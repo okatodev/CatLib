@@ -31,6 +31,11 @@ internal static class ContextText
             details.Add(UiText.Format(UiText.Options, languageCode, text));
         }
 
+        if (setting.IsOverridden)
+        {
+            details.Add(UiText.Format(UiText.HostValue, languageCode, FormatValue(setting, presentation, setting.BoxedLocalValue, languageCode)));
+        }
+
         if (setting.IsRestartPending)
         {
             details.Add(UiText.Format(UiText.AfterRestart, languageCode, FormatValue(setting, presentation, setting.BoxedLocalValue, languageCode)));

@@ -25,6 +25,8 @@ public static class CatConfig
     public static event Action<SettingValueProblem> ValueAdjusted;
     public static event Action<ISetting> RestartRequired;
 
+    public static event Action<ISetting> EffectiveValueChanged;
+
     public static int DebounceMilliseconds
     {
         get => _debounceMilliseconds;
@@ -130,6 +132,31 @@ public static class CatConfig
     {
         Log.Message($"{setting.Id} changed to {Describe(setting.BoxedLocalValue)} and will apply after a restart, current value is {Describe(setting.BoxedValue)}");
         SafeInvoker.Invoke(RestartRequired, setting, "CatConfig.RestartRequired", Log);
+    }
+
+    internal static void RaiseEffectiveValueChanged(ISetting setting) =>
+        SafeInvoker.Invoke(EffectiveValueChanged, setting, "CatConfig.EffectiveValueChanged", Log);
+
+    internal static ISettingNode FindSetting(string ownerId, string section, string key)
+    {
+        lock (Sync)
+        {
+            foreach (var state in Files.Values)
+            {
+                if (!string.Equals(state.Settings.OwnerId, ownerId, StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                var definition = new ConfigDefinition(section, key);
+                if (state.Settings.Find(definition) is ISettingNode node)
+                {
+                    return node;
+                }
+            }
+        }
+
+        return null;
     }
 
     internal static void Update()

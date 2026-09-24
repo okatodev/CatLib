@@ -21,10 +21,11 @@ internal sealed class UiRowsSandbox : IDisposable
         Seed = settings.Local("Text", "Seed", 42, "Seed.");
         Secret = settings.Local("Text", "Secret", "hidden", "Secret.").HiddenInMenu();
         FastMode = settings.Local("Advanced", "FastMode", false, "Fast mode.").RequiresRestart();
+        Difficulty = settings.Session("Session", "Difficulty", 2, "Difficulty.", new AcceptableValueRange<int>(1, 5));
     }
 
-    public const int VisibleCount = 8;
-    public const int SectionCount = 4;
+    public const int VisibleCount = 9;
+    public const int SectionCount = 5;
 
     public ConfigSandbox Config { get; }
 
@@ -47,6 +48,8 @@ internal sealed class UiRowsSandbox : IDisposable
     public Setting<string> Secret { get; }
 
     public Setting<bool> FastMode { get; }
+
+    public Setting<int> Difficulty { get; }
 
     public void Dispose() => Config.Dispose();
 }

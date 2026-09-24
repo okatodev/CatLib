@@ -21,6 +21,10 @@ public interface ISetting
 
     bool IsHiddenInMenu { get; }
 
+    bool IsOverridden { get; }
+
+    object BoxedOverride { get; }
+
     bool IsRestartRequired { get; }
 
     bool IsRestartPending { get; }

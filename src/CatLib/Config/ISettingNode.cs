@@ -5,4 +5,8 @@ internal interface ISettingNode : ISetting
     void Refresh();
 
     void Detach();
+
+    bool SetOverride(object value);
+
+    bool ClearOverride();
 }

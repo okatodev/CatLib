@@ -32,6 +32,7 @@ tests/CatLib.Tests/          in-game test plugin, developers only
 | `CatLib.Game.Bridge` | Tracks game singletons and binds their events |
 | `CatLib.Config` | Live settings: `CatSettings`, `Setting<T>`, `CatConfig` |
 | `CatLib.UI` | Mods tab injected into the game's settings menu |
+| `CatLib.Net` | Mod compatibility handshake and session settings sync |
 | `CatLib.Tests.Framework` | In-game test runner |
 | `CatLib.Tests.Timeline` | Game event timeline recorder |
 | `CatLib.Tests.Diagnostics` | Developer tools such as the UI hierarchy dump (F9) |
@@ -56,6 +57,7 @@ Configuration: `BepInEx/config/catlib.tests.cfg`.
 ## Documentation
 
 - [Live settings](docs/Settings.md)
+- [Multiplayer compatibility](docs/Network.md)
 - [Game events: observed behaviour](docs/GameEvents.md)
 
 ## Conventions

@@ -108,6 +108,11 @@ internal sealed class ModsPanel
     public static string RowLabel(ISetting setting, string languageCode)
     {
         var label = setting.MenuLabel ?? LabelFormatter.Prettify(setting.Key);
+        if (setting.IsOverridden)
+        {
+            label += " " + UiText.Get(UiText.HostSuffix, languageCode);
+        }
+
         return setting.IsRestartRequired ? label + " " + UiText.Get(UiText.RestartSuffix, languageCode) : label;
     }
 
@@ -119,10 +124,12 @@ internal sealed class ModsPanel
             RefreshList(false);
         }
 
+        var languageCode = _rows.Count > 0 ? UiText.LanguageCode : null;
         for (var index = 0; index < _rows.Count; index++)
         {
             try
             {
+                _rows[index].SyncOverride(languageCode);
                 _rows[index].Update();
             }
             catch (Exception exception)

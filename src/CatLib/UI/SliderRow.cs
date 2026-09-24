@@ -84,6 +84,13 @@ internal sealed class SliderRow : SettingRow
 
     private void OnValueChanged(float value)
     {
+        if (Setting.IsOverridden)
+        {
+            Discard();
+            Pull();
+            return;
+        }
+
         _pending = Presentation.FromSlider(value);
         _hasPending = true;
         _pendingSince = Stopwatch.GetTimestamp();

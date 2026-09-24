@@ -23,7 +23,9 @@ public sealed class CatLibTestsPlugin : BasePlugin
     private ConfigEntry<float> _fallbackDelaySeconds;
     private ConfigEntry<KeyboardShortcut> _runHotkey;
     private ConfigEntry<KeyboardShortcut> _dumpUiHotkey;
+    private ConfigEntry<KeyboardShortcut> _stressHotkey;
     private UiHierarchyDumper _uiDumper;
+    private StressMods _stressMods;
     private CatLogger _log;
     private TestRunner _runner;
     private TestReportWriter _reportWriter;
@@ -42,6 +44,8 @@ public sealed class CatLibTestsPlugin : BasePlugin
             "Run all tests on demand.");
         _dumpUiHotkey = Config.Bind("Diagnostics", "DumpUiHotkey", new KeyboardShortcut(KeyCode.F9),
             "Write the hierarchy of the open settings menu to BepInEx/CatLib.Tests/Dumps.");
+        _stressHotkey = Config.Bind("Diagnostics", "StressModsHotkey", new KeyboardShortcut(KeyCode.F8),
+            "Create or remove a set of stress mods with many settings to check the Mods tab layout.");
 
         var outputDirectory = Path.Combine(Paths.BepInExRootPath, "CatLib.Tests");
         ConfigSandbox.RootDirectory = Path.Combine(outputDirectory, "Sandbox");
@@ -50,6 +54,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
         _timeline.Start();
 
         _uiDumper = new UiHierarchyDumper(Path.Combine(outputDirectory, "Dumps"), _log.Scope("UiDump"));
+        _stressMods = new StressMods(Path.Combine(outputDirectory, "Stress"), _log.Scope("Stress"));
         _reportWriter = new TestReportWriter(Path.Combine(outputDirectory, "Reports"));
         _runner = new TestRunner(TestRegistry.Discover(typeof(CatLibTestsPlugin).Assembly), _log.Scope("Runner"));
         _runner.Completed += OnRunCompleted;
@@ -118,6 +123,18 @@ public sealed class CatLibTestsPlugin : BasePlugin
         if (_runHotkey.Value.IsDown())
         {
             _runner.Start("Hotkey");
+        }
+
+        if (_stressHotkey.Value.IsDown())
+        {
+            try
+            {
+                _stressMods.Toggle();
+            }
+            catch (System.Exception exception)
+            {
+                _log.Error("Toggling the stress mods failed", exception);
+            }
         }
 
         if (_dumpUiHotkey.Value.IsDown())

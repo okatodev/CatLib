@@ -68,6 +68,8 @@ internal static class ModsTabBuilder
         listScroll.gameObject.name = ListScrollName;
         contentScroll.gameObject.name = ContentScrollName;
         var (listWidth, contentWidth) = Split(listScroll, contentScroll);
+        EnableViewportMask(listScroll);
+        EnableViewportMask(contentScroll);
 
         var listHeader = UnityEngine.Object.Instantiate(headerTemplate, listScroll.content, false);
         listHeader.name = "group_SettingsHeader CatLibModList";
@@ -241,6 +243,30 @@ internal static class ModsTabBuilder
         text.textWrappingMode = TextWrappingModes.Normal;
         text.overflowMode = TextOverflowModes.Ellipsis;
         return text;
+    }
+
+    internal static RectTransform ViewportOf(ScrollRect scroll) =>
+        scroll.viewport ?? scroll.content?.parent?.TryCast<RectTransform>();
+
+    private static void EnableViewportMask(ScrollRect scroll)
+    {
+        var viewport = ViewportOf(scroll);
+        if (viewport == null)
+        {
+            return;
+        }
+
+        var mask = viewport.GetComponent<Mask>();
+        if (mask != null)
+        {
+            mask.enabled = true;
+        }
+
+        var graphic = viewport.GetComponent<Image>();
+        if (graphic != null)
+        {
+            graphic.enabled = true;
+        }
     }
 
     private static void FitContentWidth(ScrollRect scroll, float width)

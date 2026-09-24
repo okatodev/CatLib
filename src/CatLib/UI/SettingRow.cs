@@ -32,7 +32,50 @@ internal abstract class SettingRow
 
     protected CatLogger Log { get; }
 
-    protected object CurrentValue => Setting.EntryBase.BoxedValue;
+    protected object CurrentValue => Setting.IsOverridden ? Setting.BoxedValue : Setting.EntryBase.BoxedValue;
+
+    public bool ShowsOverride { get; private set; }
+
+    public const float OverriddenAlpha = 0.5f;
+
+    private CanvasGroup _valueGroup;
+
+    public CanvasGroup ValueGroup
+    {
+        get
+        {
+            if (_valueGroup == null)
+            {
+                var value = Root.transform.Find("panel_Value")?.gameObject;
+                if (value != null)
+                {
+                    _valueGroup = value.GetComponent<CanvasGroup>() ?? value.AddComponent<CanvasGroup>();
+                }
+            }
+
+            return _valueGroup;
+        }
+    }
+
+    public void SyncOverride(string languageCode)
+    {
+        var overridden = Setting.IsOverridden;
+        if (overridden == ShowsOverride)
+        {
+            return;
+        }
+
+        ShowsOverride = overridden;
+        var group = ValueGroup;
+        if (group != null)
+        {
+            group.alpha = overridden ? OverriddenAlpha : 1f;
+            group.blocksRaycasts = !overridden;
+        }
+
+        SetLabel(ModsPanel.RowLabel(Setting, languageCode));
+        Pull();
+    }
 
     public void SetLabel(string text)
     {
@@ -56,6 +99,12 @@ internal abstract class SettingRow
 
     protected bool Write(object value)
     {
+        if (Setting.IsOverridden)
+        {
+            Pull();
+            return false;
+        }
+
         try
         {
             Setting.EntryBase.BoxedValue = value;

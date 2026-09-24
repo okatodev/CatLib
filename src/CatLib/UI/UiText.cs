@@ -25,6 +25,8 @@ internal static class UiText
     public const string MessageRejected = "MessageRejected";
     public const string MessageAdjusted = "MessageAdjusted";
     public const string MessageReset = "MessageReset";
+    public const string HostSuffix = "HostSuffix";
+    public const string HostValue = "HostValue";
     public const string SettingsCount = "SettingsCount";
     public const string PendingRestart = "PendingRestart";
 
@@ -34,6 +36,8 @@ internal static class UiText
         [ModsList] = ("Mods", "Моды"),
         [SelectMod] = ("Select a mod", "Выберите мод"),
         [RestartSuffix] = ("(restart)", "(перезапуск)"),
+        [HostSuffix] = ("(host)", "(хост)"),
+        [HostValue] = ("Set by the host, yours: {0}", "Задано хостом, ваше: {0}"),
         [NoDescription] = ("No description", "Нет описания"),
         [DefaultValue] = ("Default: {0}", "По умолчанию: {0}"),
         [Range] = ("Range: {0} to {1}", "Диапазон: от {0} до {1}"),

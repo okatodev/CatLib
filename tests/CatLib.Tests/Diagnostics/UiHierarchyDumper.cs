@@ -221,7 +221,31 @@ public sealed class UiHierarchyDumper
         var text = component.TryCast<TMP_Text>();
         if (text != null)
         {
-            return $" text=\"{Clip(text.text)}\" fontSize={Number(text.fontSize)}";
+            return $" text=\"{Clip(text.text)}\" fontSize={Number(text.fontSize)}{Maskable(text)}{Enabled(text)}";
+        }
+
+        var mask = component.TryCast<Mask>();
+        if (mask != null)
+        {
+            return $" showGraphic={mask.showMaskGraphic}{Enabled(mask)}";
+        }
+
+        var rectMask = component.TryCast<RectMask2D>();
+        if (rectMask != null)
+        {
+            return Enabled(rectMask);
+        }
+
+        var canvas = component.TryCast<Canvas>();
+        if (canvas != null)
+        {
+            return $" overrideSorting={canvas.overrideSorting} order={canvas.sortingOrder}{Enabled(canvas)}";
+        }
+
+        var group = component.TryCast<CanvasGroup>();
+        if (group != null)
+        {
+            return $" alpha={Number(group.alpha)} interactable={group.interactable} blocksRaycasts={group.blocksRaycasts} ignoreParent={group.ignoreParentGroups}{Enabled(group)}";
         }
 
         var localize = component.TryCast<Localize>();
@@ -267,8 +291,19 @@ public sealed class UiHierarchyDumper
             return $" ignore={layout.ignoreLayout} minW={Number(layout.minWidth)} prefW={Number(layout.preferredWidth)} minH={Number(layout.minHeight)} prefH={Number(layout.preferredHeight)} flexH={Number(layout.flexibleHeight)}";
         }
 
-        return string.Empty;
+        var graphic = component.TryCast<MaskableGraphic>();
+        if (graphic != null)
+        {
+            return $" alpha={Number(graphic.color.a)}{Maskable(graphic)}{Enabled(graphic)}";
+        }
+
+        var behaviour = component.TryCast<Behaviour>();
+        return behaviour == null ? string.Empty : Enabled(behaviour);
     }
+
+    private static string Maskable(MaskableGraphic graphic) => graphic.maskable ? string.Empty : " maskable=False";
+
+    private static string Enabled(Behaviour behaviour) => behaviour.enabled ? string.Empty : " DISABLED";
 
     private static string Selectable(Selectable selectable) => " interactable=" + selectable.interactable;
 
