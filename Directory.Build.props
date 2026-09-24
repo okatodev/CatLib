@@ -1,0 +1,28 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)GamePaths.props" Condition="Exists('$(MSBuildThisFileDirectory)GamePaths.props')" />
+
+  <PropertyGroup>
+    <CatLibRoot>$(MSBuildThisFileDirectory)</CatLibRoot>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>embedded</DebugType>
+    <Deterministic>true</Deterministic>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <Authors>CatLib contributors</Authors>
+    <Product>CatLib</Product>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <BepInExDir Condition="'$(BepInExDir)' == '' and '$(GameDir)' != ''">$(GameDir)\BepInEx</BepInExDir>
+    <BepInExCoreDir Condition="'$(BepInExCoreDir)' == '' and '$(BepInExDir)' != ''">$(BepInExDir)\core</BepInExCoreDir>
+    <BepInExInteropDir Condition="'$(BepInExInteropDir)' == '' and '$(BepInExDir)' != ''">$(BepInExDir)\interop</BepInExInteropDir>
+    <BepInExPluginsDir Condition="'$(BepInExPluginsDir)' == '' and '$(BepInExDir)' != ''">$(BepInExDir)\plugins</BepInExPluginsDir>
+    <CatLibDeploy Condition="'$(CatLibDeploy)' == '' and '$(BepInExPluginsDir)' != ''">true</CatLibDeploy>
+  </PropertyGroup>
+</Project>

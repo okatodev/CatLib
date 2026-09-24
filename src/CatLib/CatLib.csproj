@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>CatLib</AssemblyName>
+    <RootNamespace>CatLib</RootNamespace>
+    <Version>0.1.0</Version>
+    <PluginGuid>catlib.core</PluginGuid>
+    <PluginMetaName>CatLib</PluginMetaName>
+    <CatLibDeployFolder>CatLib</CatLibDeployFolder>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>CatLib.Tests</AssemblyName>
+    <RootNamespace>CatLib.Tests</RootNamespace>
+    <Version>0.1.0</Version>
+    <PluginGuid>catlib.tests</PluginGuid>
+    <PluginMetaName>CatLib.Tests</PluginMetaName>
+    <CatLibDeployFolder>CatLib.Tests</CatLibDeployFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CatLib\CatLib.csproj" Private="false" />
+  </ItemGroup>
+</Project>

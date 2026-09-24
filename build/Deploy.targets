@@ -1,0 +1,10 @@
+<Project>
+  <Target Name="CatLibDeploy" AfterTargets="Build" Condition="'$(CatLibDeploy)' == 'true' and '$(CatLibDeployFolder)' != ''">
+    <PropertyGroup>
+      <CatLibDeployDir>$(BepInExPluginsDir)\$(CatLibDeployFolder)</CatLibDeployDir>
+    </PropertyGroup>
+    <MakeDir Directories="$(CatLibDeployDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(CatLibDeployDir)" SkipUnchangedFiles="true" />
+    <Message Importance="high" Text="$(TargetFileName) -&gt; $(CatLibDeployDir)" />
+  </Target>
+</Project>

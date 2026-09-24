@@ -1,0 +1,23 @@
+<Project>
+  <Target Name="CatLibGeneratePluginMeta" BeforeTargets="CoreCompile" Condition="'$(PluginGuid)' != ''">
+    <PropertyGroup>
+      <PluginMetaFile>$(IntermediateOutputPath)PluginMeta.g.cs</PluginMetaFile>
+      <PluginMetaNamespace Condition="'$(PluginMetaNamespace)' == ''">$(RootNamespace)</PluginMetaNamespace>
+      <PluginMetaName Condition="'$(PluginMetaName)' == ''">$(AssemblyName)</PluginMetaName>
+    </PropertyGroup>
+    <ItemGroup>
+      <PluginMetaLine Include="namespace $(PluginMetaNamespace)%3B" />
+      <PluginMetaLine Include="public static class PluginMeta" />
+      <PluginMetaLine Include="{" />
+      <PluginMetaLine Include="%20%20%20%20public const string Guid = &quot;$(PluginGuid)&quot;%3B" />
+      <PluginMetaLine Include="%20%20%20%20public const string Name = &quot;$(PluginMetaName)&quot;%3B" />
+      <PluginMetaLine Include="%20%20%20%20public const string Version = &quot;$(Version)&quot;%3B" />
+      <PluginMetaLine Include="}" />
+    </ItemGroup>
+    <WriteLinesToFile File="$(PluginMetaFile)" Lines="@(PluginMetaLine)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <ItemGroup>
+      <Compile Include="$(PluginMetaFile)" />
+      <FileWrites Include="$(PluginMetaFile)" />
+    </ItemGroup>
+  </Target>
+</Project>

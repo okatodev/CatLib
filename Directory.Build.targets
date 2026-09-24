@@ -1,0 +1,5 @@
+<Project>
+  <Import Project="$(CatLibRoot)build\GameReferences.targets" />
+  <Import Project="$(CatLibRoot)build\PluginMeta.targets" />
+  <Import Project="$(CatLibRoot)build\Deploy.targets" />
+</Project>

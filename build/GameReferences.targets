@@ -1,0 +1,18 @@
+<Project>
+  <ItemGroup Condition="'$(UseGameReferences)' != 'false'">
+    <Reference Include="$(BepInExCoreDir)\BepInEx.Core.dll" Private="false" />
+    <Reference Include="$(BepInExCoreDir)\BepInEx.Unity.Common.dll" Private="false" />
+    <Reference Include="$(BepInExCoreDir)\BepInEx.Unity.IL2CPP.dll" Private="false" />
+    <Reference Include="$(BepInExCoreDir)\Il2CppInterop.Common.dll" Private="false" />
+    <Reference Include="$(BepInExCoreDir)\Il2CppInterop.Runtime.dll" Private="false" />
+    <Reference Include="$(BepInExCoreDir)\0Harmony.dll" Private="false" />
+    <Reference Include="$(BepInExCoreDir)\SemanticVersioning.dll" Private="false" />
+    <Reference Include="$(BepInExInteropDir)\*.dll" Private="false" />
+  </ItemGroup>
+
+  <Target Name="CatLibValidateGamePaths" BeforeTargets="ResolveAssemblyReferences" Condition="'$(UseGameReferences)' != 'false'">
+    <Error Condition="'$(BepInExCoreDir)' == ''" Text="Game path is not configured. Copy GamePaths.props.example to GamePaths.props in the repository root and set GameDir to the folder that contains the game executable." />
+    <Error Condition="!Exists('$(BepInExCoreDir)\BepInEx.Core.dll')" Text="BepInEx core assemblies were not found in '$(BepInExCoreDir)'. Install BepInEx into the game folder first." />
+    <Error Condition="!Exists('$(BepInExInteropDir)\Assembly-CSharp.dll')" Text="Interop assemblies were not found in '$(BepInExInteropDir)'. Launch the game once with BepInEx installed so they get generated." />
+  </Target>
+</Project>
