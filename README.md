@@ -30,6 +30,7 @@ tests/CatLib.Tests/          in-game test plugin, developers only
 | `CatLib.Game` | `GameInfo`, read-only game state |
 | `CatLib.Game.Events` | Game events re-exposed as plain .NET events, `GameEventStream` |
 | `CatLib.Game.Bridge` | Tracks game singletons and binds their events |
+| `CatLib.Config` | Live settings: `CatSettings`, `Setting<T>`, `CatConfig` |
 | `CatLib.Tests.Framework` | In-game test runner |
 | `CatLib.Tests.Timeline` | Game event timeline recorder |
 | `CatLib.Tests.Suites.*` | Test cases grouped by suite |
@@ -52,6 +53,7 @@ Configuration: `BepInEx/config/catlib.tests.cfg`.
 
 ## Documentation
 
+- [Live settings](docs/Settings.md)
 - [Game events: observed behaviour](docs/GameEvents.md)
 
 ## Conventions

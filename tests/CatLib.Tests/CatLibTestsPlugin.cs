@@ -3,10 +3,12 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 using BepInEx.Unity.IL2CPP.Configuration;
+using CatLib.Config;
 using CatLib.Core;
 using CatLib.Game.Events;
 using CatLib.Logging;
 using CatLib.Tests.Framework;
+using CatLib.Tests.Suites.Settings;
 using CatLib.Tests.Timeline;
 using UnityEngine;
 
@@ -37,6 +39,8 @@ public sealed class CatLibTestsPlugin : BasePlugin
             "Run all tests on demand.");
 
         var outputDirectory = Path.Combine(Paths.BepInExRootPath, "CatLib.Tests");
+        ConfigSandbox.RootDirectory = Path.Combine(outputDirectory, "Sandbox");
+        ResetSandbox();
         _timeline = new TimelineRecorder(Path.Combine(outputDirectory, "Timelines"), _log.Scope("Timeline"));
         _timeline.Start();
 
@@ -44,10 +48,45 @@ public sealed class CatLibTestsPlugin : BasePlugin
         _runner = new TestRunner(TestRegistry.Discover(typeof(CatLibTestsPlugin).Assembly), _log.Scope("Runner"));
         _runner.Completed += OnRunCompleted;
 
+        DeclareDemoSettings();
+
         BootstrapEvents.MainMenuLoaded += OnMainMenuLoaded;
         FrameLoop.Update += OnUpdate;
 
         _log.Info($"CatLib.Tests {PluginMeta.Version} loaded with {_runner.TestCount} tests. Press {_runHotkey.Value} to run them.");
+    }
+
+    private void DeclareDemoSettings()
+    {
+        var settings = CatSettings.For(this);
+
+        settings.Local("Demo", "Message", "Hello from CatLib",
+                "Edit while the game is running to check live reload.")
+            .Apply(value => _log.Message($"Demo.Message is now \"{value}\""));
+
+        settings.Local("Demo", "Volume", 50,
+                "Edit while the game is running. Values outside 0-100 are adjusted.", new AcceptableValueRange<int>(0, 100))
+            .Apply(value => _log.Message($"Demo.Volume is now {value}"));
+
+        settings.Local("Demo", "FastMode", false,
+                "Changes to this value only apply after a restart.")
+            .RequiresRestart()
+            .Apply(value => _log.Message($"Demo.FastMode is {value}"));
+    }
+
+    private void ResetSandbox()
+    {
+        try
+        {
+            if (Directory.Exists(ConfigSandbox.RootDirectory))
+            {
+                Directory.Delete(ConfigSandbox.RootDirectory, true);
+            }
+        }
+        catch (System.Exception exception)
+        {
+            _log.Warning($"Could not clean {ConfigSandbox.RootDirectory}: {exception.Message}");
+        }
     }
 
     private void OnMainMenuLoaded()

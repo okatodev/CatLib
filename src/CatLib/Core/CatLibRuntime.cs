@@ -1,5 +1,6 @@
 using System;
 using BepInEx.Unity.IL2CPP;
+using CatLib.Config;
 using CatLib.Game.Bridge;
 using CatLib.Logging;
 using CatLib.Threading;
@@ -23,6 +24,7 @@ public static class CatLibRuntime
         MainThread.Initialize();
         FrameLoop.Initialize();
         ManagerRegistry.Initialize(Log.Scope("Bridge"));
+        CatConfig.Initialize(Log.Scope("Config"));
         plugin.AddComponent<CatLibBehaviour>();
         IsInitialized = true;
         Log.Info($"CatLib {PluginMeta.Version} initialized on managed thread {MainThread.ManagedThreadId}");

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using CatLib.Config;
 using CatLib.Events;
 using CatLib.Game.Bridge;
 using CatLib.Threading;
@@ -26,6 +27,7 @@ public static class FrameLoop
         FrameCount++;
         MainThread.Drain(CatLibRuntime.Log);
         ManagerRegistry.Update();
+        CatConfig.Update();
         SafeInvoker.Invoke(Update, "FrameLoop.Update", CatLibRuntime.Log);
     }
 }
