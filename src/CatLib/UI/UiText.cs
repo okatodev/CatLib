@@ -9,12 +9,14 @@ internal static class UiText
     public const string ModsTab = "ModsTab";
     public const string ModsList = "ModsList";
     public const string SelectMod = "SelectMod";
+    public const string RestartSuffix = "RestartSuffix";
 
     private static readonly Dictionary<string, (string English, string Russian)> Strings = new()
     {
         [ModsTab] = ("Mods", "Моды"),
         [ModsList] = ("Mods", "Моды"),
-        [SelectMod] = ("Select a mod", "Выберите мод")
+        [SelectMod] = ("Select a mod", "Выберите мод"),
+        [RestartSuffix] = ("(restart)", "(перезапуск)")
     };
 
     public static string LanguageCode

@@ -11,6 +11,7 @@ public sealed class SettingsMenuCleanupTest : TestCase
 
     public override IEnumerable<TestStep> Run(TestContext context)
     {
+        SettingsMenuFixture.RestoreTab();
         SettingsMenuFixture.CloseIfOpened(context);
         yield break;
     }

@@ -13,15 +13,21 @@ public sealed class CatSettings : IDisposable
     private readonly List<ISettingNode> _settings = new();
     private readonly CatLogger _log;
 
-    internal CatSettings(ConfigFile configFile, string ownerId, CatLogger log)
+    internal CatSettings(ConfigFile configFile, string ownerId, string displayName, string version, CatLogger log)
     {
         ConfigFile = configFile;
         OwnerId = ownerId;
+        DisplayName = string.IsNullOrWhiteSpace(displayName) ? ownerId : displayName;
+        Version = version;
         _log = log;
         ConfigFile.SettingChanged += OnConfigFileSettingChanged;
     }
 
     public string OwnerId { get; }
+
+    public string DisplayName { get; }
+
+    public string Version { get; }
 
     public ConfigFile ConfigFile { get; }
 
@@ -53,10 +59,10 @@ public sealed class CatSettings : IDisposable
             throw new ArgumentException($"{plugin.GetType().FullName} has no BepInPlugin attribute", nameof(plugin));
         }
 
-        return For(plugin.Config, metadata.GUID);
+        return For(plugin.Config, metadata.GUID, metadata.Name, metadata.Version?.ToString());
     }
 
-    public static CatSettings For(ConfigFile configFile, string ownerId)
+    public static CatSettings For(ConfigFile configFile, string ownerId, string displayName = null, string version = null)
     {
         if (configFile == null)
         {
@@ -68,7 +74,7 @@ public sealed class CatSettings : IDisposable
             throw new ArgumentException("Owner id must not be empty.", nameof(ownerId));
         }
 
-        return CatConfig.GetOrCreate(configFile, ownerId);
+        return CatConfig.GetOrCreate(configFile, ownerId, displayName, version);
     }
 
     public Setting<T> Local<T>(string section, string key, T defaultValue, string description, AcceptableValueBase acceptableValues = null) =>

@@ -211,7 +211,11 @@ public sealed class UiHierarchyDumper
         var rect = component.TryCast<RectTransform>();
         if (rect != null)
         {
-            return $" size={Vector(rect.sizeDelta)} pos={Vector(rect.anchoredPosition)} anchors={Vector(rect.anchorMin)}-{Vector(rect.anchorMax)} pivot={Vector(rect.pivot)}";
+            var rotation = rect.localEulerAngles;
+            var scale = rect.localScale;
+            var transformText = (rotation.x != 0f || rotation.y != 0f || rotation.z != 0f ? $" rot=({Number(rotation.x)},{Number(rotation.y)},{Number(rotation.z)})" : string.Empty) +
+                                (scale.x != 1f || scale.y != 1f || scale.z != 1f ? $" scale=({Number(scale.x)},{Number(scale.y)},{Number(scale.z)})" : string.Empty);
+            return $" size={Vector(rect.sizeDelta)} pos={Vector(rect.anchoredPosition)} anchors={Vector(rect.anchorMin)}-{Vector(rect.anchorMax)} pivot={Vector(rect.pivot)}{transformText}";
         }
 
         var text = component.TryCast<TMP_Text>();

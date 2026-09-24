@@ -73,3 +73,28 @@ The file itself is never rewritten while the player is editing it.
 ## Diagnostics
 
 `CatConfig` exposes `FileReloaded`, `ValueRejected`, `ValueAdjusted` and `RestartRequired` for tools and UI.
+
+## In-game menu
+
+Every mod with at least one visible setting gets an entry on the Mods tab of the game's settings menu.
+The mod list shows the plugin name, the header shows the name and version.
+Settings are grouped by section, in declaration order.
+
+| Setting type | Control |
+|---|---|
+| `bool` | Toggle |
+| Number with `AcceptableValueRange` | Slider. Whole numbers for integer types, two decimals for fractional types |
+| `enum` or any type with `AcceptableValueList` | Dropdown |
+| Anything else | Text field. Invalid input is rejected and the field shows the current value again |
+
+Toggles and dropdowns apply immediately, text fields when editing ends, sliders 250 ms after the handle stops.
+Edits to the file while the menu is open show up in the menu.
+
+```csharp
+settings.Local("General", "Seed", 42, "World seed.").Label("World seed");
+settings.Local("Debug", "InternalCounter", 0, "Used by the mod itself.").HiddenInMenu();
+```
+
+`Label` replaces the label generated from the key (`ExtraFov` becomes "Extra Fov").
+`HiddenInMenu` keeps a setting out of the menu; it still lives in the file and reloads live.
+Settings that require a restart are marked with "(restart)".

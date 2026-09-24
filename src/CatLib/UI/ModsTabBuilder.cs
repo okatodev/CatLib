@@ -15,6 +15,7 @@ internal static class ModsTabBuilder
     public const string TemplatesName = "templates_CatLib";
     public const float ListWidthRatio = 0.28f;
     public const float PaneGap = 30f;
+    public const float PaneInset = 90f;
     public const float ScrollbarAllowance = 40f;
 
     public static bool IsReady(OptionsInterface options)
@@ -58,7 +59,7 @@ internal static class ModsTabBuilder
         var listScroll = UnityEngine.Object.Instantiate(contentScroll.gameObject, panel.transform, false).GetComponent<ScrollRect>();
         listScroll.gameObject.name = ListScrollName;
         contentScroll.gameObject.name = ContentScrollName;
-        Split(listScroll, contentScroll);
+        var (listWidth, contentWidth) = Split(listScroll, contentScroll);
 
         var listHeader = UnityEngine.Object.Instantiate(headerTemplate, listScroll.content, false);
         listHeader.name = "group_SettingsHeader CatLibModList";
@@ -66,6 +67,8 @@ internal static class ModsTabBuilder
         var contentHeader = UnityEngine.Object.Instantiate(headerTemplate, contentScroll.content, false);
         contentHeader.name = "group_SettingsHeader CatLibModSettings";
         contentHeader.SetActive(true);
+
+        var rowTemplates = RowTemplates.Capture(options, headerTemplate, templates.transform);
 
         Selectable firstSelected = panel.GetComponentInChildren<SelectableButton>(true);
         if (firstSelected == null)
@@ -99,8 +102,11 @@ internal static class ModsTabBuilder
         tabs.Add(tab);
 
         var fitter = new TabBarFitter(options.TabsParent.TryCast<RectTransform>(), options.transform.TryCast<RectTransform>());
-        var modsTab = new ModsTab(context, options, tab, panel, listScroll, contentScroll, listHeader, contentHeader, templates, fitter, bindings, log);
+        var controller = new ModsPanel(options, tab, rowTemplates, listScroll.content, contentScroll.content, contentHeader,
+            listWidth - ScrollbarAllowance, contentWidth - ScrollbarAllowance, log);
+        var modsTab = new ModsTab(context, options, tab, panel, listScroll, contentScroll, listHeader, contentHeader, templates, fitter, controller, bindings, log);
         modsTab.ApplyTexts();
+        controller.RefreshList(true);
         return modsTab;
     }
 
@@ -169,23 +175,26 @@ internal static class ModsTabBuilder
         return null;
     }
 
-    private static void Split(ScrollRect listScroll, ScrollRect contentScroll)
+    private static (float ListWidth, float ContentWidth) Split(ScrollRect listScroll, ScrollRect contentScroll)
     {
         var source = contentScroll.transform.TryCast<RectTransform>();
         var size = source.sizeDelta;
         var position = source.anchoredPosition;
-        var listWidth = Mathf.Round(size.x * ListWidthRatio);
-        var contentWidth = size.x - listWidth - PaneGap;
+        var usable = size.x - PaneInset * 2f;
+        var listWidth = Mathf.Round(usable * ListWidthRatio);
+        var contentWidth = usable - listWidth - PaneGap;
+        var left = position.x - size.x / 2f + PaneInset;
 
         var list = listScroll.transform.TryCast<RectTransform>();
         list.sizeDelta = new Vector2(listWidth, size.y);
-        list.anchoredPosition = new Vector2(position.x - size.x / 2f + listWidth / 2f, position.y);
+        list.anchoredPosition = new Vector2(left + listWidth / 2f, position.y);
 
         source.sizeDelta = new Vector2(contentWidth, size.y);
-        source.anchoredPosition = new Vector2(position.x + size.x / 2f - contentWidth / 2f, position.y);
+        source.anchoredPosition = new Vector2(left + listWidth + PaneGap + contentWidth / 2f, position.y);
 
         FitContentWidth(listScroll, listWidth);
         FitContentWidth(contentScroll, contentWidth);
+        return (listWidth, contentWidth);
     }
 
     private static void FitContentWidth(ScrollRect scroll, float width)

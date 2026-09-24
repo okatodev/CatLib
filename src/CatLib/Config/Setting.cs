@@ -43,6 +43,10 @@ public sealed class Setting<T> : ISettingNode
 
     public bool IsRestartRequired { get; private set; }
 
+    public string MenuLabel { get; private set; }
+
+    public bool IsHiddenInMenu { get; private set; }
+
     public bool IsRestartPending => IsRestartRequired && !EqualityComparer<T>.Default.Equals(_value, Entry.Value);
 
     public T Value => _value;
@@ -58,6 +62,18 @@ public sealed class Setting<T> : ISettingNode
     public Setting<T> RequiresRestart()
     {
         IsRestartRequired = true;
+        return this;
+    }
+
+    public Setting<T> Label(string label)
+    {
+        MenuLabel = string.IsNullOrWhiteSpace(label) ? null : label;
+        return this;
+    }
+
+    public Setting<T> HiddenInMenu()
+    {
+        IsHiddenInMenu = true;
         return this;
     }
 

@@ -67,7 +67,7 @@ public static class CatConfig
         _watcher ??= new ConfigFileWatcher(log);
     }
 
-    internal static CatSettings GetOrCreate(ConfigFile configFile, string ownerId)
+    internal static CatSettings GetOrCreate(ConfigFile configFile, string ownerId, string displayName, string version)
     {
         var path = ConfigFileWatcher.Normalize(configFile.ConfigFilePath);
         lock (Sync)
@@ -87,7 +87,7 @@ public static class CatConfig
                 return existing.Settings;
             }
 
-            var settings = new CatSettings(configFile, ownerId, Log.Scope(ownerId));
+            var settings = new CatSettings(configFile, ownerId, displayName, version, Log.Scope(ownerId));
             var state = new FileState(path, settings);
             state.LastKnownContent = TryRead(path);
             Files[path] = state;

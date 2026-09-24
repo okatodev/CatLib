@@ -44,6 +44,12 @@ The host leaves while the client is connected but not in a level, client side:
 `GameRestartStarted` → `ClientDisconnected(self)` → 1.5 to 3 s → **a second `GameRestartStarted`** → all managers are recreated → `MainMenuLoaded`.
 Reproduced in both sessions. The host leaving while the client is inside a level has not been observed yet.
 
+## Settings menu
+
+The settings menu in the main menu is not initialized until the player opens it for the first time.
+The in-game settings menu is created with the level and destroyed on every restart.
+CatLib injects the Mods tab when a menu becomes ready and injects it again into every new instance.
+
 ## Rules for mod authors
 
 - Returning to the main menu is a full restart. Every manager is destroyed and recreated. Never cache manager references.

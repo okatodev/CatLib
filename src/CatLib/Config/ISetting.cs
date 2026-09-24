@@ -17,6 +17,10 @@ public interface ISetting
 
     SettingScope Scope { get; }
 
+    string MenuLabel { get; }
+
+    bool IsHiddenInMenu { get; }
+
     bool IsRestartRequired { get; }
 
     bool IsRestartPending { get; }

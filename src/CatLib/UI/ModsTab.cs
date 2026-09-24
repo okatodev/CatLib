@@ -25,6 +25,7 @@ internal sealed class ModsTab
         GameObject contentHeader,
         GameObject templates,
         TabBarFitter fitter,
+        ModsPanel controller,
         Il2CppEventBindings bindings,
         CatLogger log)
     {
@@ -39,6 +40,7 @@ internal sealed class ModsTab
         ContentHeader = contentHeader;
         Templates = templates;
         Fitter = fitter;
+        Controller = controller;
         _bindings = bindings;
         _log = log;
         _languageCode = UiText.LanguageCode;
@@ -66,6 +68,8 @@ internal sealed class ModsTab
 
     public TabBarFitter Fitter { get; }
 
+    public ModsPanel Controller { get; }
+
     public bool IsVisible { get; private set; } = true;
 
     public bool IsAlive => UiClone.IsAlive(Options) && UiClone.IsAlive(Tab) && UiClone.IsAlive(Panel);
@@ -83,17 +87,18 @@ internal sealed class ModsTab
         {
             _languageCode = languageCode;
             ApplyTexts();
+            Controller.RebuildRows();
             Fitter.Invalidate();
         }
 
         Fitter.Update();
+        Controller.Update();
     }
 
     public void ApplyTexts()
     {
         UiClone.SetText(Tab.gameObject, UiText.Get(UiText.ModsTab, _languageCode));
-        UiClone.SetText(ListHeader, UiText.Get(UiText.ModsList, _languageCode));
-        UiClone.SetText(ContentHeader, UiText.Get(UiText.SelectMod, _languageCode));
+        Controller.SetHeaderText(ListHeader, UiText.Get(UiText.ModsList, _languageCode), Controller.ListWidth);
     }
 
     public void Detach()

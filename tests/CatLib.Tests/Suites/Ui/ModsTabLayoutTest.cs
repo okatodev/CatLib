@@ -39,9 +39,13 @@ public sealed class ModsTabLayoutTest : TestCase
         Assert.True(content.sizeDelta.x > list.sizeDelta.x, "The content pane must be wider than the list pane");
         Assert.Equal(UiText.Get(UiText.ModsTab, language), tabText, "Tab title");
         Assert.Equal(UiText.Get(UiText.ModsList, language), listHeader, "List header");
-        Assert.Equal(UiText.Get(UiText.SelectMod, language), contentHeader, "Content header");
-        Assert.Equal(1, modsTab.ListScroll.content.childCount, "Children of the list pane content");
-        Assert.Equal(1, modsTab.ContentScroll.content.childCount, "Children of the content pane content");
+        var selected = modsTab.Controller.Selected;
+        var expectedHeader = selected == null
+            ? UiText.Get(UiText.SelectMod, language)
+            : string.IsNullOrEmpty(selected.Version) ? selected.DisplayName : selected.DisplayName + " " + selected.Version;
+        Assert.Equal(expectedHeader, contentHeader, "Content header");
+        Assert.Equal(1 + modsTab.Controller.Items.Count, modsTab.ListScroll.content.childCount, "Children of the list pane content");
+        Assert.True(modsTab.Controller.Items.Count >= 1, "The Mods list must contain at least the CatLib.Tests demo mod");
         yield break;
     }
 }
