@@ -44,7 +44,7 @@ public static class Assert
     {
         if (!EqualityComparer<T>.Default.Equals(expected, actual))
         {
-            Fail($"{what}: expected <{expected}>, actual <{actual}>");
+            Fail($"{what}: expected <{InvariantFormat.Value(expected)}>, actual <{InvariantFormat.Value(actual)}>");
         }
     }
 
@@ -52,7 +52,7 @@ public static class Assert
     {
         if (EqualityComparer<T>.Default.Equals(unexpected, actual))
         {
-            Fail($"{what}: value must differ from <{unexpected}>");
+            Fail($"{what}: value must differ from <{InvariantFormat.Value(unexpected)}>");
         }
     }
 
@@ -60,7 +60,7 @@ public static class Assert
     {
         if (actual < minimum)
         {
-            Fail($"{what}: expected at least <{minimum}>, actual <{actual}>");
+            Fail($"{what}: expected at least <{InvariantFormat.Value(minimum)}>, actual <{InvariantFormat.Value(actual)}>");
         }
     }
 
@@ -70,7 +70,7 @@ public static class Assert
         var actualList = actual.ToList();
         if (!expectedList.SequenceEqual(actualList))
         {
-            Fail($"{what}: expected [{string.Join(", ", expectedList)}], actual [{string.Join(", ", actualList)}]");
+            Fail($"{what}: expected [{string.Join(", ", expectedList.Select(item => InvariantFormat.Value(item)))}], actual [{string.Join(", ", actualList.Select(item => InvariantFormat.Value(item)))}]");
         }
     }
 
@@ -78,7 +78,7 @@ public static class Assert
     {
         if (value != null)
         {
-            Fail($"{what}: expected null, actual <{value}>");
+            Fail($"{what}: expected null, actual <{InvariantFormat.Value(value)}>");
         }
     }
 

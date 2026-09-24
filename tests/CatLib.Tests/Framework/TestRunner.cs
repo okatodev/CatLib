@@ -86,7 +86,7 @@ public sealed class TestRunner
     {
         if (active.Stopwatch.Elapsed > active.Test.Timeout)
         {
-            Complete(TestStatus.TimedOut, $"Exceeded timeout of {active.Test.Timeout.TotalSeconds:0.##} s");
+            Complete(TestStatus.TimedOut, "Exceeded timeout of " + InvariantFormat.ShortSeconds(active.Test.Timeout));
             return true;
         }
 
@@ -147,7 +147,7 @@ public sealed class TestRunner
 
     private void LogResult(TestResult result)
     {
-        var line = $"{result.Status.ToString().ToUpperInvariant(),-8} {result.FullName} ({result.Duration.TotalMilliseconds:0} ms, {result.Frames} frames)";
+        var line = InvariantFormat.ResultLine(result);
         if (result.Status == TestStatus.Passed)
         {
             _log.Info(line);
@@ -171,7 +171,7 @@ public sealed class TestRunner
         var summary = new TestRunSummary(run.Trigger, run.StartedAt, run.Stopwatch.Elapsed, run.Results);
         var line = $"Test run finished: {summary.Count(TestStatus.Passed)} passed, {summary.Count(TestStatus.Failed)} failed, " +
                    $"{summary.Count(TestStatus.Errored)} errored, {summary.Count(TestStatus.TimedOut)} timed out " +
-                   $"in {summary.Duration.TotalSeconds:0.00} s";
+                   "in " + InvariantFormat.Seconds(summary.Duration);
         if (summary.IsSuccessful)
         {
             _log.Message(line);

@@ -1,5 +1,7 @@
 using System;
+using System.Globalization;
 using System.IO;
+using CatLib.Tests.Framework;
 using BepInEx;
 using CatLib.Game.Events;
 using CatLib.Logging;
@@ -30,9 +32,9 @@ public sealed class TimelineRecorder
         }
 
         Directory.CreateDirectory(_directory);
-        FilePath = Path.Combine(_directory, $"timeline_{DateTime.Now:yyyyMMdd_HHmmss}.log");
+        FilePath = Path.Combine(_directory, "timeline_" + InvariantFormat.FileStamp(DateTime.Now) + ".log");
         _writer = new StreamWriter(FilePath, false) { AutoFlush = true };
-        _writer.WriteLine($"CatLib timeline started {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+        _writer.WriteLine("CatLib timeline started " + InvariantFormat.Timestamp(DateTime.Now));
         _writer.WriteLine($"CatLib {CatLib.PluginMeta.Version}, BepInEx {Paths.BepInExVersion}");
         _writer.WriteLine("     realtime    frame  event");
         GameEventStream.Raised += OnRaised;
@@ -63,9 +65,14 @@ public sealed class TimelineRecorder
         _pendingTicks = 0;
     }
 
+    public static string FormatLine(double realtime, long frame, string name, string arguments) =>
+        realtime.ToString("0.000", CultureInfo.InvariantCulture).PadLeft(13) + " " +
+        frame.ToString(CultureInfo.InvariantCulture).PadLeft(8) + "  " + name +
+        (string.IsNullOrEmpty(arguments) ? string.Empty : " " + arguments);
+
     private void Write(double realtime, long frame, string name, string arguments)
     {
-        var line = $"{realtime,13:0.000} {frame,8}  {name}{(string.IsNullOrEmpty(arguments) ? string.Empty : " " + arguments)}";
+        var line = FormatLine(realtime, frame, name, arguments);
         try
         {
             _writer.WriteLine(line);

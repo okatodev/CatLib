@@ -66,7 +66,7 @@ internal sealed class WaitUntilStep : TestStep
 
         if (_stopwatch.Elapsed >= _timeout)
         {
-            throw new AssertionException($"Timed out after {_timeout.TotalSeconds:0.##} s waiting for {_description}");
+            throw new AssertionException("Timed out after " + InvariantFormat.ShortSeconds(_timeout) + " waiting for " + _description);
         }
 
         return false;

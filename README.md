@@ -50,6 +50,17 @@ Pass `-p:CatLibDeploy=false` to build without copying.
 Reports are written to `BepInEx/CatLib.Tests/Reports`, game event timelines to `BepInEx/CatLib.Tests/Timelines`.
 Configuration: `BepInEx/config/catlib.tests.cfg`.
 
+## Documentation
+
+- [Game events: observed behaviour](docs/GameEvents.md)
+
+## Conventions
+
+- No comments in code.
+- Log messages are in English.
+- Numbers and dates in logs and reports are formatted with the invariant culture.
+- One public type per file, folder structure mirrors namespaces.
+
 ## License
-   
+
 MIT, see [LICENSE](LICENSE).

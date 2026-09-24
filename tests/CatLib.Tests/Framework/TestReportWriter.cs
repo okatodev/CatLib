@@ -18,13 +18,13 @@ public sealed class TestReportWriter
     public string Write(TestRunSummary summary)
     {
         Directory.CreateDirectory(_directory);
-        var path = Path.Combine(_directory, $"report_{summary.StartedAt:yyyyMMdd_HHmmss}.txt");
+        var path = Path.Combine(_directory, "report_" + InvariantFormat.FileStamp(summary.StartedAt) + ".txt");
 
         var builder = new StringBuilder();
         builder.AppendLine("CatLib test report");
-        builder.AppendLine($"Started:        {summary.StartedAt:yyyy-MM-dd HH:mm:ss}");
+        builder.AppendLine("Started:        " + InvariantFormat.Timestamp(summary.StartedAt));
         builder.AppendLine($"Trigger:        {summary.Trigger}");
-        builder.AppendLine($"Duration:       {summary.Duration.TotalSeconds:0.00} s");
+        builder.AppendLine("Duration:       " + InvariantFormat.Seconds(summary.Duration));
         builder.AppendLine($"CatLib:         {CatLib.PluginMeta.Version}");
         builder.AppendLine($"CatLib.Tests:   {PluginMeta.Version}");
         builder.AppendLine($"BepInEx:        {Paths.BepInExVersion}");
@@ -36,7 +36,7 @@ public sealed class TestReportWriter
 
         foreach (var result in summary.Results)
         {
-            builder.AppendLine($"{result.Status.ToString().ToUpperInvariant(),-8} {result.FullName} ({result.Duration.TotalMilliseconds:0} ms, {result.Frames} frames)");
+            builder.AppendLine(InvariantFormat.ResultLine(result));
             if (!string.IsNullOrEmpty(result.Message))
             {
                 foreach (var line in result.Message.Split('\n'))
