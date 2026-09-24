@@ -7,6 +7,7 @@ using CatLib.Config;
 using CatLib.Core;
 using CatLib.Game.Events;
 using CatLib.Logging;
+using CatLib.Tests.Diagnostics;
 using CatLib.Tests.Framework;
 using CatLib.Tests.Suites.Settings;
 using CatLib.Tests.Timeline;
@@ -21,6 +22,8 @@ public sealed class CatLibTestsPlugin : BasePlugin
     private ConfigEntry<bool> _runOnMainMenu;
     private ConfigEntry<float> _fallbackDelaySeconds;
     private ConfigEntry<KeyboardShortcut> _runHotkey;
+    private ConfigEntry<KeyboardShortcut> _dumpUiHotkey;
+    private UiHierarchyDumper _uiDumper;
     private CatLogger _log;
     private TestRunner _runner;
     private TestReportWriter _reportWriter;
@@ -37,6 +40,8 @@ public sealed class CatLibTestsPlugin : BasePlugin
             "Run all tests after this many seconds if the main menu event was never observed. Set to 0 to disable.");
         _runHotkey = Config.Bind("Run", "Hotkey", new KeyboardShortcut(KeyCode.F10),
             "Run all tests on demand.");
+        _dumpUiHotkey = Config.Bind("Diagnostics", "DumpUiHotkey", new KeyboardShortcut(KeyCode.F9),
+            "Write the hierarchy of the open settings menu to BepInEx/CatLib.Tests/Dumps.");
 
         var outputDirectory = Path.Combine(Paths.BepInExRootPath, "CatLib.Tests");
         ConfigSandbox.RootDirectory = Path.Combine(outputDirectory, "Sandbox");
@@ -44,6 +49,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
         _timeline = new TimelineRecorder(Path.Combine(outputDirectory, "Timelines"), _log.Scope("Timeline"));
         _timeline.Start();
 
+        _uiDumper = new UiHierarchyDumper(Path.Combine(outputDirectory, "Dumps"), _log.Scope("UiDump"));
         _reportWriter = new TestReportWriter(Path.Combine(outputDirectory, "Reports"));
         _runner = new TestRunner(TestRegistry.Discover(typeof(CatLibTestsPlugin).Assembly), _log.Scope("Runner"));
         _runner.Completed += OnRunCompleted;
@@ -112,6 +118,18 @@ public sealed class CatLibTestsPlugin : BasePlugin
         if (_runHotkey.Value.IsDown())
         {
             _runner.Start("Hotkey");
+        }
+
+        if (_dumpUiHotkey.Value.IsDown())
+        {
+            try
+            {
+                _uiDumper.DumpSettingsMenus();
+            }
+            catch (System.Exception exception)
+            {
+                _log.Error("UI dump failed", exception);
+            }
         }
 
         _runner.Update();

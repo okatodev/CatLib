@@ -31,8 +31,10 @@ tests/CatLib.Tests/          in-game test plugin, developers only
 | `CatLib.Game.Events` | Game events re-exposed as plain .NET events, `GameEventStream` |
 | `CatLib.Game.Bridge` | Tracks game singletons and binds their events |
 | `CatLib.Config` | Live settings: `CatSettings`, `Setting<T>`, `CatConfig` |
+| `CatLib.UI` | Mods tab injected into the game's settings menu |
 | `CatLib.Tests.Framework` | In-game test runner |
 | `CatLib.Tests.Timeline` | Game event timeline recorder |
+| `CatLib.Tests.Diagnostics` | Developer tools such as the UI hierarchy dump (F9) |
 | `CatLib.Tests.Suites.*` | Test cases grouped by suite |
 
 ## Building

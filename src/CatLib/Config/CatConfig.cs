@@ -268,8 +268,6 @@ public static class CatConfig
             IsApplyingFile = false;
         }
 
-        settings.RefreshAll();
-
         var report = new ConfigReloadReport(state.Path, settings.OwnerId, changed, rejected.Count, adjusted.Count, attempts, forced);
         var summary = $"Reloaded {Path.GetFileName(state.Path)}: {changed} changed, {rejected.Count} rejected, {adjusted.Count} adjusted";
         if (changed + rejected.Count + adjusted.Count > 0)
@@ -292,6 +290,8 @@ public static class CatConfig
             Log.Warning($"{problem.OwnerId}: value \"{problem.RawValue}\" of [{problem.Section}] {problem.Key} {problem.Reason}. Using {problem.EffectiveValue}");
             SafeInvoker.Invoke(ValueAdjusted, problem, "CatConfig.ValueAdjusted", Log);
         }
+
+        settings.RefreshAll();
 
         SafeInvoker.Invoke(FileReloaded, report, "CatConfig.FileReloaded", Log);
         return report;

@@ -4,6 +4,7 @@ using CatLib.Config;
 using CatLib.Game.Bridge;
 using CatLib.Logging;
 using CatLib.Threading;
+using CatLib.UI;
 
 namespace CatLib.Core;
 
@@ -25,6 +26,7 @@ public static class CatLibRuntime
         FrameLoop.Initialize();
         ManagerRegistry.Initialize(Log.Scope("Bridge"));
         CatConfig.Initialize(Log.Scope("Config"));
+        ModsMenu.Initialize(Log.Scope("UI"));
         plugin.AddComponent<CatLibBehaviour>();
         IsInitialized = true;
         Log.Info($"CatLib {PluginMeta.Version} initialized on managed thread {MainThread.ManagedThreadId}");
