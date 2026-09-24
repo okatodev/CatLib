@@ -70,6 +70,20 @@ and the player sees a message that the change applies after a restart. Appliers 
 
 The file itself is never rewritten while the player is editing it.
 
+## Resetting from code
+
+```csharp
+var changed = settings.ResetToDefaults(setting => !setting.IsHiddenInMenu);
+```
+
+All matching settings return to their defaults, appliers run as usual and the file is saved once.
+
+## Messages to the player
+
+Restart-only changes, rejected values and adjusted values are shown to the player:
+in the status line of the Mods tab while the settings menu is open, and as the game's own notifications during a level.
+Messages are available in English and Russian and follow the game language.
+
 ## Diagnostics
 
 `CatConfig` exposes `FileReloaded`, `ValueRejected`, `ValueAdjusted` and `RestartRequired` for tools and UI.
@@ -94,6 +108,11 @@ Edits to the file while the menu is open show up in the menu.
 settings.Local("General", "Seed", 42, "World seed.").Label("World seed");
 settings.Local("Debug", "InternalCounter", 0, "Used by the mod itself.").HiddenInMenu();
 ```
+
+The top of the settings pane shows the mod name, its version and how many settings wait for a restart.
+Below the settings, a context line shows the description of the setting under the pointer or the one selected with a gamepad,
+together with its default value, its range or its options.
+The "Revert settings to default" button resets the selected mod after the game's own confirmation popup; hidden settings are not touched.
 
 `Label` replaces the label generated from the key (`ExtraFov` becomes "Extra Fov").
 `HiddenInMenu` keeps a setting out of the menu; it still lives in the file and reloads live.

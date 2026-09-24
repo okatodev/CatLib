@@ -21,6 +21,7 @@ internal static class ModsMenu
     internal static void Initialize(CatLogger log)
     {
         _log = log;
+        PlayerMessages.Initialize(log);
     }
 
     internal static void Update()

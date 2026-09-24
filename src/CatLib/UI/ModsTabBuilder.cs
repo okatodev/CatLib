@@ -1,5 +1,6 @@
 using System;
 using CatLib.Il2Cpp;
+using TMPro;
 using CatLib.Logging;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,13 @@ internal static class ModsTabBuilder
     public const float PaneGap = 30f;
     public const float PaneInset = 90f;
     public const float ScrollbarAllowance = 40f;
+    public const float ContextHeight = 72f;
+    public const float ContextGap = 12f;
+    public const float ContextFontSize = 22f;
+    public const float StatusWidth = 960f;
+    public const float StatusHeight = 70f;
+    public const float StatusBottom = 95f;
+    public const float StatusFontSize = 24f;
 
     public static bool IsReady(OptionsInterface options)
     {
@@ -64,13 +72,12 @@ internal static class ModsTabBuilder
         var listHeader = UnityEngine.Object.Instantiate(headerTemplate, listScroll.content, false);
         listHeader.name = "group_SettingsHeader CatLibModList";
         listHeader.SetActive(true);
-        var contentHeader = UnityEngine.Object.Instantiate(headerTemplate, contentScroll.content, false);
-        contentHeader.name = "group_SettingsHeader CatLibModSettings";
-        contentHeader.SetActive(true);
-
         var rowTemplates = RowTemplates.Capture(options, headerTemplate, templates.transform);
+        var contextText = CreateContextText(rowTemplates, panel.transform, contentScroll, contentWidth);
+        var statusText = CreateStatusText(rowTemplates, panel.transform);
 
-        Selectable firstSelected = panel.GetComponentInChildren<SelectableButton>(true);
+        var resetButton = panel.GetComponentInChildren<SelectableButton>(true);
+        Selectable firstSelected = resetButton;
         if (firstSelected == null)
         {
             firstSelected = panel.GetComponentInChildren<Selectable>(true);
@@ -102,9 +109,9 @@ internal static class ModsTabBuilder
         tabs.Add(tab);
 
         var fitter = new TabBarFitter(options.TabsParent.TryCast<RectTransform>(), options.transform.TryCast<RectTransform>());
-        var controller = new ModsPanel(options, tab, rowTemplates, listScroll.content, contentScroll.content, contentHeader,
+        var controller = new ModsPanel(options, tab, rowTemplates, listScroll, contentScroll, contextText, statusText, resetButton,
             listWidth - ScrollbarAllowance, contentWidth - ScrollbarAllowance, log);
-        var modsTab = new ModsTab(context, options, tab, panel, listScroll, contentScroll, listHeader, contentHeader, templates, fitter, controller, bindings, log);
+        var modsTab = new ModsTab(context, options, tab, panel, listScroll, contentScroll, listHeader, templates, fitter, controller, bindings, log);
         modsTab.ApplyTexts();
         controller.RefreshList(true);
         return modsTab;
@@ -195,6 +202,45 @@ internal static class ModsTabBuilder
         FitContentWidth(listScroll, listWidth);
         FitContentWidth(contentScroll, contentWidth);
         return (listWidth, contentWidth);
+    }
+
+    private static TMP_Text CreateContextText(RowTemplates templates, Transform panel, ScrollRect contentScroll, float contentWidth)
+    {
+        var scroll = contentScroll.transform.TryCast<RectTransform>();
+        var size = scroll.sizeDelta;
+        var position = scroll.anchoredPosition;
+        var reserved = ContextHeight + ContextGap;
+        scroll.sizeDelta = new Vector2(size.x, size.y - reserved);
+        scroll.anchoredPosition = new Vector2(position.x, position.y + reserved / 2f);
+
+        var text = templates.CreateText(panel, "text_CatLibContext");
+        var rect = text.transform.TryCast<RectTransform>();
+        rect.anchorMin = scroll.anchorMin;
+        rect.anchorMax = scroll.anchorMax;
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.sizeDelta = new Vector2(contentWidth - ScrollbarAllowance, ContextHeight);
+        rect.anchoredPosition = new Vector2(position.x, position.y - size.y / 2f + ContextHeight / 2f);
+        text.fontSize = ContextFontSize;
+        text.alignment = TextAlignmentOptions.TopLeft;
+        text.textWrappingMode = TextWrappingModes.Normal;
+        text.overflowMode = TextOverflowModes.Ellipsis;
+        return text;
+    }
+
+    private static TMP_Text CreateStatusText(RowTemplates templates, Transform panel)
+    {
+        var text = templates.CreateText(panel, "text_CatLibStatus");
+        var rect = text.transform.TryCast<RectTransform>();
+        rect.anchorMin = new Vector2(0.5f, 0f);
+        rect.anchorMax = new Vector2(0.5f, 0f);
+        rect.pivot = new Vector2(0.5f, 0f);
+        rect.sizeDelta = new Vector2(StatusWidth, StatusHeight);
+        rect.anchoredPosition = new Vector2(0f, StatusBottom);
+        text.fontSize = StatusFontSize;
+        text.alignment = TextAlignmentOptions.Center;
+        text.textWrappingMode = TextWrappingModes.Normal;
+        text.overflowMode = TextOverflowModes.Ellipsis;
+        return text;
     }
 
     private static void FitContentWidth(ScrollRect scroll, float width)

@@ -76,6 +76,12 @@ internal sealed class SliderRow : SettingRow
         Pull();
     }
 
+    public override void Discard()
+    {
+        _hasPending = false;
+        _pending = null;
+    }
+
     private void OnValueChanged(float value)
     {
         _pending = Presentation.FromSlider(value);

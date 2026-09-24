@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>CatLib.Tests</AssemblyName>
     <RootNamespace>CatLib.Tests</RootNamespace>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <PluginGuid>catlib.tests</PluginGuid>
     <PluginMetaName>CatLib.Tests</PluginMetaName>
     <CatLibDeployFolder>CatLib.Tests</CatLibDeployFolder>

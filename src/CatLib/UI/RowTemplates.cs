@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,8 @@ internal sealed class RowTemplates
     private RowTemplates(GameObject header, GameObject toggle, GameObject slider, GameObject dropdown, GameObject text, GameObject listItem, float templateRowWidth)
     {
         TemplateRowWidth = templateRowWidth;
+        Label = toggle.transform.Find("panel_Label")?.GetComponentInChildren<TMP_Text>(true)?.gameObject
+                ?? throw new InvalidOperationException("The row label template was not found");
         TapeWidth = RowGeometry.TapeWidth(header);
         Header = header;
         Toggle = toggle;
@@ -26,6 +29,8 @@ internal sealed class RowTemplates
     public float TapeWidth { get; }
 
     public GameObject Header { get; }
+
+    public GameObject Label { get; }
 
     public GameObject Toggle { get; }
 
@@ -60,6 +65,16 @@ internal sealed class RowTemplates
     {
         var container = control?.parent?.parent?.parent?.TryCast<RectTransform>();
         return container == null ? 0f : container.rect.width;
+    }
+
+    public TMP_Text CreateText(Transform parent, string name)
+    {
+        var instance = UnityEngine.Object.Instantiate(Label, parent, false);
+        instance.name = name;
+        instance.SetActive(true);
+        var text = instance.GetComponent<TMP_Text>();
+        text.text = string.Empty;
+        return text;
     }
 
     public static GameObject Create(GameObject template, Transform parent, string name)

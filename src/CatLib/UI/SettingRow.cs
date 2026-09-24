@@ -50,6 +50,10 @@ internal abstract class SettingRow
     {
     }
 
+    public virtual void Discard()
+    {
+    }
+
     protected bool Write(object value)
     {
         try

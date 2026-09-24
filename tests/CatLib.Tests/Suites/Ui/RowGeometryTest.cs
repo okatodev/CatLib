@@ -55,7 +55,7 @@ public sealed class RowGeometryTest : TestCase
                 $"Track of {key} must have a visible thickness, got {track.Height:0}");
         }
 
-        var headers = new List<GameObject>(controller.SectionHeaders) { SettingsMenuFixture.Tab.ContentHeader, SettingsMenuFixture.Tab.ListHeader };
+        var headers = new List<GameObject>(controller.SectionHeaders) { SettingsMenuFixture.Tab.ListHeader };
         foreach (var header in headers)
         {
             var label = header.GetComponentInChildren<TMP_Text>(true);

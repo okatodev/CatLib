@@ -83,6 +83,51 @@ public sealed class CatSettings : IDisposable
     public Setting<T> Session<T>(string section, string key, T defaultValue, string description, AcceptableValueBase acceptableValues = null) =>
         Declare(SettingScope.Session, section, key, defaultValue, description, acceptableValues);
 
+    public int ResetToDefaults(Func<ISetting, bool> filter = null)
+    {
+        ISettingNode[] snapshot;
+        lock (_settings)
+        {
+            snapshot = _settings.ToArray();
+        }
+
+        var changed = 0;
+        var saveOnConfigSet = ConfigFile.SaveOnConfigSet;
+        ConfigFile.SaveOnConfigSet = false;
+        try
+        {
+            foreach (var setting in snapshot)
+            {
+                if (filter != null && !filter(setting))
+                {
+                    continue;
+                }
+
+                var entry = setting.EntryBase;
+                if (Equals(entry.BoxedValue, entry.DefaultValue))
+                {
+                    continue;
+                }
+
+                entry.BoxedValue = entry.DefaultValue;
+                changed++;
+            }
+        }
+        finally
+        {
+            ConfigFile.SaveOnConfigSet = saveOnConfigSet;
+        }
+
+        if (changed > 0 && saveOnConfigSet)
+        {
+            ConfigFile.Save();
+            CatConfig.RememberCurrentContent(this);
+        }
+
+        _log.Info($"Reset {changed} setting(s) of {OwnerId} to their defaults");
+        return changed;
+    }
+
     public void Dispose()
     {
         if (IsDisposed)

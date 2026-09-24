@@ -22,7 +22,6 @@ internal sealed class ModsTab
         ScrollRect listScroll,
         ScrollRect contentScroll,
         GameObject listHeader,
-        GameObject contentHeader,
         GameObject templates,
         TabBarFitter fitter,
         ModsPanel controller,
@@ -37,7 +36,6 @@ internal sealed class ModsTab
         ListScroll = listScroll;
         ContentScroll = contentScroll;
         ListHeader = listHeader;
-        ContentHeader = contentHeader;
         Templates = templates;
         Fitter = fitter;
         Controller = controller;
@@ -61,8 +59,6 @@ internal sealed class ModsTab
     public ScrollRect ContentScroll { get; }
 
     public GameObject ListHeader { get; }
-
-    public GameObject ContentHeader { get; }
 
     public GameObject Templates { get; }
 
