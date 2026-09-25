@@ -26,6 +26,10 @@ public sealed class HeightAndVariantsTest : TestCase
         Assert.False(DeckDecor.IsProp("Visuals", "Cube (6)"), "The deck floor under Visuals stays");
         Assert.False(DeckDecor.IsProp("Colliders", "prop_Something"), "Only direct children of Visuals count");
         Assert.False(DeckDecor.IsProp("Visuals", null), "Nameless objects are ignored");
+        Assert.True(DeckDecor.IsLargeCrate("prop_LD_Crate_Standard"), "The standard crate covers 2x2 cells");
+        Assert.True(DeckDecor.IsSmallCrate("prop_LD_Crate_Small_02 (1)") && !DeckDecor.IsLargeCrate("prop_LD_Crate_Small"), "Small crates cover two cells");
+        Assert.True(DeckDecor.IsSmallProp("prop_LD_Bottle (2)") && DeckDecor.IsSmallProp("prop_LD_Lamp"), "Bottles and lamps fill single cells");
+        Assert.False(DeckDecor.IsSmallProp("prop_LD_Rope_Small"), "Rope coils are wider than a cell and are not used");
 
         var tracker = new InstanceTracker();
         Assert.False(tracker.Observe(System.IntPtr.Zero), "No manager at the start is not a change");

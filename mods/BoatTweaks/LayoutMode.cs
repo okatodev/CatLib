@@ -5,5 +5,15 @@ public enum LayoutMode
     Game,
     Empty,
     GameVariants,
-    FixedVariant
+    FixedVariant,
+    Custom,
+    Generated,
+    Mixed
+}
+
+public enum CustomOrder
+{
+    Random,
+    Sequence,
+    Fixed
 }

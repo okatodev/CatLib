@@ -156,10 +156,10 @@ public sealed class TextCatalog
 
     public string Get(string key) => Get(key, CatLanguage.Current);
 
-    public string Format(string key, string language, params object[] arguments) =>
+    public string FormatFor(string language, string key, params object[] arguments) =>
         string.Format(CultureInfo.InvariantCulture, Get(key, language), arguments);
 
-    public string Format(string key, params object[] arguments) => Format(key, CatLanguage.Current, arguments);
+    public string Format(string key, params object[] arguments) => FormatFor(CatLanguage.Current, key, arguments);
 
     private static void Flatten(JsonElement element, string prefix, List<KeyValuePair<string, string>> entries)
     {

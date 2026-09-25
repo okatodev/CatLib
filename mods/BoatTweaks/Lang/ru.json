@@ -6,7 +6,11 @@
     "Layout": "Узор палубы",
     "GameVariants": "Узоры игры",
     "FixedVariant": "Один узор игры",
-    "Height": "Высота"
+    "Height": "Высота",
+    "CustomLayouts": "Свои узоры",
+    "Generated": "Генерация",
+    "Mixed": "Смесь",
+    "Saving": "Сохранение"
   },
   "setting": {
     "Layout.Mode": "Режим",
@@ -20,12 +24,43 @@
     "Height.ApprovedHeightScale": "Одобренная высота",
     "Height.ApprovedHeightScale.description": "Множитель высоты, выше которой стопка на корабле подсвечивается красным. 1 — как в игре.",
     "Height.MaximumHeightScale": "Максимальная высота",
-    "Height.MaximumHeightScale.description": "Множитель абсолютного предела высоты стопок на корабле. Одобренная высота никогда его не превышает."
+    "Height.MaximumHeightScale.description": "Множитель абсолютного предела высоты стопок на корабле. Одобренная высота никогда его не превышает.",
+    "CustomLayouts.Order": "Порядок",
+    "CustomLayouts.Order.description": "Как выбираются свои узоры: случайно, по очереди по имени файла или всегда один файл. Работает в режимах «Свои узоры» и «Смесь».",
+    "CustomLayouts.File": "Файл",
+    "CustomLayouts.File.description": "Имя файла узора для порядка «Всегда один файл», например deck_20260925_215809. Работает в режиме «Свои узоры».",
+    "CustomLayouts.AvoidRepeats": "Не повторять подряд",
+    "CustomLayouts.AvoidRepeats.description": "При случайном выборе один и тот же свой узор не выпадет два раза подряд.",
+    "Generated.Density": "Плотность",
+    "Generated.Density.description": "Доля палубы, которую занимают сгенерированные ограничители. Работает в режимах «Генерация» и «Смесь».",
+    "Generated.EdgesOnly": "Только у бортов",
+    "Generated.EdgesOnly.description": "Сгенерированные ограничители стоят у бортов, как в игре, а середина палубы остаётся свободной.",
+    "Mixed.GameWeight": "Палуба игры",
+    "Mixed.GameWeight.description": "Вес палубы игры в режиме «Смесь».",
+    "Mixed.EmptyWeight": "Пустая палуба",
+    "Mixed.EmptyWeight.description": "Вес пустой палубы в режиме «Смесь».",
+    "Mixed.CustomWeight": "Свои узоры",
+    "Mixed.CustomWeight.description": "Вес своих узоров в режиме «Смесь». Не учитывается, если их нет.",
+    "Mixed.GeneratedWeight": "Генерация",
+    "Mixed.GeneratedWeight.description": "Вес сгенерированной палубы в режиме «Смесь».",
+    "Saving.SaveHotkey": "Сохранить палубу",
+    "Saving.SaveHotkey.description": "Сохраняет палубу корабля у причала как свой узор. Клетки посылок, приплывших с этим кораблём, не сохраняются; все остальные занятые клетки сохраняются, поэтому сначала снимите лишние посылки."
   },
   "enum": {
     "LayoutMode.Game": "Как в игре",
     "LayoutMode.Empty": "Пусто",
     "LayoutMode.GameVariants": "Узоры игры",
-    "LayoutMode.FixedVariant": "Один узор игры"
+    "LayoutMode.FixedVariant": "Один узор игры",
+    "LayoutMode.Custom": "Свои узоры",
+    "LayoutMode.Generated": "Генерация",
+    "LayoutMode.Mixed": "Смесь",
+    "CustomOrder.Random": "Случайно",
+    "CustomOrder.Sequence": "По очереди",
+    "CustomOrder.Fixed": "Всегда один файл"
+  },
+  "message": {
+    "saved": "Палуба сохранена: {0}",
+    "noBoat": "У причала нет корабля",
+    "noGrid": "Палуба корабля ещё не готова"
   }
 }

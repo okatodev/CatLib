@@ -34,6 +34,8 @@ tests/CatLib.Tests/          in-game test plugin, developers only
 | `CatLib.UI` | Mods tab injected into the game's settings menu |
 | `CatLib.Net` | Mod compatibility handshake and session settings sync |
 | `CatLib.Localization` | Translation catalogs for mods and the game language |
+| `CatLib.Il2Cpp` | `Il2CppArrays` reads two-dimensional IL2CPP arrays that interop cannot type |
+| `CatLib.UI` | `Notifications.Show` shows a message as a game notification in a level and in the Mods tab |
 | `CatLib.Tests.Framework` | In-game test runner |
 | `CatLib.Tests.Timeline` | Game event timeline recorder |
 | `CatLib.Tests.Diagnostics` | Developer tools such as the UI hierarchy dump (F9) |

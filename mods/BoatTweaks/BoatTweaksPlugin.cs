@@ -1,3 +1,4 @@
+using System.IO;
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using CatLib.Config;
@@ -22,9 +23,10 @@ public sealed class BoatTweaksPlugin : BasePlugin
         var translations = settings.Texts.LoadEmbedded(typeof(BoatTweaksPlugin).Assembly, LanguageResourcePrefix);
         CatNetwork.Declare(this, SessionPolicy.RequiredOnAll);
 
-        _controller = new BoatController(log);
-        _controller.Settings = new BoatSettings(settings, _controller.RequestApply);
+        var library = new PatternLibrary(Path.Combine(Paths.ConfigPath, "BoatTweaks", "layouts"));
+        _controller = new BoatController(log, settings.Texts, library);
+        _controller.Settings = new BoatSettings(settings, _controller.RequestDecision, _controller.RequestApply);
         FrameLoop.Update += _controller.Update;
-        log.Info($"Boat Tweaks {PluginMeta.Version} loaded with {translations} translated text(s) in {string.Join(", ", settings.Texts.Languages)}");
+        log.Info($"Boat Tweaks {PluginMeta.Version} loaded with {translations} translated text(s) in {string.Join(", ", settings.Texts.Languages)}, own layouts in {library.Directory}");
     }
 }

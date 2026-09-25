@@ -9,6 +9,7 @@ var texts = CatLocalization.For(this);
 texts.LoadEmbedded(typeof(MyPlugin).Assembly, "MyMod.Lang.");
 texts.LoadDirectory(Path.Combine(Paths.ConfigPath, "MyMod", "lang"));
 var message = texts.Format("message.saved", fileName);
+var russian = texts.FormatFor("ru", "message.saved", fileName);
 ```
 
 `CatSettings.Texts` is the same catalog as `CatLocalization.For(ownerId)`.

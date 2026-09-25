@@ -6,7 +6,11 @@
     "Layout": "Deck layout",
     "GameVariants": "Game layouts",
     "FixedVariant": "One game layout",
-    "Height": "Height"
+    "Height": "Height",
+    "CustomLayouts": "Own layouts",
+    "Generated": "Generated",
+    "Mixed": "Mixed",
+    "Saving": "Saving"
   },
   "setting": {
     "Layout.Mode": "Mode",
@@ -20,12 +24,43 @@
     "Height.ApprovedHeightScale": "Approved height",
     "Height.ApprovedHeightScale.description": "Multiplier for the height above which a stack on the boat turns red. 1 keeps the game value.",
     "Height.MaximumHeightScale": "Maximum height",
-    "Height.MaximumHeightScale.description": "Multiplier for the absolute height limit of stacks on the boat. The approved height never exceeds it."
+    "Height.MaximumHeightScale.description": "Multiplier for the absolute height limit of stacks on the boat. The approved height never exceeds it.",
+    "CustomLayouts.Order": "Order",
+    "CustomLayouts.Order.description": "How own layouts are picked: at random, one after another by file name, or always one file. Works in the Own layouts and Mixed modes.",
+    "CustomLayouts.File": "File",
+    "CustomLayouts.File.description": "Name of the layout file used when the order is Always one file, for example deck_20260925_215809. Works in the Own layouts mode.",
+    "CustomLayouts.AvoidRepeats": "No repeats in a row",
+    "CustomLayouts.AvoidRepeats.description": "The same own layout never comes twice in a row when picked at random.",
+    "Generated.Density": "Density",
+    "Generated.Density.description": "Share of the deck taken by generated blockers. Works in the Generated and Mixed modes.",
+    "Generated.EdgesOnly": "Near the rails only",
+    "Generated.EdgesOnly.description": "Generated blockers stay near the rails, like in the game, and keep the middle of the deck free.",
+    "Mixed.GameWeight": "Game deck",
+    "Mixed.GameWeight.description": "Chance weight of the game deck in the Mixed mode.",
+    "Mixed.EmptyWeight": "Empty deck",
+    "Mixed.EmptyWeight.description": "Chance weight of an empty deck in the Mixed mode.",
+    "Mixed.CustomWeight": "Own layouts",
+    "Mixed.CustomWeight.description": "Chance weight of own layouts in the Mixed mode. Ignored when there are none.",
+    "Mixed.GeneratedWeight": "Generated deck",
+    "Mixed.GeneratedWeight.description": "Chance weight of a generated deck in the Mixed mode.",
+    "Saving.SaveHotkey": "Save the deck",
+    "Saving.SaveHotkey.description": "Saves the deck of the boat at the dock as an own layout. Cells of the parcels that arrived with this boat are left out; every other taken cell is saved, so take off the parcels you do not want in it."
   },
   "enum": {
     "LayoutMode.Game": "As in the game",
     "LayoutMode.Empty": "Empty",
     "LayoutMode.GameVariants": "Game layouts",
-    "LayoutMode.FixedVariant": "One game layout"
+    "LayoutMode.FixedVariant": "One game layout",
+    "LayoutMode.Custom": "Own layouts",
+    "LayoutMode.Generated": "Generated",
+    "LayoutMode.Mixed": "Mixed",
+    "CustomOrder.Random": "At random",
+    "CustomOrder.Sequence": "One after another",
+    "CustomOrder.Fixed": "Always one file"
+  },
+  "message": {
+    "saved": "Deck saved: {0}",
+    "noBoat": "No boat at the dock to save",
+    "noGrid": "The boat deck is not ready yet"
   }
 }

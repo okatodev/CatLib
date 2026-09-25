@@ -29,7 +29,10 @@ public sealed class TextCatalogTest : TestCase
         Assert.True(catalog.Has("only.en", "EN"), "Has normalizes the language code");
         Assert.Null(catalog.Find("missing", "ru"), "Unknown keys return null from Find");
         Assert.Equal("missing", catalog.Get("missing", "ru"), "Unknown keys return the key from Get");
-        Assert.Equal("Привет, Cat", catalog.Format("greeting", "ru", "Cat"), "Formatting");
+        Assert.Equal("Привет, Cat", catalog.FormatFor("ru", "greeting", "Cat"), "Formatting in a given language");
+        var current = catalog.Format("greeting", "Cat");
+        Assert.Equal(catalog.FormatFor(CatLanguage.Current, "greeting", "Cat"), current, "Format uses the current game language");
+        Assert.True(current.EndsWith("Cat"), "A single string argument is an argument, never a language");
         Assert.SequenceEqual(new[] { "en", "ru", "ru-ru" }, catalog.Languages, "Known languages");
 
         catalog.Add("ru", "mod.name", "Лодка");

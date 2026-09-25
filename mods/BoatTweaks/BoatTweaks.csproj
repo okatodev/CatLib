@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>BoatTweaks</AssemblyName>
     <RootNamespace>BoatTweaks</RootNamespace>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <PluginGuid>catlib.boattweaks</PluginGuid>
     <PluginMetaName>Boat Tweaks</PluginMetaName>
     <CatLibDeployFolder>BoatTweaks</CatLibDeployFolder>
