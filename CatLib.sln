@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7390798D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatLib.Tests", "tests\CatLib.Tests\CatLib.Tests.csproj", "{47D11F8B-F724-45E0-8591-7988C316AE7E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mods", "mods", "{5EAD98B1-8B7B-45C0-ABC9-5D42DCB8D4DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoatTweaks", "mods\BoatTweaks\BoatTweaks.csproj", "{7CAAA1D6-7FDF-4F4A-B90C-33F3DB655C9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,9 +32,14 @@ Global
 		{47D11F8B-F724-45E0-8591-7988C316AE7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47D11F8B-F724-45E0-8591-7988C316AE7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47D11F8B-F724-45E0-8591-7988C316AE7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CAAA1D6-7FDF-4F4A-B90C-33F3DB655C9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CAAA1D6-7FDF-4F4A-B90C-33F3DB655C9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CAAA1D6-7FDF-4F4A-B90C-33F3DB655C9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CAAA1D6-7FDF-4F4A-B90C-33F3DB655C9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1EB86FB7-2B70-4F47-8D3C-B50F6E2CDC04} = {BAFAE5E9-A369-4DA4-A403-54B684851C30}
 		{47D11F8B-F724-45E0-8591-7988C316AE7E} = {7390798D-BA5D-4760-8274-77526EB8BE16}
+		{7CAAA1D6-7FDF-4F4A-B90C-33F3DB655C9C} = {5EAD98B1-8B7B-45C0-ABC9-5D42DCB8D4DB}
 	EndGlobalSection
 EndGlobal

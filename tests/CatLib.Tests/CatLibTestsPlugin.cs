@@ -28,6 +28,9 @@ public sealed class CatLibTestsPlugin : BasePlugin
     private ConfigEntry<KeyboardShortcut> _probeHotkey;
     private ConfigEntry<KeyboardShortcut> _selfCheckHotkey;
     private ConfigEntry<KeyboardShortcut> _toastPreviewHotkey;
+    private ConfigEntry<KeyboardShortcut> _entityDumpHotkey;
+    private ConfigEntry<string> _entityDumpTypes;
+    private CatLib.Tests.Diagnostics.Inspection.EntityInspector _entityInspector;
     private NetworkProbes _probes;
     private UiHierarchyDumper _uiDumper;
     private StressMods _stressMods;
@@ -53,6 +56,10 @@ public sealed class CatLibTestsPlugin : BasePlugin
             "Create or remove a set of stress mods with many settings to check the Mods tab layout.");
         _probeHotkey = Config.Bind("Diagnostics", "NetworkProbeHotkey", new KeyboardShortcut(KeyCode.F7),
             "Send the next network probe to the other players.");
+        _entityDumpHotkey = Config.Bind("Diagnostics", "EntityDumpHotkey", new KeyboardShortcut(KeyCode.F4),
+            "Write what the camera looks at and the game objects of the focus types to BepInEx/CatLib.Tests/Dumps.");
+        _entityDumpTypes = Config.Bind("Diagnostics", "EntityDumpTypes", CatLib.Tests.Diagnostics.Inspection.EntityInspector.DefaultFocusTypes,
+            "Comma separated game types to list in every entity dump.");
         _toastPreviewHotkey = Config.Bind("Diagnostics", "NotificationPreviewHotkey", new KeyboardShortcut(KeyCode.F5),
             "Post a sample network message, to check how a game notification looks in a level.");
         _selfCheckHotkey = Config.Bind("Diagnostics", "SteamSelfCheckHotkey", new KeyboardShortcut(KeyCode.F6),
@@ -67,6 +74,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
         _uiDumper = new UiHierarchyDumper(Path.Combine(outputDirectory, "Dumps"), _log.Scope("UiDump"));
         _stressMods = new StressMods(Path.Combine(outputDirectory, "Stress"), _log.Scope("Stress"));
         _probes = new NetworkProbes(_log.Scope("Probe"));
+        _entityInspector = new CatLib.Tests.Diagnostics.Inspection.EntityInspector(Path.Combine(outputDirectory, "Dumps"), () => _entityDumpTypes.Value, _log.Scope("Inspect"));
         _reportWriter = new TestReportWriter(Path.Combine(outputDirectory, "Reports"));
         _runner = new TestRunner(TestRegistry.Discover(typeof(CatLibTestsPlugin).Assembly), _log.Scope("Runner"));
         _runner.Completed += OnRunCompleted;
@@ -152,6 +160,18 @@ public sealed class CatLibTestsPlugin : BasePlugin
         if (_probeHotkey.Value.IsDown())
         {
             _probes.SendNext();
+        }
+
+        if (_entityDumpHotkey.Value.IsDown())
+        {
+            try
+            {
+                _entityInspector.Dump();
+            }
+            catch (System.Exception exception)
+            {
+                _log.Error("Entity inspection failed", exception);
+            }
         }
 
         if (_toastPreviewHotkey.Value.IsDown())

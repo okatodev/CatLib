@@ -33,6 +33,7 @@ tests/CatLib.Tests/          in-game test plugin, developers only
 | `CatLib.Config` | Live settings: `CatSettings`, `Setting<T>`, `CatConfig` |
 | `CatLib.UI` | Mods tab injected into the game's settings menu |
 | `CatLib.Net` | Mod compatibility handshake and session settings sync |
+| `CatLib.Localization` | Translation catalogs for mods and the game language |
 | `CatLib.Tests.Framework` | In-game test runner |
 | `CatLib.Tests.Timeline` | Game event timeline recorder |
 | `CatLib.Tests.Diagnostics` | Developer tools such as the UI hierarchy dump (F9) |
@@ -58,6 +59,7 @@ Configuration: `BepInEx/config/catlib.tests.cfg`.
 
 - [Live settings](docs/Settings.md)
 - [Multiplayer compatibility](docs/Network.md)
+- [Localization](docs/Localization.md)
 - [Game events: observed behaviour](docs/GameEvents.md)
 
 ## Conventions
@@ -70,3 +72,31 @@ Configuration: `BepInEx/config/catlib.tests.cfg`.
 ## License
 
 MIT, see [LICENSE](LICENSE).
+
+## Developer hotkeys (CatLib.Tests)
+
+| Key | Tool |
+|---|---|
+| F4 | Entity dump: what the camera looks at, entity counts and the focus types, written to `BepInEx/CatLib.Tests/Dumps` |
+| F5 | Sample network message shown as a game notification |
+| F6 | Steam channel self check |
+| F7 | Network probes |
+| F8 | Stress mods for the Mods tab |
+| F9 | Settings menu UI dump |
+| F10 | Run the in-game tests |
+
+All keys can be changed in `catlib.tests.cfg`, section `[Diagnostics]`. The focus types of the entity dump are set with `EntityDumpTypes`.
+
+## Mods in this repository
+
+Gameplay mods built on CatLib live in `mods/`, one project per mod, released separately from CatLib:
+
+- each mod is its own BepInEx plugin with a `BepInDependency` on `catlib.core`;
+- each declares its network policy with `CatNetwork.Declare`;
+- shared build settings come from the repository's `Directory.Build.props`, so a mod project only sets its GUID, name, version and deploy folder.
+
+### Mods
+
+| Mod | Folder |
+|---|---|
+| Boat Tweaks | [mods/BoatTweaks](mods/BoatTweaks/README.md) |

@@ -18,7 +18,7 @@ internal static class ModsTabBuilder
     public const float PaneGap = 30f;
     public const float PaneInset = 90f;
     public const float ScrollbarAllowance = 40f;
-    public const float ContextHeight = 72f;
+    public const float ContextHeight = 96f;
     public const float ContextGap = 12f;
     public const float ContextFontSize = 22f;
     public const float StatusWidth = 960f;

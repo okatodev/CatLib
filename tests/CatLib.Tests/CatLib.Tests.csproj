@@ -10,5 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CatLib\CatLib.csproj" Private="false" />
+    <ProjectReference Include="..\..\mods\BoatTweaks\BoatTweaks.csproj" Private="false" />
   </ItemGroup>
 </Project>

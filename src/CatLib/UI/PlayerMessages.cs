@@ -97,5 +97,5 @@ internal static class PlayerMessages
 
     private static string Label(SettingValueProblem problem) => problem.Setting == null ? LabelFormatter.Prettify(problem.Key) : Label(problem.Setting);
 
-    private static string Label(ISetting setting) => setting.MenuLabel ?? LabelFormatter.Prettify(setting.Key);
+    private static string Label(ISetting setting) => CatLib.Localization.SettingTexts.Label(setting, UiText.LanguageCode);
 }

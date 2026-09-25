@@ -40,7 +40,7 @@ public sealed class ModsTabLayoutTest : TestCase
         Assert.Equal(UiText.Get(UiText.ModsTab, language), tabText, "Tab title");
         Assert.Equal(UiText.Get(UiText.ModsList, language), listHeader, "List header");
         var selected = modsTab.Controller.Selected;
-        var expectedTitle = selected == null ? UiText.Get(UiText.SelectMod, language) : selected.DisplayName;
+        var expectedTitle = selected == null ? UiText.Get(UiText.SelectMod, language) : CatLib.Localization.SettingTexts.ModName(selected, language);
         Assert.Equal(expectedTitle, cardTitle, "Card title");
         Assert.Equal(1 + modsTab.Controller.Items.Count, modsTab.ListScroll.content.childCount, "Children of the list pane content");
         Assert.True(modsTab.Controller.Items.Count >= 1, "The Mods list must contain at least the CatLib.Tests demo mod");

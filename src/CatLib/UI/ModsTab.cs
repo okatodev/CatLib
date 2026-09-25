@@ -83,7 +83,7 @@ internal sealed class ModsTab
         {
             _languageCode = languageCode;
             ApplyTexts();
-            Controller.RebuildRows();
+            Controller.RefreshList(true);
             Fitter.Invalidate();
         }
 

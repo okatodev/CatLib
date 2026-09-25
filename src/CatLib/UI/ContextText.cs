@@ -12,8 +12,8 @@ internal static class ContextText
     public static string For(ISetting setting, string languageCode)
     {
         var entry = setting.EntryBase;
-        var description = entry.Description?.Description;
-        var presentation = SettingPresentation.For(setting.ValueType, entry.Description?.AcceptableValues);
+        var description = CatLib.Localization.SettingTexts.Description(setting, languageCode);
+        var presentation = SettingPresentation.For(setting, languageCode);
 
         var details = new List<string>
         {

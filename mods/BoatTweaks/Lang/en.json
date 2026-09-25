@@ -1,0 +1,31 @@
+{
+  "mod": {
+    "name": "Boat Tweaks"
+  },
+  "section": {
+    "Layout": "Deck layout",
+    "GameVariants": "Game layouts",
+    "FixedVariant": "One game layout",
+    "Height": "Height"
+  },
+  "setting": {
+    "Layout.Mode": "Mode",
+    "Layout.Mode.description": "How the fixed crates, baskets and other blockers on the boat deck are chosen. Parcels that arrive with the boat never change. The sections below only work in their own mode.",
+    "GameVariants.Allowed": "Allowed layouts",
+    "GameVariants.Allowed.description": "Numbers of the game boat variants that may come, for example 1,2,4. Empty means all. Each variant keeps its own blockers and its own arriving parcels. Works in the Game layouts mode.",
+    "GameVariants.AvoidRepeats": "No repeats in a row",
+    "GameVariants.AvoidRepeats.description": "The same variant never comes twice in a row. Works in the Game layouts mode.",
+    "FixedVariant.Variant": "Layout number",
+    "FixedVariant.Variant.description": "The game boat variant that comes every time, with its own blockers and arriving parcels. If a level has fewer variants, its last one is used. Works in the One game layout mode.",
+    "Height.ApprovedHeightScale": "Approved height",
+    "Height.ApprovedHeightScale.description": "Multiplier for the height above which a stack on the boat turns red. 1 keeps the game value.",
+    "Height.MaximumHeightScale": "Maximum height",
+    "Height.MaximumHeightScale.description": "Multiplier for the absolute height limit of stacks on the boat. The approved height never exceeds it."
+  },
+  "enum": {
+    "LayoutMode.Game": "As in the game",
+    "LayoutMode.Empty": "Empty",
+    "LayoutMode.GameVariants": "Game layouts",
+    "LayoutMode.FixedVariant": "One game layout"
+  }
+}

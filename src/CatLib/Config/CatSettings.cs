@@ -4,6 +4,7 @@ using System.Linq;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
+using CatLib.Localization;
 using CatLib.Logging;
 
 namespace CatLib.Config;
@@ -28,6 +29,8 @@ public sealed class CatSettings : IDisposable
     public string DisplayName { get; }
 
     public string Version { get; }
+
+    public TextCatalog Texts => CatLocalization.For(OwnerId);
 
     public ConfigFile ConfigFile { get; }
 

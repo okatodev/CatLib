@@ -13,7 +13,7 @@ internal sealed class ModListItem
         Root = root;
         Toggle = root.GetComponent<Toggle>();
         Toggle.SetIsOnWithoutNotify(false);
-        UiClone.SetText(root, settings.DisplayName);
+        UiClone.SetText(root, CatLib.Localization.SettingTexts.ModName(settings, UiText.LanguageCode));
         UiEvents.Listen<bool>(Toggle.onValueChanged, isOn =>
         {
             if (isOn)

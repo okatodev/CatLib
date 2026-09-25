@@ -42,7 +42,10 @@ internal sealed class SettingPresentation
 
     public static bool IsNumeric(Type type) => WholeTypes.Contains(type) || FractionTypes.Contains(type);
 
-    public static SettingPresentation For(Type valueType, AcceptableValueBase acceptableValues)
+    public static SettingPresentation For(CatLib.Config.ISetting setting, string language) =>
+        For(setting.ValueType, setting.EntryBase.Description?.AcceptableValues, value => CatLib.Localization.SettingTexts.EnumValue(setting, value, language));
+
+    public static SettingPresentation For(Type valueType, AcceptableValueBase acceptableValues, Func<object, string> enumLabel = null)
     {
         if (valueType == typeof(bool))
         {
@@ -58,7 +61,7 @@ internal sealed class SettingPresentation
         if (valueType.IsEnum && !valueType.IsDefined(typeof(FlagsAttribute), false))
         {
             var values = Enum.GetValues(valueType).Cast<object>().ToList();
-            return Dropdown(valueType, values, values.Select(value => LabelFormatter.Prettify(value.ToString())).ToList());
+            return Dropdown(valueType, values, values.Select(value => enumLabel?.Invoke(value) ?? LabelFormatter.Prettify(value.ToString())).ToList());
         }
 
         if (IsNumeric(valueType) && TryRange(acceptableValues, out var min, out var max))

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>BoatTweaks</AssemblyName>
+    <RootNamespace>BoatTweaks</RootNamespace>
+    <Version>0.1.0</Version>
+    <PluginGuid>catlib.boattweaks</PluginGuid>
+    <PluginMetaName>Boat Tweaks</PluginMetaName>
+    <CatLibDeployFolder>BoatTweaks</CatLibDeployFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CatLib\CatLib.csproj" Private="false" />
+    <EmbeddedResource Include="Lang\*.json" LogicalName="BoatTweaks.Lang.%(Filename).json" />
+  </ItemGroup>
+</Project>

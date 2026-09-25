@@ -44,7 +44,7 @@ internal sealed class ModCard
             return;
         }
 
-        Set(Title, settings.DisplayName);
+        Set(Title, CatLib.Localization.SettingTexts.ModName(settings, languageCode));
         Set(Version, string.IsNullOrEmpty(settings.Version) ? string.Empty : UiText.Format(UiText.Version, languageCode, settings.Version));
         Set(Status, ContextText.CardStatus(settings, languageCode));
     }

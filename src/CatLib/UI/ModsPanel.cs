@@ -109,7 +109,7 @@ internal sealed class ModsPanel
 
     public static string RowLabel(ISetting setting, string languageCode)
     {
-        var label = setting.MenuLabel ?? LabelFormatter.Prettify(setting.Key);
+        var label = CatLib.Localization.SettingTexts.Label(setting, languageCode);
         if (setting.IsOverridden)
         {
             label += " " + UiText.Get(UiText.HostSuffix, languageCode);
@@ -304,7 +304,7 @@ internal sealed class ModsPanel
             foreach (var section in VisibleSettings(settings).GroupBy(setting => setting.Section))
             {
                 var header = RowTemplates.Create(_templates.Header, _settingsContent, "group_SettingsHeader " + section.Key);
-                SetHeaderText(header, LabelFormatter.Prettify(section.Key), _settingsWidth);
+                SetHeaderText(header, CatLib.Localization.SettingTexts.Section(settings, section.Key, languageCode), _settingsWidth);
                 _sectionHeaders.Add(header);
 
                 foreach (var setting in section)
@@ -326,7 +326,7 @@ internal sealed class ModsPanel
 
     private SettingRow CreateRow(ISetting setting, string languageCode)
     {
-        var presentation = SettingPresentation.For(setting.ValueType, setting.EntryBase.Description?.AcceptableValues);
+        var presentation = SettingPresentation.For(setting, languageCode);
         var template = presentation.Kind switch
         {
             ControlKind.Toggle => _templates.Toggle,
