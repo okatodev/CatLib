@@ -27,6 +27,19 @@ internal static class UiText
     public const string MessageReset = "MessageReset";
     public const string HostSuffix = "HostSuffix";
     public const string HostValue = "HostValue";
+    public const string NetPlayerIncompatible = "NetPlayerIncompatible";
+    public const string NetPlayerDisconnected = "NetPlayerDisconnected";
+    public const string NetPlayerDisconnectedBrief = "NetPlayerDisconnectedBrief";
+    public const string NetPlayerIncompatibleBrief = "NetPlayerIncompatibleBrief";
+    public const string NetYouWillBeDisconnected = "NetYouWillBeDisconnected";
+    public const string NetCardOtherMods = "NetCardOtherMods";
+    public const string NetHostIncompatible = "NetHostIncompatible";
+    public const string NetHostWithoutCatLib = "NetHostWithoutCatLib";
+    public const string ProblemProtocol = "ProblemProtocol";
+    public const string ProblemGame = "ProblemGame";
+    public const string ProblemMissingOnClient = "ProblemMissingOnClient";
+    public const string ProblemMissingOnHost = "ProblemMissingOnHost";
+    public const string ProblemVersion = "ProblemVersion";
     public const string SettingsCount = "SettingsCount";
     public const string PendingRestart = "PendingRestart";
 
@@ -48,10 +61,23 @@ internal static class UiText
         [On] = ("On", "Вкл"),
         [Off] = ("Off", "Выкл"),
         [Version] = ("v{0}", "v{0}"),
-        [MessageRestart] = ("{0}: {1} will change after a restart", "{0}: «{1}» изменится после перезапуска"),
+        [MessageRestart] = ("{0}: {1} changes after a restart", "{0}: «{1}» — после перезапуска"),
         [MessageRejected] = ("{0}: \"{2}\" is not a valid value for {1}", "{0}: «{2}» не подходит для «{1}»"),
-        [MessageAdjusted] = ("{0}: {1} was set to {3}, the nearest allowed value to \"{2}\"", "{0}: для «{1}» вместо «{2}» установлено ближайшее допустимое {3}"),
-        [MessageReset] = ("{0}: settings were reset to their defaults", "{0}: настройки сброшены по умолчанию")
+        [MessageAdjusted] = ("{0}: {1} set to {3} instead of \"{2}\"", "{0}: «{1}» = {3} вместо «{2}»"),
+        [MessageReset] = ("{0}: settings reset to defaults", "{0}: настройки сброшены по умолчанию"),
+        [NetPlayerIncompatible] = ("{0}: incompatible mods, {1}", "{0}: несовместимые моды, {1}"),
+        [NetPlayerDisconnected] = ("{0} was disconnected: {1}", "{0} отключён: {1}"),
+        [NetPlayerDisconnectedBrief] = ("{0} was disconnected: {1}", "{0} отключён: {1}"),
+        [NetPlayerIncompatibleBrief] = ("{0} has other mods: {1}", "У {0} другие моды: {1}"),
+        [NetYouWillBeDisconnected] = ("The host will disconnect you: {0}", "Хост отключит вас: {0}"),
+        [NetCardOtherMods] = ("other mods", "другие моды"),
+        [NetHostIncompatible] = ("Mods do not match the host: {0}", "Моды не совпадают с хостом: {0}"),
+        [NetHostWithoutCatLib] = ("The host has no CatLib, these may not work: {0}", "У хоста нет CatLib, могут не работать: {0}"),
+        [ProblemProtocol] = ("CatLib version", "версия CatLib"),
+        [ProblemGame] = ("game version", "версия игры"),
+        [ProblemMissingOnClient] = ("{0} missing on the client", "{0} нет у клиента"),
+        [ProblemMissingOnHost] = ("{0} missing on the host", "{0} нет у хоста"),
+        [ProblemVersion] = ("{0} {1} vs {2}", "{0} {1} против {2}")
     };
 
     private static readonly Dictionary<string, (string EnglishOne, string EnglishOther, string RussianOne, string RussianFew, string RussianMany)> Plurals = new()

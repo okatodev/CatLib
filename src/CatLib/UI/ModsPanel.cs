@@ -44,6 +44,8 @@ internal sealed class ModsPanel
     private Vector3 _lastMouse;
     private IntPtr _lastSelected;
 
+    internal static Func<Vector3?> PointerOverride { get; set; }
+
     public ModsPanel(
         OptionsInterface options,
         TabInterface tab,
@@ -70,8 +72,8 @@ internal sealed class ModsPanel
         ContextLabel = contextText;
         StatusLabel = statusText;
         ResetButton = resetButton;
-        _gameDropdowns = options._dropdowns?.ToArray() ?? Array.Empty<SelectableDropdown>();
-        _gameInputFields = options._inputFields?.ToArray() ?? Array.Empty<SelectableInputField>();
+        _gameDropdowns = (options._dropdowns?.ToArray() ?? Array.Empty<SelectableDropdown>()).Where(UiClone.IsAlive).ToArray();
+        _gameInputFields = (options._inputFields?.ToArray() ?? Array.Empty<SelectableInputField>()).Where(UiClone.IsAlive).ToArray();
         Card = new ModCard(templates, _settingsContent, settingsWidth);
 
         if (resetButton != null)
@@ -411,8 +413,10 @@ internal sealed class ModsPanel
     private SettingRow FindFocusedRow()
     {
         var input = UnityInput.Current;
-        var mouse = input.mousePresent ? input.mousePosition : _lastMouse;
-        if (input.mousePresent && (mouse - _lastMouse).sqrMagnitude > 0.25f)
+        var overridden = PointerOverride?.Invoke();
+        var hasPointer = overridden.HasValue || input.mousePresent;
+        var mouse = overridden ?? (input.mousePresent ? input.mousePosition : _lastMouse);
+        if (hasPointer && (mouse - _lastMouse).sqrMagnitude > 0.25f)
         {
             _pointerMode = true;
             _lastMouse = mouse;
@@ -427,27 +431,38 @@ internal sealed class ModsPanel
             _pointerMode = false;
         }
 
+        var hovered = hasPointer ? HoveredRow(mouse) : null;
         if (_pointerMode)
         {
-            var camera = _canvas == null || _canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : _canvas.worldCamera;
-            var point = new Vector2(mouse.x, mouse.y);
-            if (!RectTransformUtility.RectangleContainsScreenPoint(_settingsViewport, point, camera))
-            {
-                return null;
-            }
+            return hovered;
+        }
 
-            foreach (var row in _rows)
-            {
-                var rect = row.Root.transform.TryCast<RectTransform>();
-                if (rect != null && RectTransformUtility.RectangleContainsScreenPoint(rect, point, camera))
-                {
-                    return row;
-                }
-            }
+        return SelectedRow(selected) ?? hovered;
+    }
 
+    private SettingRow HoveredRow(Vector3 mouse)
+    {
+        var camera = _canvas == null || _canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : _canvas.worldCamera;
+        var point = new Vector2(mouse.x, mouse.y);
+        if (!RectTransformUtility.RectangleContainsScreenPoint(_settingsViewport, point, camera))
+        {
             return null;
         }
 
+        foreach (var row in _rows)
+        {
+            var rect = row.Root.transform.TryCast<RectTransform>();
+            if (rect != null && RectTransformUtility.RectangleContainsScreenPoint(rect, point, camera))
+            {
+                return row;
+            }
+        }
+
+        return null;
+    }
+
+    private SettingRow SelectedRow(GameObject selected)
+    {
         if (selected == null)
         {
             return null;

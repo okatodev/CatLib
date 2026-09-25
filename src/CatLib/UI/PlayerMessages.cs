@@ -38,7 +38,11 @@ internal static class PlayerMessages
         CatConfig.ValueAdjusted += OnValueAdjusted;
     }
 
-    public static void Post(string text)
+    public static string LastBrief { get; private set; }
+
+    public static void Post(string text) => Post(text, null);
+
+    public static void Post(string text, string brief)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
@@ -46,10 +50,11 @@ internal static class PlayerMessages
         }
 
         Last = text;
+        LastBrief = ToastText.Format(brief ?? text);
         LastPostedAt = Clock.Elapsed.TotalSeconds;
         Count++;
         SafeInvoker.Invoke(Posted, text, "PlayerMessages.Posted", _log);
-        DeliverInGame(text);
+        DeliverInGame(LastBrief);
     }
 
     private static void DeliverInGame(string text)

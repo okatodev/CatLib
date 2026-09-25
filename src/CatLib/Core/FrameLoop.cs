@@ -3,6 +3,7 @@ using System.Diagnostics;
 using CatLib.Config;
 using CatLib.Events;
 using CatLib.Game.Bridge;
+using CatLib.Net;
 using CatLib.Threading;
 using CatLib.UI;
 
@@ -30,6 +31,7 @@ public static class FrameLoop
         ManagerRegistry.Update();
         CatConfig.Update();
         ModsMenu.Update();
+        SessionNetwork.Update();
         SafeInvoker.Invoke(Update, "FrameLoop.Update", CatLibRuntime.Log);
     }
 }

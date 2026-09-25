@@ -32,7 +32,74 @@ internal static class ModsTabBuilder
         return tabs != null && tabs.Count > 0 && tabs[0].Selected != null && options.TabsParent != null;
     }
 
+    public static int RemoveStale(OptionsInterface options)
+    {
+        var removed = 0;
+        var tabs = options._tabs;
+        var selected = options._selectedTab;
+        if (selected != null && UiClone.IsAlive(selected) && selected.gameObject.name == TabName)
+        {
+            for (var index = 0; index < tabs.Count; index++)
+            {
+                if (tabs[index] != null && tabs[index].gameObject.name != TabName)
+                {
+                    tabs[index].SetTabActive(true, true);
+                    break;
+                }
+            }
+        }
+
+        for (var index = tabs.Count - 1; index >= 0; index--)
+        {
+            var tab = tabs[index];
+            if (tab != null && tab.gameObject.name == TabName)
+            {
+                tabs.RemoveAt(index);
+            }
+        }
+
+        var bar = options.TabsParent;
+        for (var index = bar.childCount - 1; index >= 0; index--)
+        {
+            var child = bar.GetChild(index).gameObject;
+            if (child.name == TabName)
+            {
+                UnityEngine.Object.DestroyImmediate(child);
+                removed++;
+            }
+        }
+
+        var panelParent = tabs.Count > 0 && tabs[0].AssociatedPanel != null ? tabs[0].AssociatedPanel.transform.parent : null;
+        if (panelParent != null)
+        {
+            for (var index = panelParent.childCount - 1; index >= 0; index--)
+            {
+                var child = panelParent.GetChild(index).gameObject;
+                if (child.name == PanelName)
+                {
+                    UnityEngine.Object.DestroyImmediate(child);
+                    removed++;
+                }
+            }
+        }
+
+        return removed;
+    }
+
     public static ModsTab Build(MenuContext context, OptionsInterface options, CatLogger log)
+    {
+        var staging = UiClone.CreateStaging(options.transform);
+        try
+        {
+            return Build(context, options, staging.transform, log);
+        }
+        finally
+        {
+            UnityEngine.Object.DestroyImmediate(staging);
+        }
+    }
+
+    private static ModsTab Build(MenuContext context, OptionsInterface options, Transform staging, CatLogger log)
     {
         var tabs = options._tabs;
         var templateTab = tabs[tabs.Count - 1];
@@ -42,7 +109,7 @@ internal static class ModsTabBuilder
             throw new InvalidOperationException("No settings panel with a scroll view was found to use as a template");
         }
 
-        var panel = UiClone.CloneInactive(templatePanel, PanelName);
+        var panel = UiClone.CloneInactive(templatePanel, staging, PanelName);
         panel.SetActive(false);
         DestroyGameInterfaces(panel);
 
@@ -85,7 +152,7 @@ internal static class ModsTabBuilder
             firstSelected = panel.GetComponentInChildren<Selectable>(true);
         }
 
-        var tabObject = UiClone.CloneInactive(templateTab.gameObject, TabName);
+        var tabObject = UiClone.CloneInactive(templateTab.gameObject, staging, TabName);
         UiClone.StripLocalization(tabObject);
         var tab = tabObject.GetComponent<TabInterface>();
         var button = tabObject.GetComponent<Button>();

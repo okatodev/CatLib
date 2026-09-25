@@ -4,5 +4,6 @@ public enum MessageType : byte
 {
     Hello = 1,
     Verdict = 2,
-    SettingsUpdate = 3
+    SettingsUpdate = 3,
+    Announce = 4
 }

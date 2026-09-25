@@ -30,7 +30,7 @@ public sealed class SessionRejectionTest : TestCase
         var mismatch = new NetworkFixture(Identity(), Identity());
         mismatch.Host.OnPeerConnected(ClientId);
         var future = MessageCodec.Encode(new HelloMessage(Identity()));
-        future[4] = 2;
+        future[4] = (byte)(MessageCodec.ProtocolVersion + 1);
         mismatch.Host.OnReceived(ClientId, future);
         mismatch.Network.Pump();
         Assert.SequenceEqual(new[] { ProblemKind.ProtocolMismatch }, mismatch.Host.ReportFor(ClientId).Problems.Select(problem => problem.Kind), "Protocol mismatch on the host");

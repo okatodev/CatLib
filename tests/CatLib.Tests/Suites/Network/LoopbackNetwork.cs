@@ -23,6 +23,25 @@ internal sealed class LoopbackNetwork
 
     public void Enqueue(ulong from, ulong to, byte[] payload) => _queue.Enqueue((from, to, payload));
 
+    public int Queued => _queue.Count;
+
+    public bool PumpOne()
+    {
+        if (_queue.Count == 0)
+        {
+            return false;
+        }
+
+        var (from, to, payload) = _queue.Dequeue();
+        if (_receivers.TryGetValue(to, out var receiver))
+        {
+            receiver(from, payload);
+            Delivered++;
+        }
+
+        return true;
+    }
+
     public int Pump()
     {
         var delivered = 0;

@@ -4,9 +4,11 @@ namespace CatLib.Net;
 
 public sealed record HelloMessage(LocalIdentity Identity);
 
-public sealed record VerdictMessage(bool Accepted, IReadOnlyList<CompatibilityProblem> Problems, IReadOnlyList<SessionSettingValue> Settings);
+public sealed record VerdictMessage(bool Accepted, IReadOnlyList<CompatibilityProblem> Problems, IReadOnlyList<SessionSettingValue> Settings, bool Disconnecting = false);
 
 public sealed record SettingsUpdateMessage(IReadOnlyList<SessionSettingValue> Settings);
+
+public sealed record AnnounceMessage;
 
 public sealed record DecodedMessage(ushort Protocol, MessageType Type, object Payload)
 {

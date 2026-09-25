@@ -31,6 +31,17 @@ public sealed class SessionHandshakeTest : TestCase
         Assert.True(fixture.Client.Report.IsCompatible, "Client report");
         Assert.SequenceEqual(hostSettings, ((RecordingSink)fixture.Sink).Applied, "Session settings delivered with the verdict");
 
+        var sentBefore = fixture.ClientTransport.Sent;
+        fixture.Client.ResendHello();
+        Assert.Equal(sentBefore, fixture.ClientTransport.Sent, "A client with a verdict must not resend Hello");
+
+        fixture.Host.OnReceived(ClientId, MessageCodec.Encode(new HelloMessage(Identity(Mod("gameplay", "1.2.3", SessionPolicy.RequiredOnAll)))));
+        fixture.Network.Pump();
+        Assert.Equal(1, hostReports.Count, "A late duplicate Hello must not evaluate the peer again");
+        Assert.Equal(1, fixture.Host.RepeatedHellosFrom(ClientId), "Repeated Hellos are counted");
+        Assert.Equal(SessionStatus.Accepted, fixture.Client.Status, "A repeated verdict must not change the client state");
+        Assert.Equal(1, ((RecordingSink)fixture.Sink).Applied.Count, "A repeated verdict must not apply settings twice");
+
         var update = new[] { new SessionSettingValue("gameplay", "Rules", "Limit", "9") };
         Assert.Equal(1, fixture.Host.BroadcastSettings(update), "Accepted peers receiving an update");
         fixture.Network.Pump();

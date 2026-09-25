@@ -61,3 +61,49 @@ Strings are a presence flag, a 16-bit byte length and UTF-8 bytes.
 Limits: 64 KiB per message, 1 KiB per string, 1024 items per list.
 A message with another protocol version is detected from the header and its payload is not parsed.
 Malformed messages are rejected with `WireFormatException` and ignored by the sessions.
+
+## Game adapter
+
+CatLib talks over a separate Steam channel (`SteamNetworkingMessages`, channel `0x4341`) and never adds messages to the game's own protocol.
+Players without CatLib never read that channel, so they are not affected.
+
+- Game network events are only recorded in the game's callbacks; every Steam call happens on the next frame from CatLib's own loop.
+- The host starts when the game raises `ServerStarted` and sends `Announce` every second to each connected player that has not answered yet.
+- A client starts after `ClientConnectionAcknowledged`. It accepts an `Announce` only from a player the game reported through
+  `OtherClientConnected`, takes the sender as the host and answers with `Hello`, resent every 2 seconds until the verdict arrives.
+- Either side gives up after 12 seconds and treats the other as a player without CatLib.
+- The host answers a repeated `Hello` with the same verdict without evaluating the player again.
+- When a session setting changes on the host, the new value is sent to every accepted player.
+- Leaving the session, or any game restart, stops the session and removes all session overrides.
+- Connections that are not made through Steam (direct IP, offline mode) skip the checks.
+
+### Incompatible players
+
+With `OnIncompatiblePlayer = Warn` both sides are told and the player stays.
+With `Disconnect` the verdict carries a flag that the host will disconnect the player:
+
+- the client shows the reason in the lobby and leaves after 4 seconds through the lobby's own back button, the same way a player leaves;
+- the host disconnects the player itself after 8 seconds if the player is still connected on its side.
+  The game does not tell the host when a client leaves the lobby, so without this the host would only notice after its connection timeout.
+
+### What players see
+
+- In a level: the game's own notification, two lines of at most 34 characters, for example "RENTAI was disconnected:" and "CatLib Demo Network Mod".
+  The full text with versions goes to the log and to the status line of the Mods tab.
+- In the lobby, as a client: a line under "Waiting for the host".
+- In the lobby, as the host: "other mods" under the player's name on the player's card.
+- Player names come from Steam, mod names from the declarations; ids are used only when a name is unknown.
+
+Two ways to call Steam are available. `Interop` goes through the game's Steamworks.NET.
+`Flat` calls the flat C API of `steam_api64` directly with buffers laid out as in the Steamworks SDK;
+it looks up the functions first and falls back to `Interop` when they are missing.
+Before the first send, accept and receive of each session, CatLib records a `Net.NativeCall` event,
+so a crash inside Steam can be traced to the call that caused it.
+
+CatLib's own settings, shown as "CatLib" on the Mods tab:
+
+| Setting | Default | Meaning |
+|---|---|---|
+| `Network.Enabled` | `true` | Take part in checks and session settings. Applies from the next session. |
+| `Network.OnIncompatiblePlayer` | `Warn` | `Warn` shows a message to the host, `Disconnect` also disconnects the player. |
+| `Network.SteamApi` | `Interop` | How Steam is called. Only for diagnostics. Applies from the next session. |

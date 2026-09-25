@@ -7,28 +7,21 @@ namespace CatLib.UI;
 
 internal static class UiClone
 {
-    private static GameObject _staging;
-
-    public static Transform Staging
-    {
-        get
-        {
-            if (_staging == null)
-            {
-                _staging = new GameObject("CatLib.UiStaging");
-                _staging.SetActive(false);
-                _staging.hideFlags = HideFlags.HideAndDontSave;
-            }
-
-            return _staging.transform;
-        }
-    }
+    public const string StagingName = "CatLib.Staging";
 
     public static bool IsAlive(Object value) => value != null && !value.WasCollected;
 
-    public static GameObject CloneInactive(GameObject original, string name)
+    public static GameObject CreateStaging(Transform scope)
     {
-        var clone = Object.Instantiate(original, Staging, false);
+        var staging = new GameObject(StagingName);
+        staging.SetActive(false);
+        staging.transform.SetParent(scope, false);
+        return staging;
+    }
+
+    public static GameObject CloneInactive(GameObject original, Transform staging, string name)
+    {
+        var clone = Object.Instantiate(original, staging, false);
         clone.name = name;
         return clone;
     }

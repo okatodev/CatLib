@@ -13,11 +13,16 @@ public sealed class HostSession
     private readonly Func<IReadOnlyList<SessionSettingValue>> _snapshot;
     private readonly Func<double> _clock;
     private readonly double _helloTimeout;
+    private readonly double _announceInterval;
+    private readonly Func<bool> _disconnectIncompatible;
+    private readonly byte[] _announce = MessageCodec.Encode(new AnnounceMessage());
     private readonly CatLogger _log;
     private readonly Dictionary<ulong, PeerState> _peers = new();
 
-    public HostSession(ISessionTransport transport, LocalIdentity identity, Func<IReadOnlyList<SessionSettingValue>> snapshot, Func<double> clock, double helloTimeoutSeconds, CatLogger log)
+    public HostSession(ISessionTransport transport, LocalIdentity identity, Func<IReadOnlyList<SessionSettingValue>> snapshot, Func<double> clock, double helloTimeoutSeconds, CatLogger log, double announceIntervalSeconds = 1, Func<bool> disconnectIncompatible = null)
     {
+        _announceInterval = announceIntervalSeconds;
+        _disconnectIncompatible = disconnectIncompatible;
         _transport = transport;
         _identity = identity;
         _snapshot = snapshot;
@@ -33,6 +38,12 @@ public sealed class HostSession
     public int PeerCount => _peers.Count;
 
     public PeerReport ReportFor(ulong peer) => _peers.TryGetValue(peer, out var state) ? state.Report : null;
+
+    public bool HasPeer(ulong peer) => _peers.ContainsKey(peer);
+
+    public int RepeatedHellosFrom(ulong peer) => _peers.TryGetValue(peer, out var state) ? state.RepeatedHellos : 0;
+
+    public IReadOnlyList<ulong> PendingPeers => _peers.Where(pair => pair.Value.Report == null).Select(pair => pair.Key).ToList();
 
     public void OnPeerConnected(ulong peer)
     {
@@ -73,8 +84,9 @@ public sealed class HostSession
         if (message.IsProtocolMismatch)
         {
             var problems = new[] { new CompatibilityProblem(ProblemKind.ProtocolMismatch, "catlib", MessageCodec.ProtocolVersion.ToString(), message.Protocol.ToString()) };
-            Complete(peer, state, new PeerReport(peer, SessionStatus.Rejected, problems, null, null));
-            Send(peer, MessageCodec.Encode(new VerdictMessage(false, problems, Array.Empty<SessionSettingValue>())));
+            var disconnect = ShouldDisconnect();
+            Complete(peer, state, new PeerReport(peer, SessionStatus.Rejected, problems, null, null, disconnect));
+            Send(peer, MessageCodec.Encode(new VerdictMessage(false, problems, Array.Empty<SessionSettingValue>(), disconnect)));
             return;
         }
 
@@ -86,10 +98,21 @@ public sealed class HostSession
 
         var found = Compatibility.Compare(_identity, hello.Identity);
         var accepted = found.Count == 0;
+        var disconnecting = !accepted && ShouldDisconnect();
         var settings = accepted ? _snapshot() : Array.Empty<SessionSettingValue>();
-        Send(peer, MessageCodec.Encode(new VerdictMessage(accepted, found, settings)));
-        Complete(peer, state, new PeerReport(peer, accepted ? SessionStatus.Accepted : SessionStatus.Rejected, found, hello.Identity.CatLibVersion, hello.Identity.GameVersion));
+        Send(peer, MessageCodec.Encode(new VerdictMessage(accepted, found, settings, disconnecting)));
+
+        var status = accepted ? SessionStatus.Accepted : SessionStatus.Rejected;
+        if (state.Report != null && state.Report.Status == status)
+        {
+            state.RepeatedHellos++;
+            return;
+        }
+
+        Complete(peer, state, new PeerReport(peer, status, found, hello.Identity.CatLibVersion, hello.Identity.GameVersion, disconnecting));
     }
+
+    public int AnnouncesSentTo(ulong peer) => _peers.TryGetValue(peer, out var state) ? state.Announces : 0;
 
     public void Update()
     {
@@ -97,13 +120,25 @@ public sealed class HostSession
         foreach (var pair in _peers.ToList())
         {
             var state = pair.Value;
-            if (state.Report != null || now - state.ConnectedAt < _helloTimeout)
+            if (state.Report != null)
+            {
+                continue;
+            }
+
+            if (now - state.LastAnnounce >= _announceInterval)
+            {
+                state.LastAnnounce = now;
+                state.Announces++;
+                Send(pair.Key, _announce);
+            }
+
+            if (now - state.ConnectedAt < _helloTimeout)
             {
                 continue;
             }
 
             var problems = Compatibility.Compare(_identity, null);
-            Complete(pair.Key, state, new PeerReport(pair.Key, SessionStatus.PeerWithoutCatLib, problems, null, null));
+            Complete(pair.Key, state, new PeerReport(pair.Key, SessionStatus.PeerWithoutCatLib, problems, null, null, problems.Count > 0 && ShouldDisconnect()));
         }
     }
 
@@ -126,6 +161,18 @@ public sealed class HostSession
         }
 
         return sent;
+    }
+
+    private bool ShouldDisconnect()
+    {
+        try
+        {
+            return _disconnectIncompatible?.Invoke() ?? false;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     private void Complete(ulong peer, PeerState state, PeerReport report)
@@ -156,5 +203,11 @@ public sealed class HostSession
         public double ConnectedAt { get; }
 
         public PeerReport Report { get; set; }
+
+        public int RepeatedHellos { get; set; }
+
+        public double LastAnnounce { get; set; } = double.NegativeInfinity;
+
+        public int Announces { get; set; }
     }
 }

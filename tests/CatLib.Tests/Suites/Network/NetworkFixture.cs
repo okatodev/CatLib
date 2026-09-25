@@ -16,9 +16,9 @@ internal sealed class NetworkFixture
         Network = new LoopbackNetwork();
         Sink = clientSink ?? new RecordingSink();
         HostTransport = Network.Join(HostId, (from, data) => Host.OnReceived(from, data));
-        ClientTransport = Network.Join(ClientId, (from, data) => Client.OnReceived(from, data));
+        ClientTransport = Network.Join(ClientId, (from, data) => Client?.OnReceived(from, data));
         Host = new HostSession(HostTransport, host, hostSettings ?? (() => Array.Empty<SessionSettingValue>()), () => Network.Now, HandshakeTimeout, null);
-        Client = client == null ? null : new ClientSession(ClientTransport, client, HostId, Sink, () => Network.Now, HandshakeTimeout, null);
+        Client = client == null ? null : new ClientSession(ClientTransport, client, Sink, () => Network.Now, HandshakeTimeout, null, id => id == HostId);
     }
 
     public LoopbackNetwork Network { get; }
@@ -27,7 +27,9 @@ internal sealed class NetworkFixture
 
     public LoopbackTransport ClientTransport { get; }
 
-    public HostSession Host { get; }
+    public HostSession Host { get; private set; }
+
+    public void ReplaceHost(HostSession host) => Host = host;
 
     public ClientSession Client { get; }
 
@@ -41,7 +43,20 @@ internal sealed class NetworkFixture
     {
         Host.OnPeerConnected(ClientId);
         Client?.Start();
-        Network.Pump();
+        Settle();
+    }
+
+    public void Settle()
+    {
+        for (var round = 0; round < 10; round++)
+        {
+            Host.Update();
+            Client?.Update();
+            if (Network.Pump() == 0)
+            {
+                return;
+            }
+        }
     }
 }
 

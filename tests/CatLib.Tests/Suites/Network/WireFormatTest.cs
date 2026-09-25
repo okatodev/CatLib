@@ -26,8 +26,16 @@ public sealed class WireFormatTest : TestCase
         Assert.SequenceEqual(problems, verdict.Problems, "Problems round trip, including a null value");
         Assert.SequenceEqual(settings, verdict.Settings, "Settings round trip, including non-ASCII text");
 
+        var kick = (VerdictMessage)MessageCodec.Decode(MessageCodec.Encode(new VerdictMessage(false, problems, new SessionSettingValue[0], true))).Payload;
+        Assert.True(kick.Disconnecting, "Disconnect flag round trip");
+        Assert.False(verdict.Disconnecting, "Disconnect flag defaults to false");
+
         var update = (SettingsUpdateMessage)MessageCodec.Decode(MessageCodec.Encode(new SettingsUpdateMessage(settings))).Payload;
         Assert.SequenceEqual(settings, update.Settings, "Settings update round trip");
+
+        var announce = MessageCodec.Decode(MessageCodec.Encode(new AnnounceMessage()));
+        Assert.True(announce.Payload is AnnounceMessage, "Announce round trip");
+        Assert.Equal(MessageCodec.HeaderBytes, MessageCodec.Encode(new AnnounceMessage()).Length, "Announce is a bare header");
 
         var valid = MessageCodec.Encode(new HelloMessage(identity));
         var badMagic = (byte[])valid.Clone();
@@ -50,7 +58,7 @@ public sealed class WireFormatTest : TestCase
         Assert.Throws<WireFormatException>(() => MessageCodec.Encode(new HelloMessage(Identity(Mod(new string('x', 2000), "1", SessionPolicy.ClientOnly)))), "String over the limit");
 
         var future = (byte[])valid.Clone();
-        future[4] = 2;
+        future[4] = (byte)(MessageCodec.ProtocolVersion + 1);
         var decoded = MessageCodec.Decode(future);
         Assert.True(decoded.IsProtocolMismatch, "A newer protocol must be detected from the header alone");
         Assert.Null(decoded.Payload, "The payload of another protocol must not be parsed");

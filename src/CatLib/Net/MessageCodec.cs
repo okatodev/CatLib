@@ -5,7 +5,7 @@ namespace CatLib.Net;
 public static class MessageCodec
 {
     public const uint Magic = 0x4C544143;
-    public const ushort ProtocolVersion = 1;
+    public const ushort ProtocolVersion = 3;
     public const int HeaderBytes = 7;
     public const int MaxMessageBytes = 64 * 1024;
     public const int MaxStringBytes = 1024;
@@ -34,6 +34,7 @@ public static class MessageCodec
     {
         var writer = Header(MessageType.Verdict);
         writer.WriteBool(message.Accepted);
+        writer.WriteBool(message.Disconnecting);
         writer.WriteCount(message.Problems.Count);
         foreach (var problem in message.Problems)
         {
@@ -46,6 +47,8 @@ public static class MessageCodec
         WriteSettings(writer, message.Settings);
         return writer.ToArray();
     }
+
+    public static byte[] Encode(AnnounceMessage message) => Header(MessageType.Announce).ToArray();
 
     public static byte[] Encode(SettingsUpdateMessage message)
     {
@@ -63,7 +66,7 @@ public static class MessageCodec
         }
 
         var protocol = reader.ReadUInt16();
-        var type = reader.ReadEnum(MessageType.Hello, MessageType.SettingsUpdate);
+        var type = reader.ReadEnum(MessageType.Hello, MessageType.Announce);
         if (protocol != ProtocolVersion)
         {
             return new DecodedMessage(protocol, type, null);
@@ -73,6 +76,7 @@ public static class MessageCodec
         {
             MessageType.Hello => ReadHello(reader),
             MessageType.Verdict => ReadVerdict(reader),
+            MessageType.Announce => new AnnounceMessage(),
             _ => new SettingsUpdateMessage(ReadSettings(reader))
         };
 
@@ -114,6 +118,7 @@ public static class MessageCodec
     private static VerdictMessage ReadVerdict(WireReader reader)
     {
         var accepted = reader.ReadBool();
+        var disconnecting = reader.ReadBool();
         var count = reader.ReadCount();
         var problems = new List<CompatibilityProblem>(count);
         for (var index = 0; index < count; index++)
@@ -122,7 +127,7 @@ public static class MessageCodec
                 reader.ReadString(), reader.ReadString(), reader.ReadString()));
         }
 
-        return new VerdictMessage(accepted, problems, ReadSettings(reader));
+        return new VerdictMessage(accepted, problems, ReadSettings(reader), disconnecting);
     }
 
     private static void WriteSettings(WireWriter writer, IReadOnlyList<SessionSettingValue> settings)
