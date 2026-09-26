@@ -10,6 +10,8 @@ CatLib follows semantic versioning. Mods in `mods/` have their own versions and 
   Written only after the game saved successfully and only by the host, atomically with a backup;
   damaged files are set aside, newer data is never overwritten, a new save never inherits data left under its name.
   See [Mod data in game saves](docs/Saves.md).
+- Developer menu in `CatLib.DevTools`: one key opens a keyboard driven panel with commands mods register with
+  `DevMenu.Command` and `DevMenu.Toggle`. See [Developer menu](docs/DevTools.md).
 - Messages between mods: `CatNetwork.Channel` with `SendToHost`, `Broadcast`, `SendTo`, `PeerJoined` and `PeerLeft`.
   Only between the host and players that share the mod, with local delivery in single player and on the host,
   and a limit of 60 messages per second per player on the host. See [Mod messages](docs/Network.md#mod-messages).
@@ -19,7 +21,7 @@ CatLib follows semantic versioning. Mods in `mods/` have their own versions and 
 - Notifications are wrapped by the width the game's notification font measures, not by a character count,
   so a line never runs past the screen edge when the notification settles. Lines are not broken inside quotes.
 - Network protocol 4: the verdict lists the mods both sides share. Players with an older CatLib are reported as incompatible.
-- The F7 developer key sends a mod message probe instead of the old game protocol probes.
+- The developer tools of `CatLib.Tests` moved from function keys F3-F10 to the developer menu.
 
 ## 0.5.0
 

@@ -13,4 +13,9 @@ public sealed class CatLibBehaviour : MonoBehaviour
     {
         CatLibRuntime.Tick();
     }
+
+    public void OnGUI()
+    {
+        CatLib.DevTools.DevMenu.Draw();
+    }
 }

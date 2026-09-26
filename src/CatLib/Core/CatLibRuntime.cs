@@ -1,6 +1,7 @@
 using System;
 using BepInEx.Unity.IL2CPP;
 using CatLib.Config;
+using CatLib.DevTools;
 using CatLib.Game.Bridge;
 using CatLib.Net;
 using CatLib.Logging;
@@ -34,6 +35,7 @@ public static class CatLibRuntime
         Settings = CatSettings.For(plugin);
         SessionNetwork.Initialize(Log.Scope("Net"), Settings);
         CatSaves.Initialize(Log.Scope("Saves"));
+        DevMenu.Initialize(Log.Scope("DevTools"), Settings);
         plugin.AddComponent<CatLibBehaviour>();
         IsInitialized = true;
         Log.Info($"CatLib {PluginMeta.Version} initialized on managed thread {MainThread.ManagedThreadId}");

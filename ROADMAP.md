@@ -20,9 +20,8 @@ A mod that adds 1 to 3 extra labels next to or below each shelf label, so one sh
 
 ## Developer menu
 
-One key opens an in-game panel (IMGUI) with the developer commands instead of a function key per tool:
-entity dump, label experiments, deck saving and whatever mods register. Commands keep writing their results to files.
-UnityExplorer stays the tool for live inspection; the menu is for repeatable dumps and experiments.
+Done in the code: one key opens a keyboard driven IMGUI panel with the commands of `CatLib.Tests` and of any mod.
+Next: the in-game check.
 
 ## Later mods
 

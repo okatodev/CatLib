@@ -5,6 +5,7 @@ using BepInEx.Unity.IL2CPP;
 using BepInEx.Unity.IL2CPP.Configuration;
 using CatLib.Config;
 using CatLib.Core;
+using CatLib.DevTools;
 using CatLib.Game.Events;
 using CatLib.Logging;
 using CatLib.Net;
@@ -22,16 +23,8 @@ public sealed class CatLibTestsPlugin : BasePlugin
 {
     private ConfigEntry<bool> _runOnMainMenu;
     private ConfigEntry<float> _fallbackDelaySeconds;
-    private ConfigEntry<KeyboardShortcut> _runHotkey;
-    private ConfigEntry<KeyboardShortcut> _dumpUiHotkey;
-    private ConfigEntry<KeyboardShortcut> _stressHotkey;
-    private ConfigEntry<KeyboardShortcut> _probeHotkey;
-    private ConfigEntry<KeyboardShortcut> _selfCheckHotkey;
-    private ConfigEntry<KeyboardShortcut> _toastPreviewHotkey;
-    private ConfigEntry<KeyboardShortcut> _entityDumpHotkey;
     private ConfigEntry<string> _entityDumpTypes;
     private CatLib.Tests.Diagnostics.Inspection.EntityInspector _entityInspector;
-    private ConfigEntry<KeyboardShortcut> _labelCloneHotkey;
     private CatLib.Tests.Diagnostics.Inspection.LabelCloneExperiment _labelClone;
     private MessageProbe _probes;
     private SaveProbe _saveProbe;
@@ -51,24 +44,8 @@ public sealed class CatLibTestsPlugin : BasePlugin
             "Run all tests automatically the first time the main menu is loaded.");
         _fallbackDelaySeconds = Config.Bind("Run", "FallbackDelaySeconds", 45f,
             "Run all tests after this many seconds if the main menu event was never observed. Set to 0 to disable.");
-        _runHotkey = Config.Bind("Run", "Hotkey", new KeyboardShortcut(KeyCode.F10),
-            "Run all tests on demand.");
-        _dumpUiHotkey = Config.Bind("Diagnostics", "DumpUiHotkey", new KeyboardShortcut(KeyCode.F9),
-            "Write the hierarchy of the open settings menu to BepInEx/CatLib.Tests/Dumps.");
-        _stressHotkey = Config.Bind("Diagnostics", "StressModsHotkey", new KeyboardShortcut(KeyCode.F8),
-            "Create or remove a set of stress mods with many settings to check the Mods tab layout.");
-        _probeHotkey = Config.Bind("Diagnostics", "NetworkProbeHotkey", new KeyboardShortcut(KeyCode.F7),
-            "Send a mod message to the host, which answers every player. Works alone too.");
-        _entityDumpHotkey = Config.Bind("Diagnostics", "EntityDumpHotkey", new KeyboardShortcut(KeyCode.F4),
-            "Write what the camera looks at and the game objects of the focus types to BepInEx/CatLib.Tests/Dumps.");
         _entityDumpTypes = Config.Bind("Diagnostics", "EntityDumpTypes", CatLib.Tests.Diagnostics.Inspection.EntityInspector.DefaultFocusTypes,
             "Comma separated game types to list in every entity dump.");
-        _labelCloneHotkey = Config.Bind("Diagnostics", "LabelCloneExperimentHotkey", new KeyboardShortcut(KeyCode.F3),
-            "Experiment: copies the shelf label the camera looks at without its network and save identifiers, press again to remove the copies.");
-        _toastPreviewHotkey = Config.Bind("Diagnostics", "NotificationPreviewHotkey", new KeyboardShortcut(KeyCode.F5),
-            "Post a sample network message, to check how a game notification looks in a level.");
-        _selfCheckHotkey = Config.Bind("Diagnostics", "SteamSelfCheckHotkey", new KeyboardShortcut(KeyCode.F6),
-            "Send a message to yourself through the CatLib Steam channel to check the Steam calls without another player.");
 
         var outputDirectory = Path.Combine(Paths.BepInExRootPath, "CatLib.Tests");
         ConfigSandbox.RootDirectory = Path.Combine(outputDirectory, "Sandbox");
@@ -87,11 +64,61 @@ public sealed class CatLibTestsPlugin : BasePlugin
         _runner.Completed += OnRunCompleted;
 
         DeclareDemoSettings();
+        RegisterDevCommands();
 
         BootstrapEvents.MainMenuLoaded += OnMainMenuLoaded;
         FrameLoop.Update += OnUpdate;
 
-        _log.Info($"CatLib.Tests {PluginMeta.Version} loaded with {_runner.TestCount} tests. Press {_runHotkey.Value} to run them.");
+        _log.Info($"CatLib.Tests {PluginMeta.Version} loaded with {_runner.TestCount} tests. Run them again from the developer menu.");
+    }
+
+    private void RegisterDevCommands()
+    {
+        DevMenu.Command("Tests", "Run all tests", () =>
+        {
+            _runner.Start("DevMenu");
+            return $"{_runner.TestCount} test(s) started, the report is written when they finish";
+        }, "Runs every test again. They also run by themselves when the main menu loads.");
+        DevMenu.Toggle("Tests", "Run on main menu", () => _runOnMainMenu.Value, value => _runOnMainMenu.Value = value,
+            "Runs all tests the first time the main menu loads. Saved as OnMainMenu in section [Run] of catlib.tests.cfg.");
+        DevMenu.Command("Inspect", "Entity dump", () =>
+        {
+            _entityInspector.Dump();
+            return "written to BepInEx/CatLib.Tests/Dumps";
+        }, "Writes what the camera looks at, with components, fields and object tree, and the nearest objects of the focus types.");
+        DevMenu.Command("Inspect", "Settings menu dump", () =>
+        {
+            _uiDumper.DumpSettingsMenus();
+            return "written to BepInEx/CatLib.Tests/Dumps";
+        }, "Writes the hierarchy of the open settings menu.");
+        DevMenu.Command("Inspect", "Label clone experiment", () =>
+        {
+            _labelClone.Toggle();
+            return "see the log";
+        }, "Copies the shelf label the camera looks at, press again to remove the copies. Superseded by the Shelf Labels mod.");
+        DevMenu.Command("Network", "Mod message probe", () =>
+        {
+            _probes.SendPing();
+            return "see the log";
+        }, "Sends a mod message to the host, which answers every player. Works alone too.");
+        DevMenu.Command("Network", "Steam self check", () =>
+        {
+            SessionNetwork.RunSelfCheck();
+            return "see the log";
+        }, "Sends a message to yourself through the CatLib Steam channel.");
+        DevMenu.Command("UI", "Notification preview", () =>
+        {
+            var language = CatLib.UI.UiText.LanguageCode;
+            CatLib.UI.PlayerMessages.Post(
+                CatLib.UI.UiText.Format(CatLib.UI.UiText.NetPlayerDisconnected, language, "RENTAI", "CatLib Demo Network Mod 1.0.0 / 2.0.0"),
+                CatLib.UI.UiText.Format(CatLib.UI.UiText.NetPlayerDisconnectedBrief, language, "RENTAI", "CatLib Demo Network Mod"));
+            return "posted, it shows as a game notification in a level";
+        }, "Posts a sample network message.");
+        DevMenu.Command("UI", "Stress mods on or off", () =>
+        {
+            _stressMods.Toggle();
+            return "see the Mods tab";
+        }, "Creates or removes a set of mods with many settings to check the Mods tab layout.");
     }
 
     private void DeclareDemoSettings()
@@ -152,94 +179,14 @@ public sealed class CatLibTestsPlugin : BasePlugin
 
     private void OnUpdate()
     {
-        if (!_autoRunHandled && _fallbackDelaySeconds.Value > 0 && FrameLoop.Realtime >= _fallbackDelaySeconds.Value)
+        if (!_autoRunHandled && _runOnMainMenu.Value && _fallbackDelaySeconds.Value > 0 && FrameLoop.Realtime >= _fallbackDelaySeconds.Value)
         {
             _autoRunHandled = true;
             _log.Warning($"Main menu event was not observed within {_fallbackDelaySeconds.Value:0} s, running tests anyway");
             _runner.Start("FallbackTimeout");
         }
 
-        if (_runHotkey.Value.IsDown())
-        {
-            _runner.Start("Hotkey");
-        }
-
-        if (_probeHotkey.Value.IsDown())
-        {
-            _probes.SendPing();
-        }
-
-        if (_labelCloneHotkey.Value.IsDown())
-        {
-            _labelClone.Toggle();
-        }
-
         _labelClone.Update();
-
-        if (_entityDumpHotkey.Value.IsDown())
-        {
-            try
-            {
-                _entityInspector.Dump();
-            }
-            catch (System.Exception exception)
-            {
-                _log.Error("Entity inspection failed", exception);
-            }
-        }
-
-        if (_toastPreviewHotkey.Value.IsDown())
-        {
-            try
-            {
-                var language = CatLib.UI.UiText.LanguageCode;
-                CatLib.UI.PlayerMessages.Post(
-                    CatLib.UI.UiText.Format(CatLib.UI.UiText.NetPlayerDisconnected, language, "RENTAI", "CatLib Demo Network Mod 1.0.0 / 2.0.0"),
-                    CatLib.UI.UiText.Format(CatLib.UI.UiText.NetPlayerDisconnectedBrief, language, "RENTAI", "CatLib Demo Network Mod"));
-                _log.Message("Posted a sample network message, it shows as a game notification in a level");
-            }
-            catch (System.Exception exception)
-            {
-                _log.Error("Posting a sample message failed", exception);
-            }
-        }
-
-        if (_selfCheckHotkey.Value.IsDown())
-        {
-            try
-            {
-                SessionNetwork.RunSelfCheck();
-            }
-            catch (System.Exception exception)
-            {
-                _log.Error("Steam self check failed", exception);
-            }
-        }
-
-        if (_stressHotkey.Value.IsDown())
-        {
-            try
-            {
-                _stressMods.Toggle();
-            }
-            catch (System.Exception exception)
-            {
-                _log.Error("Toggling the stress mods failed", exception);
-            }
-        }
-
-        if (_dumpUiHotkey.Value.IsDown())
-        {
-            try
-            {
-                _uiDumper.DumpSettingsMenus();
-            }
-            catch (System.Exception exception)
-            {
-                _log.Error("UI dump failed", exception);
-            }
-        }
-
         _runner.Update();
     }
 

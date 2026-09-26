@@ -35,6 +35,7 @@ docs/                        documentation
 | `CatLib.Config` | Live settings: `CatSettings`, `Setting<T>`, `CatConfig` |
 | `CatLib.Saves` | Mod data per game save, written with the game's save, atomically and with a backup |
 | `CatLib.Localization` | Translation catalogs for mods, `CatLanguage` follows the game language |
+| `CatLib.DevTools` | Keyboard developer menu, `DevMenu.Command` and `DevMenu.Toggle` |
 | `CatLib.UI` | Mods tab in the game's settings menu; `Notifications.Show` for messages to the player |
 | `CatLib.Net` | Mod compatibility handshake, session settings sync, messages between mods (`CatNetwork.Channel`), `CatNetwork.Role` and `IsAuthority` |
 
@@ -63,23 +64,28 @@ Pass `-p:CatLibDeploy=false` to build without copying.
 
 ## Tests
 
-`CatLib.Tests` runs all tests the first time the main menu loads and on demand with F10.
+`CatLib.Tests` runs all tests the first time the main menu loads and again from the developer menu.
 Reports are written to `BepInEx/CatLib.Tests/Reports`, game event timelines to `BepInEx/CatLib.Tests/Timelines`.
 Configuration: `BepInEx/config/catlib.tests.cfg`.
 
-### Developer hotkeys
+### Developer menu
 
-| Key | Tool |
+The `` ` `` key (the key left of 1) opens the developer menu. It is keyboard only, so the camera stays where it looks:
+Up and Down select, Enter or 1-9 run, Left and Right switch the group, the same key or Esc closes it.
+
+| Group | Command |
 |---|---|
-| F4 | Entity dump: what the camera looks at with its object tree, entity counts, storages and the focus types, written to `BepInEx/CatLib.Tests/Dumps` |
-| F5 | Sample network message shown as a game notification |
-| F6 | Steam channel self check |
-| F7 | Mod message probe: a ping to the host, which answers every player |
-| F8 | Stress mods for the Mods tab |
-| F9 | Settings menu UI dump |
-| F10 | Run the in-game tests |
+| Tests | Run all tests |
+| Inspect | Entity dump: what the camera looks at with its object tree, entity counts, storages and the focus types, written to `BepInEx/CatLib.Tests/Dumps` |
+| Inspect | Settings menu dump |
+| Inspect | Label clone experiment |
+| Network | Mod message probe: a ping to the host, which answers every player |
+| Network | Steam channel self check |
+| UI | Sample network message shown as a game notification |
+| UI | Stress mods for the Mods tab |
 
-All keys can be changed in `catlib.tests.cfg`, section `[Diagnostics]`. The focus types of the entity dump are set with `EntityDumpTypes`.
+The key is `MenuHotkey` in section `[DevTools]` of CatLib's own config. The focus types of the entity dump are set with `EntityDumpTypes` in `catlib.tests.cfg`.
+Mods add their own commands with `DevMenu.Command`, see [Developer menu](docs/DevTools.md).
 
 ## Documentation
 
@@ -88,6 +94,7 @@ All keys can be changed in `catlib.tests.cfg`, section `[Diagnostics]`. The focu
 - [Multiplayer compatibility](docs/Network.md)
 - [Localization](docs/Localization.md)
 - [Mod data in game saves](docs/Saves.md)
+- [Developer menu](docs/DevTools.md)
 - [Game events: observed behaviour](docs/GameEvents.md)
 - [Changelog](CHANGELOG.md)
 - [Roadmap](ROADMAP.md)
