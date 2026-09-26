@@ -35,5 +35,4 @@ UnityExplorer stays the tool for live inspection; the menu is for repeatable dum
 ## Deferred
 
 - macOS support.
-- Reloading mod code without restarting the game.
-- Distribution: releases on GitHub with install instructions.
+- Reloading mod code without restarting the game. (Questioned.)
