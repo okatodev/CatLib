@@ -5,11 +5,13 @@ namespace CatLib.Net;
 public static class MessageCodec
 {
     public const uint Magic = 0x4C544143;
-    public const ushort ProtocolVersion = 3;
+    public const ushort ProtocolVersion = 4;
     public const int HeaderBytes = 7;
     public const int MaxMessageBytes = 64 * 1024;
     public const int MaxStringBytes = 1024;
     public const int MaxItems = 1024;
+    public const int MaxModDataBytes = 16 * 1024;
+    public const int MaxModNameBytes = 64;
 
     public static byte[] Encode(HelloMessage message)
     {
@@ -45,6 +47,16 @@ public static class MessageCodec
         }
 
         WriteSettings(writer, message.Settings);
+        WriteIds(writer, message.SharedModIds);
+        return writer.ToArray();
+    }
+
+    public static byte[] Encode(ModMessageData message)
+    {
+        var writer = Header(MessageType.Mod);
+        writer.WriteString(message.ModId);
+        writer.WriteString(message.Name);
+        writer.WriteBytes(message.Data, MaxModDataBytes);
         return writer.ToArray();
     }
 
@@ -66,7 +78,7 @@ public static class MessageCodec
         }
 
         var protocol = reader.ReadUInt16();
-        var type = reader.ReadEnum(MessageType.Hello, MessageType.Announce);
+        var type = reader.ReadEnum(MessageType.Hello, MessageType.Mod);
         if (protocol != ProtocolVersion)
         {
             return new DecodedMessage(protocol, type, null);
@@ -77,6 +89,7 @@ public static class MessageCodec
             MessageType.Hello => ReadHello(reader),
             MessageType.Verdict => ReadVerdict(reader),
             MessageType.Announce => new AnnounceMessage(),
+            MessageType.Mod => ReadMod(reader),
             _ => new SettingsUpdateMessage(ReadSettings(reader))
         };
 
@@ -127,7 +140,52 @@ public static class MessageCodec
                 reader.ReadString(), reader.ReadString(), reader.ReadString()));
         }
 
-        return new VerdictMessage(accepted, problems, ReadSettings(reader), disconnecting);
+        var settings = ReadSettings(reader);
+        return new VerdictMessage(accepted, problems, settings, disconnecting, ReadIds(reader));
+    }
+
+    private static ModMessageData ReadMod(WireReader reader)
+    {
+        var modId = reader.ReadString();
+        var name = reader.ReadString();
+        if (string.IsNullOrEmpty(modId) || string.IsNullOrEmpty(name))
+        {
+            throw new WireFormatException("Mod message has no mod id or name");
+        }
+
+        if (System.Text.Encoding.UTF8.GetByteCount(name) > MaxModNameBytes)
+        {
+            throw new WireFormatException($"Mod message name exceeds {MaxModNameBytes} bytes");
+        }
+
+        return new ModMessageData(modId, name, reader.ReadBytes(MaxModDataBytes));
+    }
+
+    private static void WriteIds(WireWriter writer, IReadOnlyList<string> ids)
+    {
+        writer.WriteCount(ids.Count);
+        foreach (var id in ids)
+        {
+            writer.WriteString(id);
+        }
+    }
+
+    private static IReadOnlyList<string> ReadIds(WireReader reader)
+    {
+        var count = reader.ReadCount();
+        var ids = new List<string>(count);
+        for (var index = 0; index < count; index++)
+        {
+            var id = reader.ReadString();
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new WireFormatException("Shared mod id is empty");
+            }
+
+            ids.Add(id);
+        }
+
+        return ids;
     }
 
     private static void WriteSettings(WireWriter writer, IReadOnlyList<SessionSettingValue> settings)

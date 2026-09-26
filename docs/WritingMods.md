@@ -95,6 +95,11 @@ A test that walks the declared settings and checks every key with `TextCatalog.H
 `BootstrapEvents.LevelLoadFinalized`, `BootstrapEvents.GameRestartStarted`, `NetworkEvents.ClientConnected`
 or `PlayerEvents.LocalPlayerSpawned`. Their observed order and meaning are in [Game events](GameEvents.md).
 
+## Data in saves
+
+Data that belongs to a playthrough, such as a picture a player chose, is stored per game save with `CatSaves.For(this)`.
+It is written only when the game saves and only by the host. Rules and examples are in [Mod data in game saves](Saves.md).
+
 ## Multiplayer
 
 - Decisions that must be the same for everyone are made where `CatNetwork.IsAuthority` is true
@@ -103,6 +108,8 @@ or `PlayerEvents.LocalPlayerSpawned`. Their observed order and meaning are in [G
 - Random choices are sent as a seed, and clients rebuild the same result from it.
 
 The pattern with code is in [Session role](Network.md#session-role).
+For actions of players, such as a click on an object the mod added, use [mod messages](Network.md#mod-messages):
+the player asks the host, the host checks and applies the action and tells everyone the result.
 
 ## Working with game objects
 

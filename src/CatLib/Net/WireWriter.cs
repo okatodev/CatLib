@@ -49,6 +49,21 @@ public sealed class WireWriter
         _stream.Write(bytes, 0, bytes.Length);
     }
 
+    public void WriteBytes(byte[] value, int limit)
+    {
+        var length = value?.Length ?? 0;
+        if (length > limit || length > ushort.MaxValue)
+        {
+            throw new WireFormatException($"Data of {length} bytes exceeds the limit of {limit}");
+        }
+
+        WriteUInt16((ushort)length);
+        if (length > 0)
+        {
+            _stream.Write(value, 0, length);
+        }
+    }
+
     public byte[] ToArray()
     {
         if (_stream.Length > MessageCodec.MaxMessageBytes)

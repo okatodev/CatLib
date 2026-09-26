@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using CatLib.Net;
 using CatLib.Tests.Framework;
 using CatLib.UI;
@@ -15,7 +16,13 @@ public sealed class MessageLengthTest : TestCase
         string NameOf(string id) => id == "catlib.tests.demo-network" ? "CatLib Demo Network Mod" : null;
 
         Assert.Equal("RENTAI was disconnected:\nCatLib Demo Network Mod", ToastText.Format("RENTAI was disconnected: CatLib Demo Network Mod"), "Two lines split after the first colon");
-        Assert.Equal("A very long line that does not fi\u2026".Length, ToastText.Clip("A very long line that does not fit into one notification line").Length, "Clipped line length");
+        Assert.Equal(ToastText.MaxLineLength, ToastText.Clip("A very long line that does not fit into one notification line").Length, "Clipped line length");
+        Assert.Equal("Сначала наведитесь на метку\nполки", ToastText.Format("Сначала наведитесь на метку полки", line => line.Length, 28), "A single long line wraps at a word");
+        Assert.Equal("Short", ToastText.Format("Short"), "A short line stays one line");
+        Assert.Equal("Mod:\none two three four", ToastText.Format("Mod: one two three four", line => line.Length, 18), "The part before the colon gets its own line");
+        Assert.Equal("Mod: aaa bbb\nccc ddd eee", ToastText.Format("Mod: aaa bbb ccc ddd eee", line => line.Length, 12), "Three lines are rebalanced into two");
+        Assert.Equal("CatLib.Tests: «Fast Mode»\n— после перезапуска", ToastText.Format("CatLib.Tests: «Fast Mode» — после перезапуска"), "Lines are not broken inside quotes");
+        Assert.True(ToastText.Format("Wide wide wide", line => line.Count(character => character == 'W') * 10 + line.Length, 12).Split('\n').Length == 2, "Width comes from the measuring function, not from the character count");
         Assert.True(ToastText.Clip("A very long line that does not fit into one notification line").EndsWith("\u2026"), "Clipped lines end with an ellipsis");
 
         foreach (var language in new[] { "en", "ru" })

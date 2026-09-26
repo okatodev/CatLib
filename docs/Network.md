@@ -78,11 +78,56 @@ Settings that require a restart are never changed live; a different host value i
 
 In the Mods tab, overridden settings are read-only, marked "(host)", and the context line shows the player's own value.
 
+## Mod messages
+
+A mod talks to the same mod on other players through its channel:
+
+```csharp
+var channel = CatNetwork.Channel(this);
+
+channel.Received += message =>
+{
+    if (!message.FromHost)
+    {
+        if (TryApply(message.Text))
+        {
+            channel.Broadcast("state", message.Text);
+        }
+
+        return;
+    }
+
+    ShowState(message.Text);
+};
+
+channel.PeerJoined += peer => channel.SendTo(peer, "full", FullState());
+
+void OnPlayerClicked(string change) => channel.SendToHost("click", change);
+```
+
+- Messages go only between the host and players, never between two players directly:
+  a player asks with `SendToHost`, the host decides and answers with `Broadcast` or `SendTo`.
+- The same code works everywhere. In single player, in the main menu and on the host,
+  `SendToHost` and `Broadcast` also deliver to this game itself, with the next frame and in the order they were sent.
+  `IsLocal` marks those copies; `FromHost` tells a request (`false`) from a decision of the host (`true`).
+- A message only travels between two players when both have the mod with compatible versions.
+  The host lists these shared mods in its verdict, so this also works for a player who was rejected because of another mod
+  and stayed in the game with the `Warn` action.
+- `PeerJoined` runs on the host when a player with the mod finished the handshake; send it the full state there.
+  `PeerLeft` runs when that player disconnects.
+- `SendToHost` returns `false` on a player whose handshake is not finished or whose host does not share the mod.
+  `CanSendToHost` checks that beforehand. `Broadcast` and `SendTo` on a player do nothing.
+- Limits: a name of up to 64 bytes and up to 16 KiB of data. Larger values throw `ArgumentException`.
+  The host accepts up to 60 messages per second from one player and drops the rest with a warning.
+- Messages are reliable and ordered per player. Handlers run on the main thread; an exception in one handler does not stop the others.
+- The host is the authority: check every request before applying it, a player can send anything.
+
 ## Wire format
 
 Little-endian binary. Every message starts with a 7-byte header: the magic `CATL`, a 16-bit protocol version and a message type byte.
 Strings are a presence flag, a 16-bit byte length and UTF-8 bytes.
 Limits: 64 KiB per message, 1 KiB per string, 1024 items per list.
+Protocol 4 added mod messages (type 5) and the list of shared mods at the end of the verdict.
 A message with another protocol version is detected from the header and its payload is not parsed.
 Malformed messages are rejected with `WireFormatException` and ignored by the sessions.
 

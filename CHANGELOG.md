@@ -2,6 +2,25 @@
 
 CatLib follows semantic versioning. Mods in `mods/` have their own versions and changes in their README files.
 
+## Unreleased
+
+### Added
+
+- `CatLib.Saves`: mod data per game save in `CatLibSaves` next to the game's save folder (`CatSaves.For`, `ModSave`).
+  Written only after the game saved successfully and only by the host, atomically with a backup;
+  damaged files are set aside, newer data is never overwritten, a new save never inherits data left under its name.
+  See [Mod data in game saves](docs/Saves.md).
+- Messages between mods: `CatNetwork.Channel` with `SendToHost`, `Broadcast`, `SendTo`, `PeerJoined` and `PeerLeft`.
+  Only between the host and players that share the mod, with local delivery in single player and on the host,
+  and a limit of 60 messages per second per player on the host. See [Mod messages](docs/Network.md#mod-messages).
+
+### Changed
+
+- Notifications are wrapped by the width the game's notification font measures, not by a character count,
+  so a line never runs past the screen edge when the notification settles. Lines are not broken inside quotes.
+- Network protocol 4: the verdict lists the mods both sides share. Players with an older CatLib are reported as incompatible.
+- The F7 developer key sends a mod message probe instead of the old game protocol probes.
+
 ## 0.5.0
 
 For mod authors: localization, safe access to two-dimensional IL2CPP arrays, player notifications and the session role.
@@ -17,6 +36,8 @@ For mod authors: localization, safe access to two-dimensional IL2CPP arrays, pla
 - `Notifications.Show` in `CatLib.UI` shows a mod's message as a game notification in a level and in the Mods tab status line.
 - `CatNetwork.Role` (`Offline`, `Host`, `Client`) and `CatNetwork.IsAuthority` for mods whose decisions must match for every player.
 - `Setting<T>.LocalValue` can be written from code: the file is saved and appliers run.
+- `SaveEvents` in `CatLib.Game.Events` (`SaveFileSelected`, `GameSavingStarted`, `SuccessfullySaved`, `UnsuccessfullySaved`)
+  and the current save in `GameInfo` (`SaveDirectory`, `SaveFileName`, `SaveFilePath`, `IsNewSave`, `IsLoadingSave`).
 - Documentation: [Writing a mod](docs/WritingMods.md), [Localization](docs/Localization.md), session role in [Multiplayer compatibility](docs/Network.md).
 - Developer tools in `CatLib.Tests`: entity dump on F4 with the object tree, collider sizes and renderer state; notification preview on F5.
 

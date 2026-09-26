@@ -33,6 +33,8 @@ public sealed class HostSession
 
     public event Action<PeerReport> PeerEvaluated;
 
+    public event Action<ulong, ModMessageData> ModMessageReceived;
+
     public IReadOnlyList<PeerReport> Reports => _peers.Values.Where(peer => peer.Report != null).Select(peer => peer.Report).ToList();
 
     public int PeerCount => _peers.Count;
@@ -42,6 +44,23 @@ public sealed class HostSession
     public bool HasPeer(ulong peer) => _peers.ContainsKey(peer);
 
     public int RepeatedHellosFrom(ulong peer) => _peers.TryGetValue(peer, out var state) ? state.RepeatedHellos : 0;
+
+    public IReadOnlyCollection<string> SharedModsOf(ulong peer) => _peers.TryGetValue(peer, out var state) ? state.SharedMods : Array.Empty<string>();
+
+    public bool PeerShares(ulong peer, string modId) => _peers.TryGetValue(peer, out var state) && state.SharedMods.Contains(modId);
+
+    public IReadOnlyList<ulong> PeersSharing(string modId) => _peers.Where(pair => pair.Value.SharedMods.Contains(modId)).Select(pair => pair.Key).OrderBy(peer => peer).ToList();
+
+    public bool Send(ulong peer, ModMessageData message)
+    {
+        if (!PeerShares(peer, message.ModId))
+        {
+            return false;
+        }
+
+        Send(peer, MessageCodec.Encode(message));
+        return true;
+    }
 
     public IReadOnlyList<ulong> PendingPeers => _peers.Where(pair => pair.Value.Report == null).Select(pair => pair.Key).ToList();
 
@@ -90,6 +109,18 @@ public sealed class HostSession
             return;
         }
 
+        if (message.Payload is ModMessageData modMessage)
+        {
+            if (state.Report == null)
+            {
+                _log?.Warning($"Ignored a message of {modMessage.ModId} from {peer} before its mods were checked");
+                return;
+            }
+
+            SafeInvoker.Invoke(ModMessageReceived, peer, modMessage, "HostSession.ModMessageReceived", _log);
+            return;
+        }
+
         if (message.Payload is not HelloMessage hello)
         {
             _log?.Warning($"Ignored an unexpected {message.Type} message from {peer}");
@@ -100,7 +131,9 @@ public sealed class HostSession
         var accepted = found.Count == 0;
         var disconnecting = !accepted && ShouldDisconnect();
         var settings = accepted ? _snapshot() : Array.Empty<SessionSettingValue>();
-        Send(peer, MessageCodec.Encode(new VerdictMessage(accepted, found, settings, disconnecting)));
+        var shared = disconnecting ? new List<string>() : SharedMods(_identity, hello.Identity, found);
+        state.SharedMods = new HashSet<string>(shared, StringComparer.Ordinal);
+        Send(peer, MessageCodec.Encode(new VerdictMessage(accepted, found, settings, disconnecting, shared)));
 
         var status = accepted ? SessionStatus.Accepted : SessionStatus.Rejected;
         if (state.Report != null && state.Report.Status == status)
@@ -163,6 +196,13 @@ public sealed class HostSession
         return sent;
     }
 
+    public static List<string> SharedMods(LocalIdentity host, LocalIdentity client, IReadOnlyList<CompatibilityProblem> problems) =>
+        host.Mods
+            .Where(mod => client.Find(mod.Id) != null && problems.All(problem => problem.Subject != mod.Id))
+            .Select(mod => mod.Id)
+            .OrderBy(id => id, StringComparer.Ordinal)
+            .ToList();
+
     private bool ShouldDisconnect()
     {
         try
@@ -209,5 +249,7 @@ public sealed class HostSession
         public double LastAnnounce { get; set; } = double.NegativeInfinity;
 
         public int Announces { get; set; }
+
+        public HashSet<string> SharedMods { get; set; } = new(StringComparer.Ordinal);
     }
 }

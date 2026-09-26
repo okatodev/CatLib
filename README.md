@@ -29,13 +29,14 @@ docs/                        documentation
 | `CatLib.Threading` | `MainThread` dispatcher |
 | `CatLib.Events` | `SafeInvoker`, exception-isolated event invocation |
 | `CatLib.Il2Cpp` | Binding managed code to IL2CPP events; `Il2CppArrays` reads and writes two-dimensional IL2CPP arrays that interop cannot type |
-| `CatLib.Game` | `GameInfo`, read-only game state |
+| `CatLib.Game` | `GameInfo`, read-only game state including the current save |
 | `CatLib.Game.Events` | Game events as plain .NET events, `GameEventStream` |
 | `CatLib.Game.Bridge` | Tracks game singletons and binds their events |
 | `CatLib.Config` | Live settings: `CatSettings`, `Setting<T>`, `CatConfig` |
+| `CatLib.Saves` | Mod data per game save, written with the game's save, atomically and with a backup |
 | `CatLib.Localization` | Translation catalogs for mods, `CatLanguage` follows the game language |
 | `CatLib.UI` | Mods tab in the game's settings menu; `Notifications.Show` for messages to the player |
-| `CatLib.Net` | Mod compatibility handshake, session settings sync, `CatNetwork.Role` and `IsAuthority` |
+| `CatLib.Net` | Mod compatibility handshake, session settings sync, messages between mods (`CatNetwork.Channel`), `CatNetwork.Role` and `IsAuthority` |
 
 ## Mods
 
@@ -48,6 +49,7 @@ Each mod in `mods/` is its own BepInEx plugin, released separately from CatLib:
 | Mod | Description |
 |---|---|
 | [Boat Tweaks](mods/BoatTweaks/README.md) | Deck blockers and stack height limits of the boat |
+| [Shelf Labels](mods/ShelfLabels/README.md) | Up to three extra labels next to every shelf label, stored per save |
 
 ## Building
 
@@ -72,7 +74,7 @@ Configuration: `BepInEx/config/catlib.tests.cfg`.
 | F4 | Entity dump: what the camera looks at with its object tree, entity counts, storages and the focus types, written to `BepInEx/CatLib.Tests/Dumps` |
 | F5 | Sample network message shown as a game notification |
 | F6 | Steam channel self check |
-| F7 | Network probes |
+| F7 | Mod message probe: a ping to the host, which answers every player |
 | F8 | Stress mods for the Mods tab |
 | F9 | Settings menu UI dump |
 | F10 | Run the in-game tests |
@@ -85,8 +87,10 @@ All keys can be changed in `catlib.tests.cfg`, section `[Diagnostics]`. The focu
 - [Live settings](docs/Settings.md)
 - [Multiplayer compatibility](docs/Network.md)
 - [Localization](docs/Localization.md)
+- [Mod data in game saves](docs/Saves.md)
 - [Game events: observed behaviour](docs/GameEvents.md)
 - [Changelog](CHANGELOG.md)
+- [Roadmap](ROADMAP.md)
 
 ## Conventions
 

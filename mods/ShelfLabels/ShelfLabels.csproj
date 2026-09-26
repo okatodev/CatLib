@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>ShelfLabels</AssemblyName>
+    <RootNamespace>ShelfLabels</RootNamespace>
+    <Version>0.1.0</Version>
+    <PluginGuid>catlib.shelflabels</PluginGuid>
+    <PluginMetaName>Shelf Labels</PluginMetaName>
+    <CatLibDeployFolder>ShelfLabels</CatLibDeployFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CatLib\CatLib.csproj" Private="false" />
+    <EmbeddedResource Include="Lang\*.json" LogicalName="ShelfLabels.Lang.%(Filename).json" />
+  </ItemGroup>
+</Project>

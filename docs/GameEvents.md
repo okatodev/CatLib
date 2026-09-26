@@ -44,6 +44,34 @@ The host leaves while the client is connected but not in a level, client side:
 `GameRestartStarted` → `ClientDisconnected(self)` → 1.5 to 3 s → **a second `GameRestartStarted`** → all managers are recreated → `MainMenuLoaded`.
 Reproduced in both sessions. The host leaving while the client is inside a level has not been observed yet.
 
+## Saves
+
+`SaveEvents` exposes `SaveFileSelected`, `GameSavingStarted`, `SuccessfullySaved` and `UnsuccessfullySaved` of the game's `SaveManager`.
+Each record in the timeline carries the save file name and whether it is new, loading and hosted.
+
+Observed in single player:
+
+```
+42.225  Save.SaveFileSelected  file=GameSave_20260923_201740_Cat-Mail-Co.bin new=no loading=no host=no
+43.225  Bootstrap.LevelLoadStarted
+43.516  Network.ServerStarted
+94.049  Save.GameSavingStarted file=GameSave_20260923_201740_Cat-Mail-Co.bin new=no loading=no host=yes
+94.073  Save.SuccessfullySaved file=GameSave_20260923_201740_Cat-Mail-Co.bin new=no loading=no host=yes
+102.210 Bootstrap.GameRestartStarted
+```
+
+- `SaveFileSelected` comes in the main menu, before the level and before the server starts, so `host` is still `no`.
+- Before a save is selected `GameInfo.SaveFileName` is `.bin`, an empty name with the extension.
+- Starting and finishing a save happen in the same frame, 24 ms apart.
+- Leaving to the main menu does not save.
+- A freshly started save reports `new=yes` already in `SaveFileSelected`, with a file name the game has not written yet.
+  Its first save follows about one second after `GameStartedPhase2`, still with `new=yes`.
+- Which events a client receives is not observed yet.
+
+The game saves on its own: after a level loads, when the game starts, when a customer is satisfied,
+when the time of day changes and when a client connects. A save is an SQLite database per slot in `GameInfo.SaveDirectory`.
+In multiplayer the host sends the whole save file to clients.
+
 ## Settings menu
 
 The settings menu in the main menu is not initialized until the player opens it for the first time.

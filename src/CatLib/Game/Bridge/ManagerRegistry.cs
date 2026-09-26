@@ -15,6 +15,7 @@ public static class ManagerRegistry
     public const string PlayerManagerName = nameof(PlayerManager);
     public const string NetworkManagerName = nameof(NetworkManager);
     public const string NetworkClientName = "NetworkClient";
+    public const string SaveManagerName = nameof(SaveManager);
 
     private static readonly List<IManagerTracker> Trackers = new();
 
@@ -45,6 +46,8 @@ public static class ManagerRegistry
             Singleton<NetworkManager>.HasInstance, () => Singleton<NetworkManager>.Instance, NetworkBinder.Bind, NetworkBinder.EventCount, log));
         Trackers.Add(new ManagerTracker<Client>(NetworkClientName,
             NetworkClientBinder.HasInstance, NetworkClientBinder.GetInstance, NetworkClientBinder.Bind, NetworkClientBinder.EventCount, log));
+        Trackers.Add(new ManagerTracker<SaveManager>(SaveManagerName,
+            Singleton<SaveManager>.HasInstance, () => Singleton<SaveManager>.Instance, SaveBinder.Bind, SaveBinder.EventCount, log));
     }
 
     internal static void Update()

@@ -1,0 +1,38 @@
+{
+  "mod": {
+    "name": "Shelf Labels"
+  },
+  "section": {
+    "Labels": "Labels",
+    "Look": "Look"
+  },
+  "setting": {
+    "Labels.ExtraSlots": "Extra labels",
+    "Labels.ExtraSlots.description": "How many extra labels each shelf label gets, up to 3. The host decides for everyone. Pictures of hidden labels stay in the save and come back when the labels are shown again.",
+    "Look.Spacing": "Gap",
+    "Look.Spacing.description": "Gap between the labels in meters.",
+    "Labels.DefaultPlacement": "Placement",
+    "Labels.DefaultPlacement.description": "Where extra labels go on shelves without a placement of their own. Every shelf label can get its own with the hotkey below. The host decides for everyone.",
+    "Look.PlacementHotkey": "Change placement",
+    "Look.PlacementHotkey.description": "Look at a shelf label or its extra label and press to switch: freer side, right, left, below, no extra labels. Every player can do it, the host keeps it in the save.",
+    "Labels.HideStands": "Hide stands",
+    "Labels.HideStands.description": "Extra labels on shelves without a choice of their own are shown without the wooden stand under the frame. The game's own label always keeps it. The host decides for everyone.",
+    "Look.StandHotkey": "Stand on or off",
+    "Look.StandHotkey.description": "Look at a shelf label or its extra label and press to show or hide the wooden stand of its extra labels. Every player can do it, the host keeps it in the save."
+  },
+  "enum": {
+    "Placement.Auto": "Beside, freer side",
+    "Placement.Right": "Right",
+    "Placement.Left": "Left",
+    "Placement.Below": "Below",
+    "Placement.None": "No extra labels"
+  },
+  "message": {
+    "placement": "Extra labels: {0}",
+    "lookAtLabel": "Look at a shelf label first",
+    "noHost": "The host does not have Shelf Labels",
+    "standHidden": "Extra labels: without stands",
+    "standShown": "Extra labels: with stands",
+    "standUnsupported": "The stand of this label cannot be removed"
+  }
+}

@@ -9,6 +9,8 @@ namespace CatLib.UI;
 internal static class PlayerMessages
 {
     public const double DisplaySeconds = 8;
+    public const string ReferenceLine = "Сначала наведитесь на метку по";
+    public const float ReferenceShare = 0.9f;
 
     private static readonly Stopwatch Clock = Stopwatch.StartNew();
     private static CatLogger _log;
@@ -54,10 +56,10 @@ internal static class PlayerMessages
         LastPostedAt = Clock.Elapsed.TotalSeconds;
         Count++;
         SafeInvoker.Invoke(Posted, text, "PlayerMessages.Posted", _log);
-        DeliverInGame(LastBrief);
+        DeliverInGame(brief ?? text);
     }
 
-    private static void DeliverInGame(string text)
+    private static void DeliverInGame(string raw)
     {
         try
         {
@@ -73,12 +75,41 @@ internal static class PlayerMessages
                 return;
             }
 
-            manager.NotificationInterface?.ShowNotification(text);
+            var notifications = manager.NotificationInterface;
+            if (notifications == null)
+            {
+                return;
+            }
+
+            notifications.ShowNotification(FitToNotification(notifications, raw));
         }
         catch (Exception exception)
         {
             _log?.Warning($"Could not show an in-game notification: {exception.Message}");
         }
+    }
+
+    private static string FitToNotification(NotificationInterface notifications, string raw)
+    {
+        try
+        {
+            var prefab = notifications.NotificationItemInterfacePrefab;
+            var text = prefab == null ? null : prefab.LinkedText;
+            if (text != null)
+            {
+                var limit = text.GetPreferredValues(ReferenceLine).x * ReferenceShare;
+                if (limit > 0)
+                {
+                    return ToastText.Format(raw, line => text.GetPreferredValues(line).x, limit);
+                }
+            }
+        }
+        catch (Exception exception)
+        {
+            _log?.Debug($"Measuring the notification text failed, using the character limit: {exception.Message}");
+        }
+
+        return ToastText.Format(raw);
     }
 
     private static void OnRestartRequired(ISetting setting)

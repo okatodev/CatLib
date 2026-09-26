@@ -4,6 +4,7 @@ using CatLib.Config;
 using CatLib.Game.Bridge;
 using CatLib.Net;
 using CatLib.Logging;
+using CatLib.Saves;
 using CatLib.Threading;
 using CatLib.UI;
 
@@ -32,6 +33,7 @@ public static class CatLibRuntime
         ModsMenu.Initialize(Log.Scope("UI"));
         Settings = CatSettings.For(plugin);
         SessionNetwork.Initialize(Log.Scope("Net"), Settings);
+        CatSaves.Initialize(Log.Scope("Saves"));
         plugin.AddComponent<CatLibBehaviour>();
         IsInitialized = true;
         Log.Info($"CatLib {PluginMeta.Version} initialized on managed thread {MainThread.ManagedThreadId}");

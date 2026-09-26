@@ -81,6 +81,21 @@ public sealed class WireReader
         return present ? value : null;
     }
 
+    public byte[] ReadBytes(int limit)
+    {
+        var length = ReadUInt16();
+        if (length > limit)
+        {
+            throw new WireFormatException($"Data of {length} bytes exceeds the limit of {limit}");
+        }
+
+        Require(length);
+        var value = new byte[length];
+        Array.Copy(_data, _position, value, 0, length);
+        _position += length;
+        return value;
+    }
+
     public T ReadEnum<T>(T min, T max) where T : struct, Enum
     {
         var raw = ReadByte();

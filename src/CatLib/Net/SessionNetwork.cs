@@ -46,6 +46,8 @@ internal static class SessionNetwork
 
     public static SteamSelfCheck SelfCheck { get; private set; }
 
+    public static ModMessenger Messenger { get; private set; }
+
     public static bool IsEnabled => _enabled == null || _enabled.Value;
 
     public static SteamApiBackend Backend => _backend?.Value ?? SteamApiBackend.Interop;
@@ -57,6 +59,7 @@ internal static class SessionNetwork
         _log = log;
         Clock.Start();
         SelfCheck = new SteamSelfCheck(log.Scope("SelfCheck"));
+        Messenger = new ModMessenger(new SessionLink(() => Host, () => Client, () => Transport), () => Now, log.Scope("Messages"));
         _enabled = settings.Local("Network", "Enabled", true,
             "Exchange mod lists and session settings with other players who use CatLib. Takes effect from the next session.");
         _onIncompatible = settings.Local("Network", "OnIncompatiblePlayer", IncompatiblePlayerAction.Warn,
@@ -100,6 +103,15 @@ internal static class SessionNetwork
         catch (Exception exception)
         {
             _log.Error("Steam self check failed", exception);
+        }
+
+        try
+        {
+            Messenger.Update();
+        }
+        catch (Exception exception)
+        {
+            _log.Error("Delivering local mod messages failed", exception);
         }
 
         if (Transport == null)
@@ -174,6 +186,7 @@ internal static class SessionNetwork
         Host = null;
         Client = null;
         Transport = null;
+        Messenger.Reset();
         _log.Info("Network session stopped, session overrides cleared");
         GameEventStream.Publish(StoppedEventName);
     }
@@ -224,7 +237,10 @@ internal static class SessionNetwork
         Transport = new SteamMessagesTransport(localId, SteamMessagesTransport.CreateApi(Backend, _log), _log.Scope("Channel"));
         Host = new HostSession(Transport, Identity(), SessionSettings.Snapshot, () => Now, HandshakeTimeoutSeconds, _log.Scope("Host"), 1,
             () => _onIncompatible.Value == IncompatiblePlayerAction.Disconnect);
-        Host.PeerEvaluated += OnPeerEvaluated;
+        var host = Host;
+        host.PeerEvaluated += OnPeerEvaluated;
+        host.PeerEvaluated += report => Messenger.OnPeerEvaluated(report.PeerId, host.SharedModsOf(report.PeerId));
+        host.ModMessageReceived += Messenger.OnHostReceived;
         _log.Info($"Hosting as {localId} through the {Transport.ApiName} Steam API, declared mods: {CatNetwork.DeclaredMods.Count}");
         GameEventStream.Publish(HostStartedEventName, $"id={localId} api={Transport.ApiName}");
     }
@@ -266,6 +282,7 @@ internal static class SessionNetwork
             PendingKicks.Remove(clientId);
             MenuNotices.ClearPlayerNotice(clientId);
             Host?.OnPeerDisconnected(clientId);
+            Messenger.OnPeerLeft(clientId);
         });
     }
 
@@ -288,6 +305,8 @@ internal static class SessionNetwork
         Client = new ClientSession(Transport, Identity(), SessionSettings.Instance, () => Now, HandshakeTimeoutSeconds, _log.Scope("Client"), HostCandidates.Contains);
         Client.Completed += OnHandshakeCompleted;
         Client.SettingsApplied += OnSettingsApplied;
+        var client = Client;
+        client.ModMessageReceived += data => Messenger.OnClientReceived(client.HostId, data);
         Client.Start();
         MenuNotices.ClearLobby();
         _lastAccept = double.NegativeInfinity;

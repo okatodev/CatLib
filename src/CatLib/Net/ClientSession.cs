@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CatLib.Events;
 using CatLib.Logging;
 
@@ -33,6 +34,31 @@ public sealed class ClientSession
     public event Action<PeerReport> Completed;
 
     public event Action<SessionApplyResult> SettingsApplied;
+
+    public event Action<ModMessageData> ModMessageReceived;
+
+    public IReadOnlyCollection<string> SharedMods { get; private set; } = Array.Empty<string>();
+
+    public bool SharesWithHost(string modId) => HostId != 0 && Status is SessionStatus.Accepted or SessionStatus.Rejected && SharedMods.Contains(modId);
+
+    public bool Send(ModMessageData message)
+    {
+        if (!SharesWithHost(message.ModId))
+        {
+            return false;
+        }
+
+        try
+        {
+            _transport.Send(HostId, MessageCodec.Encode(message));
+            return true;
+        }
+        catch (Exception exception)
+        {
+            _log?.Warning($"Sending a message of {message.ModId} to the host failed: {exception.Message}");
+            return false;
+        }
+    }
 
     public ulong HostId { get; private set; }
 
@@ -130,6 +156,7 @@ public sealed class ClientSession
                 _log?.Debug($"Ignored a repeated verdict from the host in state {Status}");
                 break;
             case VerdictMessage verdict when Status == SessionStatus.Waiting:
+                SharedMods = new HashSet<string>(verdict.SharedModIds, StringComparer.Ordinal);
                 if (verdict.Accepted)
                 {
                     ApplySettings(verdict.Settings);
@@ -139,6 +166,17 @@ public sealed class ClientSession
                 break;
             case SettingsUpdateMessage update when Status == SessionStatus.Accepted:
                 ApplySettings(update.Settings);
+                break;
+            case ModMessageData modMessage when Status is SessionStatus.Accepted or SessionStatus.Rejected:
+                if (SharedMods.Contains(modMessage.ModId))
+                {
+                    SafeInvoker.Invoke(ModMessageReceived, modMessage, "ClientSession.ModMessageReceived", _log);
+                }
+                else
+                {
+                    _log?.Debug($"Ignored a message of {modMessage.ModId}, the mod is not shared with the host");
+                }
+
                 break;
             default:
                 _log?.Warning($"Ignored an unexpected {message.Type} message from the host in state {Status}");
@@ -162,6 +200,7 @@ public sealed class ClientSession
         }
 
         Status = SessionStatus.Stopped;
+        SharedMods = Array.Empty<string>();
         _sink.Clear();
     }
 

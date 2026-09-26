@@ -29,6 +29,25 @@ public static class CatNetwork
         }
     }
 
+    public static ModChannel Channel(BasePlugin plugin)
+    {
+        if (plugin == null)
+        {
+            throw new ArgumentNullException(nameof(plugin));
+        }
+
+        var metadata = MetadataHelper.GetMetadata(plugin)
+                       ?? throw new ArgumentException($"{plugin.GetType().FullName} has no BepInPlugin attribute", nameof(plugin));
+        return Channel(metadata.GUID);
+    }
+
+    public static ModChannel Channel(string modId)
+    {
+        var messenger = SessionNetwork.Messenger
+                        ?? throw new InvalidOperationException("CatLib is not initialized yet; add [BepInDependency(\"catlib.core\")] to the plugin");
+        return messenger.Channel(modId);
+    }
+
     public static ModInfo Declare(BasePlugin plugin, SessionPolicy policy, VersionRule rule = VersionRule.SameMinor)
     {
         if (plugin == null)

@@ -17,4 +17,14 @@ public static class GameInfo
     public static string LoadedLevelKey => Singleton<BootstrapManager>.HasInstance() ? Singleton<BootstrapManager>.Instance.LoadedLevelKey : null;
 
     public static bool? IsServer => Singleton<NetworkManager>.HasInstance() ? Singleton<NetworkManager>.Instance.IsServer : null;
+
+    public static string SaveDirectory => SaveManager.GameSaveDirectoryPath;
+
+    public static string SaveFileName => Singleton<SaveManager>.HasInstance() ? Singleton<SaveManager>.Instance.GameSaveFileName : null;
+
+    public static string SaveFilePath => Singleton<SaveManager>.HasInstance() ? Singleton<SaveManager>.Instance.CurrentGameSaveFullPath : null;
+
+    public static bool? IsNewSave => Singleton<SaveManager>.HasInstance() ? Singleton<SaveManager>.Instance.IsNewSave : null;
+
+    public static bool? IsLoadingSave => Singleton<SaveManager>.HasInstance() ? Singleton<SaveManager>.Instance.IsLoadingSave : null;
 }
