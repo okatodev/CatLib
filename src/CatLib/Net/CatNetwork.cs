@@ -11,6 +11,13 @@ public static class CatNetwork
     private static readonly object Sync = new();
     private static readonly Dictionary<string, ModInfo> Declared = new(StringComparer.Ordinal);
 
+    public static SessionRole Role => ResolveRole(SessionNetwork.Host != null, SessionNetwork.Client != null);
+
+    public static bool IsAuthority => Role != SessionRole.Client;
+
+    public static SessionRole ResolveRole(bool hosting, bool joined) =>
+        joined ? SessionRole.Client : hosting ? SessionRole.Host : SessionRole.Offline;
+
     public static IReadOnlyList<ModInfo> DeclaredMods
     {
         get

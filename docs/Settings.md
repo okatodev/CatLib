@@ -43,6 +43,12 @@ Declare gameplay settings as `Session` now. Mods will not need changes when sync
 - `LocalValue` is the value from the local file.
 - They differ for settings that require a restart after an edit, and later for session settings while playing as a client.
 
+## Writing values from code
+
+`LocalValue = value` writes the local value: the file is saved and appliers run, exactly as after an edit in the menu.
+While a host override is active, `Value` keeps the host value until the session ends.
+A setting that only carries data between players, never meant for the menu, is declared with `.HiddenInMenu()`.
+
 ## Applying values
 
 `Apply(action)` calls `action` immediately with the current value and again after every change.
@@ -83,6 +89,10 @@ All matching settings return to their defaults, appliers run as usual and the fi
 Restart-only changes, rejected values and adjusted values are shown to the player:
 in the status line of the Mods tab while the settings menu is open, and as the game's own notifications during a level.
 Messages are available in English and Russian and follow the game language.
+
+A mod shows its own messages the same way with `Notifications.Show(text, brief)` from `CatLib.UI`.
+`brief` is the short form for the game notification, two lines of at most 34 characters split after the first `": "`;
+the full `text` goes to the status line of the Mods tab.
 
 ## Diagnostics
 

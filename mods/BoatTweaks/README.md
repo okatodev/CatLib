@@ -37,6 +37,8 @@ Cells where arriving parcels stand are always left free: the host prefers boat v
 ## Multiplayer
 
 The host decides the deck of the next boat and sends it to everyone as a hidden session setting.
+Only a player with `CatNetwork.IsAuthority` decides, which is the host or a single player; a client builds exactly what the host planned
+and, until the host has accepted it, keeps the game deck.
 Own layouts travel whole, so only the host needs the files; generated decks are rebuilt from the same seed on every player.
 
 ## How it works
@@ -51,3 +53,20 @@ Own layouts travel whole, so only the host needs the files; generated decks are 
 - For an own layout the host only lets the boat variants come whose arriving parcels do not stand on the layout.
   If no variant fits, the cells under arriving parcels are left free.
 - Heights are scaled from the remembered original values of every prefab, and also applied to the boat at the dock.
+
+## Changes
+
+### 0.2.0
+
+- Own layouts from files, picked at random, one after another or always one file.
+- Saving the deck of the boat at the dock as an own layout (Ctrl+B); cells of arriving parcels are left out.
+- Generated decks with a set density, near the rails or anywhere, rebuilt from the same seed on every player.
+- Mixed mode picking the deck source for each boat by weight.
+- Blockers of own and generated decks are decorated with the game's crates, bottles and lamps sized to their cells.
+- For an own layout only boat variants whose arriving parcels miss it come.
+- The host decides the next deck and sends it to clients.
+
+### 0.1.0
+
+- Game layouts with allowed numbers and no repeats, one fixed game layout, an empty deck.
+- Approved and maximum stack height multipliers.

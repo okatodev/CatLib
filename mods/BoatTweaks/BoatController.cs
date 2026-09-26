@@ -5,6 +5,7 @@ using CatLib.Core;
 using CatLib.Il2Cpp;
 using CatLib.Localization;
 using CatLib.Logging;
+using CatLib.Net;
 using CatLib.UI;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
@@ -67,12 +68,17 @@ public sealed class BoatController
         _dirty = true;
     }
 
-    public bool IsAuthority => Settings != null && !Settings.Plan.IsOverridden;
+    public bool IsAuthority => Settings != null && CatNetwork.IsAuthority;
 
     public DeckPlan CurrentPlan
     {
         get
         {
+            if (!IsAuthority && !Settings.Plan.IsOverridden)
+            {
+                return DeckPlan.Game;
+            }
+
             var text = Settings.Plan.Value;
             if (text != _planText)
             {
@@ -366,7 +372,7 @@ public sealed class BoatController
         var encoded = decision.Plan.Encode();
         if (encoded != Settings.Plan.Value)
         {
-            Settings.Plan.Entry.Value = encoded;
+            Settings.Plan.LocalValue = encoded;
             _log.Info("Next deck: " + decision.Plan.Describe());
         }
     }

@@ -35,7 +35,7 @@ docs/                        documentation
 | `CatLib.Config` | Live settings: `CatSettings`, `Setting<T>`, `CatConfig` |
 | `CatLib.Localization` | Translation catalogs for mods, `CatLanguage` follows the game language |
 | `CatLib.UI` | Mods tab in the game's settings menu; `Notifications.Show` for messages to the player |
-| `CatLib.Net` | Mod compatibility handshake and session settings sync |
+| `CatLib.Net` | Mod compatibility handshake, session settings sync, `CatNetwork.Role` and `IsAuthority` |
 
 ## Mods
 
@@ -81,10 +81,12 @@ All keys can be changed in `catlib.tests.cfg`, section `[Diagnostics]`. The focu
 
 ## Documentation
 
+- [Writing a mod](docs/WritingMods.md)
 - [Live settings](docs/Settings.md)
 - [Multiplayer compatibility](docs/Network.md)
 - [Localization](docs/Localization.md)
 - [Game events: observed behaviour](docs/GameEvents.md)
+- [Changelog](CHANGELOG.md)
 
 ## Conventions
 

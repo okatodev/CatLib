@@ -41,6 +41,30 @@ It is compatible only if the host has no `RequiredOnAll` mods.
 A host that never answers is treated as a host without CatLib; the client is compatible only if it has no `RequiredOnAll` mods.
 A verdict that arrives after the timeout is ignored.
 
+## Session role
+
+`CatNetwork.Role` tells what the local player is in the current session:
+
+| Role | When |
+|---|---|
+| `Offline` | main menu, no session |
+| `Host` | hosting, including single player, where the game runs its own server |
+| `Client` | joined another player's lobby or game |
+
+`CatNetwork.IsAuthority` is true for `Offline` and `Host`. A mod whose decisions must be the same for everyone
+makes them only while it has authority and passes the result to clients in a hidden session setting:
+
+```csharp
+var plan = settings.Session("Sync", "Plan", "", "Written by the mod.").HiddenInMenu();
+if (CatNetwork.IsAuthority)
+{
+    plan.LocalValue = Decide();
+}
+```
+
+A client reads `plan.Value`, which is the host's value once the handshake is accepted.
+Until then, and when the host rejected the client, `plan.IsOverridden` is false and the client should not act on its own old value.
+
 ## Session settings
 
 On an accepted client, session settings take the host's values as overrides:

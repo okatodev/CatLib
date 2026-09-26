@@ -57,7 +57,11 @@ public sealed class Setting<T> : ISettingNode
 
     public T Value => _value;
 
-    public T LocalValue => Entry.Value;
+    public T LocalValue
+    {
+        get => Entry.Value;
+        set => Entry.Value = value;
+    }
 
     public Type ValueType => typeof(T);
 
