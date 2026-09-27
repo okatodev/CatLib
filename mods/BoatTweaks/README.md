@@ -58,7 +58,8 @@ Decoration is a personal setting: with `Decoration/Enabled` off the blocked cell
   If no variant fits, the closest variants come and the cells under their arriving parcels are left free.
 - Objects of the boat prefabs that carry game entities are never hidden, so the game's network identifiers are not affected.
 - From the start of a game restart until the next level loads the mod changes nothing, so the level is never touched while it is destroyed.
-- Heights are scaled from the remembered original values of every prefab, and also applied to the boat at the dock.
+- Heights are scaled from the remembered original values of every prefab and applied to every boat in the scene, after which the game recomputes whether the stack is approved.
+- The developer menu has **Boat Tweaks → Boat heights**, which writes the limits of every boat in the scene to the log.
 
 ## Changes
 

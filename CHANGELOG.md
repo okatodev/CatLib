@@ -2,36 +2,11 @@
 
 CatLib follows semantic versioning. Mods in `mods/` have their own versions and changes in their README files.
 
-## Unreleased
-
-### Added
-
-- `CatLib.Saves`: mod data per game save in `CatLibSaves` next to the game's save folder (`CatSaves.For`, `ModSave`).
-  Written only after the game saved successfully and only by the host, atomically with a backup;
-  damaged files are set aside, newer data is never overwritten, a new save never inherits data left under its name.
-  See [Mod data in game saves](docs/Saves.md).
-- Developer menu in `CatLib.DevTools`: one key opens a keyboard driven panel with commands mods register with
-  `DevMenu.Command` and `DevMenu.Toggle`. See [Developer menu](docs/DevTools.md).
-- Messages between mods: `CatNetwork.Channel` with `SendToHost`, `Broadcast`, `SendTo`, `PeerJoined` and `PeerLeft`.
-  Only between the host and players that share the mod, with local delivery in single player and on the host,
-  and a limit of 60 messages per second per player on the host. See [Mod messages](docs/Network.md#mod-messages).
-
-### Changed
-
-- Notifications are wrapped by the width the game's notification font measures, not by a character count,
-  so a line never runs past the screen edge when the notification settles. Lines are not broken inside quotes.
-- Network protocol 4: the verdict lists the mods both sides share. Players with an older CatLib are reported as incompatible.
-- The developer tools of `CatLib.Tests` moved from function keys F3-F10 to the developer menu.
-- When a client leaves through a game restart, the host's session settings stay until the main menu is loaded,
-  so mods do not react to setting changes while the level is being destroyed.
-- The build copies plugins to a second game copy too when `SecondGameDir` is set in `GamePaths.props`.
-- The Steam channel sessions of CatLib are closed when a player leaves, when the session stops and after the Steam self check,
-  instead of being left open while the game shuts its networking down.
-- `CatLib.Tests` developer menu: Visible players and Join the first host, for joining a second game copy on the same computer.
-
 ## 0.5.0
 
-For mod authors: localization, safe access to two-dimensional IL2CPP arrays, player notifications and the session role.
+For mod authors: localization, mod data in game saves, messages between mods, a developer menu,
+safe access to two-dimensional IL2CPP arrays, player notifications and the session role.
+Checked with two game copies on one computer, including Boat Tweaks and Shelf Labels in multiplayer.
 
 ### Added
 
@@ -39,6 +14,15 @@ For mod authors: localization, safe access to two-dimensional IL2CPP arrays, pla
   lookup with fallback from a regional language to its base language and to English, `CatLanguage.Current` following the game language.
 - The Mods tab takes the mod name, section names, setting labels, descriptions and dropdown values from the mod's catalog,
   and rebuilds its texts when the game language changes.
+- `CatLib.Saves`: mod data per game save in `CatLibSaves` next to the game's save folder (`CatSaves.For`, `ModSave`).
+  Written only after the game saved successfully and only by the host, atomically with a backup;
+  damaged files are set aside, newer data is never overwritten, a new save never inherits data left under its name.
+  See [Mod data in game saves](docs/Saves.md).
+- Messages between mods: `CatNetwork.Channel` with `SendToHost`, `Broadcast`, `SendTo`, `PeerJoined` and `PeerLeft`.
+  Only between the host and players that share the mod, with local delivery in single player and on the host,
+  and a limit of 60 messages per second per player on the host. See [Mod messages](docs/Network.md#mod-messages).
+- Developer menu in `CatLib.DevTools`: one key opens a keyboard driven panel with commands mods register with
+  `DevMenu.Command` and `DevMenu.Toggle`. See [Developer menu](docs/DevTools.md).
 - `Il2CppArrays` in `CatLib.Il2Cpp`: reads and writes two-dimensional IL2CPP arrays that interop only exposes as `Il2CppObjectBase`.
   Every call checks the array rank, the element size against the requested type and the bounds.
 - `Notifications.Show` in `CatLib.UI` shows a mod's message as a game notification in a level and in the Mods tab status line.
@@ -46,12 +30,25 @@ For mod authors: localization, safe access to two-dimensional IL2CPP arrays, pla
 - `Setting<T>.LocalValue` can be written from code: the file is saved and appliers run.
 - `SaveEvents` in `CatLib.Game.Events` (`SaveFileSelected`, `GameSavingStarted`, `SuccessfullySaved`, `UnsuccessfullySaved`)
   and the current save in `GameInfo` (`SaveDirectory`, `SaveFileName`, `SaveFilePath`, `IsNewSave`, `IsLoadingSave`).
+- The build copies plugins to a second game copy too when `SecondGameDir` is set in `GamePaths.props`.
+- Developer tools in `CatLib.Tests`, all in the developer menu: entity dump, settings menu dump, notification preview,
+  mod message probe, Steam self check, the list of visible Steam players and joining the first host.
 - Documentation: [Writing a mod](docs/WritingMods.md), [Localization](docs/Localization.md), session role in [Multiplayer compatibility](docs/Network.md).
-- Developer tools in `CatLib.Tests`: entity dump on F4 with the object tree, collider sizes and renderer state; notification preview on F5.
 
 ### Changed
 
+- Network protocol 4: the verdict lists the mods both sides share. Players with an older CatLib are reported as incompatible.
+- Notifications are wrapped by the width the game's notification font measures, not by a character count,
+  so a line never runs past the screen edge when the notification settles. Lines are not broken inside quotes.
+- When a client leaves through a game restart, the host's session settings stay until the main menu is loaded,
+  so mods do not react to setting changes while the level is being destroyed.
 - The context line of the Mods tab holds three lines, so long descriptions keep their default value line.
+
+### Fixed
+
+- A crash when leaving a level in multiplayer: the Steam channel sessions of CatLib stayed open while the game shut its networking down.
+  They are now closed when a player leaves, when the session stops and after the Steam self check.
+- The scrollbars of the Mods tab stretch along their pane like the game's own, instead of sitting as a small square in the corner.
 
 ## 0.4.0
 

@@ -2,26 +2,11 @@
 
 What is planned, in rough order. Finished work moves to [CHANGELOG.md](CHANGELOG.md).
 
-## Now: extra shelf labels
+## Now: next mod
 
-A mod that adds 1 to 3 extra labels next to or below each shelf label, so one shelf can say both "Port Windy" and "Fragile".
-
-1. Done: save events in the bridge and `GameInfo` save properties, observed in single player. Client side comes with test 7.
-2. Done: `CatLib.Saves`, checked with a real save: writing, reading after a restart, recovery from a damaged file, a new save.
-3. Done: messages between mods, tested outside the game. Next: F7 in single player and with a friend.
-4. The mod in `mods/ShelfLabels` works in single player: extra labels, clicks, placement and stands per shelf, saves. Next: test 10.5 with a friend.
-   The plan it follows: copies of the game's label without its network and save identifiers, the game's own highlight and clicks,
-   side and count per setting, pictures stored per original label and copy number so hiding copies never loses them,
-   the original label never touched.
-
-## Before tagging 0.5.0
-
-- Test 7 of the session journal: Boat Tweaks with two players. 7.1 found layouts meeting parcels of two-player boats and a client crash on leaving; fixes are ready for a rerun.
-
-## Developer menu
-
-Done in the code: one key opens a keyboard driven IMGUI panel with the commands of `CatLib.Tests` and of any mod.
-Next: the in-game check.
+0.5.0 is out with Boat Tweaks 0.2.0 and Shelf Labels 0.1.0, checked in multiplayer with two game copies on one computer.
+Next is the Workshop mod below; it waits for research of what a repair consumes.
+Open question from the tests: whether the boat leaves with a stack above the game's approved height when Boat Tweaks raises it.
 
 ## Later mods
 

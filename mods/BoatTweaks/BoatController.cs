@@ -212,11 +212,44 @@ public sealed class BoatController
 
         _dirty = false;
         Apply(pools);
-        if (current != null)
+        ApplyHeightToScene();
+    }
+
+    private void ApplyHeightToScene()
+    {
+        var states = _prefabs.Values.GroupBy(state => state.Key).ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
+        foreach (var store in UnityEngine.Object.FindObjectsOfType<EntityInteractableStore>())
         {
-            var state = pools.SelectMany(pool => pool.Prefabs).Select(prefab => _prefabs[prefab.Pointer]).FirstOrDefault(prefab => prefab.Key == KeyOf(current));
-            ApplyHeight(current, state);
+            if (store == null || !states.TryGetValue(KeyOf(store), out var state))
+            {
+                continue;
+            }
+
+            ApplyHeight(store, state);
+            store.UpdateApprovedHeight();
         }
+    }
+
+    public string DescribeBoats()
+    {
+        var keys = new HashSet<string>(_prefabs.Values.Select(state => state.Key), StringComparer.Ordinal);
+        var lines = new List<string>();
+        foreach (var store in UnityEngine.Object.FindObjectsOfType<EntityInteractableStore>())
+        {
+            if (store == null || !keys.Contains(KeyOf(store)))
+            {
+                continue;
+            }
+
+            var visual = store._ApprovedHeightVisual_k__BackingField;
+            lines.Add($"{KeyOf(store)}: approved {store._StorageMaximumApprovedHeight_k__BackingField:0.##}, maximum {store._StorageMaximumHeight_k__BackingField:0.##}, " +
+                      $"current {store.CurrentHeight:0.##}, approved now {store.IsHeightApproved}, " +
+                      (visual == null ? "no approved height visual" : $"visual {(visual.activeInHierarchy ? "shown" : "hidden")} at local height {visual.transform.localPosition.y:0.##}"));
+        }
+
+        var role = CatNetwork.Role;
+        _log.Info($"Boats in the scene as {role}: {(lines.Count == 0 ? "none" : string.Join("; ", lines))}; scales approved x{Settings.ApprovedHeightScale.Value:0.##}, maximum x{Settings.MaximumHeightScale.Value:0.##}");
+        return lines.Count == 0 ? "no boat in the scene" : $"{lines.Count} boat(s), see the log";
     }
 
     private void Apply(IReadOnlyList<Pool> pools)

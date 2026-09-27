@@ -137,6 +137,9 @@ internal static class ModsTabBuilder
         var (listWidth, contentWidth) = Split(listScroll, contentScroll);
         EnableViewportMask(listScroll);
         EnableViewportMask(contentScroll);
+        var scrollbarReference = FindLaidOutScrollbar(options);
+        StretchScrollbar(listScroll, scrollbarReference);
+        StretchScrollbar(contentScroll, scrollbarReference);
 
         var listHeader = UnityEngine.Object.Instantiate(headerTemplate, listScroll.content, false);
         listHeader.name = "group_SettingsHeader CatLibModList";
@@ -314,6 +317,58 @@ internal static class ModsTabBuilder
 
     internal static RectTransform ViewportOf(ScrollRect scroll) =>
         scroll.viewport ?? scroll.content?.parent?.TryCast<RectTransform>();
+
+    private static Scrollbar FindLaidOutScrollbar(OptionsInterface options)
+    {
+        var tabs = options._tabs;
+        for (var index = 0; index < tabs.Count; index++)
+        {
+            var panel = tabs[index].AssociatedPanel;
+            var scroll = panel == null ? null : FindDirectScroll(panel.transform);
+            var scrollbar = scroll == null ? null : scroll.verticalScrollbar;
+            var rect = scrollbar == null ? null : scrollbar.transform.TryCast<RectTransform>();
+            if (rect != null && rect.anchorMax.y > rect.anchorMin.y)
+            {
+                return scrollbar;
+            }
+        }
+
+        return null;
+    }
+
+    internal static void StretchScrollbar(ScrollRect scroll, Scrollbar reference)
+    {
+        var scrollbar = scroll.verticalScrollbar;
+        var rect = scrollbar == null ? null : scrollbar.transform.TryCast<RectTransform>();
+        if (rect == null || rect.anchorMax.y > rect.anchorMin.y)
+        {
+            return;
+        }
+
+        var referenceRect = reference == null ? null : reference.transform.TryCast<RectTransform>();
+        if (referenceRect != null)
+        {
+            rect.anchorMin = referenceRect.anchorMin;
+            rect.anchorMax = referenceRect.anchorMax;
+            rect.pivot = referenceRect.pivot;
+            rect.sizeDelta = referenceRect.sizeDelta;
+            rect.anchoredPosition = referenceRect.anchoredPosition;
+            var handle = scrollbar.handleRect;
+            var referenceHandle = reference.handleRect;
+            if (handle != null && referenceHandle != null)
+            {
+                handle.sizeDelta = referenceHandle.sizeDelta;
+            }
+
+            return;
+        }
+
+        rect.anchorMin = new Vector2(1f, 0f);
+        rect.anchorMax = new Vector2(1f, 1f);
+        rect.pivot = new Vector2(1f, 1f);
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 0f);
+        rect.anchoredPosition = Vector2.zero;
+    }
 
     private static void EnableViewportMask(ScrollRect scroll)
     {

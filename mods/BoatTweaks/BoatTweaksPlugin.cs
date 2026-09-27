@@ -3,6 +3,7 @@ using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using CatLib.Config;
 using CatLib.Core;
+using CatLib.DevTools;
 using CatLib.Game.Events;
 using CatLib.Logging;
 using CatLib.Net;
@@ -30,6 +31,8 @@ public sealed class BoatTweaksPlugin : BasePlugin
         FrameLoop.Update += _controller.Update;
         BootstrapEvents.GameRestartStarted += _controller.SuspendForRestart;
         BootstrapEvents.LevelLoadStarted += _controller.OnLevelLoadStarted;
+        DevMenu.Command("Boat Tweaks", "Boat heights", _controller.DescribeBoats,
+            "Writes the height limits of every boat in the scene and whether its stack is approved.");
         log.Info($"Boat Tweaks {PluginMeta.Version} loaded with {translations} translated text(s) in {string.Join(", ", settings.Texts.Languages)}, own layouts in {library.Directory}");
     }
 }

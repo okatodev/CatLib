@@ -66,7 +66,10 @@ Observed in single player:
 - Leaving to the main menu does not save.
 - A freshly started save reports `new=yes` already in `SaveFileSelected`, with a file name the game has not written yet.
   Its first save follows about one second after `GameStartedPhase2`, still with `new=yes`.
-- Which events a client receives is not observed yet.
+- In multiplayer the host gets `GameSavingStarted` and `SuccessfullySaved` with `host=yes`.
+  A client gets no `SaveFileSelected` and no `GameSavingStarted`, only `SuccessfullySaved` for its own copy of the host's save,
+  named after it with `_FromNetwork`, for example `GameSave_20260923_201740_Cat-Mail-Co_FromNetwork.bin`, with `host=no`.
+  `CatLib.Saves` ignores it: save data of mods is written only by the host.
 
 The game saves on its own: after a level loads, when the game starts, when a customer is satisfied,
 when the time of day changes and when a client connects. A save is an SQLite database per slot in `GameInfo.SaveDirectory`.
