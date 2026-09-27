@@ -18,4 +18,9 @@ public sealed class CatLibBehaviour : MonoBehaviour
     {
         CatLib.DevTools.DevMenu.Draw();
     }
+
+    public void OnApplicationQuit()
+    {
+        CatLib.Diagnostics.CrashWatch.MarkCleanExit();
+    }
 }

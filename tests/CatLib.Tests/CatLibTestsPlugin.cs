@@ -27,6 +27,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
     private CatLib.Tests.Diagnostics.Inspection.EntityInspector _entityInspector;
     private CatLib.Tests.Diagnostics.Inspection.LabelCloneExperiment _labelClone;
     private CatLib.Tests.Diagnostics.LocalJoin _localJoin;
+    private CrashTrigger _crashes;
     private MessageProbe _probes;
     private SaveProbe _saveProbe;
     private UiHierarchyDumper _uiDumper;
@@ -60,6 +61,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
         _saveProbe = new SaveProbe(PluginMeta.Version, _log.Scope("SaveProbe"));
         _labelClone = new CatLib.Tests.Diagnostics.Inspection.LabelCloneExperiment(_log.Scope("LabelClone"));
         _localJoin = new CatLib.Tests.Diagnostics.LocalJoin(_log.Scope("LocalJoin"));
+        _crashes = new CrashTrigger(_log.Scope("Crash"));
         _entityInspector = new CatLib.Tests.Diagnostics.Inspection.EntityInspector(Path.Combine(outputDirectory, "Dumps"), () => _entityDumpTypes.Value, _log.Scope("Inspect"));
         _reportWriter = new TestReportWriter(Path.Combine(outputDirectory, "Reports"));
         _runner = new TestRunner(TestRegistry.Discover(typeof(CatLibTestsPlugin).Assembly), _log.Scope("Runner"));
@@ -125,6 +127,12 @@ public sealed class CatLibTestsPlugin : BasePlugin
             _stressMods.Toggle();
             return "see the Mods tab";
         }, "Creates or removes a set of mods with many settings to check the Mods tab layout.");
+        DevMenu.Command("Crash", "Native crash, game thread", _crashes.NativeOnGameThread,
+            "Crashes the game with a native access violation on the game thread to check the CatLib crash window. Press twice.");
+        DevMenu.Command("Crash", "Native crash, worker thread", _crashes.NativeOnWorkerThread,
+            "Crashes the game from a new native thread, like the Steam networking crash. Press twice.");
+        DevMenu.Command("Crash", "Managed crash", _crashes.Managed,
+            "Crashes the game with an unhandled .NET exception on a new thread. Press twice.");
     }
 
     private void DeclareDemoSettings()

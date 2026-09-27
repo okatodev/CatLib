@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>CatLib</AssemblyName>
     <RootNamespace>CatLib</RootNamespace>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
     <PluginGuid>catlib.core</PluginGuid>
     <PluginMetaName>CatLib</PluginMetaName>
     <CatLibDeployFolder>CatLib</CatLibDeployFolder>
@@ -10,5 +10,9 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="CatLib.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\tools\CatLib.CrashWatcher\CatLib.CrashWatcher.csproj" ReferenceOutputAssembly="false" SkipGetTargetFrameworkProperties="true" Private="false" />
   </ItemGroup>
 </Project>

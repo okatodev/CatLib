@@ -14,6 +14,7 @@ build/
   PluginMeta.targets         generates PluginMeta (Guid, Name, Version) from the project file
   Deploy.targets             copies the built plugin into BepInEx/plugins/<folder>
 src/CatLib/                  the library, shipped to players
+tools/CatLib.CrashWatcher/   small Windows program that shows the crash window, shipped next to CatLib.dll
 mods/                        gameplay mods built on CatLib, one project per mod
 tests/CatLib.Tests/          in-game test plugin and developer tools, developers only
 docs/                        documentation
@@ -35,6 +36,7 @@ docs/                        documentation
 | `CatLib.Config` | Live settings: `CatSettings`, `Setting<T>`, `CatConfig` |
 | `CatLib.Saves` | Mod data per game save, written with the game's save, atomically and with a backup |
 | `CatLib.Localization` | Translation catalogs for mods, `CatLanguage` follows the game language |
+| `CatLib.Diagnostics` | Crash watcher: a report and a small window when the game closes unexpectedly |
 | `CatLib.DevTools` | Keyboard developer menu, `DevMenu.Command` and `DevMenu.Toggle` |
 | `CatLib.UI` | Mods tab in the game's settings menu; `Notifications.Show` for messages to the player |
 | `CatLib.Net` | Mod compatibility handshake, session settings sync, messages between mods (`CatNetwork.Channel`), `CatNetwork.Role` and `IsAuthority` |
@@ -60,6 +62,8 @@ Each mod in `mods/` is its own BepInEx plugin, released separately from CatLib:
 4. Run `dotnet build` in the repository root.
 
 Each build copies every plugin into its own folder in `BepInEx/plugins`: `CatLib`, `CatLib.Tests` and one folder per mod.
+`CatLib.CrashWatcher.exe` is built for .NET Framework 4.8, which every Windows 10 and 11 has, and goes into the `CatLib` folder next to `CatLib.dll`.
+Players install both files.
 Pass `-p:CatLibDeploy=false` to build without copying.
 Set `SecondGameDir` in `GamePaths.props` to a second copy of the game to copy the plugins there as well, for running two instances on one computer.
 
@@ -87,6 +91,7 @@ Up and Down select, Enter or 1-9 run, Left and Right switch the group, the same 
 | Network | Steam channel self check |
 | UI | Sample network message shown as a game notification |
 | UI | Stress mods for the Mods tab |
+| Crash | Native crash on the game thread, native crash on a worker thread, managed crash: each needs a second press within 3 s |
 
 The key is `MenuHotkey` in section `[DevTools]` of CatLib's own config. The focus types of the entity dump are set with `EntityDumpTypes` in `catlib.tests.cfg`.
 Mods add their own commands with `DevMenu.Command`, see [Developer menu](docs/DevTools.md).
@@ -99,6 +104,7 @@ Mods add their own commands with `DevMenu.Command`, see [Developer menu](docs/De
 - [Localization](docs/Localization.md)
 - [Mod data in game saves](docs/Saves.md)
 - [Developer menu](docs/DevTools.md)
+- [Crash reports](docs/CrashReports.md)
 - [Game events: observed behaviour](docs/GameEvents.md)
 - [Changelog](CHANGELOG.md)
 - [Roadmap](ROADMAP.md)

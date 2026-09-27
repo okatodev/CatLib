@@ -2,6 +2,7 @@ using System;
 using BepInEx.Unity.IL2CPP;
 using CatLib.Config;
 using CatLib.DevTools;
+using CatLib.Diagnostics;
 using CatLib.Game.Bridge;
 using CatLib.Net;
 using CatLib.Logging;
@@ -33,6 +34,7 @@ public static class CatLibRuntime
         CatConfig.Initialize(Log.Scope("Config"));
         ModsMenu.Initialize(Log.Scope("UI"));
         Settings = CatSettings.For(plugin);
+        CrashWatch.Initialize(Log.Scope("Crash"), Settings);
         SessionNetwork.Initialize(Log.Scope("Net"), Settings);
         CatSaves.Initialize(Log.Scope("Saves"));
         DevMenu.Initialize(Log.Scope("DevTools"), Settings);

@@ -2,6 +2,19 @@
 
 CatLib follows semantic versioning. Mods in `mods/` have their own versions and changes in their README files.
 
+## 0.6.0
+
+Not released yet.
+
+### Added
+
+- Crash reports: when the game closes unexpectedly, a small window names what happened with a different cozy phrase every time,
+  and a report folder keeps the report, both logs and the recorded session in `BepInEx/CatLib/Crashes`.
+  Works for native crashes too, since the window comes from `CatLib.CrashWatcher.exe`, a separate program next to `CatLib.dll`.
+  Can be turned off with `CrashWindow` in section `[Diagnostics]`. See [Crash reports](docs/CrashReports.md).
+- Developer menu of `CatLib.Tests`: the Crash group with a native crash on the game thread, a native crash on a worker thread
+  and a managed crash.
+
 ## 0.5.0
 
 For mod authors: localization, mod data in game saves, messages between mods, a developer menu,
