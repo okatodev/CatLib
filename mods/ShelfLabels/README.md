@@ -52,3 +52,12 @@ A player who joins gets all pictures and placements from the host. Without the m
 
 The extra labels are copies of the game's label holder without its network and save components and with the game's label script turned off.
 Clicks on the copies are caught before the game handles them, so they never reach the game's network code.
+
+## Changes
+
+### 0.1.0
+
+- One to three extra labels per shelf label, with the game's highlight and clicks; the original label is never touched.
+- Placement per shelf (right, left, below, none, or the freer side), changed with Ctrl+L by any player, decided and saved by the host.
+- The wooden stand of the extra labels can be removed per shelf with Ctrl+K.
+- Pictures, placement and stands are stored per game save and synchronized to every player.

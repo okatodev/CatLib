@@ -74,6 +74,7 @@ Decoration is a personal setting: with `Decoration/Enabled` off the blocked cell
 - Nothing is changed while the game restarts.
 - Blockers of own and generated decks are plain box colliders instead of copies of the game's objects.
 - Decoration can be turned off per player.
+- Height multipliers reach every boat in the scene, also on clients, and the game recomputes the approved height at once.
 - The host decides the next deck and sends it to clients.
 
 ### 0.1.0
