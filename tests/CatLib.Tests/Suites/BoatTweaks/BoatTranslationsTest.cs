@@ -67,10 +67,11 @@ public sealed class BoatTranslationsTest : TestCase
             }
         }
 
-        Assert.Equal(17, sandbox.Settings.Settings.Count, "Declared settings");
-        Assert.True(sandbox.Settings.Settings.Where(setting => setting.Section != "Saving").All(setting => setting.Scope == CatLib.Config.SettingScope.Session),
-            "Every boat setting except the hotkey is a session setting so the host decides");
+        Assert.Equal(18, sandbox.Settings.Settings.Count, "Declared settings");
+        Assert.True(sandbox.Settings.Settings.Where(setting => setting.Section != "Saving" && setting.Section != "Decoration").All(setting => setting.Scope == CatLib.Config.SettingScope.Session),
+            "Every gameplay setting is a session setting so the host decides");
         Assert.Equal(CatLib.Config.SettingScope.Local, boat.SaveHotkey.Scope, "The save hotkey is personal");
+        Assert.Equal(CatLib.Config.SettingScope.Local, boat.Decorate.Scope, "Decoration is personal");
         Assert.True(boat.Plan.IsHiddenInMenu, "The synced plan is not shown in the menu");
         Assert.Equal(0, missing.Count, "Missing translations: " + string.Join("; ", missing));
         Assert.Equal("Узор палубы", SettingTexts.Section(sandbox.Settings, "Layout", "ru"), "Russian section name");

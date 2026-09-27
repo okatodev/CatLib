@@ -61,6 +61,7 @@ Each mod in `mods/` is its own BepInEx plugin, released separately from CatLib:
 
 Each build copies every plugin into its own folder in `BepInEx/plugins`: `CatLib`, `CatLib.Tests` and one folder per mod.
 Pass `-p:CatLibDeploy=false` to build without copying.
+Set `SecondGameDir` in `GamePaths.props` to a second copy of the game to copy the plugins there as well, for running two instances on one computer.
 
 ## Tests
 
@@ -76,10 +77,13 @@ Up and Down select, Enter or 1-9 run, Left and Right switch the group, the same 
 | Group | Command |
 |---|---|
 | Tests | Run all tests |
+| Tests | Run on main menu: turns the automatic run on or off (`OnMainMenu` in section `[Run]` of `catlib.tests.cfg`) |
 | Inspect | Entity dump: what the camera looks at with its object tree, entity counts, storages and the focus types, written to `BepInEx/CatLib.Tests/Dumps` |
 | Inspect | Settings menu dump |
 | Inspect | Label clone experiment |
 | Network | Mod message probe: a ping to the host, which answers every player |
+| Network | Visible players: everyone Steam sees, with their rich presence |
+| Network | Join the first host: joins the first visible player that offers a game, like accepting a Steam invite |
 | Network | Steam channel self check |
 | UI | Sample network message shown as a game notification |
 | UI | Stress mods for the Mods tab |

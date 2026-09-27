@@ -22,6 +22,12 @@ CatLib follows semantic versioning. Mods in `mods/` have their own versions and 
   so a line never runs past the screen edge when the notification settles. Lines are not broken inside quotes.
 - Network protocol 4: the verdict lists the mods both sides share. Players with an older CatLib are reported as incompatible.
 - The developer tools of `CatLib.Tests` moved from function keys F3-F10 to the developer menu.
+- When a client leaves through a game restart, the host's session settings stay until the main menu is loaded,
+  so mods do not react to setting changes while the level is being destroyed.
+- The build copies plugins to a second game copy too when `SecondGameDir` is set in `GamePaths.props`.
+- The Steam channel sessions of CatLib are closed when a player leaves, when the session stops and after the Steam self check,
+  instead of being left open while the game shuts its networking down.
+- `CatLib.Tests` developer menu: Visible players and Join the first host, for joining a second game copy on the same computer.
 
 ## 0.5.0
 

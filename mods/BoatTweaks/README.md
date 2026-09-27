@@ -32,7 +32,9 @@ Any line with other characters is a note
 The boat deck is 8 by 8 cells on most levels; a layout of another size is skipped for that boat.
 The easiest way to make one: switch to Empty, put parcels where the blockers should be, then press the save hotkey (Ctrl+B by default).
 Every taken cell of the boat at the dock is saved except the cells of the parcels that arrived with it, so take off other parcels that should not be part of the layout first.
-Cells where arriving parcels stand are always left free: the host prefers boat variants whose parcels miss the layout, and otherwise frees those cells.
+Cells where arriving parcels stand are always left free: the host prefers boat variants whose parcels miss the layout.
+If every variant has parcels on the layout, which is common for boats of two or more players, only the variants that free the fewest cells,
+and the same cells, come, so the deck looks the same every time, and a notification tells how many cells stay free.
 
 ## Multiplayer
 
@@ -40,10 +42,12 @@ The host decides the deck of the next boat and sends it to everyone as a hidden 
 Only a player with `CatNetwork.IsAuthority` decides, which is the host or a single player; a client builds exactly what the host planned
 and, until the host has accepted it, keeps the game deck.
 Own layouts travel whole, so only the host needs the files; generated decks are rebuilt from the same seed on every player.
+Decoration is a personal setting: with `Decoration/Enabled` off the blocked cells stay taken but bare, for that player only.
 
 ## How it works
 
 - Blocked cells come from objects on the `StorageBlocker` layer. The crates, baskets, bottles, lamps and paddles (`Visuals/prop_*`) decorate them.
+- Own and generated decks get plain box colliders on the `StorageBlocker` layer, one per cell, not copies of the game's blocker objects.
 - Game layouts replace the variant list of each level with the chosen variant, so the game itself spawns it.
 - Empty, own layouts and generated decks hide the game's blockers and decoration in every boat prefab.
   For own layouts and generated decks, decoration is added to the boat that arrives: large crates on 2x2 pieces,
@@ -51,7 +55,9 @@ Own layouts travel whole, so only the host needs the files; generated decks are 
   The game reads blockers only when a boat is created, so the mod holds its cells taken in the storage grid every frame
   while that boat is at the dock; the game recounts the grid whenever a parcel is placed or taken, and the mod keeps its cells taken.
 - For an own layout the host only lets the boat variants come whose arriving parcels do not stand on the layout.
-  If no variant fits, the cells under arriving parcels are left free.
+  If no variant fits, the closest variants come and the cells under their arriving parcels are left free.
+- Objects of the boat prefabs that carry game entities are never hidden, so the game's network identifiers are not affected.
+- From the start of a game restart until the next level loads the mod changes nothing, so the level is never touched while it is destroyed.
 - Heights are scaled from the remembered original values of every prefab, and also applied to the boat at the dock.
 
 ## Changes
@@ -63,7 +69,10 @@ Own layouts travel whole, so only the host needs the files; generated decks are 
 - Generated decks with a set density, near the rails or anywhere, rebuilt from the same seed on every player.
 - Mixed mode picking the deck source for each boat by weight.
 - Blockers of own and generated decks are decorated with the game's crates, bottles and lamps sized to their cells.
-- For an own layout only boat variants whose arriving parcels miss it come.
+- For an own layout only boat variants whose arriving parcels miss it come; if none does, the closest ones, so the deck is the same every time.
+- Nothing is changed while the game restarts.
+- Blockers of own and generated decks are plain box colliders instead of copies of the game's objects.
+- Decoration can be turned off per player.
 - The host decides the next deck and sends it to clients.
 
 ### 0.1.0

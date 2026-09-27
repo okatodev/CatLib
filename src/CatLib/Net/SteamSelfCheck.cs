@@ -75,6 +75,7 @@ internal sealed class SteamSelfCheck
         _log.Message("Steam self check finished: " + LastResult);
         GameEventStream.Publish(StepEventName, "result " + LastResult);
         _clock = null;
+        _transport.Close(_transport.LocalId);
         _transport = null;
     }
 

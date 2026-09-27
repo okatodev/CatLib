@@ -386,11 +386,6 @@ public sealed class LabelsController
 
     private void Forget()
     {
-        foreach (var view in _views.Values)
-        {
-            view.RemoveAll();
-        }
-
         _views.Clear();
         _actions.Clear();
         _roots.Clear();

@@ -16,4 +16,6 @@ public sealed class InstanceTracker
         Current = instance;
         return true;
     }
+
+    public void Forget() => Current = IntPtr.Zero;
 }

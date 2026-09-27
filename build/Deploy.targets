@@ -2,9 +2,13 @@
   <Target Name="CatLibDeploy" AfterTargets="Build" Condition="'$(CatLibDeploy)' == 'true' and '$(CatLibDeployFolder)' != ''">
     <PropertyGroup>
       <CatLibDeployDir>$(BepInExPluginsDir)\$(CatLibDeployFolder)</CatLibDeployDir>
+      <CatLibSecondDeployDir Condition="'$(SecondGameDir)' != ''">$(SecondGameDir)\BepInEx\plugins\$(CatLibDeployFolder)</CatLibSecondDeployDir>
     </PropertyGroup>
     <MakeDir Directories="$(CatLibDeployDir)" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(CatLibDeployDir)" SkipUnchangedFiles="true" />
     <Message Importance="high" Text="$(TargetFileName) -&gt; $(CatLibDeployDir)" />
+    <MakeDir Directories="$(CatLibSecondDeployDir)" Condition="'$(CatLibSecondDeployDir)' != ''" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(CatLibSecondDeployDir)" SkipUnchangedFiles="true" Condition="'$(CatLibSecondDeployDir)' != ''" />
+    <Message Importance="high" Text="$(TargetFileName) -&gt; $(CatLibSecondDeployDir)" Condition="'$(CatLibSecondDeployDir)' != ''" />
   </Target>
 </Project>

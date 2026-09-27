@@ -28,6 +28,12 @@ internal sealed class InteropSteamChannelApi : ISteamChannelApi
         return SteamNetworkingMessages.AcceptSessionWithUser(ref identity);
     }
 
+    public bool Close(ulong peer)
+    {
+        var identity = Identity(peer);
+        return SteamNetworkingMessages.CloseSessionWithUser(ref identity);
+    }
+
     public int Receive(int channel, Action<ulong, byte[]> received)
     {
         var count = SteamNetworkingMessages.ReceiveMessagesOnChannel(channel, _buffer, MaxBatch);

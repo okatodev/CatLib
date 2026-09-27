@@ -32,6 +32,7 @@ public sealed class DeckBuilder
     public const float DefaultCellSize = 0.25f;
 
     private readonly CatLogger _log;
+    private bool _describedTemplate;
 
     public DeckBuilder(CatLogger log)
     {
@@ -78,6 +79,12 @@ public sealed class DeckBuilder
         var blockerParent = templateTransform.IsChildOf(store.transform) ? templateTransform.parent : Child(store.transform, "Colliders");
         var propParent = Child(store.transform, DeckDecor.VisualsName);
         var templateBox = template.GetComponent<BoxCollider>();
+        if (!_describedTemplate)
+        {
+            _describedTemplate = true;
+            _log.Info($"Blocker template {template.name} has {DescribeComponents(template)}; the mod places plain box colliders on its layer instead of copies");
+        }
+
         var height = templateBox == null ? cell * 2f : templateBox.size.y * templateTransform.localScale.y;
         var centerY = templateBox == null ? cell : templateBox.center.y * templateTransform.localScale.y;
         var baseY = templateTransform.localPosition.y;
@@ -92,26 +99,17 @@ public sealed class DeckBuilder
             }
 
             var position = grid[row, column];
-            var blocker = UnityEngine.Object.Instantiate(template, blockerParent);
-            blocker.name = $"{ClonePrefix}Blocker {row},{column}";
-            blocker.SetActive(true);
+            var blocker = new GameObject($"{ClonePrefix}Blocker {row},{column}");
+            blocker.layer = template.layer;
             var blockerTransform = blocker.transform;
+            blockerTransform.SetParent(blockerParent, false);
             blockerTransform.localPosition = new Vector3(position.x, baseY, position.z);
             blockerTransform.localRotation = Quaternion.identity;
             blockerTransform.localScale = Vector3.one;
-            var box = blocker.GetComponent<BoxCollider>();
-            if (box != null)
-            {
-                box.size = new Vector3(cell * BlockerFill, height, cell * BlockerFill);
-                box.center = new Vector3(0f, centerY, 0f);
-            }
-
-            var renderer = blocker.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                renderer.enabled = false;
-            }
-
+            var box = blocker.AddComponent<BoxCollider>();
+            box.isTrigger = templateBox != null && templateBox.isTrigger;
+            box.size = new Vector3(cell * BlockerFill, height, cell * BlockerFill);
+            box.center = new Vector3(0f, centerY, 0f);
             placed.Add((row, column));
         }
 
@@ -190,6 +188,17 @@ public sealed class DeckBuilder
 
         var local = parent.InverseTransformVector(bounds.size);
         return new Vector3(Mathf.Abs(local.x), Mathf.Abs(local.y), Mathf.Abs(local.z));
+    }
+
+    private static string DescribeComponents(GameObject gameObject)
+    {
+        var names = new List<string>();
+        foreach (var component in gameObject.GetComponents<Component>())
+        {
+            names.Add(component == null ? "missing" : component.GetIl2CppType().Name);
+        }
+
+        return string.Join(", ", names);
     }
 
     public static GameObject FindBlocker(EntityInteractableStore store, int blockerLayer)

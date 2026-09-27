@@ -37,6 +37,8 @@ internal static class SessionNetwork
     private static double _lastAccept;
     private static ulong _identifiedHost;
     private static double _leaveAt = double.PositiveInfinity;
+    private static bool _restarting;
+    private static ClientSession _heldSettings;
 
     public static SteamMessagesTransport Transport { get; private set; }
 
@@ -72,7 +74,14 @@ internal static class SessionNetwork
         NetworkEvents.OtherClientConnected += OnOtherClientConnected;
         NetworkEvents.ClientDisconnected += OnClientDisconnected;
         NetworkEvents.ClientConnectionAcknowledged += OnConnectionAcknowledged;
-        BootstrapEvents.GameRestartStarted += () => MainThread.Post(Stop);
+        BootstrapEvents.GameRestartStarted += () =>
+        {
+            _restarting = true;
+            CloseChannelSessions();
+            MainThread.Post(Stop);
+        };
+        BootstrapEvents.MainMenuLoaded += EndRestart;
+        BootstrapEvents.LevelLoadStarted += EndRestart;
         CatConfig.EffectiveValueChanged += OnEffectiveValueChanged;
     }
 
@@ -174,21 +183,68 @@ internal static class SessionNetwork
             return;
         }
 
+        CloseChannelSessions();
+        var holdSettings = _restarting && Client != null;
         try
         {
-            Client?.Stop();
+            Client?.Stop(!holdSettings);
         }
         catch (Exception exception)
         {
             _log.Error("Stopping the client session failed", exception);
         }
 
+        if (holdSettings)
+        {
+            _heldSettings = Client;
+        }
+
         Host = null;
         Client = null;
         Transport = null;
         Messenger.Reset();
-        _log.Info("Network session stopped, session overrides cleared");
+        _log.Info(holdSettings
+            ? "Network session stopped, session overrides are kept until the level is unloaded"
+            : "Network session stopped, session overrides cleared");
         GameEventStream.Publish(StoppedEventName);
+    }
+
+    private static void CloseChannelSessions()
+    {
+        var transport = Transport;
+        if (transport == null || transport.Peers.Count == 0)
+        {
+            return;
+        }
+
+        var closed = transport.CloseAll();
+        _log.Info($"Closed {closed} CatLib channel session(s) before the game shuts its network down");
+    }
+
+    private static void EndRestart()
+    {
+        _restarting = false;
+        ReleaseHeldSettings();
+    }
+
+    private static void ReleaseHeldSettings()
+    {
+        var held = _heldSettings;
+        _heldSettings = null;
+        if (held == null)
+        {
+            return;
+        }
+
+        try
+        {
+            held.ReleaseSettings();
+            _log.Info("Session overrides cleared after the level was unloaded");
+        }
+        catch (Exception exception)
+        {
+            _log.Error("Clearing the session overrides failed", exception);
+        }
     }
 
     private static void AcceptPending()
@@ -221,6 +277,7 @@ internal static class SessionNetwork
 
     private static void StartHost()
     {
+        ReleaseHeldSettings();
         if (!IsEnabled)
         {
             _log.Info("Network is disabled in the CatLib settings, the host will not check mods");
@@ -280,6 +337,7 @@ internal static class SessionNetwork
             }
 
             PendingKicks.Remove(clientId);
+            Transport.Close(clientId);
             MenuNotices.ClearPlayerNotice(clientId);
             Host?.OnPeerDisconnected(clientId);
             Messenger.OnPeerLeft(clientId);
@@ -290,6 +348,7 @@ internal static class SessionNetwork
 
     private static void StartClient(ulong clientId)
     {
+        ReleaseHeldSettings();
         if (!IsEnabled || Host != null || IsServer())
         {
             return;

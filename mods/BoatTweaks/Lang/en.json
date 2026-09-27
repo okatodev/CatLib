@@ -10,7 +10,8 @@
     "CustomLayouts": "Own layouts",
     "Generated": "Generated",
     "Mixed": "Mixed",
-    "Saving": "Saving"
+    "Saving": "Saving",
+    "Decoration": "Decoration"
   },
   "setting": {
     "Layout.Mode": "Mode",
@@ -44,7 +45,9 @@
     "Mixed.GeneratedWeight": "Generated deck",
     "Mixed.GeneratedWeight.description": "Chance weight of a generated deck in the Mixed mode.",
     "Saving.SaveHotkey": "Save the deck",
-    "Saving.SaveHotkey.description": "Saves the deck of the boat at the dock as an own layout. Cells of the parcels that arrived with this boat are left out; every other taken cell is saved, so take off the parcels you do not want in it."
+    "Saving.SaveHotkey.description": "Saves the deck of the boat at the dock as an own layout. Cells of the parcels that arrived with this boat are left out; every other taken cell is saved, so take off the parcels you do not want in it.",
+    "Decoration.Enabled": "Decorate blockers",
+    "Decoration.Enabled.description": "Crates, bottles and lamps are placed on the blockers of own and generated decks. Off leaves the blocked cells bare. Only changes what you see."
   },
   "enum": {
     "LayoutMode.Game": "As in the game",
@@ -61,6 +64,7 @@
   "message": {
     "saved": "Deck saved: {0}",
     "noBoat": "No boat at the dock to save",
-    "noGrid": "The boat deck is not ready yet"
+    "noGrid": "The boat deck is not ready yet",
+    "layoutFreed": "Layout cells under the boat parcels: {0}"
   }
 }

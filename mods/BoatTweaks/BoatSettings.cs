@@ -43,6 +43,8 @@ public sealed class BoatSettings
             "Multiplier for the absolute height limit of stacks on the boat. The approved height never exceeds it.", scale);
         SaveHotkey = settings.Local("Saving", "SaveHotkey", new KeyboardShortcut(KeyCode.B, KeyCode.LeftControl),
             "Saves the deck of the boat at the dock as an own layout. Cells of the parcels that arrived with the boat are left out.");
+        Decorate = settings.Local("Decoration", "Enabled", true,
+            "Crates, bottles and lamps are placed on the blockers of own and generated decks. Off leaves the blocked cells bare. Only changes what you see.");
         Plan = settings.Session("Sync", "Plan", "game", "The deck planned by the host for the next boat. Written by the mod.").HiddenInMenu();
 
         foreach (var setting in new ISettingApply[]
@@ -91,6 +93,8 @@ public sealed class BoatSettings
     public Setting<float> MaximumHeightScale { get; }
 
     public Setting<KeyboardShortcut> SaveHotkey { get; }
+
+    public Setting<bool> Decorate { get; }
 
     public Setting<string> Plan { get; }
 

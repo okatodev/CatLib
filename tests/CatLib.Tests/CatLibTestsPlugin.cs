@@ -26,6 +26,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
     private ConfigEntry<string> _entityDumpTypes;
     private CatLib.Tests.Diagnostics.Inspection.EntityInspector _entityInspector;
     private CatLib.Tests.Diagnostics.Inspection.LabelCloneExperiment _labelClone;
+    private CatLib.Tests.Diagnostics.LocalJoin _localJoin;
     private MessageProbe _probes;
     private SaveProbe _saveProbe;
     private UiHierarchyDumper _uiDumper;
@@ -58,6 +59,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
         _probes = new MessageProbe(_log.Scope("Probe"));
         _saveProbe = new SaveProbe(PluginMeta.Version, _log.Scope("SaveProbe"));
         _labelClone = new CatLib.Tests.Diagnostics.Inspection.LabelCloneExperiment(_log.Scope("LabelClone"));
+        _localJoin = new CatLib.Tests.Diagnostics.LocalJoin(_log.Scope("LocalJoin"));
         _entityInspector = new CatLib.Tests.Diagnostics.Inspection.EntityInspector(Path.Combine(outputDirectory, "Dumps"), () => _entityDumpTypes.Value, _log.Scope("Inspect"));
         _reportWriter = new TestReportWriter(Path.Combine(outputDirectory, "Reports"));
         _runner = new TestRunner(TestRegistry.Discover(typeof(CatLibTestsPlugin).Assembly), _log.Scope("Runner"));
@@ -101,6 +103,10 @@ public sealed class CatLibTestsPlugin : BasePlugin
             _probes.SendPing();
             return "see the log";
         }, "Sends a mod message to the host, which answers every player. Works alone too.");
+        DevMenu.Command("Network", "Visible players", _localJoin.ListPlayers,
+            "Lists the players Steam sees, with their rich presence. On one computer these are the other game copies.");
+        DevMenu.Command("Network", "Join the first host", _localJoin.JoinFirst,
+            "Joins the first visible player that offers a game, the same way accepting a Steam invite does.");
         DevMenu.Command("Network", "Steam self check", () =>
         {
             SessionNetwork.RunSelfCheck();

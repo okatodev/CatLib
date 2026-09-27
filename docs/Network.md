@@ -71,6 +71,8 @@ On an accepted client, session settings take the host's values as overrides:
 `Value` becomes the host value, `LocalValue` and the file stay untouched, and appliers run as usual.
 Local edits during the session are saved but do not replace the override.
 When the session ends, the overrides are removed and the local values apply again.
+If it ends because the game restarts, the overrides stay until the level is unloaded and the main menu is loaded,
+so mods never react to changed settings while the level is being destroyed.
 
 Host values that the client does not know, that are local settings on the client, that cannot be parsed
 or that are outside the client's accepted values are ignored and reported.
@@ -143,7 +145,8 @@ Players without CatLib never read that channel, so they are not affected.
 - Either side gives up after 12 seconds and treats the other as a player without CatLib.
 - The host answers a repeated `Hello` with the same verdict without evaluating the player again.
 - When a session setting changes on the host, the new value is sent to every accepted player.
-- Leaving the session, or any game restart, stops the session and removes all session overrides.
+- Leaving the session, or any game restart, stops the session and removes all session overrides; on a restart only after the main menu is loaded.
+- CatLib closes its Steam channel sessions when a player leaves and when the session stops, before the game shuts its own networking down.
 - Connections that are not made through Steam (direct IP, offline mode) skip the checks.
 
 ### Incompatible players

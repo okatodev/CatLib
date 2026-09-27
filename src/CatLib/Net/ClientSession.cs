@@ -192,7 +192,9 @@ public sealed class ClientSession
         }
     }
 
-    public void Stop()
+    public void Stop() => Stop(true);
+
+    public void Stop(bool releaseSettings)
     {
         if (Status == SessionStatus.Stopped)
         {
@@ -201,8 +203,13 @@ public sealed class ClientSession
 
         Status = SessionStatus.Stopped;
         SharedMods = Array.Empty<string>();
-        _sink.Clear();
+        if (releaseSettings)
+        {
+            _sink.Clear();
+        }
     }
+
+    public void ReleaseSettings() => _sink.Clear();
 
     private void SendHello()
     {

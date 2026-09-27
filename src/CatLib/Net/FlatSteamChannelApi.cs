@@ -25,14 +25,16 @@ internal sealed unsafe class FlatSteamChannelApi : ISteamChannelApi
     private readonly delegate* unmanaged[Cdecl]<IntPtr, int, IntPtr*, int, int> _receive;
     private readonly delegate* unmanaged[Cdecl]<IntPtr, byte*, byte> _accept;
     private readonly delegate* unmanaged[Cdecl]<IntPtr, void> _release;
+    private readonly delegate* unmanaged[Cdecl]<IntPtr, byte*, byte> _close;
 
-    private FlatSteamChannelApi(IntPtr self, IntPtr send, IntPtr receive, IntPtr accept, IntPtr release, string accessor)
+    private FlatSteamChannelApi(IntPtr self, IntPtr send, IntPtr receive, IntPtr accept, IntPtr release, IntPtr close, string accessor)
     {
         _self = self;
         _send = (delegate* unmanaged[Cdecl]<IntPtr, byte*, byte*, uint, int, int, int>)send;
         _receive = (delegate* unmanaged[Cdecl]<IntPtr, int, IntPtr*, int, int>)receive;
         _accept = (delegate* unmanaged[Cdecl]<IntPtr, byte*, byte>)accept;
         _release = (delegate* unmanaged[Cdecl]<IntPtr, void>)release;
+        _close = (delegate* unmanaged[Cdecl]<IntPtr, byte*, byte>)close;
         Accessor = accessor;
     }
 
@@ -68,7 +70,8 @@ internal sealed unsafe class FlatSteamChannelApi : ISteamChannelApi
         if (!NativeLibrary.TryGetExport(library, "SteamAPI_ISteamNetworkingMessages_SendMessageToUser", out var send) ||
             !NativeLibrary.TryGetExport(library, "SteamAPI_ISteamNetworkingMessages_ReceiveMessagesOnChannel", out var receive) ||
             !NativeLibrary.TryGetExport(library, "SteamAPI_ISteamNetworkingMessages_AcceptSessionWithUser", out var accept) ||
-            !NativeLibrary.TryGetExport(library, "SteamAPI_SteamNetworkingMessage_t_Release", out var release))
+            !NativeLibrary.TryGetExport(library, "SteamAPI_SteamNetworkingMessage_t_Release", out var release) ||
+            !NativeLibrary.TryGetExport(library, "SteamAPI_ISteamNetworkingMessages_CloseSessionWithUser", out var close))
         {
             error = "A SteamNetworkingMessages function is missing in " + LibraryName;
             return null;
@@ -82,7 +85,7 @@ internal sealed unsafe class FlatSteamChannelApi : ISteamChannelApi
         }
 
         error = null;
-        return new FlatSteamChannelApi(self, send, receive, accept, release, accessorName);
+        return new FlatSteamChannelApi(self, send, receive, accept, release, close, accessorName);
     }
 
     public int Send(ulong peer, byte[] payload, int flags, int channel)
@@ -100,6 +103,13 @@ internal sealed unsafe class FlatSteamChannelApi : ISteamChannelApi
         var identity = stackalloc byte[IdentitySize];
         WriteIdentity(identity, peer);
         return _accept(_self, identity) != 0;
+    }
+
+    public bool Close(ulong peer)
+    {
+        var identity = stackalloc byte[IdentitySize];
+        WriteIdentity(identity, peer);
+        return _close(_self, identity) != 0;
     }
 
     public int Receive(int channel, Action<ulong, byte[]> received)

@@ -46,6 +46,8 @@ public sealed class BoatController
     private bool _dirty = true;
     private double _nextScan;
     private string _lastSummary;
+    private bool _suspended;
+    private readonly HashSet<string> _freedReported = new(StringComparer.Ordinal);
 
     public BoatController(CatLogger log, TextCatalog texts, PatternLibrary library)
     {
@@ -90,9 +92,24 @@ public sealed class BoatController
         }
     }
 
+    public void SuspendForRestart()
+    {
+        _suspended = true;
+        _pendingStore = null;
+        _enforcer.Clear();
+        _log.Info("The game is restarting, the boats are left alone until the next level");
+    }
+
+    public void OnLevelLoadStarted()
+    {
+        _suspended = false;
+        _manager.Forget();
+        _freedReported.Clear();
+    }
+
     public void Update()
     {
-        if (Settings == null)
+        if (Settings == null || _suspended)
         {
             return;
         }
@@ -230,7 +247,8 @@ public sealed class BoatController
 
         var summary = $"Boat: mode {mode}, next deck {CurrentPlan.Describe()}, {pools.Count} pool(s), {_prefabs.Count} boat storage prefab(s), " +
                       $"{_prefabs.Values.Sum(state => state.BlockerCount)} blocker(s) and {_prefabs.Values.Sum(state => state.PropCount)} prop(s) {(clearDeck ? "hidden" : "shown")}, " +
-                      $"height x{Settings.ApprovedHeightScale.Value:0.##} approved, x{Settings.MaximumHeightScale.Value:0.##} maximum";
+                      $"height x{Settings.ApprovedHeightScale.Value:0.##} approved, x{Settings.MaximumHeightScale.Value:0.##} maximum" +
+                      (EntityObjects > 0 ? $", {EntityObjects} object(s) with game entities left untouched" : string.Empty);
         var plans = string.Join(", ", pools.Where(pool => _plans[pool.Key].Kind != LayoutPlanKind.KeepGame).Take(3).Select(pool => pool.Key + ": " + _plans[pool.Key]));
         if (summary != _lastSummary)
         {
@@ -253,13 +271,18 @@ public sealed class BoatController
         }
 
         var arriving = pool.Prefabs.Select(prefab => (ISet<(int Row, int Column)>)_prefabs[prefab.Pointer].Arriving).ToList();
-        var fitting = LayoutFit.FittingVariants(plan.Pattern, arriving);
-        if (fitting.Count == 0 || fitting.Count == pool.Prefabs.Count)
+        var closest = LayoutFit.ClosestVariants(plan.Pattern, arriving);
+        if (closest.FreedCells > 0)
+        {
+            _log.Debug($"Layout \"{plan.Name}\" meets arriving parcels on every boat of pool {pool.Key}; the closest one leaves {closest.FreedCells} cell(s) free");
+        }
+
+        if (closest.Variants.Count == 0 || closest.Variants.Count == pool.Prefabs.Count)
         {
             return null;
         }
 
-        return fitting.Select(index => pool.Prefabs[index]).ToList();
+        return closest.Variants.Select(index => pool.Prefabs[index]).ToList();
     }
 
     private void ApplyHeight(EntityInteractableStore store, PrefabState state)
@@ -327,10 +350,15 @@ public sealed class BoatController
             return;
         }
 
-        var result = _builder.TryBuild(_pendingStore, KeyOf(_pendingStore), _pendingPlan, DecorTemplates(), FallbackBlocker(), BlockerLayer(), out var taken);
+        var result = _builder.TryBuild(_pendingStore, KeyOf(_pendingStore), _pendingPlan, Settings.Decorate.Value ? DecorTemplates() : new DeckDecorTemplates(), FallbackBlocker(), BlockerLayer(), out var taken);
         if (result == DeckBuildResult.Done && taken != null && taken.Count > 0)
         {
             _enforcer.Hold(_pendingStore, KeyOf(_pendingStore), taken);
+        }
+
+        if (result == DeckBuildResult.Done && _pendingPlan.Kind == DeckPlanKind.Pattern && taken != null)
+        {
+            ReportFreed(_pendingPlan, KeyOf(_pendingStore), _pendingPlan.Pattern.BlockedCount - taken.Count);
         }
 
         if (result != DeckBuildResult.NotReady)
@@ -342,6 +370,17 @@ public sealed class BoatController
             _log.Warning($"The deck of {KeyOf(_pendingStore)} was not ready within {BuildTimeoutSeconds} seconds; it stays empty");
             _pendingStore = null;
         }
+    }
+
+    private void ReportFreed(DeckPlan plan, string key, int freed)
+    {
+        if (freed <= 0 || !_freedReported.Add(plan.Name + "|" + key))
+        {
+            return;
+        }
+
+        _log.Info($"Layout \"{plan.Name}\" on {key}: {freed} cell(s) stay free under arriving parcels");
+        Notifications.Show(_texts.Format("message.layoutFreed", freed));
     }
 
     private void Decide()
@@ -456,6 +495,8 @@ public sealed class BoatController
         return templates;
     }
 
+    private int EntityObjects => _prefabs.Values.Sum(state => state.EntityObjects);
+
     private GameObject FallbackBlocker() =>
         _prefabs.Values.SelectMany(state => state.Blockers).Select(blocker => blocker.Object).FirstOrDefault(blocker => blocker != null);
 
@@ -545,14 +586,20 @@ public sealed class BoatController
         {
             var gameObject = transform.gameObject;
             var parentName = transform.parent == null ? null : transform.parent.name;
-            if (_blockerLayer >= 0 && gameObject.layer == _blockerLayer)
+            var isBlocker = _blockerLayer >= 0 && gameObject.layer == _blockerLayer;
+            var isProp = !isBlocker && DeckDecor.IsProp(parentName, gameObject.name);
+            if (!isBlocker && !isProp)
             {
-                state.Blockers.Add((gameObject, gameObject.activeSelf));
+                continue;
             }
-            else if (DeckDecor.IsProp(parentName, gameObject.name))
+
+            if (gameObject.GetComponentsInChildren<Entity>(true).Length > 0)
             {
-                state.Props.Add((gameObject, gameObject.activeSelf));
+                state.EntityObjects++;
+                continue;
             }
+
+            (isBlocker ? state.Blockers : state.Props).Add((gameObject, gameObject.activeSelf));
         }
 
         _prefabs[prefab.Pointer] = state;
@@ -594,6 +641,8 @@ public sealed class BoatController
         public int BlockerCount => Blockers.Count;
 
         public int PropCount => Props.Count;
+
+        public int EntityObjects { get; set; }
 
         public void Restore()
         {

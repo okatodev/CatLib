@@ -16,7 +16,7 @@ A mod that adds 1 to 3 extra labels next to or below each shelf label, so one sh
 
 ## Before tagging 0.5.0
 
-- Test 7 of the session journal: Boat Tweaks with two players.
+- Test 7 of the session journal: Boat Tweaks with two players. 7.1 found layouts meeting parcels of two-player boats and a client crash on leaving; fixes are ready for a rerun.
 
 ## Developer menu
 

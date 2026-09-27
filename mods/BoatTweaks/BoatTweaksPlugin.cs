@@ -3,6 +3,7 @@ using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using CatLib.Config;
 using CatLib.Core;
+using CatLib.Game.Events;
 using CatLib.Logging;
 using CatLib.Net;
 
@@ -27,6 +28,8 @@ public sealed class BoatTweaksPlugin : BasePlugin
         _controller = new BoatController(log, settings.Texts, library);
         _controller.Settings = new BoatSettings(settings, _controller.RequestDecision, _controller.RequestApply);
         FrameLoop.Update += _controller.Update;
+        BootstrapEvents.GameRestartStarted += _controller.SuspendForRestart;
+        BootstrapEvents.LevelLoadStarted += _controller.OnLevelLoadStarted;
         log.Info($"Boat Tweaks {PluginMeta.Version} loaded with {translations} translated text(s) in {string.Join(", ", settings.Texts.Languages)}, own layouts in {library.Directory}");
     }
 }

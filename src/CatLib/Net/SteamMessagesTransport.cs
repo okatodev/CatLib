@@ -15,6 +15,7 @@ internal sealed class SteamMessagesTransport : ISessionTransport
     private readonly ISteamChannelApi _api;
     private readonly CatLogger _log;
     private readonly HashSet<string> _announcedCalls = new();
+    private readonly HashSet<ulong> _peers = new();
 
     public SteamMessagesTransport(ulong localId, ISteamChannelApi api, CatLogger log)
     {
@@ -50,9 +51,12 @@ internal sealed class SteamMessagesTransport : ISessionTransport
         return new InteropSteamChannelApi();
     }
 
+    public IReadOnlyCollection<ulong> Peers => _peers;
+
     public void Send(ulong peer, byte[] payload)
     {
         Breadcrumb("send", peer);
+        _peers.Add(peer);
         var result = _api.Send(peer, payload, SendFlags, Channel);
         if (result == ResultOk)
         {
@@ -68,6 +72,7 @@ internal sealed class SteamMessagesTransport : ISessionTransport
     public bool Accept(ulong peer)
     {
         Breadcrumb("accept", peer);
+        _peers.Add(peer);
         return _api.Accept(peer);
     }
 
@@ -83,6 +88,7 @@ internal sealed class SteamMessagesTransport : ISessionTransport
             }
 
             Received++;
+            _peers.Add(sender);
             _log.Info($"Received {bytes.Length} bytes from {sender} on the CatLib channel");
             try
             {
@@ -93,6 +99,41 @@ internal sealed class SteamMessagesTransport : ISessionTransport
                 _log.Error("Handling a message from the CatLib channel failed", exception);
             }
         });
+    }
+
+    public bool Close(ulong peer)
+    {
+        if (!_peers.Remove(peer))
+        {
+            return false;
+        }
+
+        Breadcrumb("close", peer);
+        try
+        {
+            var closed = _api.Close(peer);
+            _log.Info($"Closed the CatLib channel session with {peer}: {(closed ? "closed" : "there was none")}");
+            return closed;
+        }
+        catch (Exception exception)
+        {
+            _log.Error($"Closing the CatLib channel session with {peer} failed", exception);
+            return false;
+        }
+    }
+
+    public int CloseAll()
+    {
+        var closed = 0;
+        foreach (var peer in new List<ulong>(_peers))
+        {
+            if (Close(peer))
+            {
+                closed++;
+            }
+        }
+
+        return closed;
     }
 
     private void Breadcrumb(string operation, ulong peer)
