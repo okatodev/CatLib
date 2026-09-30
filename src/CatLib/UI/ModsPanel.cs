@@ -43,6 +43,9 @@ internal sealed class ModsPanel
     private bool _pointerMode;
     private Vector3 _lastMouse;
     private IntPtr _lastSelected;
+    private IntPtr _revealed;
+    private readonly ScrollRect _listScroll;
+    private readonly ScrollRect _settingsScroll;
 
     internal static Func<Vector3?> PointerOverride { get; set; }
 
@@ -62,6 +65,8 @@ internal sealed class ModsPanel
         _options = options;
         _tab = tab;
         _templates = templates;
+        _listScroll = listScroll;
+        _settingsScroll = settingsScroll;
         _listContent = listScroll.content;
         _settingsContent = settingsScroll.content;
         _settingsViewport = settingsScroll.viewport ?? settingsScroll.transform.TryCast<RectTransform>();
@@ -147,6 +152,7 @@ internal sealed class ModsPanel
         }
 
         UpdateStatus();
+        RevealSelection();
 
         if (_settingsContent.gameObject.activeInHierarchy)
         {
@@ -467,6 +473,45 @@ internal sealed class ModsPanel
         if (ContextLabel.text != text)
         {
             ContextLabel.text = text;
+        }
+    }
+
+    private void RevealSelection()
+    {
+        var eventSystem = EventSystem.current;
+        var selected = eventSystem == null ? null : eventSystem.currentSelectedGameObject;
+        var pointer = selected == null ? IntPtr.Zero : selected.Pointer;
+        if (pointer == _revealed)
+        {
+            return;
+        }
+
+        _revealed = pointer;
+        if (selected == null)
+        {
+            return;
+        }
+
+        try
+        {
+            var row = ScrollReveal.ChildOf(_settingsContent, selected.transform);
+            if (row != null)
+            {
+                var first = _rows.Count > 0 && _rows[0].Root != null && _rows[0].Root.Pointer == row.gameObject.Pointer;
+                ScrollReveal.Reveal(_settingsScroll, row, first);
+                return;
+            }
+
+            var item = ScrollReveal.ChildOf(_listContent, selected.transform);
+            if (item != null)
+            {
+                var first = _items.Count > 0 && _items[0].Root != null && _items[0].Root.Pointer == item.gameObject.Pointer;
+                ScrollReveal.Reveal(_listScroll, item, first);
+            }
+        }
+        catch (Exception exception)
+        {
+            _log.Debug($"Scrolling to the selected {selected.name} failed: {exception.Message}");
         }
     }
 

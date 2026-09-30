@@ -27,6 +27,8 @@ Not released yet.
 - The Mods tab: the author under the mod's version (`CatSettings.Author`, from the Thunderstore package folder or the assembly company),
   a short mark under a mod's name when it is paused in this game, waits for a restart or has settings set by the host,
   CatLib first in the list, and keyboard and gamepad navigation between the list, the settings and the reset button.
+  A text setting starts typing on submit instead of on selection, so a gamepad moves past it.
+  The mod list and the settings scroll to follow the selection.
 - `FoldoutList` in `CatLib.UI`: a folding list built from the game's UI pieces, for mods too. See [Folding lists](docs/Foldout.md).
 - `CatNetwork.IncompatiblePlayers` reads and changes what the host does with incompatible players; a change applies to players already in the session.
 - Developer menu of `CatLib.Tests`: Session roster and Lobby dump.

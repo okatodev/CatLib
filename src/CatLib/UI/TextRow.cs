@@ -23,6 +23,7 @@ internal sealed class TextRow : SettingRow
         }
 
         _input.contentType = TMP_InputField.ContentType.Standard;
+        _input.shouldActivateOnSelect = false;
         Pull();
         UiEvents.Listen<string>(_input.onEndEdit, OnEndEdit);
     }
