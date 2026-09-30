@@ -1,0 +1,38 @@
+{
+  "mod": {
+    "name": "Regalschilder"
+  },
+  "section": {
+    "Labels": "Schilder",
+    "Look": "Aussehen"
+  },
+  "setting": {
+    "Labels.ExtraSlots": "Zusatzschilder",
+    "Labels.ExtraSlots.description": "Wie viele Zusatzschilder jedes Regalschild bekommt, bis zu 3. Der Host entscheidet für alle. Bilder ausgeblendeter Schilder bleiben im Spielstand und kommen zurück, wenn die Schilder wieder angezeigt werden.",
+    "Look.Spacing": "Abstand",
+    "Look.Spacing.description": "Abstand zwischen den Schildern in Metern.",
+    "Labels.DefaultPlacement": "Position",
+    "Labels.DefaultPlacement.description": "Wo Zusatzschilder an Regalen ohne eigene Position hinkommen. Jedes Regalschild kann mit der Taste unten eine eigene bekommen. Der Host entscheidet für alle.",
+    "Look.PlacementHotkey": "Position ändern",
+    "Look.PlacementHotkey.description": "Schau auf ein Regalschild oder eines seiner Zusatzschilder und drücke die Taste zum Wechseln: freiere Seite, rechts, links, unten, keine Zusatzschilder. Jeder Spieler kann das, der Host speichert es im Spielstand.",
+    "Labels.HideStands": "Ohne Ständer",
+    "Labels.HideStands.description": "Zusatzschilder an Regalen ohne eigene Wahl werden ohne den Holzständer unter dem Rahmen gezeigt. Das Originalschild des Spiels behält ihn immer. Der Host entscheidet für alle.",
+    "Look.StandHotkey": "Ständer an/aus",
+    "Look.StandHotkey.description": "Schau auf ein Regalschild oder eines seiner Zusatzschilder und drücke die Taste, um den Holzständer seiner Zusatzschilder ein- oder auszublenden. Jeder Spieler kann das, der Host speichert es im Spielstand."
+  },
+  "enum": {
+    "Placement.Auto": "Seitlich, freiere Seite",
+    "Placement.Right": "Rechts",
+    "Placement.Left": "Links",
+    "Placement.Below": "Unten",
+    "Placement.None": "Keine Zusatzschilder"
+  },
+  "message": {
+    "placement": "Zusatzschilder: {0}",
+    "lookAtLabel": "Schau zuerst auf ein Regalschild",
+    "noHost": "Der Host hat „Regalschilder“ nicht",
+    "standHidden": "Zusatzschilder: ohne Ständer",
+    "standShown": "Zusatzschilder: mit Ständer",
+    "standUnsupported": "Ständer lässt sich hier nicht entfernen"
+  }
+}

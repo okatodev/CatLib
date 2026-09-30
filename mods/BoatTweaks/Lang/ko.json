@@ -1,0 +1,70 @@
+{
+  "mod": {
+    "name": "배 설정"
+  },
+  "section": {
+    "Layout": "갑판 배치",
+    "GameVariants": "게임 배치",
+    "FixedVariant": "고정 게임 배치",
+    "Height": "높이",
+    "CustomLayouts": "내 배치",
+    "Generated": "자동 생성",
+    "Mixed": "혼합",
+    "Saving": "저장",
+    "Decoration": "장식"
+  },
+  "setting": {
+    "Layout.Mode": "모드",
+    "Layout.Mode.description": "배 갑판에 고정된 상자, 바구니 같은 장애물을 어떻게 고를지 정해요. 배와 함께 오는 소포는 절대 바뀌지 않아요. 아래 섹션은 각자의 모드에서만 작동해요.",
+    "GameVariants.Allowed": "허용 배치",
+    "GameVariants.Allowed.description": "올 수 있는 게임 배 변형의 번호예요. 예: 1,2,4. 비워 두면 전부 허용해요. 각 변형은 자기 장애물과 함께 오는 소포를 그대로 유지해요. '게임 배치' 모드에서 작동해요.",
+    "GameVariants.AvoidRepeats": "연속 반복 없음",
+    "GameVariants.AvoidRepeats.description": "같은 변형이 두 번 연속으로 오지 않아요. '게임 배치' 모드에서 작동해요.",
+    "FixedVariant.Variant": "배치 번호",
+    "FixedVariant.Variant.description": "매번 오는 게임 배 변형이에요. 자기 장애물과 함께 오는 소포도 그대로예요. 레벨의 변형이 더 적으면 마지막 변형을 써요. '고정 게임 배치' 모드에서 작동해요.",
+    "Height.ApprovedHeightScale": "승인 높이",
+    "Height.ApprovedHeightScale.description": "배 위의 더미가 빨갛게 변하기 시작하는 높이의 배율이에요. 1이면 게임 값 그대로예요.",
+    "Height.MaximumHeightScale": "최대 높이",
+    "Height.MaximumHeightScale.description": "배 위 더미의 절대 높이 제한 배율이에요. 승인 높이는 이 값을 넘지 않아요.",
+    "CustomLayouts.Order": "순서",
+    "CustomLayouts.Order.description": "내 배치를 고르는 방식이에요. 무작위, 파일 이름 순서대로, 또는 항상 한 파일. '내 배치'와 '혼합' 모드에서 작동해요.",
+    "CustomLayouts.File": "파일",
+    "CustomLayouts.File.description": "순서가 '항상 한 파일'일 때 쓰는 배치 파일 이름이에요. 예: deck_20260925_215809. '내 배치' 모드에서 작동해요.",
+    "CustomLayouts.AvoidRepeats": "연속 반복 없음",
+    "CustomLayouts.AvoidRepeats.description": "무작위로 고를 때 같은 내 배치가 두 번 연속 나오지 않아요.",
+    "Generated.Density": "밀도",
+    "Generated.Density.description": "생성된 장애물이 차지하는 갑판의 비율이에요. '자동 생성'과 '혼합' 모드에서 작동해요.",
+    "Generated.EdgesOnly": "난간 근처만",
+    "Generated.EdgesOnly.description": "생성된 장애물이 게임처럼 난간 근처에만 놓이고 갑판 가운데는 비워 둬요.",
+    "Mixed.GameWeight": "게임 갑판",
+    "Mixed.GameWeight.description": "'혼합' 모드에서 게임 갑판이 나올 가중치예요.",
+    "Mixed.EmptyWeight": "빈 갑판",
+    "Mixed.EmptyWeight.description": "'혼합' 모드에서 빈 갑판이 나올 가중치예요.",
+    "Mixed.CustomWeight": "내 배치",
+    "Mixed.CustomWeight.description": "'혼합' 모드에서 내 배치가 나올 가중치예요. 내 배치가 없으면 무시돼요.",
+    "Mixed.GeneratedWeight": "생성 갑판",
+    "Mixed.GeneratedWeight.description": "'혼합' 모드에서 생성된 갑판이 나올 가중치예요.",
+    "Saving.SaveHotkey": "갑판 저장",
+    "Saving.SaveHotkey.description": "부두에 있는 배의 갑판을 내 배치로 저장해요. 이 배와 함께 온 소포의 칸은 빼고 나머지 차 있는 칸은 모두 저장되니, 넣고 싶지 않은 소포는 먼저 내려 주세요.",
+    "Decoration.Enabled": "장애물 장식",
+    "Decoration.Enabled.description": "내 배치와 생성된 갑판의 장애물 위에 상자, 병, 램프를 놓아요. 끄면 막힌 칸이 장식 없이 남아요. 내 화면에만 적용돼요."
+  },
+  "enum": {
+    "LayoutMode.Game": "게임 그대로",
+    "LayoutMode.Empty": "비움",
+    "LayoutMode.GameVariants": "게임 배치",
+    "LayoutMode.FixedVariant": "고정 게임 배치",
+    "LayoutMode.Custom": "내 배치",
+    "LayoutMode.Generated": "자동 생성",
+    "LayoutMode.Mixed": "혼합",
+    "CustomOrder.Random": "무작위",
+    "CustomOrder.Sequence": "차례대로",
+    "CustomOrder.Fixed": "항상 한 파일"
+  },
+  "message": {
+    "saved": "갑판 저장됨: {0}",
+    "noBoat": "부두에 저장할 배가 없어요",
+    "noGrid": "배 갑판이 아직 준비되지 않았어요",
+    "layoutFreed": "소포 아래 배치 칸: {0}"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "mod": {
+    "name": "貨架標籤"
+  },
+  "section": {
+    "Labels": "標籤",
+    "Look": "外觀"
+  },
+  "setting": {
+    "Labels.ExtraSlots": "額外標籤",
+    "Labels.ExtraSlots.description": "每個貨架標籤額外增加幾個標籤，最多 3 個。由主機替所有人決定。被隱藏的標籤圖案會保留在存檔中，重新顯示時就會回來。",
+    "Look.Spacing": "間距",
+    "Look.Spacing.description": "標籤之間的間距（公尺）。",
+    "Labels.DefaultPlacement": "位置",
+    "Labels.DefaultPlacement.description": "在沒有個別設定位置的貨架上，額外標籤要放在哪裡。每個貨架標籤都能用下方的快速鍵個別設定。由主機替所有人決定。",
+    "Look.PlacementHotkey": "切換位置",
+    "Look.PlacementHotkey.description": "看著貨架標籤或它的額外標籤按下此鍵即可切換：較空的一側、右側、左側、下方、無額外標籤。每位玩家都能操作，主機會把它保存在存檔中。",
+    "Labels.HideStands": "隱藏支架",
+    "Labels.HideStands.description": "在沒有個別設定的貨架上，額外標籤不顯示畫框下方的木頭支架。遊戲原本的標籤一律保留支架。由主機替所有人決定。",
+    "Look.StandHotkey": "支架開關",
+    "Look.StandHotkey.description": "看著貨架標籤或它的額外標籤按下此鍵，即可顯示或隱藏其額外標籤的木頭支架。每位玩家都能操作，主機會把它保存在存檔中。"
+  },
+  "enum": {
+    "Placement.Auto": "側邊較空處",
+    "Placement.Right": "右側",
+    "Placement.Left": "左側",
+    "Placement.Below": "下方",
+    "Placement.None": "無額外標籤"
+  },
+  "message": {
+    "placement": "額外標籤：{0}",
+    "lookAtLabel": "請先看著一個貨架標籤",
+    "noHost": "主機沒有安裝「貨架標籤」",
+    "standHidden": "額外標籤：無支架",
+    "standShown": "額外標籤：有支架",
+    "standUnsupported": "這個標籤的支架無法移除"
+  }
+}

@@ -27,7 +27,7 @@ public sealed class ShelfLabelsPlugin : BasePlugin
     {
         var log = CatLogger.From(Log);
         var settings = CatSettings.For(this);
-        var translations = settings.Texts.LoadEmbedded(typeof(ShelfLabelsPlugin).Assembly, LanguageResourcePrefix);
+        var translations = settings.Texts.Count;
         CatNetwork.Declare(this, SessionPolicy.RequiredOnAll);
 
         var board = new LabelBoard();

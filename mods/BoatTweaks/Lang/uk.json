@@ -1,0 +1,70 @@
+{
+  "mod": {
+    "name": "Налаштування корабля"
+  },
+  "section": {
+    "Layout": "Схема палуби",
+    "GameVariants": "Схеми гри",
+    "FixedVariant": "Одна схема гри",
+    "Height": "Висота",
+    "CustomLayouts": "Свої схеми",
+    "Generated": "Генерація",
+    "Mixed": "Суміш",
+    "Saving": "Збереження",
+    "Decoration": "Прикраси"
+  },
+  "setting": {
+    "Layout.Mode": "Режим",
+    "Layout.Mode.description": "Як вибираються закріплені ящики, кошики та інші перешкоди на палубі. Посилки, що припливають із кораблем, ніколи не змінюються. Розділи нижче працюють лише у своєму режимі.",
+    "GameVariants.Allowed": "Дозволені схеми",
+    "GameVariants.Allowed.description": "Номери варіантів корабля з гри, які можуть припливти, наприклад 1,2,4. Порожньо — усі. Кожен варіант має свої перешкоди й свої посилки. Працює в режимі «Схеми гри».",
+    "GameVariants.AvoidRepeats": "Без повторів поспіль",
+    "GameVariants.AvoidRepeats.description": "Той самий варіант не припливе двічі поспіль. Працює в режимі «Схеми гри».",
+    "FixedVariant.Variant": "Номер схеми",
+    "FixedVariant.Variant.description": "Варіант корабля з гри, що припливає щоразу, зі своїми перешкодами й посилками. Якщо на рівні варіантів менше, береться останній. Працює в режимі «Одна схема гри».",
+    "Height.ApprovedHeightScale": "Схвалена висота",
+    "Height.ApprovedHeightScale.description": "Множник висоти, вище якої стос на кораблі підсвічується червоним. 1 — як у грі.",
+    "Height.MaximumHeightScale": "Максимальна висота",
+    "Height.MaximumHeightScale.description": "Множник абсолютної межі висоти стосів на кораблі. Схвалена висота ніколи її не перевищує.",
+    "CustomLayouts.Order": "Порядок",
+    "CustomLayouts.Order.description": "Як вибираються свої схеми: випадково, по черзі за назвою файлу або завжди один файл. Працює в режимах «Свої схеми» і «Суміш».",
+    "CustomLayouts.File": "Файл",
+    "CustomLayouts.File.description": "Назва файлу схеми для порядку «Завжди один файл», наприклад deck_20260925_215809. Працює в режимі «Свої схеми».",
+    "CustomLayouts.AvoidRepeats": "Без повторів поспіль",
+    "CustomLayouts.AvoidRepeats.description": "Під час випадкового вибору та сама своя схема не випаде двічі поспіль.",
+    "Generated.Density": "Щільність",
+    "Generated.Density.description": "Частка палуби, яку займають згенеровані перешкоди. Працює в режимах «Генерація» і «Суміш».",
+    "Generated.EdgesOnly": "Лише біля бортів",
+    "Generated.EdgesOnly.description": "Згенеровані перешкоди стоять біля бортів, як у грі, а середина палуби лишається вільною.",
+    "Mixed.GameWeight": "Палуба гри",
+    "Mixed.GameWeight.description": "Вага палуби гри в режимі «Суміш».",
+    "Mixed.EmptyWeight": "Порожня палуба",
+    "Mixed.EmptyWeight.description": "Вага порожньої палуби в режимі «Суміш».",
+    "Mixed.CustomWeight": "Свої схеми",
+    "Mixed.CustomWeight.description": "Вага своїх схем у режимі «Суміш». Не враховується, якщо їх немає.",
+    "Mixed.GeneratedWeight": "Генерація",
+    "Mixed.GeneratedWeight.description": "Вага згенерованої палуби в режимі «Суміш».",
+    "Saving.SaveHotkey": "Зберегти палубу",
+    "Saving.SaveHotkey.description": "Зберігає палубу корабля біля причалу як свою схему. Клітинки посилок, що припливли з цим кораблем, не зберігаються; усі інші зайняті клітинки зберігаються, тож спершу зніміть зайві посилки.",
+    "Decoration.Enabled": "Прикрашати перешкоди",
+    "Decoration.Enabled.description": "На перешкоди своїх і згенерованих палуб ставляться ящики, пляшки та ліхтарі. Якщо вимкнути, клітинки лишаються зайнятими, але порожніми. Змінює лише те, що бачите ви."
+  },
+  "enum": {
+    "LayoutMode.Game": "Як у грі",
+    "LayoutMode.Empty": "Порожньо",
+    "LayoutMode.GameVariants": "Схеми гри",
+    "LayoutMode.FixedVariant": "Одна схема гри",
+    "LayoutMode.Custom": "Свої схеми",
+    "LayoutMode.Generated": "Генерація",
+    "LayoutMode.Mixed": "Суміш",
+    "CustomOrder.Random": "Випадково",
+    "CustomOrder.Sequence": "По черзі",
+    "CustomOrder.Fixed": "Завжди один файл"
+  },
+  "message": {
+    "saved": "Палубу збережено: {0}",
+    "noBoat": "Біля причалу немає корабля",
+    "noGrid": "Палуба корабля ще не готова",
+    "layoutFreed": "Клітинок схеми під посилками: {0}"
+  }
+}

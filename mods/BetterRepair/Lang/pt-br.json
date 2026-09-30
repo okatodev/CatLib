@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Reparo fácil"
+  },
+  "section": {
+    "Cardboard": "Papelão",
+    "Messages": "Mensagens"
+  },
+  "setting": {
+    "Cardboard.Unlimited": "Papelão infinito",
+    "Cardboard.Unlimited.description": "O papelão da mesa de reparo nunca acaba. O host decide por todos.",
+    "Cardboard.Stock": "Estoque",
+    "Cardboard.Stock.description": "Quantas folhas de papelão a mesa de reparo comporta. A mesa mostra até três, o resto fica no estoque. No jogo são 3. O host decide por todos.",
+    "Cardboard.Refill": "O novo dia traz",
+    "Cardboard.Refill.description": "O que um novo dia traz: o estoque completo, como no jogo, ou um número fixo de folhas. O host decide por todos.",
+    "Cardboard.RefillAmount": "Folhas por dia",
+    "Cardboard.RefillAmount.description": "Folhas adicionadas a cada novo dia quando um número fixo é escolhido acima. O estoque nunca passa do seu tamanho. O host decide por todos.",
+    "Messages.Enabled": "Mensagens do papelão",
+    "Messages.Enabled.description": "Mostra quanto papelão sobrou depois de um reparo e quanto um novo dia trouxe. Só para você."
+  },
+  "enum": {
+    "RefillMode.Full": "Estoque completo",
+    "RefillMode.Amount": "Número fixo de folhas"
+  },
+  "message": {
+    "left": "Papelão restante: {0} de {1}",
+    "empty": "Sem papelão até amanhã",
+    "refilled": "Papelão: {0} de {1}"
+  }
+}

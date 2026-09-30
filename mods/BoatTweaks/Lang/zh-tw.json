@@ -1,0 +1,70 @@
+{
+  "mod": {
+    "name": "船隻調整"
+  },
+  "section": {
+    "Layout": "甲板配置",
+    "GameVariants": "遊戲配置",
+    "FixedVariant": "單一遊戲配置",
+    "Height": "高度",
+    "CustomLayouts": "自訂配置",
+    "Generated": "隨機生成",
+    "Mixed": "混合",
+    "Saving": "儲存",
+    "Decoration": "裝飾"
+  },
+  "setting": {
+    "Layout.Mode": "模式",
+    "Layout.Mode.description": "如何選擇船甲板上固定的箱子、籃子和其他障礙物。隨船而來的包裹永遠不會改變。下方各區塊只在各自的模式下有效。",
+    "GameVariants.Allowed": "允許的配置",
+    "GameVariants.Allowed.description": "可能出現的遊戲船隻樣式編號，例如 1,2,4。留空代表全部。每種樣式保有自己的障礙物和隨船包裹。在「遊戲配置」模式下有效。",
+    "GameVariants.AvoidRepeats": "不連續重複",
+    "GameVariants.AvoidRepeats.description": "同一種樣式不會連續出現兩次。在「遊戲配置」模式下有效。",
+    "FixedVariant.Variant": "配置編號",
+    "FixedVariant.Variant.description": "每次都會出現的遊戲船隻樣式，帶有它自己的障礙物和隨船包裹。如果某一關的樣式較少，就使用最後一種。在「單一遊戲配置」模式下有效。",
+    "Height.ApprovedHeightScale": "合格高度",
+    "Height.ApprovedHeightScale.description": "船上包裹堆超過這個高度就會變紅，此項是該高度的倍率。1 為遊戲原本的數值。",
+    "Height.MaximumHeightScale": "最大高度",
+    "Height.MaximumHeightScale.description": "船上包裹堆絕對高度上限的倍率。合格高度絕不會超過它。",
+    "CustomLayouts.Order": "順序",
+    "CustomLayouts.Order.description": "自訂配置的選擇方式：隨機、依檔名輪流，或固定一個檔案。在「自訂配置」和「混合」模式下有效。",
+    "CustomLayouts.File": "檔案",
+    "CustomLayouts.File.description": "順序為「固定一個檔案」時使用的配置檔名，例如 deck_20260925_215809。在「自訂配置」模式下有效。",
+    "CustomLayouts.AvoidRepeats": "不連續重複",
+    "CustomLayouts.AvoidRepeats.description": "隨機選擇時，同一個自訂配置不會連續出現兩次。",
+    "Generated.Density": "密度",
+    "Generated.Density.description": "生成的障礙物佔甲板的比例。在「隨機生成」和「混合」模式下有效。",
+    "Generated.EdgesOnly": "只靠船舷",
+    "Generated.EdgesOnly.description": "生成的障礙物像遊戲中一樣靠近船舷，甲板中間保持淨空。",
+    "Mixed.GameWeight": "遊戲甲板",
+    "Mixed.GameWeight.description": "「混合」模式下遊戲甲板的出現權重。",
+    "Mixed.EmptyWeight": "空甲板",
+    "Mixed.EmptyWeight.description": "「混合」模式下空甲板的出現權重。",
+    "Mixed.CustomWeight": "自訂配置",
+    "Mixed.CustomWeight.description": "「混合」模式下自訂配置的出現權重。沒有自訂配置時會忽略。",
+    "Mixed.GeneratedWeight": "隨機生成",
+    "Mixed.GeneratedWeight.description": "「混合」模式下隨機生成甲板的出現權重。",
+    "Saving.SaveHotkey": "儲存甲板",
+    "Saving.SaveHotkey.description": "將停在碼頭的船的甲板儲存為自訂配置。隨這艘船而來的包裹所佔的格子不會儲存；其他被佔用的格子都會儲存，所以請先拿走不想存進去的包裹。",
+    "Decoration.Enabled": "裝飾障礙物",
+    "Decoration.Enabled.description": "在自訂與隨機生成甲板的障礙物上擺放箱子、瓶子和燈。關閉時，被佔用的格子會保持空白。只影響你看到的畫面。"
+  },
+  "enum": {
+    "LayoutMode.Game": "與遊戲相同",
+    "LayoutMode.Empty": "空甲板",
+    "LayoutMode.GameVariants": "遊戲配置",
+    "LayoutMode.FixedVariant": "單一遊戲配置",
+    "LayoutMode.Custom": "自訂配置",
+    "LayoutMode.Generated": "隨機生成",
+    "LayoutMode.Mixed": "混合",
+    "CustomOrder.Random": "隨機",
+    "CustomOrder.Sequence": "輪流",
+    "CustomOrder.Fixed": "固定一個檔案"
+  },
+  "message": {
+    "saved": "甲板已儲存：{0}",
+    "noBoat": "碼頭沒有可儲存的船",
+    "noGrid": "船甲板尚未準備好",
+    "layoutFreed": "因隨船包裹空出的配置格：{0}"
+  }
+}

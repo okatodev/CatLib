@@ -1,0 +1,103 @@
+{
+  "mod": {
+    "name": "CatLib"
+  },
+  "section": {
+    "Diagnostics": "診斷",
+    "Network": "網路",
+    "DevTools": "開發者工具"
+  },
+  "setting": {
+    "Diagnostics.CrashWindow": "當機視窗",
+    "Diagnostics.CrashWindow.description": "遊戲意外關閉時，會跳出一個小視窗說明發生了什麼事，並把附有記錄檔的報告保存在 BepInEx/CatLib/Crashes。",
+    "Network.Enabled": "連線模組",
+    "Network.Enabled.description": "與其他使用 CatLib 的玩家交換模組清單和本場設定。下一場遊戲起生效。",
+    "Network.OnIncompatiblePlayer": "模組不同的玩家",
+    "Network.OnIncompatiblePlayer.description": "加入的玩家模組不一致時，主機的處理方式：讓玩家加入並暫停不是每個人都有的模組，或是中斷該玩家的連線。",
+    "Network.SteamApi": "Steam 連線",
+    "Network.SteamApi.description": "CatLib 呼叫 Steam 的方式。只有在排查問題時被要求更改才需要調整。下一場遊戲起生效。",
+    "DevTools.MenuHotkey": "開發者選單按鍵",
+    "DevTools.MenuHotkey.description": "當有模組註冊了開發者指令（例如 CatLib.Tests）時，開啟開發者選單。"
+  },
+  "enum": {
+    "IncompatiblePlayerAction.Warn": "允許加入，暫停模組",
+    "IncompatiblePlayerAction.Disconnect": "中斷連線",
+    "SteamApiBackend.Interop": "Interop",
+    "SteamApiBackend.Flat": "Flat"
+  },
+  "ui": {
+    "ModsTab": "模組",
+    "ModsList": "模組",
+    "SelectMod": "選擇模組",
+    "RestartSuffix": "（需重新啟動）",
+    "HostSuffix": "（主機）",
+    "HostValue": "由主機設定，你的：{0}",
+    "NoDescription": "沒有說明",
+    "DefaultValue": "預設：{0}",
+    "Range": "範圍：{0} 至 {1}",
+    "Options": "選項：{0}",
+    "AppliesAfterRestart": "重新啟動後生效",
+    "AfterRestart": "重新啟動後：{0}",
+    "HoverHint": "將游標移到設定上即可查看說明",
+    "On": "開",
+    "Off": "關",
+    "Version": "v{0}",
+    "MessageRestart": "{0}：「{1}」重新啟動後生效",
+    "MessageRejected": "{0}：「{2}」不是「{1}」的有效值",
+    "MessageAdjusted": "{0}：「{1}」已設為 {3}，而非「{2}」",
+    "MessageReset": "{0}：設定已恢復預設值",
+    "NetPlayerIncompatible": "{0}：模組不相容，{1}",
+    "NetPlayerDisconnected": "{0} 已被中斷連線：{1}",
+    "NetPlayerDisconnectedBrief": "{0} 已被中斷連線：{1}",
+    "NetPlayerIncompatibleBrief": "{0} 的模組不同：{1}",
+    "NetYouWillBeDisconnected": "主機將中斷你的連線：{0}",
+    "NetCardOtherMods": "模組不同",
+    "NetHostIncompatible": "模組與主機不一致：{0}",
+    "NetHostWithoutCatLib": "主機沒有 CatLib，這些可能無法運作：{0}",
+    "ProblemProtocol": "CatLib 版本",
+    "ProblemGame": "遊戲版本",
+    "ProblemMissingOnClient": "用戶端缺少 {0}",
+    "ProblemMissingOnHost": "主機缺少 {0}",
+    "ProblemVersion": "{0} {1} vs {2}",
+    "LobbyModsTitle": "玩家模組",
+    "LobbyAllMatch": "{0} · 全部一致",
+    "LobbyPaused": "{0} · 已暫停：{1}",
+    "LobbyHost": "主機",
+    "LobbyYou": "你",
+    "RosterChecking": "檢查中…",
+    "RosterCompatible": "全部一致",
+    "RosterLimited": "模組不同",
+    "RosterWithoutCatLib": "沒有 CatLib",
+    "RosterLeaving": "將被中斷連線",
+    "MarkWorks": "正常",
+    "MarkPaused": "已暫停",
+    "MarkMissing": "未安裝 · 主機：{0}",
+    "MarkOtherVersion": "主機：{0}",
+    "MarkNotOnHost": "主機沒有 · 已暫停",
+    "MarkLocal": "僅限本機",
+    "RowGameVersion": "遊戲版本",
+    "RowHostHas": "主機：{0}",
+    "RowCatLib": "CatLib",
+    "RowCatLibOther": "版本不同，請更新 CatLib",
+    "RowNoMods": "沒有模組",
+    "PolicyTitle": "模組不同的玩家",
+    "PolicyWarn": "允許加入，暫停模組",
+    "PolicyDisconnect": "中斷連線",
+    "BadgePaused": "本場已暫停",
+    "BadgeRestart": "需要重新啟動",
+    "BadgeHost": "主機設定",
+    "CardAuthor": "作者：{0}",
+    "SettingsCount": {
+      "other": "{0} 項設定"
+    },
+    "PendingRestart": {
+      "other": "{0} 項待重新啟動"
+    },
+    "LobbyPlayers": {
+      "other": "{0} 位玩家"
+    },
+    "LobbyMods": {
+      "other": "{0} 個模組"
+    }
+  }
+}

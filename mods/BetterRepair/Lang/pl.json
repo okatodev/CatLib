@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Wygodna naprawa"
+  },
+  "section": {
+    "Cardboard": "Karton",
+    "Messages": "Komunikaty"
+  },
+  "setting": {
+    "Cardboard.Unlimited": "Nieskończony karton",
+    "Cardboard.Unlimited.description": "Na stole naprawczym nigdy nie kończy się karton. Host decyduje za wszystkich.",
+    "Cardboard.Stock": "Zapas",
+    "Cardboard.Stock.description": "Ile arkuszy kartonu mieści stół naprawczy. Na stole widać do trzech, reszta czeka w zapasie. W grze są 3. Host decyduje za wszystkich.",
+    "Cardboard.Refill": "Nowy dzień przynosi",
+    "Cardboard.Refill.description": "Co przynosi nowy dzień: pełny zapas, jak w grze, albo ustaloną liczbę arkuszy. Host decyduje za wszystkich.",
+    "Cardboard.RefillAmount": "Arkuszy na dzień",
+    "Cardboard.RefillAmount.description": "Tyle arkuszy dochodzi każdego nowego dnia, gdy wyżej wybrano ustaloną liczbę. Zapas nigdy nie przekracza swojego rozmiaru. Host decyduje za wszystkich.",
+    "Messages.Enabled": "Komunikaty o kartonie",
+    "Messages.Enabled.description": "Pokazuje, ile kartonu zostało po naprawie i ile przyniósł nowy dzień. Tylko dla ciebie."
+  },
+  "enum": {
+    "RefillMode.Full": "Pełny zapas",
+    "RefillMode.Amount": "Ustalona liczba arkuszy"
+  },
+  "message": {
+    "left": "Zostało kartonu: {0} z {1}",
+    "empty": "Brak kartonu do jutra",
+    "refilled": "Karton: {0} z {1}"
+  }
+}

@@ -24,8 +24,12 @@ public sealed class MessageLengthTest : TestCase
         Assert.Equal("CatLib.Tests: «Fast Mode»\n— после перезапуска", ToastText.Format("CatLib.Tests: «Fast Mode» — после перезапуска"), "Lines are not broken inside quotes");
         Assert.True(ToastText.Format("Wide wide wide", line => line.Count(character => character == 'W') * 10 + line.Length, 12).Split('\n').Length == 2, "Width comes from the measuring function, not from the character count");
         Assert.True(ToastText.Clip("A very long line that does not fit into one notification line").EndsWith("\u2026"), "Clipped lines end with an ellipsis");
+        Assert.Equal("CatLib.Tests：\n設定を初期値に戻しました", ToastText.Format("CatLib.Tests：設定を初期値に戻しました", ToastText.DisplayWidth, 26), "A full-width colon starts the second line");
+        Assert.Equal("「Fast Mode」は\n再起動後に反映", ToastText.Format("「Fast Mode」は再起動後に反映", ToastText.DisplayWidth, 16), "Japanese breaks between characters, never inside quotes or before a closing mark");
+        Assert.Equal("'Fast Mode'은(는)\n재시작 후 적용", ToastText.Format("'Fast Mode'은(는) 재시작 후 적용", ToastText.DisplayWidth, 20), "Korean breaks only between words");
+        Assert.Equal(4f, ToastText.DisplayWidth("設定"), "Wide characters count twice");
 
-        foreach (var language in new[] { "en", "ru" })
+        foreach (var language in CatLib.Tests.Suites.Localization.AllLanguagesTest.GameLanguages)
         {
             var mods = ProblemText.ModsOnly(problems, NameOf);
             var briefs = new[]

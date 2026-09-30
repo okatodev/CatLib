@@ -1,0 +1,38 @@
+{
+  "mod": {
+    "name": "Etiquetas de prateleira"
+  },
+  "section": {
+    "Labels": "Etiquetas",
+    "Look": "Aparência"
+  },
+  "setting": {
+    "Labels.ExtraSlots": "Etiquetas extras",
+    "Labels.ExtraSlots.description": "Quantas etiquetas extras cada etiqueta de prateleira recebe, até 3. O host decide por todos. As imagens das etiquetas ocultas ficam no jogo salvo e voltam quando as etiquetas aparecem de novo.",
+    "Look.Spacing": "Espaço",
+    "Look.Spacing.description": "Espaço entre as etiquetas, em metros.",
+    "Labels.DefaultPlacement": "Posição",
+    "Labels.DefaultPlacement.description": "Onde ficam as etiquetas extras nas prateleiras sem posição própria. Cada etiqueta de prateleira pode ter a sua com a tecla abaixo. O host decide por todos.",
+    "Look.PlacementHotkey": "Mudar posição",
+    "Look.PlacementHotkey.description": "Olhe para uma etiqueta de prateleira ou uma etiqueta extra dela e aperte para alternar: lado mais livre, direita, esquerda, abaixo, sem etiquetas extras. Qualquer jogador pode fazer isso, o host guarda no jogo salvo.",
+    "Labels.HideStands": "Sem suportes",
+    "Labels.HideStands.description": "As etiquetas extras nas prateleiras sem escolha própria aparecem sem o suporte de madeira sob a moldura. A etiqueta original do jogo sempre mantém o suporte. O host decide por todos.",
+    "Look.StandHotkey": "Alternar suporte",
+    "Look.StandHotkey.description": "Olhe para uma etiqueta de prateleira ou uma etiqueta extra dela e aperte para mostrar ou ocultar o suporte de madeira das etiquetas extras. Qualquer jogador pode fazer isso, o host guarda no jogo salvo."
+  },
+  "enum": {
+    "Placement.Auto": "Ao lado, mais livre",
+    "Placement.Right": "À direita",
+    "Placement.Left": "À esquerda",
+    "Placement.Below": "Abaixo",
+    "Placement.None": "Sem etiquetas extras"
+  },
+  "message": {
+    "placement": "Etiquetas extras: {0}",
+    "lookAtLabel": "Olhe para uma etiqueta primeiro",
+    "noHost": "O host não tem “Etiquetas de prateleira”",
+    "standHidden": "Etiquetas extras: sem suporte",
+    "standShown": "Etiquetas extras: com suporte",
+    "standUnsupported": "Não dá para tirar o suporte desta etiqueta"
+  }
+}

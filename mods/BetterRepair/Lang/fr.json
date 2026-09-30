@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Réparation facile"
+  },
+  "section": {
+    "Cardboard": "Carton",
+    "Messages": "Messages"
+  },
+  "setting": {
+    "Cardboard.Unlimited": "Carton illimité",
+    "Cardboard.Unlimited.description": "La table de réparation ne manque jamais de carton. L'hôte décide pour tout le monde.",
+    "Cardboard.Stock": "Réserve",
+    "Cardboard.Stock.description": "Combien de feuilles de carton la table de réparation peut contenir. La table en montre jusqu'à trois, le reste attend en réserve. 3 correspond au jeu de base. L'hôte décide pour tout le monde.",
+    "Cardboard.Refill": "Chaque jour apporte",
+    "Cardboard.Refill.description": "Ce qu'apporte un nouveau jour : toute la réserve, comme dans le jeu, ou un nombre fixe de feuilles. L'hôte décide pour tout le monde.",
+    "Cardboard.RefillAmount": "Feuilles par jour",
+    "Cardboard.RefillAmount.description": "Feuilles ajoutées chaque nouveau jour quand un nombre fixe est choisi ci-dessus. La réserve ne dépasse jamais sa taille. L'hôte décide pour tout le monde.",
+    "Messages.Enabled": "Messages sur le carton",
+    "Messages.Enabled.description": "Indique combien de carton il reste après une réparation et combien un nouveau jour en a apporté. Pour vous seulement."
+  },
+  "enum": {
+    "RefillMode.Full": "Réserve pleine",
+    "RefillMode.Amount": "Un nombre fixe de feuilles"
+  },
+  "message": {
+    "left": "Carton restant : {0} sur {1}",
+    "empty": "Plus de carton jusqu'à demain",
+    "refilled": "Carton : {0} sur {1}"
+  }
+}

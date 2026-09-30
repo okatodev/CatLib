@@ -20,13 +20,12 @@ A mod in this repository lives in `mods/<Name>/` and only declares what is its o
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CatLib\CatLib.csproj" Private="false" />
-    <EmbeddedResource Include="Lang\*.json" LogicalName="MyMod.Lang.%(Filename).json" />
   </ItemGroup>
 </Project>
 ```
 
-Game and BepInEx references, the generated `PluginMeta` class and copying into `BepInEx/plugins/<CatLibDeployFolder>`
-come from the shared build files. Add the project to `CatLib.sln` with `dotnet sln add`.
+Game and BepInEx references, the generated `PluginMeta` class, the texts in `Lang/*.json`
+and copying into `BepInEx/plugins/<CatLibDeployFolder>` come from the shared build files. Add the project to `CatLib.sln` with `dotnet sln add`.
 
 A mod outside this repository references `CatLib.dll` directly and writes its own `BepInPlugin` values.
 
@@ -77,7 +76,6 @@ public sealed class MyModPlugin : BasePlugin
     {
         var log = CatLogger.From(Log);
         var settings = CatSettings.For(this);
-        settings.Texts.LoadEmbedded(typeof(MyModPlugin).Assembly, "MyMod.Lang.");
         CatNetwork.Declare(this, SessionPolicy.RequiredOnAll);
 
         var controller = new MyController(log, settings);
@@ -87,6 +85,7 @@ public sealed class MyModPlugin : BasePlugin
 ```
 
 - `BepInDependency` makes BepInEx load CatLib first.
+- `CatSettings.For(this)` also loads the mod's texts from `Lang/*.json` and the players' translation files.
 - `CatNetwork.Declare` puts the mod into the multiplayer handshake. See [Multiplayer compatibility](Network.md) for the policies.
 - `FrameLoop.Update` runs every frame on the main thread; an exception in one subscriber does not stop the others.
 
@@ -104,7 +103,8 @@ height.Apply(value => controller.RequestApply());
 ## Texts
 
 Every text a player sees comes from the mod's catalog: the name on the Mods tab, sections, labels, descriptions,
-dropdown values and the mod's own messages. Put `Lang/en.json` and `Lang/ru.json` next to the project:
+dropdown values and the mod's own messages. Put `Lang/en.json` and a file for every other language next to the project,
+the build embeds them and CatLib loads them by itself:
 
 ```json
 {
@@ -114,16 +114,17 @@ dropdown values and the mod's own messages. Put `Lang/en.json` and `Lang/ru.json
     "Height.Scale": "Height limit",
     "Height.Scale.description": "Multiplier for the height limit."
   },
-  "message": { "saved": "Saved: {0}" }
+  "message": { "saved": "Saved: {0}" },
+  "parcels": { "one": "{0} parcel", "other": "{0} parcels" }
 }
 ```
 
 ```csharp
 Notifications.Show(settings.Texts.Format("message.saved", name));
+Notifications.Show(settings.Texts.Plural("parcels", count));
 ```
 
-Key rules and the lookup order are in [Localization](Localization.md).
-A test that walks the declared settings and checks every key with `TextCatalog.Has` for each language keeps the files complete.
+Key rules, plural forms, translation files of players and the checks are in [Localization](Localization.md).
 
 ## Reacting to the game
 

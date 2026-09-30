@@ -1,0 +1,38 @@
+{
+  "mod": {
+    "name": "棚ラベル"
+  },
+  "section": {
+    "Labels": "ラベル",
+    "Look": "見た目"
+  },
+  "setting": {
+    "Labels.ExtraSlots": "追加ラベル",
+    "Labels.ExtraSlots.description": "各棚ラベルに追加されるラベルの数です（最大3）。ホストが全員分を決めます。非表示になったラベルの絵柄はセーブに残り、再び表示すると元に戻ります。",
+    "Look.Spacing": "間隔",
+    "Look.Spacing.description": "ラベル同士の間隔（メートル）です。",
+    "Labels.DefaultPlacement": "位置",
+    "Labels.DefaultPlacement.description": "個別の位置が決まっていない棚で、追加ラベルを置く場所です。棚ラベルごとに下のキーで個別に設定できます。ホストが全員分を決めます。",
+    "Look.PlacementHotkey": "位置を切り替え",
+    "Look.PlacementHotkey.description": "棚ラベルか追加ラベルを見てキーを押すと、空いている側、右、左、下、追加ラベルなしの順に切り替わります。どのプレイヤーでも操作でき、ホストがセーブに保存します。",
+    "Labels.HideStands": "台座を隠す",
+    "Labels.HideStands.description": "個別に設定されていない棚の追加ラベルを、枠の下にある木の台座なしで表示します。ゲーム本来のラベルは常に台座付きです。ホストが全員分を決めます。",
+    "Look.StandHotkey": "台座の表示切替",
+    "Look.StandHotkey.description": "棚ラベルか追加ラベルを見てキーを押すと、その追加ラベルの木の台座を表示・非表示にします。どのプレイヤーでも操作でき、ホストがセーブに保存します。"
+  },
+  "enum": {
+    "Placement.Auto": "横の空いている側",
+    "Placement.Right": "右",
+    "Placement.Left": "左",
+    "Placement.Below": "下",
+    "Placement.None": "追加ラベルなし"
+  },
+  "message": {
+    "placement": "追加ラベル：{0}",
+    "lookAtLabel": "先に棚ラベルを見てください",
+    "noHost": "ホストに「棚ラベル」がありません",
+    "standHidden": "追加ラベル：台座なし",
+    "standShown": "追加ラベル：台座あり",
+    "standUnsupported": "このラベルの台座は外せません"
+  }
+}

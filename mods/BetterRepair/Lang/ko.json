@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "편리한 수리"
+  },
+  "section": {
+    "Cardboard": "골판지",
+    "Messages": "메시지"
+  },
+  "setting": {
+    "Cardboard.Unlimited": "골판지 무제한",
+    "Cardboard.Unlimited.description": "수리대의 골판지가 절대 떨어지지 않아요. 호스트 설정이 모두에게 적용돼요.",
+    "Cardboard.Stock": "재고",
+    "Cardboard.Stock.description": "수리대에 보관되는 골판지 장 수예요. 수리대에는 최대 3장이 보이고 나머지는 재고로 기다려요. 게임 기본값은 3장이에요. 호스트 설정이 모두에게 적용돼요.",
+    "Cardboard.Refill": "새 날 보충",
+    "Cardboard.Refill.description": "새 날이 오면 채워지는 양이에요. 게임처럼 재고 전체를 채우거나, 정한 장 수만큼 채워요. 호스트 설정이 모두에게 적용돼요.",
+    "Cardboard.RefillAmount": "하루 보충량",
+    "Cardboard.RefillAmount.description": "위에서 '정한 장 수'를 골랐을 때 새 날마다 추가되는 장 수예요. 재고는 최대치를 넘지 않아요. 호스트 설정이 모두에게 적용돼요.",
+    "Messages.Enabled": "골판지 알림",
+    "Messages.Enabled.description": "수리 후 남은 골판지와 새 날에 채워진 양을 보여 줘요. 나에게만 적용돼요."
+  },
+  "enum": {
+    "RefillMode.Full": "재고 전체",
+    "RefillMode.Amount": "정한 장 수"
+  },
+  "message": {
+    "left": "남은 골판지: {0}/{1}",
+    "empty": "내일까지 골판지가 없어요",
+    "refilled": "골판지: {0}/{1}"
+  }
+}

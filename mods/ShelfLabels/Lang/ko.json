@@ -1,0 +1,38 @@
+{
+  "mod": {
+    "name": "선반 라벨"
+  },
+  "section": {
+    "Labels": "라벨",
+    "Look": "모양"
+  },
+  "setting": {
+    "Labels.ExtraSlots": "추가 라벨",
+    "Labels.ExtraSlots.description": "선반 라벨마다 붙는 추가 라벨 수예요. 최대 3개예요. 호스트 설정이 모두에게 적용돼요. 숨긴 라벨의 그림은 저장에 남아 있다가 라벨을 다시 표시하면 돌아와요.",
+    "Look.Spacing": "간격",
+    "Look.Spacing.description": "라벨 사이 간격이에요(미터 단위).",
+    "Labels.DefaultPlacement": "위치",
+    "Labels.DefaultPlacement.description": "따로 위치를 정하지 않은 선반에서 추가 라벨이 놓이는 곳이에요. 아래 단축키로 선반 라벨마다 따로 정할 수 있어요. 호스트 설정이 모두에게 적용돼요.",
+    "Look.PlacementHotkey": "위치 변경",
+    "Look.PlacementHotkey.description": "선반 라벨이나 추가 라벨을 바라보고 누르면 넓은 쪽, 오른쪽, 왼쪽, 아래, 추가 라벨 없음 순으로 바뀌어요. 모든 플레이어가 쓸 수 있고, 호스트가 저장해요.",
+    "Labels.HideStands": "받침대 숨기기",
+    "Labels.HideStands.description": "따로 정하지 않은 선반의 추가 라벨을 틀 아래 나무 받침대 없이 보여 줘요. 게임 원래 라벨의 받침대는 항상 그대로예요. 호스트 설정이 모두에게 적용돼요.",
+    "Look.StandHotkey": "받침대 켜기/끄기",
+    "Look.StandHotkey.description": "선반 라벨이나 추가 라벨을 바라보고 누르면 그 추가 라벨들의 나무 받침대를 숨기거나 보여 줘요. 모든 플레이어가 쓸 수 있고, 호스트가 저장해요."
+  },
+  "enum": {
+    "Placement.Auto": "옆, 넓은 쪽",
+    "Placement.Right": "오른쪽",
+    "Placement.Left": "왼쪽",
+    "Placement.Below": "아래",
+    "Placement.None": "추가 라벨 없음"
+  },
+  "message": {
+    "placement": "추가 라벨: {0}",
+    "lookAtLabel": "먼저 선반 라벨을 바라보세요",
+    "noHost": "호스트에 '선반 라벨'이 없어요",
+    "standHidden": "추가 라벨: 받침대 없음",
+    "standShown": "추가 라벨: 받침대 있음",
+    "standUnsupported": "이 라벨의 받침대는 뗄 수 없어요"
+  }
+}

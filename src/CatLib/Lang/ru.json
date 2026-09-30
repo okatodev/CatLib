@@ -1,0 +1,111 @@
+{
+  "mod": {
+    "name": "CatLib"
+  },
+  "section": {
+    "Diagnostics": "Диагностика",
+    "Network": "Сеть",
+    "DevTools": "Для разработчиков"
+  },
+  "setting": {
+    "Diagnostics.CrashWindow": "Окно при вылете",
+    "Diagnostics.CrashWindow.description": "Когда игра неожиданно закрывается, небольшое окно показывает, что случилось, а отчёт с логами сохраняется в BepInEx/CatLib/Crashes.",
+    "Network.Enabled": "Моды в мультиплеере",
+    "Network.Enabled.description": "Обмениваться списками модов и настройками сессии с другими игроками, у которых есть CatLib. Действует со следующей сессии.",
+    "Network.OnIncompatiblePlayer": "Игроки с другими модами",
+    "Network.OnIncompatiblePlayer.description": "Что делает хост, если моды входящего игрока не совпадают: пустить игрока и поставить на паузу моды, которые есть не у всех, или отключить его.",
+    "Network.SteamApi": "Связь со Steam",
+    "Network.SteamApi.description": "Как CatLib обращается к Steam. Меняйте, только если об этом попросили при поиске проблемы. Действует со следующей сессии.",
+    "DevTools.MenuHotkey": "Клавиша меню разработчика",
+    "DevTools.MenuHotkey.description": "Открывает меню разработчика, если какой-то мод добавил в него команды, например CatLib.Tests."
+  },
+  "enum": {
+    "IncompatiblePlayerAction.Warn": "Пускать, моды на паузу",
+    "IncompatiblePlayerAction.Disconnect": "Отключать",
+    "SteamApiBackend.Interop": "Interop",
+    "SteamApiBackend.Flat": "Flat"
+  },
+  "ui": {
+    "ModsTab": "Моды",
+    "ModsList": "Моды",
+    "SelectMod": "Выберите мод",
+    "RestartSuffix": "(перезапуск)",
+    "HostSuffix": "(хост)",
+    "HostValue": "Задано хостом, ваше: {0}",
+    "NoDescription": "Нет описания",
+    "DefaultValue": "По умолчанию: {0}",
+    "Range": "Диапазон: от {0} до {1}",
+    "Options": "Варианты: {0}",
+    "AppliesAfterRestart": "Применяется после перезапуска",
+    "AfterRestart": "После перезапуска: {0}",
+    "HoverHint": "Наведите на настройку, чтобы увидеть описание",
+    "On": "Вкл",
+    "Off": "Выкл",
+    "Version": "v{0}",
+    "MessageRestart": "{0}: «{1}» — после перезапуска",
+    "MessageRejected": "{0}: «{2}» не подходит для «{1}»",
+    "MessageAdjusted": "{0}: «{1}» = {3} вместо «{2}»",
+    "MessageReset": "{0}: настройки сброшены по умолчанию",
+    "NetPlayerIncompatible": "{0}: несовместимые моды, {1}",
+    "NetPlayerDisconnected": "{0} отключён: {1}",
+    "NetPlayerDisconnectedBrief": "{0} отключён: {1}",
+    "NetPlayerIncompatibleBrief": "У {0} другие моды: {1}",
+    "NetYouWillBeDisconnected": "Хост отключит вас: {0}",
+    "NetCardOtherMods": "другие моды",
+    "NetHostIncompatible": "Моды не совпадают с хостом: {0}",
+    "NetHostWithoutCatLib": "У хоста нет CatLib, могут не работать: {0}",
+    "ProblemProtocol": "версия CatLib",
+    "ProblemGame": "версия игры",
+    "ProblemMissingOnClient": "{0} нет у клиента",
+    "ProblemMissingOnHost": "{0} нет у хоста",
+    "ProblemVersion": "{0} {1} против {2}",
+    "LobbyModsTitle": "Моды игроков",
+    "LobbyAllMatch": "{0} · всё совпадает",
+    "LobbyPaused": "{0} · на паузе: {1}",
+    "LobbyHost": "хост",
+    "LobbyYou": "вы",
+    "RosterChecking": "проверка…",
+    "RosterCompatible": "всё совпадает",
+    "RosterLimited": "другие моды",
+    "RosterWithoutCatLib": "нет CatLib",
+    "RosterLeaving": "будет отключён",
+    "MarkWorks": "работает",
+    "MarkPaused": "на паузе",
+    "MarkMissing": "нет · у хоста {0}",
+    "MarkOtherVersion": "у хоста {0}",
+    "MarkNotOnHost": "нет у хоста · на паузе",
+    "MarkLocal": "только у себя",
+    "RowGameVersion": "Версия игры",
+    "RowHostHas": "у хоста {0}",
+    "RowCatLib": "CatLib",
+    "RowCatLibOther": "другая версия, обновите CatLib",
+    "RowNoMods": "нет модов",
+    "PolicyTitle": "Игроки с другими модами",
+    "PolicyWarn": "пускать, моды на паузу",
+    "PolicyDisconnect": "отключать",
+    "BadgePaused": "на паузе в этой игре",
+    "BadgeRestart": "ждёт перезапуска",
+    "BadgeHost": "задано хостом",
+    "CardAuthor": "автор: {0}",
+    "SettingsCount": {
+      "one": "{0} настройка",
+      "few": "{0} настройки",
+      "many": "{0} настроек"
+    },
+    "PendingRestart": {
+      "one": "{0} ждёт перезапуска",
+      "few": "{0} ждут перезапуска",
+      "many": "{0} ждут перезапуска"
+    },
+    "LobbyPlayers": {
+      "one": "{0} игрок",
+      "few": "{0} игрока",
+      "many": "{0} игроков"
+    },
+    "LobbyMods": {
+      "one": "{0} мод",
+      "few": "{0} мода",
+      "many": "{0} модов"
+    }
+  }
+}

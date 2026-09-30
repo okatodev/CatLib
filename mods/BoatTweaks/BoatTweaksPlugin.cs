@@ -24,7 +24,7 @@ public sealed class BoatTweaksPlugin : BasePlugin
     {
         var log = CatLogger.From(Log);
         var settings = CatSettings.For(this);
-        var translations = settings.Texts.LoadEmbedded(typeof(BoatTweaksPlugin).Assembly, LanguageResourcePrefix);
+        var translations = settings.Texts.Count;
         CatNetwork.Declare(this, SessionPolicy.RequiredOnAll);
 
         var library = new PatternLibrary(Path.Combine(Paths.ConfigPath, "BoatTweaks", "layouts"));

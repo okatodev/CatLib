@@ -1,0 +1,70 @@
+{
+  "mod": {
+    "name": "Impostazioni barca"
+  },
+  "section": {
+    "Layout": "Schema del ponte",
+    "GameVariants": "Schemi del gioco",
+    "FixedVariant": "Uno schema del gioco",
+    "Height": "Altezza",
+    "CustomLayouts": "Schemi propri",
+    "Generated": "Generato",
+    "Mixed": "Misto",
+    "Saving": "Salvataggio",
+    "Decoration": "Decorazione"
+  },
+  "setting": {
+    "Layout.Mode": "Modalità",
+    "Layout.Mode.description": "Come vengono scelti le casse fisse, i cesti e gli altri ostacoli sul ponte della barca. I pacchi che arrivano con la barca non cambiano mai. Le sezioni qui sotto funzionano solo nella loro modalità.",
+    "GameVariants.Allowed": "Schemi consentiti",
+    "GameVariants.Allowed.description": "Numeri delle varianti di barca del gioco che possono arrivare, per esempio 1,2,4. Vuoto significa tutte. Ogni variante mantiene i propri ostacoli e i propri pacchi in arrivo. Funziona nella modalità «Schemi del gioco».",
+    "GameVariants.AvoidRepeats": "Niente ripetizioni",
+    "GameVariants.AvoidRepeats.description": "La stessa variante non arriva mai due volte di fila. Funziona nella modalità «Schemi del gioco».",
+    "FixedVariant.Variant": "Numero di schema",
+    "FixedVariant.Variant.description": "La variante di barca del gioco che arriva ogni volta, con i propri ostacoli e pacchi in arrivo. Se un livello ha meno varianti, si usa l'ultima. Funziona nella modalità «Uno schema del gioco».",
+    "Height.ApprovedHeightScale": "Altezza consentita",
+    "Height.ApprovedHeightScale.description": "Moltiplicatore dell'altezza oltre la quale una pila sulla barca diventa rossa. 1 mantiene il valore del gioco.",
+    "Height.MaximumHeightScale": "Altezza massima",
+    "Height.MaximumHeightScale.description": "Moltiplicatore del limite assoluto di altezza delle pile sulla barca. L'altezza consentita non lo supera mai.",
+    "CustomLayouts.Order": "Ordine",
+    "CustomLayouts.Order.description": "Come vengono scelti gli schemi propri: a caso, uno dopo l'altro per nome del file, o sempre lo stesso file. Funziona nelle modalità «Schemi propri» e «Misto».",
+    "CustomLayouts.File": "File",
+    "CustomLayouts.File.description": "Nome del file di schema usato quando l'ordine è «Sempre un file», per esempio deck_20260925_215809. Funziona nella modalità «Schemi propri».",
+    "CustomLayouts.AvoidRepeats": "Niente ripetizioni",
+    "CustomLayouts.AvoidRepeats.description": "Lo stesso schema proprio non arriva mai due volte di fila quando è scelto a caso.",
+    "Generated.Density": "Densità",
+    "Generated.Density.description": "Parte del ponte occupata dagli ostacoli generati. Funziona nelle modalità «Generato» e «Misto».",
+    "Generated.EdgesOnly": "Solo vicino ai bordi",
+    "Generated.EdgesOnly.description": "Gli ostacoli generati restano vicino ai bordi, come nel gioco, e lasciano libero il centro del ponte.",
+    "Mixed.GameWeight": "Ponte del gioco",
+    "Mixed.GameWeight.description": "Peso di probabilità del ponte del gioco nella modalità «Misto».",
+    "Mixed.EmptyWeight": "Ponte vuoto",
+    "Mixed.EmptyWeight.description": "Peso di probabilità di un ponte vuoto nella modalità «Misto».",
+    "Mixed.CustomWeight": "Schemi propri",
+    "Mixed.CustomWeight.description": "Peso di probabilità degli schemi propri nella modalità «Misto». Ignorato se non ce ne sono.",
+    "Mixed.GeneratedWeight": "Ponte generato",
+    "Mixed.GeneratedWeight.description": "Peso di probabilità di un ponte generato nella modalità «Misto».",
+    "Saving.SaveHotkey": "Salva il ponte",
+    "Saving.SaveHotkey.description": "Salva il ponte della barca al molo come schema proprio. Le celle dei pacchi arrivati con questa barca vengono escluse; ogni altra cella occupata viene salvata, quindi togli prima i pacchi che non vuoi includere.",
+    "Decoration.Enabled": "Decora gli ostacoli",
+    "Decoration.Enabled.description": "Casse, bottiglie e lanterne vengono messe sugli ostacoli dei ponti propri e generati. Se disattivato, le celle bloccate restano spoglie. Cambia solo ciò che vedi tu."
+  },
+  "enum": {
+    "LayoutMode.Game": "Come nel gioco",
+    "LayoutMode.Empty": "Vuoto",
+    "LayoutMode.GameVariants": "Schemi del gioco",
+    "LayoutMode.FixedVariant": "Uno schema del gioco",
+    "LayoutMode.Custom": "Schemi propri",
+    "LayoutMode.Generated": "Generato",
+    "LayoutMode.Mixed": "Misto",
+    "CustomOrder.Random": "A caso",
+    "CustomOrder.Sequence": "Uno dopo l'altro",
+    "CustomOrder.Fixed": "Sempre un file"
+  },
+  "message": {
+    "saved": "Ponte salvato: {0}",
+    "noBoat": "Nessuna barca al molo",
+    "noGrid": "Il ponte non è ancora pronto",
+    "layoutFreed": "Celle libere sotto i pacchi: {0}"
+  }
+}

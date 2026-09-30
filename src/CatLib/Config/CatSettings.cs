@@ -71,6 +71,13 @@ public sealed class CatSettings : IDisposable
         var settings = For(plugin.Config, metadata.GUID, metadata.Name, metadata.Version?.ToString());
         try
         {
+            CatLocalization.For(plugin);
+        }
+        catch (Exception)
+        {
+        }
+        try
+        {
             var assembly = plugin.GetType().Assembly;
             var directory = System.IO.Path.GetDirectoryName(assembly.Location);
             settings.PluginDirectory ??= directory;

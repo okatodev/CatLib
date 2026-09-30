@@ -1,0 +1,38 @@
+{
+  "mod": {
+    "name": "Etykiety półek"
+  },
+  "section": {
+    "Labels": "Etykiety",
+    "Look": "Wygląd"
+  },
+  "setting": {
+    "Labels.ExtraSlots": "Dodatkowe etykiety",
+    "Labels.ExtraSlots.description": "Ile dodatkowych etykiet dostaje każda etykieta półki, do 3. Host decyduje za wszystkich. Obrazki ukrytych etykiet zostają w zapisie gry i wracają, gdy etykiety znów się pojawią.",
+    "Look.Spacing": "Odstęp",
+    "Look.Spacing.description": "Odstęp między etykietami w metrach.",
+    "Labels.DefaultPlacement": "Położenie",
+    "Labels.DefaultPlacement.description": "Gdzie trafiają dodatkowe etykiety na półkach bez własnego położenia. Każda etykieta półki może dostać własne klawiszem poniżej. Host decyduje za wszystkich.",
+    "Look.PlacementHotkey": "Zmień położenie",
+    "Look.PlacementHotkey.description": "Spójrz na etykietę półki lub jej dodatkową etykietę i naciśnij, aby przełączyć: gdzie więcej miejsca, z prawej, z lewej, poniżej, bez dodatkowych etykiet. Może to zrobić każdy gracz, host przechowuje to w zapisie gry.",
+    "Labels.HideStands": "Bez podstawek",
+    "Labels.HideStands.description": "Dodatkowe etykiety na półkach bez własnego wyboru są pokazywane bez drewnianej podstawki pod ramką. Oryginalna etykieta gry zawsze ją zachowuje. Host decyduje za wszystkich.",
+    "Look.StandHotkey": "Podstawka wł./wył.",
+    "Look.StandHotkey.description": "Spójrz na etykietę półki lub jej dodatkową etykietę i naciśnij, aby ukryć lub pokazać drewnianą podstawkę jej dodatkowych etykiet. Może to zrobić każdy gracz, host przechowuje to w zapisie gry."
+  },
+  "enum": {
+    "Placement.Auto": "Z boku, gdzie luźniej",
+    "Placement.Right": "Z prawej",
+    "Placement.Left": "Z lewej",
+    "Placement.Below": "Poniżej",
+    "Placement.None": "Bez dodatkowych"
+  },
+  "message": {
+    "placement": "Dodatkowe etykiety: {0}",
+    "lookAtLabel": "Najpierw spójrz na etykietę półki",
+    "noHost": "Host nie ma „Etykiet półek”",
+    "standHidden": "Dodatkowe etykiety: bez podstawek",
+    "standShown": "Dodatkowe etykiety: z podstawkami",
+    "standUnsupported": "Tej podstawki nie da się usunąć"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Bequeme Reparatur"
+  },
+  "section": {
+    "Cardboard": "Pappe",
+    "Messages": "Meldungen"
+  },
+  "setting": {
+    "Cardboard.Unlimited": "Unbegrenzte Pappe",
+    "Cardboard.Unlimited.description": "Am Reparaturtisch geht die Pappe nie aus. Der Host entscheidet für alle.",
+    "Cardboard.Stock": "Vorrat",
+    "Cardboard.Stock.description": "Wie viele Bögen Pappe der Reparaturtisch fasst. Auf dem Tisch liegen bis zu drei, der Rest wartet im Vorrat. Im Spiel sind es 3. Der Host entscheidet für alle.",
+    "Cardboard.Refill": "Neuer Tag bringt",
+    "Cardboard.Refill.description": "Was ein neuer Tag bringt: den vollen Vorrat wie im Spiel oder eine feste Anzahl Bögen. Der Host entscheidet für alle.",
+    "Cardboard.RefillAmount": "Bögen pro Tag",
+    "Cardboard.RefillAmount.description": "So viele Bögen kommen an jedem neuen Tag dazu, wenn oben eine feste Anzahl gewählt ist. Der Vorrat wächst nie über seine Größe hinaus. Der Host entscheidet für alle.",
+    "Messages.Enabled": "Meldungen zur Pappe",
+    "Messages.Enabled.description": "Zeigt nach einer Reparatur, wie viel Pappe übrig ist, und wie viel ein neuer Tag gebracht hat. Nur für dich."
+  },
+  "enum": {
+    "RefillMode.Full": "Voller Vorrat",
+    "RefillMode.Amount": "Feste Anzahl Bögen"
+  },
+  "message": {
+    "left": "Pappe übrig: {0} von {1}",
+    "empty": "Keine Pappe mehr bis morgen",
+    "refilled": "Pappe: {0} von {1}"
+  }
+}

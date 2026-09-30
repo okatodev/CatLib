@@ -1,0 +1,70 @@
+{
+  "mod": {
+    "name": "Réglages du bateau"
+  },
+  "section": {
+    "Layout": "Disposition",
+    "GameVariants": "Dispositions du jeu",
+    "FixedVariant": "Une disposition du jeu",
+    "Height": "Hauteur",
+    "CustomLayouts": "Mes dispositions",
+    "Generated": "Généré",
+    "Mixed": "Mixte",
+    "Saving": "Sauvegarde",
+    "Decoration": "Décoration"
+  },
+  "setting": {
+    "Layout.Mode": "Mode",
+    "Layout.Mode.description": "Comment sont choisis les caisses fixes, paniers et autres obstacles sur le pont du bateau. Les colis qui arrivent avec le bateau ne changent jamais. Les sections ci-dessous ne fonctionnent que dans leur propre mode.",
+    "GameVariants.Allowed": "Dispositions permises",
+    "GameVariants.Allowed.description": "Numéros des variantes de bateau du jeu qui peuvent venir, par exemple 1,2,4. Vide signifie toutes. Chaque variante garde ses propres obstacles et ses propres colis à l'arrivée. Fonctionne en mode « Dispositions du jeu ».",
+    "GameVariants.AvoidRepeats": "Pas de répétition",
+    "GameVariants.AvoidRepeats.description": "La même variante ne vient jamais deux fois de suite. Fonctionne en mode « Dispositions du jeu ».",
+    "FixedVariant.Variant": "N° de disposition",
+    "FixedVariant.Variant.description": "La variante de bateau du jeu qui vient à chaque fois, avec ses propres obstacles et colis à l'arrivée. Si un niveau a moins de variantes, sa dernière est utilisée. Fonctionne en mode « Une disposition du jeu ».",
+    "Height.ApprovedHeightScale": "Hauteur autorisée",
+    "Height.ApprovedHeightScale.description": "Multiplicateur de la hauteur au-dessus de laquelle une pile sur le bateau devient rouge. 1 garde la valeur du jeu.",
+    "Height.MaximumHeightScale": "Hauteur maximale",
+    "Height.MaximumHeightScale.description": "Multiplicateur de la limite absolue de hauteur des piles sur le bateau. La hauteur autorisée ne la dépasse jamais.",
+    "CustomLayouts.Order": "Ordre",
+    "CustomLayouts.Order.description": "Comment vos dispositions sont choisies : au hasard, l'une après l'autre par nom de fichier, ou toujours le même fichier. Fonctionne en modes « Mes dispositions » et « Mixte ».",
+    "CustomLayouts.File": "Fichier",
+    "CustomLayouts.File.description": "Nom du fichier de disposition utilisé quand l'ordre est « Toujours un fichier », par exemple deck_20260925_215809. Fonctionne en mode « Mes dispositions ».",
+    "CustomLayouts.AvoidRepeats": "Pas de répétition",
+    "CustomLayouts.AvoidRepeats.description": "La même disposition personnelle ne vient jamais deux fois de suite quand elle est choisie au hasard.",
+    "Generated.Density": "Densité",
+    "Generated.Density.description": "Part du pont occupée par les obstacles générés. Fonctionne en modes « Généré » et « Mixte ».",
+    "Generated.EdgesOnly": "Seulement près des bords",
+    "Generated.EdgesOnly.description": "Les obstacles générés restent près des bords, comme dans le jeu, et laissent le milieu du pont libre.",
+    "Mixed.GameWeight": "Pont du jeu",
+    "Mixed.GameWeight.description": "Poids de probabilité du pont du jeu en mode « Mixte ».",
+    "Mixed.EmptyWeight": "Pont vide",
+    "Mixed.EmptyWeight.description": "Poids de probabilité d'un pont vide en mode « Mixte ».",
+    "Mixed.CustomWeight": "Mes dispositions",
+    "Mixed.CustomWeight.description": "Poids de probabilité de vos dispositions en mode « Mixte ». Ignoré s'il n'y en a aucune.",
+    "Mixed.GeneratedWeight": "Pont généré",
+    "Mixed.GeneratedWeight.description": "Poids de probabilité d'un pont généré en mode « Mixte ».",
+    "Saving.SaveHotkey": "Enregistrer le pont",
+    "Saving.SaveHotkey.description": "Enregistre le pont du bateau à quai comme disposition personnelle. Les cases des colis arrivés avec ce bateau sont ignorées ; toutes les autres cases occupées sont enregistrées, alors retirez d'abord les colis que vous ne voulez pas y garder.",
+    "Decoration.Enabled": "Décorer les obstacles",
+    "Decoration.Enabled.description": "Des caisses, bouteilles et lanternes sont posées sur les obstacles des ponts personnels et générés. Désactivé, les cases bloquées restent nues. Ne change que ce que vous voyez."
+  },
+  "enum": {
+    "LayoutMode.Game": "Comme dans le jeu",
+    "LayoutMode.Empty": "Vide",
+    "LayoutMode.GameVariants": "Dispositions du jeu",
+    "LayoutMode.FixedVariant": "Une disposition du jeu",
+    "LayoutMode.Custom": "Mes dispositions",
+    "LayoutMode.Generated": "Généré",
+    "LayoutMode.Mixed": "Mixte",
+    "CustomOrder.Random": "Au hasard",
+    "CustomOrder.Sequence": "L'une après l'autre",
+    "CustomOrder.Fixed": "Toujours un fichier"
+  },
+  "message": {
+    "saved": "Pont enregistré : {0}",
+    "noBoat": "Pas de bateau à quai",
+    "noGrid": "Le pont n'est pas encore prêt",
+    "layoutFreed": "Cases libres sous les colis : {0}"
+  }
+}

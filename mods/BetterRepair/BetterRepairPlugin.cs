@@ -27,7 +27,7 @@ public sealed class BetterRepairPlugin : BasePlugin
     {
         var log = CatLogger.From(Log);
         var settings = CatSettings.For(this);
-        var translations = settings.Texts.LoadEmbedded(typeof(BetterRepairPlugin).Assembly, LanguageResourcePrefix);
+        var translations = settings.Texts.Count;
         CatNetwork.Declare(this, SessionPolicy.RequiredOnAll);
 
         _controller = new BetterRepairController(log, settings.Texts);

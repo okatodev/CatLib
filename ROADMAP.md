@@ -11,14 +11,9 @@ What is planned, in rough order. Finished work is removed from here and describe
 - Boat Tweaks: improvements and bug fixes.
 - Late join: joining a game in progress. Builds on patches, mod messages and entity synchronization.
 
-## Mods tab
-
-- Polish of the small details.
-
 ## Localization
 
-- More languages than English and Russian.
-- Conveniences in the localization API where mods need them.
+- The crash window and crash reports in every game language. The crash watcher runs outside the game, so it needs its own copy of the texts.
 
 ## Crash reports
 

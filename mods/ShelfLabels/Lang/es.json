@@ -1,0 +1,38 @@
+{
+  "mod": {
+    "name": "Etiquetas de estantes"
+  },
+  "section": {
+    "Labels": "Etiquetas",
+    "Look": "Aspecto"
+  },
+  "setting": {
+    "Labels.ExtraSlots": "Etiquetas extra",
+    "Labels.ExtraSlots.description": "Cuántas etiquetas extra recibe cada etiqueta de estante, hasta 3. El anfitrión decide por todos. Las imágenes de las etiquetas ocultas se quedan en la partida guardada y vuelven cuando las etiquetas se muestran de nuevo.",
+    "Look.Spacing": "Separación",
+    "Look.Spacing.description": "Separación entre las etiquetas en metros.",
+    "Labels.DefaultPlacement": "Posición",
+    "Labels.DefaultPlacement.description": "Dónde van las etiquetas extra en los estantes sin posición propia. Cada etiqueta de estante puede tener la suya con la tecla de abajo. El anfitrión decide por todos.",
+    "Look.PlacementHotkey": "Cambiar posición",
+    "Look.PlacementHotkey.description": "Mira una etiqueta de estante o una de sus etiquetas extra y pulsa para cambiar: lado más libre, derecha, izquierda, debajo, ninguna. Cualquier jugador puede hacerlo; el anfitrión lo guarda en la partida.",
+    "Labels.HideStands": "Ocultar soportes",
+    "Labels.HideStands.description": "Las etiquetas extra de los estantes sin elección propia se muestran sin el soporte de madera bajo el marco. La etiqueta original del juego siempre lo conserva. El anfitrión decide por todos.",
+    "Look.StandHotkey": "Soporte sí/no",
+    "Look.StandHotkey.description": "Mira una etiqueta de estante o una de sus etiquetas extra y pulsa para mostrar u ocultar el soporte de madera de sus etiquetas extra. Cualquier jugador puede hacerlo; el anfitrión lo guarda en la partida."
+  },
+  "enum": {
+    "Placement.Auto": "Lado más libre",
+    "Placement.Right": "Derecha",
+    "Placement.Left": "Izquierda",
+    "Placement.Below": "Debajo",
+    "Placement.None": "Ninguna"
+  },
+  "message": {
+    "placement": "Etiquetas extra: {0}",
+    "lookAtLabel": "Primero mira una etiqueta",
+    "noHost": "El anfitrión no tiene «Etiquetas de estantes»",
+    "standHidden": "Etiquetas extra: sin soporte",
+    "standShown": "Etiquetas extra: con soporte",
+    "standUnsupported": "No se puede quitar este soporte"
+  }
+}

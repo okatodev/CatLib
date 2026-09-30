@@ -1,0 +1,38 @@
+{
+  "mod": {
+    "name": "Étiquettes d'étagères"
+  },
+  "section": {
+    "Labels": "Étiquettes",
+    "Look": "Apparence"
+  },
+  "setting": {
+    "Labels.ExtraSlots": "Étiquettes en plus",
+    "Labels.ExtraSlots.description": "Combien d'étiquettes en plus reçoit chaque étiquette d'étagère, jusqu'à 3. L'hôte décide pour tout le monde. Les images des étiquettes masquées restent dans la sauvegarde et reviennent quand les étiquettes sont de nouveau affichées.",
+    "Look.Spacing": "Écart",
+    "Look.Spacing.description": "Écart entre les étiquettes, en mètres.",
+    "Labels.DefaultPlacement": "Position",
+    "Labels.DefaultPlacement.description": "Où vont les étiquettes en plus sur les étagères sans position propre. Chaque étiquette d'étagère peut avoir la sienne avec le raccourci ci-dessous. L'hôte décide pour tout le monde.",
+    "Look.PlacementHotkey": "Changer la position",
+    "Look.PlacementHotkey.description": "Regardez une étiquette d'étagère ou l'une de ses étiquettes en plus et appuyez pour changer : côté le plus libre, droite, gauche, dessous, aucune. Tous les joueurs peuvent le faire, l'hôte le garde dans la sauvegarde.",
+    "Labels.HideStands": "Masquer supports",
+    "Labels.HideStands.description": "Les étiquettes en plus des étagères sans choix propre s'affichent sans le support en bois sous le cadre. L'étiquette d'origine du jeu le garde toujours. L'hôte décide pour tout le monde.",
+    "Look.StandHotkey": "Support oui/non",
+    "Look.StandHotkey.description": "Regardez une étiquette d'étagère ou l'une de ses étiquettes en plus et appuyez pour afficher ou masquer le support en bois de ses étiquettes en plus. Tous les joueurs peuvent le faire, l'hôte le garde dans la sauvegarde."
+  },
+  "enum": {
+    "Placement.Auto": "Côté le plus libre",
+    "Placement.Right": "Droite",
+    "Placement.Left": "Gauche",
+    "Placement.Below": "Dessous",
+    "Placement.None": "Aucune"
+  },
+  "message": {
+    "placement": "Étiquettes en plus : {0}",
+    "lookAtLabel": "Regardez d'abord une étiquette",
+    "noHost": "L'hôte n'a pas « Étiquettes d'étagères »",
+    "standHidden": "Étiquettes en plus : sans support",
+    "standShown": "Étiquettes en plus : avec support",
+    "standUnsupported": "Impossible de retirer ce support"
+  }
+}

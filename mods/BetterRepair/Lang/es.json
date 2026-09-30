@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Reparación fácil"
+  },
+  "section": {
+    "Cardboard": "Cartón",
+    "Messages": "Mensajes"
+  },
+  "setting": {
+    "Cardboard.Unlimited": "Cartón ilimitado",
+    "Cardboard.Unlimited.description": "A la mesa de reparación nunca se le acaba el cartón. El anfitrión decide por todos.",
+    "Cardboard.Stock": "Reserva",
+    "Cardboard.Stock.description": "Cuántas hojas de cartón caben en la mesa de reparación. La mesa muestra hasta tres, el resto espera en reserva. 3 es la cantidad del juego. El anfitrión decide por todos.",
+    "Cardboard.Refill": "Cada día trae",
+    "Cardboard.Refill.description": "Qué trae un nuevo día: la reserva llena, como en el juego, o un número fijo de hojas. El anfitrión decide por todos.",
+    "Cardboard.RefillAmount": "Hojas por día",
+    "Cardboard.RefillAmount.description": "Hojas que se añaden cada nuevo día cuando arriba se elige un número fijo. La reserva nunca supera su tamaño. El anfitrión decide por todos.",
+    "Messages.Enabled": "Mensajes de cartón",
+    "Messages.Enabled.description": "Muestra cuánto cartón queda tras una reparación y cuánto trajo un nuevo día. Solo para ti."
+  },
+  "enum": {
+    "RefillMode.Full": "Reserva llena",
+    "RefillMode.Amount": "Un número fijo de hojas"
+  },
+  "message": {
+    "left": "Cartón restante: {0} de {1}",
+    "empty": "Sin cartón hasta mañana",
+    "refilled": "Cartón: {0} de {1}"
+  }
+}

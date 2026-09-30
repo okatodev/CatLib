@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Riparazione facile"
+  },
+  "section": {
+    "Cardboard": "Cartone",
+    "Messages": "Messaggi"
+  },
+  "setting": {
+    "Cardboard.Unlimited": "Cartone infinito",
+    "Cardboard.Unlimited.description": "Il tavolo di riparazione non resta mai senza cartone. L'host decide per tutti.",
+    "Cardboard.Stock": "Scorta",
+    "Cardboard.Stock.description": "Quanti fogli di cartone contiene il tavolo di riparazione. Il tavolo ne mostra fino a tre, il resto aspetta nella scorta. 3 è la quantità del gioco. L'host decide per tutti.",
+    "Cardboard.Refill": "Ogni giorno porta",
+    "Cardboard.Refill.description": "Cosa porta un nuovo giorno: la scorta piena, come nel gioco, o un numero fisso di fogli. L'host decide per tutti.",
+    "Cardboard.RefillAmount": "Fogli al giorno",
+    "Cardboard.RefillAmount.description": "Fogli aggiunti a ogni nuovo giorno quando sopra è scelto un numero fisso. La scorta non supera mai la sua capienza. L'host decide per tutti.",
+    "Messages.Enabled": "Messaggi sul cartone",
+    "Messages.Enabled.description": "Mostra quanto cartone resta dopo una riparazione e quanto ne ha portato un nuovo giorno. Solo per te."
+  },
+  "enum": {
+    "RefillMode.Full": "Scorta piena",
+    "RefillMode.Amount": "Un numero fisso di fogli"
+  },
+  "message": {
+    "left": "Cartone rimasto: {0} su {1}",
+    "empty": "Cartone finito fino a domani",
+    "refilled": "Cartone: {0} su {1}"
+  }
+}

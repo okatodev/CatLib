@@ -32,12 +32,24 @@ Not released yet.
 - `FoldoutList` in `CatLib.UI`: a folding list built from the game's UI pieces, for mods too. See [Folding lists](docs/Foldout.md).
 - `CatNetwork.IncompatiblePlayers` reads and changes what the host does with incompatible players; a change applies to players already in the session.
 - Developer menu of `CatLib.Tests`: Session roster and Lobby dump.
+- Localization: texts in `Lang/*.json` are embedded by the build and loaded by `CatSettings.For` without code.
+  Plural forms by the Unicode rules of each language (`Plural`, `PluralRules`), `LocalText` handles,
+  `CatLanguage.Changed`, `CatLanguage.GameLanguages` and the game's own texts with `CatLanguage.Game(term)`.
+  A translation that cannot be filled in shows English instead of failing.
+- Translation files of players in `BepInEx/config/CatLib/Translations/<mod id>/<language>.json` win over built-in texts.
+  The developer menu writes a translation report, exports texts for translators and reloads the files.
+  `TranslationCheck` finds missing, unknown and broken texts; the log lists them at the main menu. See [Localization](docs/Localization.md).
+- CatLib, Better Repair, Boat Tweaks and Shelf Labels in every language of the game: English, French, Italian, German, Spanish,
+  Brazilian Portuguese, Polish, Simplified and Traditional Chinese, Japanese, Korean, Ukrainian and Russian.
 
 ### Changed
 
 - The scrollbars of the Mods tab are copies of the game's own.
 - A player that stays after a failed check gets the session settings of the mods it shares with the host.
 - Protocol 5: players with CatLib 0.5.0 are told that their CatLib differs.
+- CatLib's own texts live in `src/CatLib/Lang/*.json` (catalog `catlib.core`, keys `ui.*`), so they can be translated and fixed by files like any mod's.
+- Notifications wrap Chinese and Japanese between characters, keep Korean words whole and split at a full-width colon.
+- Mods no longer load their texts themselves and have no `EmbeddedResource` line for `Lang`.
 - Mods in `mods/` follow one folder layout (`Settings`, `Logic`, `Scene`, `Sync`, `Data`, `Patches`),
   with namespaces that follow the folders. See [Writing a mod](docs/WritingMods.md#folders).
 

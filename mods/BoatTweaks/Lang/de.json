@@ -1,0 +1,70 @@
+{
+  "mod": {
+    "name": "Bootsoptionen"
+  },
+  "section": {
+    "Layout": "Deck-Layout",
+    "GameVariants": "Spiel-Layouts",
+    "FixedVariant": "Ein Spiel-Layout",
+    "Height": "Höhe",
+    "CustomLayouts": "Eigene Layouts",
+    "Generated": "Generiert",
+    "Mixed": "Gemischt",
+    "Saving": "Speichern",
+    "Decoration": "Deko"
+  },
+  "setting": {
+    "Layout.Mode": "Modus",
+    "Layout.Mode.description": "Wie die festen Kisten, Körbe und anderen Hindernisse auf dem Bootsdeck gewählt werden. Pakete, die mit dem Boot ankommen, ändern sich nie. Die Abschnitte unten wirken nur in ihrem eigenen Modus.",
+    "GameVariants.Allowed": "Erlaubte Layouts",
+    "GameVariants.Allowed.description": "Nummern der Bootsvarianten aus dem Spiel, die kommen dürfen, zum Beispiel 1,2,4. Leer heißt alle. Jede Variante behält ihre eigenen Hindernisse und ihre eigenen ankommenden Pakete. Wirkt im Modus „Spiel-Layouts“.",
+    "GameVariants.AvoidRepeats": "Keine Wiederholungen",
+    "GameVariants.AvoidRepeats.description": "Dieselbe Variante kommt nie zweimal hintereinander. Wirkt im Modus „Spiel-Layouts“.",
+    "FixedVariant.Variant": "Layout-Nummer",
+    "FixedVariant.Variant.description": "Die Bootsvariante aus dem Spiel, die jedes Mal kommt, mit ihren eigenen Hindernissen und ankommenden Paketen. Hat ein Level weniger Varianten, wird die letzte genommen. Wirkt im Modus „Ein Spiel-Layout“.",
+    "Height.ApprovedHeightScale": "Zulässige Höhe",
+    "Height.ApprovedHeightScale.description": "Multiplikator für die Höhe, ab der ein Stapel auf dem Boot rot wird. 1 behält den Wert aus dem Spiel.",
+    "Height.MaximumHeightScale": "Maximale Höhe",
+    "Height.MaximumHeightScale.description": "Multiplikator für die absolute Höhengrenze von Stapeln auf dem Boot. Die zulässige Höhe liegt nie darüber.",
+    "CustomLayouts.Order": "Reihenfolge",
+    "CustomLayouts.Order.description": "Wie eigene Layouts gewählt werden: zufällig, nacheinander nach Dateiname oder immer eine Datei. Wirkt in den Modi „Eigene Layouts“ und „Gemischt“.",
+    "CustomLayouts.File": "Datei",
+    "CustomLayouts.File.description": "Name der Layout-Datei für die Reihenfolge „Immer eine Datei“, zum Beispiel deck_20260925_215809. Wirkt im Modus „Eigene Layouts“.",
+    "CustomLayouts.AvoidRepeats": "Keine Wiederholungen",
+    "CustomLayouts.AvoidRepeats.description": "Bei zufälliger Wahl kommt dasselbe eigene Layout nie zweimal hintereinander.",
+    "Generated.Density": "Dichte",
+    "Generated.Density.description": "Anteil des Decks, den generierte Hindernisse belegen. Wirkt in den Modi „Generiert“ und „Gemischt“.",
+    "Generated.EdgesOnly": "Nur an der Reling",
+    "Generated.EdgesOnly.description": "Generierte Hindernisse bleiben wie im Spiel an der Reling, die Mitte des Decks bleibt frei.",
+    "Mixed.GameWeight": "Spiel-Deck",
+    "Mixed.GameWeight.description": "Gewichtung des Decks aus dem Spiel im Modus „Gemischt“.",
+    "Mixed.EmptyWeight": "Leeres Deck",
+    "Mixed.EmptyWeight.description": "Gewichtung eines leeren Decks im Modus „Gemischt“.",
+    "Mixed.CustomWeight": "Eigene Layouts",
+    "Mixed.CustomWeight.description": "Gewichtung eigener Layouts im Modus „Gemischt“. Wird ignoriert, wenn es keine gibt.",
+    "Mixed.GeneratedWeight": "Generiertes Deck",
+    "Mixed.GeneratedWeight.description": "Gewichtung eines generierten Decks im Modus „Gemischt“.",
+    "Saving.SaveHotkey": "Deck speichern",
+    "Saving.SaveHotkey.description": "Speichert das Deck des Boots am Steg als eigenes Layout. Felder der Pakete, die mit diesem Boot gekommen sind, werden ausgelassen; jedes andere belegte Feld wird gespeichert, also nimm vorher die Pakete herunter, die nicht dazugehören sollen.",
+    "Decoration.Enabled": "Hindernisse dekorieren",
+    "Decoration.Enabled.description": "Auf die Hindernisse eigener und generierter Decks kommen Kisten, Flaschen und Laternen. Aus lässt die belegten Felder leer. Ändert nur, was du siehst."
+  },
+  "enum": {
+    "LayoutMode.Game": "Wie im Spiel",
+    "LayoutMode.Empty": "Leer",
+    "LayoutMode.GameVariants": "Spiel-Layouts",
+    "LayoutMode.FixedVariant": "Ein Spiel-Layout",
+    "LayoutMode.Custom": "Eigene Layouts",
+    "LayoutMode.Generated": "Generiert",
+    "LayoutMode.Mixed": "Gemischt",
+    "CustomOrder.Random": "Zufällig",
+    "CustomOrder.Sequence": "Nacheinander",
+    "CustomOrder.Fixed": "Immer eine Datei"
+  },
+  "message": {
+    "saved": "Deck gespeichert: {0}",
+    "noBoat": "Kein Boot am Steg zum Speichern",
+    "noGrid": "Bootsdeck noch nicht bereit",
+    "layoutFreed": "Layout-Felder unter Paketen: {0}"
+  }
+}

@@ -1,0 +1,5 @@
+<Project>
+  <ItemGroup Condition="'$(CatLibLang)' != 'false'">
+    <EmbeddedResource Include="$(MSBuildProjectDirectory)\Lang\*.json" LogicalName="$(AssemblyName).Lang.%(Filename).json" />
+  </ItemGroup>
+</Project>

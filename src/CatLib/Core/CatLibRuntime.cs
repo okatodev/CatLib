@@ -32,6 +32,7 @@ public static class CatLibRuntime
         FrameLoop.Initialize();
         ManagerRegistry.Initialize(Log.Scope("Bridge"));
         CatConfig.Initialize(Log.Scope("Config"));
+        CatLib.Localization.TranslationTools.Initialize(Log.Scope("Lang"));
         ModsMenu.Initialize(Log.Scope("UI"));
         Settings = CatSettings.For(plugin);
         CrashWatch.Initialize(Log.Scope("Crash"), Settings);

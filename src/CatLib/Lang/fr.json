@@ -1,0 +1,107 @@
+{
+  "mod": {
+    "name": "CatLib"
+  },
+  "section": {
+    "Diagnostics": "Diagnostic",
+    "Network": "Réseau",
+    "DevTools": "Outils développeur"
+  },
+  "setting": {
+    "Diagnostics.CrashWindow": "Fenêtre de plantage",
+    "Diagnostics.CrashWindow.description": "Quand le jeu se ferme de façon inattendue, une petite fenêtre montre ce qui s'est passé et un rapport avec les journaux est conservé dans BepInEx/CatLib/Crashes.",
+    "Network.Enabled": "Mods en multijoueur",
+    "Network.Enabled.description": "Échanger les listes de mods et les réglages de session avec les autres joueurs qui utilisent CatLib. Prend effet à la prochaine session.",
+    "Network.OnIncompatiblePlayer": "Joueurs avec d'autres mods",
+    "Network.OnIncompatiblePlayer.description": "Ce que fait l'hôte quand les mods d'un joueur qui rejoint ne correspondent pas : le laisser entrer et mettre en pause les mods que tout le monde n'a pas, ou le déconnecter.",
+    "Network.SteamApi": "Connexion à Steam",
+    "Network.SteamApi.description": "Comment CatLib communique avec Steam. À ne changer que si on vous le demande pour diagnostiquer un problème. Prend effet à la prochaine session.",
+    "DevTools.MenuHotkey": "Touche menu développeur",
+    "DevTools.MenuHotkey.description": "Ouvre le menu développeur quand un mod y a ajouté des commandes, par exemple CatLib.Tests."
+  },
+  "enum": {
+    "IncompatiblePlayerAction.Warn": "Accepter, mods en pause",
+    "IncompatiblePlayerAction.Disconnect": "Déconnecter",
+    "SteamApiBackend.Interop": "Interop",
+    "SteamApiBackend.Flat": "Flat"
+  },
+  "ui": {
+    "ModsTab": "Mods",
+    "ModsList": "Mods",
+    "SelectMod": "Choisissez un mod",
+    "RestartSuffix": "(redémarrage)",
+    "HostSuffix": "(hôte)",
+    "HostValue": "Réglé par l'hôte, le vôtre : {0}",
+    "NoDescription": "Aucune description",
+    "DefaultValue": "Par défaut : {0}",
+    "Range": "Plage : de {0} à {1}",
+    "Options": "Options : {0}",
+    "AppliesAfterRestart": "S'applique après un redémarrage",
+    "AfterRestart": "Après redémarrage : {0}",
+    "HoverHint": "Survolez un réglage pour voir sa description",
+    "On": "Oui",
+    "Off": "Non",
+    "Version": "v{0}",
+    "MessageRestart": "{0} : {1} change au redémarrage",
+    "MessageRejected": "{0} : « {2} » invalide pour {1}",
+    "MessageAdjusted": "{0} : {1} = {3} au lieu de « {2} »",
+    "MessageReset": "{0} : réglages par défaut rétablis",
+    "NetPlayerIncompatible": "{0} : mods incompatibles, {1}",
+    "NetPlayerDisconnected": "Déconnexion de {0} : {1}",
+    "NetPlayerDisconnectedBrief": "Déconnexion de {0} : {1}",
+    "NetPlayerIncompatibleBrief": "{0} a d'autres mods : {1}",
+    "NetYouWillBeDisconnected": "L'hôte va vous déconnecter : {0}",
+    "NetCardOtherMods": "autres mods",
+    "NetHostIncompatible": "Mods différents de l'hôte : {0}",
+    "NetHostWithoutCatLib": "Hôte sans CatLib, peut-être inactifs : {0}",
+    "ProblemProtocol": "version de CatLib",
+    "ProblemGame": "version du jeu",
+    "ProblemMissingOnClient": "{0} absent chez le client",
+    "ProblemMissingOnHost": "{0} absent chez l'hôte",
+    "ProblemVersion": "{0} {1} contre {2}",
+    "LobbyModsTitle": "Mods des joueurs",
+    "LobbyAllMatch": "{0} · tout concorde",
+    "LobbyPaused": "{0} · en pause : {1}",
+    "LobbyHost": "hôte",
+    "LobbyYou": "vous",
+    "RosterChecking": "vérification…",
+    "RosterCompatible": "tout concorde",
+    "RosterLimited": "autres mods",
+    "RosterWithoutCatLib": "sans CatLib",
+    "RosterLeaving": "à déconnecter",
+    "MarkWorks": "fonctionne",
+    "MarkPaused": "en pause",
+    "MarkMissing": "absent · l'hôte a {0}",
+    "MarkOtherVersion": "l'hôte a {0}",
+    "MarkNotOnHost": "absent chez l'hôte · en pause",
+    "MarkLocal": "ici seulement",
+    "RowGameVersion": "Version du jeu",
+    "RowHostHas": "l'hôte a {0}",
+    "RowCatLib": "CatLib",
+    "RowCatLibOther": "autre version, mettez CatLib à jour",
+    "RowNoMods": "aucun mod",
+    "PolicyTitle": "Joueurs avec d'autres mods",
+    "PolicyWarn": "accepter, mods en pause",
+    "PolicyDisconnect": "déconnecter",
+    "BadgePaused": "en pause dans cette partie",
+    "BadgeRestart": "redémarrage requis",
+    "BadgeHost": "réglé par l'hôte",
+    "CardAuthor": "par {0}",
+    "SettingsCount": {
+      "one": "{0} réglage",
+      "other": "{0} réglages"
+    },
+    "PendingRestart": {
+      "one": "{0} en attente de redémarrage",
+      "other": "{0} en attente de redémarrage"
+    },
+    "LobbyPlayers": {
+      "one": "{0} joueur",
+      "other": "{0} joueurs"
+    },
+    "LobbyMods": {
+      "one": "{0} mod",
+      "other": "{0} mods"
+    }
+  }
+}

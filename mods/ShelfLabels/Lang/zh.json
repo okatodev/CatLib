@@ -1,0 +1,38 @@
+{
+  "mod": {
+    "name": "货架标签"
+  },
+  "section": {
+    "Labels": "标签",
+    "Look": "外观"
+  },
+  "setting": {
+    "Labels.ExtraSlots": "额外标签",
+    "Labels.ExtraSlots.description": "每个货架标签额外增加几个标签，最多 3 个。由房主为所有人决定。被隐藏的标签的图案会保留在存档中，重新显示时就会回来。",
+    "Look.Spacing": "间距",
+    "Look.Spacing.description": "标签之间的间距（米）。",
+    "Labels.DefaultPlacement": "位置",
+    "Labels.DefaultPlacement.description": "在没有单独设置位置的货架上，额外标签放在哪里。每个货架标签都可以用下方的快捷键单独设置。由房主为所有人决定。",
+    "Look.PlacementHotkey": "切换位置",
+    "Look.PlacementHotkey.description": "看向货架标签或它的额外标签并按下此键即可切换：较空的一侧、右侧、左侧、下方、无额外标签。所有玩家都能操作，房主会把它保存在存档中。",
+    "Labels.HideStands": "隐藏支架",
+    "Labels.HideStands.description": "在没有单独设置的货架上，额外标签不显示画框下方的木支架。游戏原有的标签始终保留支架。由房主为所有人决定。",
+    "Look.StandHotkey": "支架开关",
+    "Look.StandHotkey.description": "看向货架标签或它的额外标签并按下此键，即可显示或隐藏其额外标签的木支架。所有玩家都能操作，房主会把它保存在存档中。"
+  },
+  "enum": {
+    "Placement.Auto": "侧边，较空一侧",
+    "Placement.Right": "右侧",
+    "Placement.Left": "左侧",
+    "Placement.Below": "下方",
+    "Placement.None": "无额外标签"
+  },
+  "message": {
+    "placement": "额外标签：{0}",
+    "lookAtLabel": "请先看向一个货架标签",
+    "noHost": "房主没有安装“货架标签”",
+    "standHidden": "额外标签：无支架",
+    "standShown": "额外标签：有支架",
+    "standUnsupported": "这个标签的支架无法移除"
+  }
+}

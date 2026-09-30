@@ -1,0 +1,103 @@
+{
+  "mod": {
+    "name": "CatLib"
+  },
+  "section": {
+    "Diagnostics": "诊断",
+    "Network": "网络",
+    "DevTools": "开发者工具"
+  },
+  "setting": {
+    "Diagnostics.CrashWindow": "崩溃窗口",
+    "Diagnostics.CrashWindow.description": "游戏意外关闭时，会弹出一个小窗口说明发生了什么，并把附带日志的报告保存到 BepInEx/CatLib/Crashes。",
+    "Network.Enabled": "联机模组",
+    "Network.Enabled.description": "与其他使用 CatLib 的玩家交换模组列表和本局设置。从下一局起生效。",
+    "Network.OnIncompatiblePlayer": "模组不同的玩家",
+    "Network.OnIncompatiblePlayer.description": "加入的玩家模组不一致时，房主如何处理：让玩家加入并暂停并非所有人都有的模组，或者断开该玩家的连接。",
+    "Network.SteamApi": "Steam 连接",
+    "Network.SteamApi.description": "CatLib 调用 Steam 的方式。只有在排查问题时被要求更改才需要修改。从下一局起生效。",
+    "DevTools.MenuHotkey": "开发者菜单按键",
+    "DevTools.MenuHotkey.description": "当有模组注册了开发者命令（例如 CatLib.Tests）时，打开开发者菜单。"
+  },
+  "enum": {
+    "IncompatiblePlayerAction.Warn": "允许加入，暂停模组",
+    "IncompatiblePlayerAction.Disconnect": "断开连接",
+    "SteamApiBackend.Interop": "Interop",
+    "SteamApiBackend.Flat": "Flat"
+  },
+  "ui": {
+    "ModsTab": "模组",
+    "ModsList": "模组",
+    "SelectMod": "选择模组",
+    "RestartSuffix": "（需重启）",
+    "HostSuffix": "（房主）",
+    "HostValue": "由房主设定，你的：{0}",
+    "NoDescription": "暂无说明",
+    "DefaultValue": "默认：{0}",
+    "Range": "范围：{0} 至 {1}",
+    "Options": "选项：{0}",
+    "AppliesAfterRestart": "重启后生效",
+    "AfterRestart": "重启后：{0}",
+    "HoverHint": "指向设置项即可查看说明",
+    "On": "开",
+    "Off": "关",
+    "Version": "v{0}",
+    "MessageRestart": "{0}：“{1}”重启后生效",
+    "MessageRejected": "{0}：“{2}”不是“{1}”的有效值",
+    "MessageAdjusted": "{0}：“{1}”已设为 {3}，而非“{2}”",
+    "MessageReset": "{0}：设置已恢复默认",
+    "NetPlayerIncompatible": "{0}：模组不兼容，{1}",
+    "NetPlayerDisconnected": "{0} 已被断开连接：{1}",
+    "NetPlayerDisconnectedBrief": "{0} 已被断开连接：{1}",
+    "NetPlayerIncompatibleBrief": "{0} 的模组不同：{1}",
+    "NetYouWillBeDisconnected": "房主将断开你的连接：{0}",
+    "NetCardOtherMods": "模组不同",
+    "NetHostIncompatible": "模组与房主不一致：{0}",
+    "NetHostWithoutCatLib": "房主没有 CatLib，这些可能无法运行：{0}",
+    "ProblemProtocol": "CatLib 版本",
+    "ProblemGame": "游戏版本",
+    "ProblemMissingOnClient": "客户端缺少 {0}",
+    "ProblemMissingOnHost": "房主缺少 {0}",
+    "ProblemVersion": "{0} {1} vs {2}",
+    "LobbyModsTitle": "玩家模组",
+    "LobbyAllMatch": "{0} · 全部一致",
+    "LobbyPaused": "{0} · 已暂停：{1}",
+    "LobbyHost": "房主",
+    "LobbyYou": "你",
+    "RosterChecking": "检查中…",
+    "RosterCompatible": "全部一致",
+    "RosterLimited": "模组不同",
+    "RosterWithoutCatLib": "无 CatLib",
+    "RosterLeaving": "将被断开",
+    "MarkWorks": "正常",
+    "MarkPaused": "已暂停",
+    "MarkMissing": "未安装 · 房主：{0}",
+    "MarkOtherVersion": "房主：{0}",
+    "MarkNotOnHost": "房主没有 · 已暂停",
+    "MarkLocal": "仅本地",
+    "RowGameVersion": "游戏版本",
+    "RowHostHas": "房主：{0}",
+    "RowCatLib": "CatLib",
+    "RowCatLibOther": "版本不同，请更新 CatLib",
+    "RowNoMods": "无模组",
+    "PolicyTitle": "模组不同的玩家",
+    "PolicyWarn": "允许加入，暂停模组",
+    "PolicyDisconnect": "断开连接",
+    "BadgePaused": "本局已暂停",
+    "BadgeRestart": "需要重启",
+    "BadgeHost": "房主设定",
+    "CardAuthor": "作者：{0}",
+    "SettingsCount": {
+      "other": "{0} 项设置"
+    },
+    "PendingRestart": {
+      "other": "{0} 项待重启"
+    },
+    "LobbyPlayers": {
+      "other": "{0} 名玩家"
+    },
+    "LobbyMods": {
+      "other": "{0} 个模组"
+    }
+  }
+}

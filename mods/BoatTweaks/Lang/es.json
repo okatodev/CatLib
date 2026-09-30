@@ -1,0 +1,70 @@
+{
+  "mod": {
+    "name": "Ajustes del barco"
+  },
+  "section": {
+    "Layout": "Diseño",
+    "GameVariants": "Diseños del juego",
+    "FixedVariant": "Un diseño del juego",
+    "Height": "Altura",
+    "CustomLayouts": "Diseños propios",
+    "Generated": "Generado",
+    "Mixed": "Mixto",
+    "Saving": "Guardado",
+    "Decoration": "Decoración"
+  },
+  "setting": {
+    "Layout.Mode": "Modo",
+    "Layout.Mode.description": "Cómo se eligen las cajas fijas, cestas y demás obstáculos de la cubierta del barco. Los paquetes que llegan con el barco nunca cambian. Las secciones de abajo solo funcionan en su propio modo.",
+    "GameVariants.Allowed": "Diseños permitidos",
+    "GameVariants.Allowed.description": "Números de las variantes de barco del juego que pueden llegar, por ejemplo 1,2,4. Vacío significa todas. Cada variante mantiene sus propios obstáculos y sus propios paquetes de llegada. Funciona en el modo «Diseños del juego».",
+    "GameVariants.AvoidRepeats": "Sin repetir seguidos",
+    "GameVariants.AvoidRepeats.description": "La misma variante nunca llega dos veces seguidas. Funciona en el modo «Diseños del juego».",
+    "FixedVariant.Variant": "Número de diseño",
+    "FixedVariant.Variant.description": "La variante de barco del juego que llega siempre, con sus propios obstáculos y paquetes de llegada. Si un nivel tiene menos variantes, se usa la última. Funciona en el modo «Un diseño del juego».",
+    "Height.ApprovedHeightScale": "Altura permitida",
+    "Height.ApprovedHeightScale.description": "Multiplicador de la altura a partir de la cual una pila en el barco se vuelve roja. 1 mantiene el valor del juego.",
+    "Height.MaximumHeightScale": "Altura máxima",
+    "Height.MaximumHeightScale.description": "Multiplicador del límite absoluto de altura de las pilas en el barco. La altura permitida nunca lo supera.",
+    "CustomLayouts.Order": "Orden",
+    "CustomLayouts.Order.description": "Cómo se eligen los diseños propios: al azar, uno tras otro por nombre de archivo, o siempre el mismo archivo. Funciona en los modos «Diseños propios» y «Mixto».",
+    "CustomLayouts.File": "Archivo",
+    "CustomLayouts.File.description": "Nombre del archivo de diseño usado cuando el orden es «Siempre un archivo», por ejemplo deck_20260925_215809. Funciona en el modo «Diseños propios».",
+    "CustomLayouts.AvoidRepeats": "Sin repetir seguidos",
+    "CustomLayouts.AvoidRepeats.description": "El mismo diseño propio nunca llega dos veces seguidas cuando se elige al azar.",
+    "Generated.Density": "Densidad",
+    "Generated.Density.description": "Parte de la cubierta ocupada por obstáculos generados. Funciona en los modos «Generado» y «Mixto».",
+    "Generated.EdgesOnly": "Solo junto a los bordes",
+    "Generated.EdgesOnly.description": "Los obstáculos generados se quedan junto a los bordes, como en el juego, y dejan libre el centro de la cubierta.",
+    "Mixed.GameWeight": "Cubierta del juego",
+    "Mixed.GameWeight.description": "Peso de probabilidad de la cubierta del juego en el modo «Mixto».",
+    "Mixed.EmptyWeight": "Cubierta vacía",
+    "Mixed.EmptyWeight.description": "Peso de probabilidad de una cubierta vacía en el modo «Mixto».",
+    "Mixed.CustomWeight": "Diseños propios",
+    "Mixed.CustomWeight.description": "Peso de probabilidad de los diseños propios en el modo «Mixto». Se ignora si no hay ninguno.",
+    "Mixed.GeneratedWeight": "Cubierta generada",
+    "Mixed.GeneratedWeight.description": "Peso de probabilidad de una cubierta generada en el modo «Mixto».",
+    "Saving.SaveHotkey": "Guardar la cubierta",
+    "Saving.SaveHotkey.description": "Guarda la cubierta del barco del muelle como diseño propio. Las casillas de los paquetes que llegaron con este barco se excluyen; se guardan todas las demás casillas ocupadas, así que quita antes los paquetes que no quieras incluir.",
+    "Decoration.Enabled": "Decorar obstáculos",
+    "Decoration.Enabled.description": "Se colocan cajas, botellas y faroles sobre los obstáculos de las cubiertas propias y generadas. Desactivado, las casillas bloqueadas quedan desnudas. Solo cambia lo que ves tú."
+  },
+  "enum": {
+    "LayoutMode.Game": "Como en el juego",
+    "LayoutMode.Empty": "Vacío",
+    "LayoutMode.GameVariants": "Diseños del juego",
+    "LayoutMode.FixedVariant": "Un diseño del juego",
+    "LayoutMode.Custom": "Diseños propios",
+    "LayoutMode.Generated": "Generado",
+    "LayoutMode.Mixed": "Mixto",
+    "CustomOrder.Random": "Al azar",
+    "CustomOrder.Sequence": "Uno tras otro",
+    "CustomOrder.Fixed": "Siempre un archivo"
+  },
+  "message": {
+    "saved": "Cubierta guardada: {0}",
+    "noBoat": "No hay barco en el muelle",
+    "noGrid": "La cubierta aún no está lista",
+    "layoutFreed": "Casillas libres bajo los paquetes: {0}"
+  }
+}

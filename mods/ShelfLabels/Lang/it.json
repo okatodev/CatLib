@@ -1,0 +1,38 @@
+{
+  "mod": {
+    "name": "Etichette per scaffali"
+  },
+  "section": {
+    "Labels": "Etichette",
+    "Look": "Aspetto"
+  },
+  "setting": {
+    "Labels.ExtraSlots": "Etichette extra",
+    "Labels.ExtraSlots.description": "Quante etichette extra riceve ogni etichetta di scaffale, fino a 3. L'host decide per tutti. Le immagini delle etichette nascoste restano nel salvataggio e tornano quando le etichette vengono mostrate di nuovo.",
+    "Look.Spacing": "Distanza",
+    "Look.Spacing.description": "Distanza tra le etichette in metri.",
+    "Labels.DefaultPlacement": "Posizione",
+    "Labels.DefaultPlacement.description": "Dove vanno le etichette extra sugli scaffali senza una posizione propria. Ogni etichetta di scaffale può averne una propria con il tasto qui sotto. L'host decide per tutti.",
+    "Look.PlacementHotkey": "Cambia posizione",
+    "Look.PlacementHotkey.description": "Guarda un'etichetta di scaffale o una sua etichetta extra e premi per cambiare: lato più libero, destra, sinistra, sotto, nessuna. Può farlo ogni giocatore, l'host lo conserva nel salvataggio.",
+    "Labels.HideStands": "Nascondi supporti",
+    "Labels.HideStands.description": "Le etichette extra sugli scaffali senza una scelta propria appaiono senza il supporto di legno sotto la cornice. L'etichetta originale del gioco lo mantiene sempre. L'host decide per tutti.",
+    "Look.StandHotkey": "Supporto sì/no",
+    "Look.StandHotkey.description": "Guarda un'etichetta di scaffale o una sua etichetta extra e premi per mostrare o nascondere il supporto di legno delle sue etichette extra. Può farlo ogni giocatore, l'host lo conserva nel salvataggio."
+  },
+  "enum": {
+    "Placement.Auto": "Lato più libero",
+    "Placement.Right": "Destra",
+    "Placement.Left": "Sinistra",
+    "Placement.Below": "Sotto",
+    "Placement.None": "Nessuna"
+  },
+  "message": {
+    "placement": "Etichette extra: {0}",
+    "lookAtLabel": "Prima guarda un'etichetta",
+    "noHost": "L'host non ha «Etichette per scaffali»",
+    "standHidden": "Etichette extra: senza supporto",
+    "standShown": "Etichette extra: con supporto",
+    "standUnsupported": "Impossibile togliere questo supporto"
+  }
+}

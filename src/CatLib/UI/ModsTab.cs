@@ -12,6 +12,7 @@ internal sealed class ModsTab
     private readonly Il2CppEventBindings _bindings;
     private readonly CatLogger _log;
     private string _languageCode;
+    private int _textsRevision = CatLib.Localization.CatLocalization.Revision;
     private int _visibilityCheckCountdown;
 
     public ModsTab(
@@ -79,9 +80,11 @@ internal sealed class ModsTab
         }
 
         var languageCode = UiText.LanguageCode;
-        if (languageCode != _languageCode)
+        var revision = CatLib.Localization.CatLocalization.Revision;
+        if (languageCode != _languageCode || revision != _textsRevision)
         {
             _languageCode = languageCode;
+            _textsRevision = revision;
             ApplyTexts();
             Controller.RefreshList(true);
             Fitter.Invalidate();

@@ -1,0 +1,103 @@
+{
+  "mod": {
+    "name": "CatLib"
+  },
+  "section": {
+    "Diagnostics": "진단",
+    "Network": "네트워크",
+    "DevTools": "개발자 도구"
+  },
+  "setting": {
+    "Diagnostics.CrashWindow": "크래시 창",
+    "Diagnostics.CrashWindow.description": "게임이 예기치 않게 종료되면 작은 창에 무슨 일이 있었는지 보여 주고, 로그가 담긴 보고서를 BepInEx/CatLib/Crashes에 보관해요.",
+    "Network.Enabled": "멀티플레이 모드",
+    "Network.Enabled.description": "CatLib을 쓰는 다른 플레이어와 모드 목록과 세션 설정을 주고받아요. 다음 세션부터 적용돼요.",
+    "Network.OnIncompatiblePlayer": "모드가 다른 플레이어",
+    "Network.OnIncompatiblePlayer.description": "참가하는 플레이어의 모드가 맞지 않을 때 호스트가 할 일이에요. 플레이어를 들여보내고 모두에게 있지 않은 모드를 일시 정지하거나, 플레이어의 연결을 끊어요.",
+    "Network.SteamApi": "Steam 연결",
+    "Network.SteamApi.description": "CatLib이 Steam을 호출하는 방식이에요. 문제를 진단하면서 요청받았을 때만 바꾸세요. 다음 세션부터 적용돼요.",
+    "DevTools.MenuHotkey": "개발자 메뉴 키",
+    "DevTools.MenuHotkey.description": "모드가 개발자 명령을 등록했을 때 개발자 메뉴를 열어요. 예: CatLib.Tests."
+  },
+  "enum": {
+    "IncompatiblePlayerAction.Warn": "입장 허용, 모드 정지",
+    "IncompatiblePlayerAction.Disconnect": "연결 끊기",
+    "SteamApiBackend.Interop": "Interop",
+    "SteamApiBackend.Flat": "Flat"
+  },
+  "ui": {
+    "ModsTab": "모드",
+    "ModsList": "모드",
+    "SelectMod": "모드를 선택하세요",
+    "RestartSuffix": "(재시작)",
+    "HostSuffix": "(호스트)",
+    "HostValue": "호스트 설정, 내 값: {0}",
+    "NoDescription": "설명 없음",
+    "DefaultValue": "기본값: {0}",
+    "Range": "범위: {0}~{1}",
+    "Options": "선택지: {0}",
+    "AppliesAfterRestart": "재시작 후 적용",
+    "AfterRestart": "재시작 후: {0}",
+    "HoverHint": "설정을 가리키면 설명이 보여요",
+    "On": "켜짐",
+    "Off": "꺼짐",
+    "Version": "v{0}",
+    "MessageRestart": "{0}: '{1}' 재시작 후 적용",
+    "MessageRejected": "{0}: '{2}'은(는) '{1}'에 쓸 수 없어요",
+    "MessageAdjusted": "{0}: '{1}' = {3} ('{2}' 대신)",
+    "MessageReset": "{0}: 설정을 기본값으로 초기화",
+    "NetPlayerIncompatible": "{0}: 호환되지 않는 모드, {1}",
+    "NetPlayerDisconnected": "{0} 연결 끊김: {1}",
+    "NetPlayerDisconnectedBrief": "{0} 연결 끊김: {1}",
+    "NetPlayerIncompatibleBrief": "{0}의 모드가 달라요: {1}",
+    "NetYouWillBeDisconnected": "호스트가 연결을 끊어요: {0}",
+    "NetCardOtherMods": "다른 모드",
+    "NetHostIncompatible": "호스트와 모드가 달라요: {0}",
+    "NetHostWithoutCatLib": "호스트에 CatLib이 없어 작동 안 할 수 있음: {0}",
+    "ProblemProtocol": "CatLib 버전",
+    "ProblemGame": "게임 버전",
+    "ProblemMissingOnClient": "클라이언트에 {0} 없음",
+    "ProblemMissingOnHost": "호스트에 {0} 없음",
+    "ProblemVersion": "{0} {1} vs {2}",
+    "LobbyModsTitle": "플레이어 모드",
+    "LobbyAllMatch": "{0} · 모두 일치",
+    "LobbyPaused": "{0} · 일시 정지: {1}",
+    "LobbyHost": "호스트",
+    "LobbyYou": "나",
+    "RosterChecking": "확인 중…",
+    "RosterCompatible": "모두 일치",
+    "RosterLimited": "다른 모드",
+    "RosterWithoutCatLib": "CatLib 없음",
+    "RosterLeaving": "연결 끊길 예정",
+    "MarkWorks": "작동",
+    "MarkPaused": "일시 정지",
+    "MarkMissing": "없음 · 호스트: {0}",
+    "MarkOtherVersion": "호스트: {0}",
+    "MarkNotOnHost": "호스트에 없음 · 일시 정지",
+    "MarkLocal": "나에게만",
+    "RowGameVersion": "게임 버전",
+    "RowHostHas": "호스트: {0}",
+    "RowCatLib": "CatLib",
+    "RowCatLibOther": "다른 버전, CatLib을 업데이트하세요",
+    "RowNoMods": "모드 없음",
+    "PolicyTitle": "모드가 다른 플레이어",
+    "PolicyWarn": "입장 허용, 모드 정지",
+    "PolicyDisconnect": "연결 끊기",
+    "BadgePaused": "이번 게임에서 일시 정지",
+    "BadgeRestart": "재시작 필요",
+    "BadgeHost": "호스트 설정",
+    "CardAuthor": "제작: {0}",
+    "SettingsCount": {
+      "other": "설정 {0}개"
+    },
+    "PendingRestart": {
+      "other": "{0}개 재시작 대기"
+    },
+    "LobbyPlayers": {
+      "other": "플레이어 {0}명"
+    },
+    "LobbyMods": {
+      "other": "모드 {0}개"
+    }
+  }
+}

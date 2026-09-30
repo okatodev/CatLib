@@ -1,0 +1,103 @@
+{
+  "mod": {
+    "name": "CatLib"
+  },
+  "section": {
+    "Diagnostics": "診断",
+    "Network": "ネットワーク",
+    "DevTools": "開発者ツール"
+  },
+  "setting": {
+    "Diagnostics.CrashWindow": "クラッシュ画面",
+    "Diagnostics.CrashWindow.description": "ゲームが予期せず終了したとき、何が起きたかを小さなウィンドウで表示し、ログ付きのレポートを BepInEx/CatLib/Crashes に保存します。",
+    "Network.Enabled": "マルチプレイのMOD",
+    "Network.Enabled.description": "CatLib を使っている他のプレイヤーと、MODの一覧やセッションの設定をやり取りします。次のセッションから反映されます。",
+    "Network.OnIncompatiblePlayer": "MODが違うプレイヤー",
+    "Network.OnIncompatiblePlayer.description": "参加するプレイヤーのMODが一致しないときのホストの対応です。参加させて全員がそろっていないMODを一時停止するか、そのプレイヤーを切断します。",
+    "Network.SteamApi": "Steam接続",
+    "Network.SteamApi.description": "CatLib が Steam を呼び出す方法です。問題の調査で頼まれたときだけ変更してください。次のセッションから反映されます。",
+    "DevTools.MenuHotkey": "開発者メニューのキー",
+    "DevTools.MenuHotkey.description": "MODが開発者コマンドを登録しているとき（例：CatLib.Tests）、開発者メニューを開きます。"
+  },
+  "enum": {
+    "IncompatiblePlayerAction.Warn": "参加可、MODを一時停止",
+    "IncompatiblePlayerAction.Disconnect": "切断",
+    "SteamApiBackend.Interop": "Interop",
+    "SteamApiBackend.Flat": "Flat"
+  },
+  "ui": {
+    "ModsTab": "MOD",
+    "ModsList": "MOD",
+    "SelectMod": "MODを選択",
+    "RestartSuffix": "（再起動）",
+    "HostSuffix": "（ホスト）",
+    "HostValue": "ホストが設定、自分：{0}",
+    "NoDescription": "説明なし",
+    "DefaultValue": "初期値：{0}",
+    "Range": "範囲：{0}～{1}",
+    "Options": "選択肢：{0}",
+    "AppliesAfterRestart": "再起動後に反映",
+    "AfterRestart": "再起動後：{0}",
+    "HoverHint": "設定にカーソルを合わせると説明を表示",
+    "On": "オン",
+    "Off": "オフ",
+    "Version": "v{0}",
+    "MessageRestart": "{0}：「{1}」は再起動後に反映",
+    "MessageRejected": "{0}：「{2}」は「{1}」に使えない値です",
+    "MessageAdjusted": "{0}：「{1}」を「{2}」ではなく {3} に設定",
+    "MessageReset": "{0}：設定を初期値に戻しました",
+    "NetPlayerIncompatible": "{0}：MODの互換性なし、{1}",
+    "NetPlayerDisconnected": "{0} は切断されました：{1}",
+    "NetPlayerDisconnectedBrief": "{0} は切断されました：{1}",
+    "NetPlayerIncompatibleBrief": "{0} のMODが違います：{1}",
+    "NetYouWillBeDisconnected": "ホストから切断されます：{0}",
+    "NetCardOtherMods": "MODが違う",
+    "NetHostIncompatible": "MODがホストと一致しません：{0}",
+    "NetHostWithoutCatLib": "ホストに CatLib がなく、動かない可能性あり：{0}",
+    "ProblemProtocol": "CatLibのバージョン",
+    "ProblemGame": "ゲームのバージョン",
+    "ProblemMissingOnClient": "クライアントに {0} がない",
+    "ProblemMissingOnHost": "ホストに {0} がない",
+    "ProblemVersion": "{0} {1} vs {2}",
+    "LobbyModsTitle": "プレイヤーのMOD",
+    "LobbyAllMatch": "{0} · すべて一致",
+    "LobbyPaused": "{0} · 一時停止：{1}",
+    "LobbyHost": "ホスト",
+    "LobbyYou": "自分",
+    "RosterChecking": "確認中…",
+    "RosterCompatible": "すべて一致",
+    "RosterLimited": "MODが違う",
+    "RosterWithoutCatLib": "CatLibなし",
+    "RosterLeaving": "切断予定",
+    "MarkWorks": "動作中",
+    "MarkPaused": "一時停止中",
+    "MarkMissing": "なし · ホスト：{0}",
+    "MarkOtherVersion": "ホスト：{0}",
+    "MarkNotOnHost": "ホストになし · 一時停止",
+    "MarkLocal": "自分のみ",
+    "RowGameVersion": "ゲームのバージョン",
+    "RowHostHas": "ホスト：{0}",
+    "RowCatLib": "CatLib",
+    "RowCatLibOther": "別バージョン、CatLibを更新してください",
+    "RowNoMods": "MODなし",
+    "PolicyTitle": "MODが違うプレイヤー",
+    "PolicyWarn": "参加可、MODを一時停止",
+    "PolicyDisconnect": "切断",
+    "BadgePaused": "このセッションで一時停止",
+    "BadgeRestart": "再起動が必要",
+    "BadgeHost": "ホストが設定",
+    "CardAuthor": "作者：{0}",
+    "SettingsCount": {
+      "other": "{0} 件の設定"
+    },
+    "PendingRestart": {
+      "other": "{0} 件が再起動待ち"
+    },
+    "LobbyPlayers": {
+      "other": "{0} 人"
+    },
+    "LobbyMods": {
+      "other": "MOD {0} 個"
+    }
+  }
+}

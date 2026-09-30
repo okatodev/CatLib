@@ -1,0 +1,111 @@
+{
+  "mod": {
+    "name": "CatLib"
+  },
+  "section": {
+    "Diagnostics": "Diagnostyka",
+    "Network": "Sieć",
+    "DevTools": "Dla deweloperów"
+  },
+  "setting": {
+    "Diagnostics.CrashWindow": "Okno awarii",
+    "Diagnostics.CrashWindow.description": "Gdy gra niespodziewanie się zamknie, małe okno pokaże, co się stało, a raport z logami zostanie zachowany w BepInEx/CatLib/Crashes.",
+    "Network.Enabled": "Mody w multiplayerze",
+    "Network.Enabled.description": "Wymiana list modów i ustawień sesji z innymi graczami, którzy używają CatLib. Działa od następnej sesji.",
+    "Network.OnIncompatiblePlayer": "Gracze z innymi modami",
+    "Network.OnIncompatiblePlayer.description": "Co robi host, gdy mody dołączającego gracza się nie zgadzają: wpuścić gracza i wstrzymać mody, których nie mają wszyscy, albo rozłączyć gracza.",
+    "Network.SteamApi": "Połączenie ze Steam",
+    "Network.SteamApi.description": "Jak CatLib komunikuje się ze Steam. Zmieniaj tylko wtedy, gdy ktoś o to poprosi przy szukaniu problemu. Działa od następnej sesji.",
+    "DevTools.MenuHotkey": "Klawisz menu dewelopera",
+    "DevTools.MenuHotkey.description": "Otwiera menu dewelopera, gdy jakiś mod zarejestrował polecenia deweloperskie, na przykład CatLib.Tests."
+  },
+  "enum": {
+    "IncompatiblePlayerAction.Warn": "Wpuścić, wstrzymać mody",
+    "IncompatiblePlayerAction.Disconnect": "Rozłączyć",
+    "SteamApiBackend.Interop": "Interop",
+    "SteamApiBackend.Flat": "Flat"
+  },
+  "ui": {
+    "ModsTab": "Mody",
+    "ModsList": "Mody",
+    "SelectMod": "Wybierz mod",
+    "RestartSuffix": "(restart)",
+    "HostSuffix": "(host)",
+    "HostValue": "Ustawia host, twoje: {0}",
+    "NoDescription": "Brak opisu",
+    "DefaultValue": "Domyślnie: {0}",
+    "Range": "Zakres: od {0} do {1}",
+    "Options": "Opcje: {0}",
+    "AppliesAfterRestart": "Działa po restarcie",
+    "AfterRestart": "Po restarcie: {0}",
+    "HoverHint": "Najedź na ustawienie, aby zobaczyć opis",
+    "On": "Wł.",
+    "Off": "Wył.",
+    "Version": "v{0}",
+    "MessageRestart": "{0}: {1} zmieni się po restarcie",
+    "MessageRejected": "{0}: {1} nie przyjmuje „{2}”",
+    "MessageAdjusted": "{0}: {1} = {3} zamiast „{2}”",
+    "MessageReset": "{0}: przywrócono domyślne",
+    "NetPlayerIncompatible": "{0}: niezgodne mody, {1}",
+    "NetPlayerDisconnected": "Rozłączono {0}: {1}",
+    "NetPlayerDisconnectedBrief": "Rozłączono {0}: {1}",
+    "NetPlayerIncompatibleBrief": "{0} ma inne mody: {1}",
+    "NetYouWillBeDisconnected": "Host cię rozłączy: {0}",
+    "NetCardOtherMods": "inne mody",
+    "NetHostIncompatible": "Mody niezgodne z hostem: {0}",
+    "NetHostWithoutCatLib": "Host nie ma CatLib, mogą nie działać: {0}",
+    "ProblemProtocol": "wersja CatLib",
+    "ProblemGame": "wersja gry",
+    "ProblemMissingOnClient": "{0}: brak u klienta",
+    "ProblemMissingOnHost": "{0}: brak u hosta",
+    "ProblemVersion": "{0} {1} vs {2}",
+    "LobbyModsTitle": "Mody graczy",
+    "LobbyAllMatch": "{0} · wszystko zgodne",
+    "LobbyPaused": "{0} · wstrzymane: {1}",
+    "LobbyHost": "host",
+    "LobbyYou": "ty",
+    "RosterChecking": "sprawdzanie…",
+    "RosterCompatible": "wszystko zgodne",
+    "RosterLimited": "inne mody",
+    "RosterWithoutCatLib": "bez CatLib",
+    "RosterLeaving": "do rozłączenia",
+    "MarkWorks": "działa",
+    "MarkPaused": "wstrzymany",
+    "MarkMissing": "brak · host ma {0}",
+    "MarkOtherVersion": "host ma {0}",
+    "MarkNotOnHost": "brak u hosta · wstrzymany",
+    "MarkLocal": "tylko u ciebie",
+    "RowGameVersion": "Wersja gry",
+    "RowHostHas": "host ma {0}",
+    "RowCatLib": "CatLib",
+    "RowCatLibOther": "inna wersja, zaktualizuj CatLib",
+    "RowNoMods": "brak modów",
+    "PolicyTitle": "Gracze z innymi modami",
+    "PolicyWarn": "wpuścić, wstrzymać mody",
+    "PolicyDisconnect": "rozłączyć",
+    "BadgePaused": "wstrzymany w tej grze",
+    "BadgeRestart": "wymaga restartu",
+    "BadgeHost": "ustawia host",
+    "CardAuthor": "autor: {0}",
+    "SettingsCount": {
+      "one": "{0} ustawienie",
+      "few": "{0} ustawienia",
+      "many": "{0} ustawień"
+    },
+    "PendingRestart": {
+      "one": "{0} czeka na restart",
+      "few": "{0} czekają na restart",
+      "many": "{0} czeka na restart"
+    },
+    "LobbyPlayers": {
+      "one": "{0} gracz",
+      "few": "{0} gracze",
+      "many": "{0} graczy"
+    },
+    "LobbyMods": {
+      "one": "{0} mod",
+      "few": "{0} mody",
+      "many": "{0} modów"
+    }
+  }
+}

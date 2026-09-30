@@ -1,0 +1,107 @@
+{
+  "mod": {
+    "name": "CatLib"
+  },
+  "section": {
+    "Diagnostics": "Diagnóstico",
+    "Network": "Rede",
+    "DevTools": "Desenvolvedor"
+  },
+  "setting": {
+    "Diagnostics.CrashWindow": "Janela de falha",
+    "Diagnostics.CrashWindow.description": "Quando o jogo fecha de repente, uma pequena janela mostra o que aconteceu e um relatório com os logs fica guardado em BepInEx/CatLib/Crashes.",
+    "Network.Enabled": "Mods no multijogador",
+    "Network.Enabled.description": "Troca listas de mods e configurações da sessão com outros jogadores que usam CatLib. Vale a partir da próxima sessão.",
+    "Network.OnIncompatiblePlayer": "Jogadores com outros mods",
+    "Network.OnIncompatiblePlayer.description": "O que o host faz quando os mods de um jogador que está entrando não batem: deixar o jogador entrar e pausar os mods que nem todos têm, ou desconectar o jogador.",
+    "Network.SteamApi": "Conexão com a Steam",
+    "Network.SteamApi.description": "Como o CatLib se comunica com a Steam. Só mude se pedirem isso durante a investigação de um problema. Vale a partir da próxima sessão.",
+    "DevTools.MenuHotkey": "Tecla do menu de dev",
+    "DevTools.MenuHotkey.description": "Abre o menu do desenvolvedor quando algum mod registrou comandos de desenvolvedor, por exemplo CatLib.Tests."
+  },
+  "enum": {
+    "IncompatiblePlayerAction.Warn": "Deixar entrar, pausar mods",
+    "IncompatiblePlayerAction.Disconnect": "Desconectar",
+    "SteamApiBackend.Interop": "Interop",
+    "SteamApiBackend.Flat": "Flat"
+  },
+  "ui": {
+    "ModsTab": "Mods",
+    "ModsList": "Mods",
+    "SelectMod": "Selecione um mod",
+    "RestartSuffix": "(reinício)",
+    "HostSuffix": "(host)",
+    "HostValue": "Definido pelo host, o seu: {0}",
+    "NoDescription": "Sem descrição",
+    "DefaultValue": "Padrão: {0}",
+    "Range": "Intervalo: {0} a {1}",
+    "Options": "Opções: {0}",
+    "AppliesAfterRestart": "Vale após reiniciar",
+    "AfterRestart": "Após reiniciar: {0}",
+    "HoverHint": "Aponte para uma configuração para ver a descrição",
+    "On": "Ligado",
+    "Off": "Desligado",
+    "Version": "v{0}",
+    "MessageRestart": "{0}: {1} muda após reiniciar",
+    "MessageRejected": "{0}: “{2}” não vale para {1}",
+    "MessageAdjusted": "{0}: {1} ficou {3}, não “{2}”",
+    "MessageReset": "{0}: configurações restauradas",
+    "NetPlayerIncompatible": "{0}: mods incompatíveis, {1}",
+    "NetPlayerDisconnected": "{0} foi desconectado: {1}",
+    "NetPlayerDisconnectedBrief": "{0} foi desconectado: {1}",
+    "NetPlayerIncompatibleBrief": "{0} tem outros mods: {1}",
+    "NetYouWillBeDisconnected": "O host vai te desconectar: {0}",
+    "NetCardOtherMods": "outros mods",
+    "NetHostIncompatible": "Mods não batem com o host: {0}",
+    "NetHostWithoutCatLib": "O host não tem CatLib, podem falhar: {0}",
+    "ProblemProtocol": "versão do CatLib",
+    "ProblemGame": "versão do jogo",
+    "ProblemMissingOnClient": "{0} ausente no cliente",
+    "ProblemMissingOnHost": "{0} ausente no host",
+    "ProblemVersion": "{0} {1} vs {2}",
+    "LobbyModsTitle": "Mods dos jogadores",
+    "LobbyAllMatch": "{0} · tudo compatível",
+    "LobbyPaused": "{0} · pausados: {1}",
+    "LobbyHost": "host",
+    "LobbyYou": "você",
+    "RosterChecking": "verificando…",
+    "RosterCompatible": "tudo compatível",
+    "RosterLimited": "outros mods",
+    "RosterWithoutCatLib": "sem CatLib",
+    "RosterLeaving": "será desconectado",
+    "MarkWorks": "funciona",
+    "MarkPaused": "pausado",
+    "MarkMissing": "ausente · host tem {0}",
+    "MarkOtherVersion": "host tem {0}",
+    "MarkNotOnHost": "não está no host · pausado",
+    "MarkLocal": "só aqui",
+    "RowGameVersion": "Versão do jogo",
+    "RowHostHas": "host tem {0}",
+    "RowCatLib": "CatLib",
+    "RowCatLibOther": "outra versão, atualize o CatLib",
+    "RowNoMods": "sem mods",
+    "PolicyTitle": "Jogadores com outros mods",
+    "PolicyWarn": "deixar entrar, pausar mods",
+    "PolicyDisconnect": "desconectar",
+    "BadgePaused": "pausado nesta partida",
+    "BadgeRestart": "precisa reiniciar",
+    "BadgeHost": "definido pelo host",
+    "CardAuthor": "por {0}",
+    "SettingsCount": {
+      "one": "{0} configuração",
+      "other": "{0} configurações"
+    },
+    "PendingRestart": {
+      "one": "{0} aguardando reinício",
+      "other": "{0} aguardando reinício"
+    },
+    "LobbyPlayers": {
+      "one": "{0} jogador",
+      "other": "{0} jogadores"
+    },
+    "LobbyMods": {
+      "one": "{0} mod",
+      "other": "{0} mods"
+    }
+  }
+}

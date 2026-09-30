@@ -1,0 +1,107 @@
+{
+  "mod": {
+    "name": "CatLib"
+  },
+  "section": {
+    "Diagnostics": "Diagnostics",
+    "Network": "Network",
+    "DevTools": "Developer tools"
+  },
+  "setting": {
+    "Diagnostics.CrashWindow": "Crash window",
+    "Diagnostics.CrashWindow.description": "When the game closes unexpectedly, a small window shows what happened and a report with the logs is kept in BepInEx/CatLib/Crashes.",
+    "Network.Enabled": "Mods in multiplayer",
+    "Network.Enabled.description": "Exchange mod lists and session settings with other players who use CatLib. Takes effect from the next session.",
+    "Network.OnIncompatiblePlayer": "Players with other mods",
+    "Network.OnIncompatiblePlayer.description": "What the host does when a joining player's mods do not match: let the player in and pause the mods that not everyone has, or disconnect the player.",
+    "Network.SteamApi": "Steam connection",
+    "Network.SteamApi.description": "How CatLib calls Steam. Change it only when asked to while diagnosing a problem. Takes effect from the next session.",
+    "DevTools.MenuHotkey": "Developer menu key",
+    "DevTools.MenuHotkey.description": "Opens the developer menu when a mod has registered developer commands, for example CatLib.Tests."
+  },
+  "enum": {
+    "IncompatiblePlayerAction.Warn": "Let in, pause the mods",
+    "IncompatiblePlayerAction.Disconnect": "Disconnect",
+    "SteamApiBackend.Interop": "Interop",
+    "SteamApiBackend.Flat": "Flat"
+  },
+  "ui": {
+    "ModsTab": "Mods",
+    "ModsList": "Mods",
+    "SelectMod": "Select a mod",
+    "RestartSuffix": "(restart)",
+    "HostSuffix": "(host)",
+    "HostValue": "Set by the host, yours: {0}",
+    "NoDescription": "No description",
+    "DefaultValue": "Default: {0}",
+    "Range": "Range: {0} to {1}",
+    "Options": "Options: {0}",
+    "AppliesAfterRestart": "Applies after a restart",
+    "AfterRestart": "After a restart: {0}",
+    "HoverHint": "Point at a setting to see its description",
+    "On": "On",
+    "Off": "Off",
+    "Version": "v{0}",
+    "MessageRestart": "{0}: {1} changes after a restart",
+    "MessageRejected": "{0}: \"{2}\" is not a valid value for {1}",
+    "MessageAdjusted": "{0}: {1} set to {3} instead of \"{2}\"",
+    "MessageReset": "{0}: settings reset to defaults",
+    "NetPlayerIncompatible": "{0}: incompatible mods, {1}",
+    "NetPlayerDisconnected": "{0} was disconnected: {1}",
+    "NetPlayerDisconnectedBrief": "{0} was disconnected: {1}",
+    "NetPlayerIncompatibleBrief": "{0} has other mods: {1}",
+    "NetYouWillBeDisconnected": "The host will disconnect you: {0}",
+    "NetCardOtherMods": "other mods",
+    "NetHostIncompatible": "Mods do not match the host: {0}",
+    "NetHostWithoutCatLib": "The host has no CatLib, these may not work: {0}",
+    "ProblemProtocol": "CatLib version",
+    "ProblemGame": "game version",
+    "ProblemMissingOnClient": "{0} missing on the client",
+    "ProblemMissingOnHost": "{0} missing on the host",
+    "ProblemVersion": "{0} {1} vs {2}",
+    "LobbyModsTitle": "Players' mods",
+    "LobbyAllMatch": "{0} · all match",
+    "LobbyPaused": "{0} · paused: {1}",
+    "LobbyHost": "host",
+    "LobbyYou": "you",
+    "RosterChecking": "checking…",
+    "RosterCompatible": "everything matches",
+    "RosterLimited": "other mods",
+    "RosterWithoutCatLib": "no CatLib",
+    "RosterLeaving": "will be disconnected",
+    "MarkWorks": "works",
+    "MarkPaused": "paused",
+    "MarkMissing": "missing · host has {0}",
+    "MarkOtherVersion": "host has {0}",
+    "MarkNotOnHost": "not on the host · paused",
+    "MarkLocal": "only here",
+    "RowGameVersion": "Game version",
+    "RowHostHas": "host has {0}",
+    "RowCatLib": "CatLib",
+    "RowCatLibOther": "other version, update CatLib",
+    "RowNoMods": "no mods",
+    "PolicyTitle": "Players with other mods",
+    "PolicyWarn": "let in, pause the mods",
+    "PolicyDisconnect": "disconnect",
+    "BadgePaused": "paused in this game",
+    "BadgeRestart": "needs a restart",
+    "BadgeHost": "set by the host",
+    "CardAuthor": "by {0}",
+    "SettingsCount": {
+      "one": "{0} setting",
+      "other": "{0} settings"
+    },
+    "PendingRestart": {
+      "one": "{0} waiting for a restart",
+      "other": "{0} waiting for a restart"
+    },
+    "LobbyPlayers": {
+      "one": "{0} player",
+      "other": "{0} players"
+    },
+    "LobbyMods": {
+      "one": "{0} mod",
+      "other": "{0} mods"
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "mod": {
+    "name": "Ajustes do barco"
+  },
+  "section": {
+    "Layout": "Layout do convés",
+    "GameVariants": "Layouts do jogo",
+    "FixedVariant": "Um layout do jogo",
+    "Height": "Altura",
+    "CustomLayouts": "Layouts próprios",
+    "Generated": "Gerado",
+    "Mixed": "Misto",
+    "Saving": "Salvar",
+    "Decoration": "Decoração"
+  },
+  "setting": {
+    "Layout.Mode": "Modo",
+    "Layout.Mode.description": "Como são escolhidos os caixotes fixos, cestos e outros obstáculos no convés do barco. Os pacotes que chegam com o barco nunca mudam. As seções abaixo só funcionam no próprio modo.",
+    "GameVariants.Allowed": "Layouts permitidos",
+    "GameVariants.Allowed.description": "Números das variantes de barco do jogo que podem vir, por exemplo 1,2,4. Vazio significa todas. Cada variante mantém os próprios obstáculos e os próprios pacotes que chegam. Funciona no modo “Layouts do jogo”.",
+    "GameVariants.AvoidRepeats": "Sem repetir seguido",
+    "GameVariants.AvoidRepeats.description": "A mesma variante nunca vem duas vezes seguidas. Funciona no modo “Layouts do jogo”.",
+    "FixedVariant.Variant": "Número do layout",
+    "FixedVariant.Variant.description": "A variante de barco do jogo que vem toda vez, com os próprios obstáculos e pacotes que chegam. Se uma fase tiver menos variantes, a última é usada. Funciona no modo “Um layout do jogo”.",
+    "Height.ApprovedHeightScale": "Altura aprovada",
+    "Height.ApprovedHeightScale.description": "Multiplicador da altura acima da qual uma pilha no barco fica vermelha. 1 mantém o valor do jogo.",
+    "Height.MaximumHeightScale": "Altura máxima",
+    "Height.MaximumHeightScale.description": "Multiplicador do limite absoluto de altura das pilhas no barco. A altura aprovada nunca passa dele.",
+    "CustomLayouts.Order": "Ordem",
+    "CustomLayouts.Order.description": "Como os layouts próprios são escolhidos: aleatoriamente, em sequência pelo nome do arquivo ou sempre um arquivo. Funciona nos modos “Layouts próprios” e “Misto”.",
+    "CustomLayouts.File": "Arquivo",
+    "CustomLayouts.File.description": "Nome do arquivo de layout usado quando a ordem é “Sempre um arquivo”, por exemplo deck_20260925_215809. Funciona no modo “Layouts próprios”.",
+    "CustomLayouts.AvoidRepeats": "Sem repetir seguido",
+    "CustomLayouts.AvoidRepeats.description": "Na escolha aleatória, o mesmo layout próprio nunca vem duas vezes seguidas.",
+    "Generated.Density": "Densidade",
+    "Generated.Density.description": "Parte do convés ocupada por obstáculos gerados. Funciona nos modos “Gerado” e “Misto”.",
+    "Generated.EdgesOnly": "Só junto às bordas",
+    "Generated.EdgesOnly.description": "Os obstáculos gerados ficam junto às bordas, como no jogo, e o meio do convés fica livre.",
+    "Mixed.GameWeight": "Convés do jogo",
+    "Mixed.GameWeight.description": "Peso de chance do convés do jogo no modo “Misto”.",
+    "Mixed.EmptyWeight": "Convés vazio",
+    "Mixed.EmptyWeight.description": "Peso de chance de um convés vazio no modo “Misto”.",
+    "Mixed.CustomWeight": "Layouts próprios",
+    "Mixed.CustomWeight.description": "Peso de chance dos layouts próprios no modo “Misto”. Ignorado quando não há nenhum.",
+    "Mixed.GeneratedWeight": "Convés gerado",
+    "Mixed.GeneratedWeight.description": "Peso de chance de um convés gerado no modo “Misto”.",
+    "Saving.SaveHotkey": "Salvar o convés",
+    "Saving.SaveHotkey.description": "Salva o convés do barco no cais como layout próprio. As células dos pacotes que chegaram com este barco ficam de fora; todas as outras células ocupadas são salvas, então tire antes os pacotes que você não quer nele.",
+    "Decoration.Enabled": "Decorar obstáculos",
+    "Decoration.Enabled.description": "Caixotes, garrafas e lanternas são colocados nos obstáculos dos conveses próprios e gerados. Desligado, as células bloqueadas ficam vazias. Só muda o que você vê."
+  },
+  "enum": {
+    "LayoutMode.Game": "Como no jogo",
+    "LayoutMode.Empty": "Vazio",
+    "LayoutMode.GameVariants": "Layouts do jogo",
+    "LayoutMode.FixedVariant": "Um layout do jogo",
+    "LayoutMode.Custom": "Layouts próprios",
+    "LayoutMode.Generated": "Gerado",
+    "LayoutMode.Mixed": "Misto",
+    "CustomOrder.Random": "Aleatório",
+    "CustomOrder.Sequence": "Em sequência",
+    "CustomOrder.Fixed": "Sempre um arquivo"
+  },
+  "message": {
+    "saved": "Convés salvo: {0}",
+    "noBoat": "Sem barco no cais para salvar",
+    "noGrid": "O convés ainda não está pronto",
+    "layoutFreed": "Células do layout sob pacotes: {0}"
+  }
+}

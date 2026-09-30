@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "らくらく修理"
+  },
+  "section": {
+    "Cardboard": "段ボール",
+    "Messages": "通知"
+  },
+  "setting": {
+    "Cardboard.Unlimited": "段ボール無限",
+    "Cardboard.Unlimited.description": "修理台の段ボールがなくなりません。ホストが全員分を決めます。",
+    "Cardboard.Stock": "在庫",
+    "Cardboard.Stock.description": "修理台に置ける段ボールの枚数です。台には最大3枚まで表示され、残りは在庫に入ります。ゲーム本来は3枚です。ホストが全員分を決めます。",
+    "Cardboard.Refill": "新しい日の補充",
+    "Cardboard.Refill.description": "新しい日に補充される量です。ゲームと同じく在庫いっぱいか、指定した枚数を選べます。ホストが全員分を決めます。",
+    "Cardboard.RefillAmount": "1日の補充枚数",
+    "Cardboard.RefillAmount.description": "上で「指定枚数」を選んだとき、新しい日ごとに補充される枚数です。在庫は上限を超えません。ホストが全員分を決めます。",
+    "Messages.Enabled": "段ボール通知",
+    "Messages.Enabled.description": "修理後に残りの段ボールの枚数と、新しい日に補充された枚数を表示します。自分にだけ適用されます。"
+  },
+  "enum": {
+    "RefillMode.Full": "在庫いっぱい",
+    "RefillMode.Amount": "指定枚数"
+  },
+  "message": {
+    "left": "段ボール残り：{0}/{1}",
+    "empty": "段ボール切れ（明日補充）",
+    "refilled": "段ボール：{0}/{1}"
+  }
+}

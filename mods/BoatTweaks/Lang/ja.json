@@ -1,0 +1,70 @@
+{
+  "mod": {
+    "name": "船カスタム"
+  },
+  "section": {
+    "Layout": "甲板の配置",
+    "GameVariants": "ゲーム配置",
+    "FixedVariant": "固定ゲーム配置",
+    "Height": "高さ",
+    "CustomLayouts": "自作配置",
+    "Generated": "自動生成",
+    "Mixed": "ミックス",
+    "Saving": "保存",
+    "Decoration": "装飾"
+  },
+  "setting": {
+    "Layout.Mode": "モード",
+    "Layout.Mode.description": "船の甲板に固定された木箱やかご、その他の障害物をどう決めるかを選びます。船と一緒に届く荷物は変わりません。下の各項目は、それぞれのモードでのみ機能します。",
+    "GameVariants.Allowed": "許可する配置",
+    "GameVariants.Allowed.description": "来てもよいゲームの船パターンの番号です（例：1,2,4）。空欄ならすべて。各パターンは独自の障害物と、一緒に届く荷物をそのまま保ちます。「ゲーム配置」モードで機能します。",
+    "GameVariants.AvoidRepeats": "連続を避ける",
+    "GameVariants.AvoidRepeats.description": "同じパターンが2回続けて来ることはありません。「ゲーム配置」モードで機能します。",
+    "FixedVariant.Variant": "配置番号",
+    "FixedVariant.Variant.description": "毎回来るゲームの船パターンです。独自の障害物と一緒に届く荷物もそのままです。レベルのパターン数が足りない場合は、最後のパターンが使われます。「固定ゲーム配置」モードで機能します。",
+    "Height.ApprovedHeightScale": "適正な高さ",
+    "Height.ApprovedHeightScale.description": "船上の積み荷が赤くなる高さにかける倍率です。1 でゲーム本来の値になります。",
+    "Height.MaximumHeightScale": "最大の高さ",
+    "Height.MaximumHeightScale.description": "船上の積み荷の高さの絶対上限にかける倍率です。適正な高さがこれを超えることはありません。",
+    "CustomLayouts.Order": "順番",
+    "CustomLayouts.Order.description": "自作配置の選び方です。ランダム、ファイル名順に一つずつ、または常に同じファイル。「自作配置」と「ミックス」モードで機能します。",
+    "CustomLayouts.File": "ファイル",
+    "CustomLayouts.File.description": "順番が「常に同じファイル」のときに使う配置ファイルの名前です（例：deck_20260925_215809）。「自作配置」モードで機能します。",
+    "CustomLayouts.AvoidRepeats": "連続を避ける",
+    "CustomLayouts.AvoidRepeats.description": "ランダムで選ぶとき、同じ自作配置が2回続けて来ることはありません。",
+    "Generated.Density": "密度",
+    "Generated.Density.description": "自動生成された障害物が甲板を占める割合です。「自動生成」と「ミックス」モードで機能します。",
+    "Generated.EdgesOnly": "船べりのみ",
+    "Generated.EdgesOnly.description": "自動生成された障害物はゲームと同じく船べりの近くに置かれ、甲板の中央は空いたままになります。",
+    "Mixed.GameWeight": "ゲームの甲板",
+    "Mixed.GameWeight.description": "「ミックス」モードでのゲームの甲板の出やすさ（重み）です。",
+    "Mixed.EmptyWeight": "空の甲板",
+    "Mixed.EmptyWeight.description": "「ミックス」モードでの空の甲板の出やすさ（重み）です。",
+    "Mixed.CustomWeight": "自作配置",
+    "Mixed.CustomWeight.description": "「ミックス」モードでの自作配置の出やすさ（重み）です。自作配置がない場合は無視されます。",
+    "Mixed.GeneratedWeight": "自動生成",
+    "Mixed.GeneratedWeight.description": "「ミックス」モードでの自動生成された甲板の出やすさ（重み）です。",
+    "Saving.SaveHotkey": "甲板を保存",
+    "Saving.SaveHotkey.description": "港に停まっている船の甲板を自作配置として保存します。この船と一緒に届いた荷物のマスは除かれ、それ以外の埋まっているマスはすべて保存されるので、含めたくない荷物は先に降ろしてください。",
+    "Decoration.Enabled": "障害物を飾る",
+    "Decoration.Enabled.description": "自作や自動生成の甲板の障害物に、木箱やビン、ランプを置きます。オフにすると、ふさがったマスは何もない見た目になります。自分の画面にだけ影響します。"
+  },
+  "enum": {
+    "LayoutMode.Game": "ゲームどおり",
+    "LayoutMode.Empty": "空の甲板",
+    "LayoutMode.GameVariants": "ゲーム配置",
+    "LayoutMode.FixedVariant": "固定ゲーム配置",
+    "LayoutMode.Custom": "自作配置",
+    "LayoutMode.Generated": "自動生成",
+    "LayoutMode.Mixed": "ミックス",
+    "CustomOrder.Random": "ランダム",
+    "CustomOrder.Sequence": "順番に",
+    "CustomOrder.Fixed": "常に同じファイル"
+  },
+  "message": {
+    "saved": "甲板を保存しました：{0}",
+    "noBoat": "港に保存できる船がありません",
+    "noGrid": "船の甲板がまだ準備できていません",
+    "layoutFreed": "荷物のため空けた配置マス：{0}"
+  }
+}

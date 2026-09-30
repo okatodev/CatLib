@@ -1,0 +1,111 @@
+{
+  "mod": {
+    "name": "CatLib"
+  },
+  "section": {
+    "Diagnostics": "Діагностика",
+    "Network": "Мережа",
+    "DevTools": "Для розробників"
+  },
+  "setting": {
+    "Diagnostics.CrashWindow": "Вікно при збої",
+    "Diagnostics.CrashWindow.description": "Коли гра несподівано закривається, невелике вікно показує, що сталося, а звіт із логами зберігається в BepInEx/CatLib/Crashes.",
+    "Network.Enabled": "Моди в мультиплеєрі",
+    "Network.Enabled.description": "Обмінюватися списками модів і налаштуваннями сесії з іншими гравцями, у яких є CatLib. Діє з наступної сесії.",
+    "Network.OnIncompatiblePlayer": "Гравці з іншими модами",
+    "Network.OnIncompatiblePlayer.description": "Що робить хост, якщо моди гравця, який приєднується, не збігаються: впустити гравця й поставити на паузу моди, які є не в усіх, або від’єднати його.",
+    "Network.SteamApi": "Зв’язок зі Steam",
+    "Network.SteamApi.description": "Як CatLib звертається до Steam. Змінюйте, лише якщо вас про це попросили під час пошуку проблеми. Діє з наступної сесії.",
+    "DevTools.MenuHotkey": "Клавіша меню розробника",
+    "DevTools.MenuHotkey.description": "Відкриває меню розробника, якщо якийсь мод додав до нього команди, наприклад CatLib.Tests."
+  },
+  "enum": {
+    "IncompatiblePlayerAction.Warn": "Впускати, моди на паузу",
+    "IncompatiblePlayerAction.Disconnect": "Від’єднувати",
+    "SteamApiBackend.Interop": "Interop",
+    "SteamApiBackend.Flat": "Flat"
+  },
+  "ui": {
+    "ModsTab": "Моди",
+    "ModsList": "Моди",
+    "SelectMod": "Виберіть мод",
+    "RestartSuffix": "(перезапуск)",
+    "HostSuffix": "(хост)",
+    "HostValue": "Задано хостом, ваше: {0}",
+    "NoDescription": "Немає опису",
+    "DefaultValue": "Типово: {0}",
+    "Range": "Діапазон: від {0} до {1}",
+    "Options": "Варіанти: {0}",
+    "AppliesAfterRestart": "Діє після перезапуску",
+    "AfterRestart": "Після перезапуску: {0}",
+    "HoverHint": "Наведіть на налаштування, щоб побачити опис",
+    "On": "Увімк.",
+    "Off": "Вимк.",
+    "Version": "v{0}",
+    "MessageRestart": "{0}: «{1}» — після перезапуску",
+    "MessageRejected": "{0}: «{2}» не підходить для «{1}»",
+    "MessageAdjusted": "{0}: «{1}» = {3} замість «{2}»",
+    "MessageReset": "{0}: налаштування скинуто",
+    "NetPlayerIncompatible": "{0}: несумісні моди, {1}",
+    "NetPlayerDisconnected": "{0} від’єднано: {1}",
+    "NetPlayerDisconnectedBrief": "{0} від’єднано: {1}",
+    "NetPlayerIncompatibleBrief": "У {0} інші моди: {1}",
+    "NetYouWillBeDisconnected": "Хост від’єднає вас: {0}",
+    "NetCardOtherMods": "інші моди",
+    "NetHostIncompatible": "Моди не збігаються з хостом: {0}",
+    "NetHostWithoutCatLib": "У хоста немає CatLib, можуть не працювати: {0}",
+    "ProblemProtocol": "версія CatLib",
+    "ProblemGame": "версія гри",
+    "ProblemMissingOnClient": "{0} немає в клієнта",
+    "ProblemMissingOnHost": "{0} немає в хоста",
+    "ProblemVersion": "{0} {1} проти {2}",
+    "LobbyModsTitle": "Моди гравців",
+    "LobbyAllMatch": "{0} · усе збігається",
+    "LobbyPaused": "{0} · на паузі: {1}",
+    "LobbyHost": "хост",
+    "LobbyYou": "ви",
+    "RosterChecking": "перевірка…",
+    "RosterCompatible": "усе збігається",
+    "RosterLimited": "інші моди",
+    "RosterWithoutCatLib": "немає CatLib",
+    "RosterLeaving": "буде від’єднано",
+    "MarkWorks": "працює",
+    "MarkPaused": "на паузі",
+    "MarkMissing": "немає · у хоста {0}",
+    "MarkOtherVersion": "у хоста {0}",
+    "MarkNotOnHost": "немає в хоста · на паузі",
+    "MarkLocal": "лише у вас",
+    "RowGameVersion": "Версія гри",
+    "RowHostHas": "у хоста {0}",
+    "RowCatLib": "CatLib",
+    "RowCatLibOther": "інша версія, оновіть CatLib",
+    "RowNoMods": "немає модів",
+    "PolicyTitle": "Гравці з іншими модами",
+    "PolicyWarn": "впускати, моди на паузу",
+    "PolicyDisconnect": "від’єднувати",
+    "BadgePaused": "на паузі в цій грі",
+    "BadgeRestart": "чекає перезапуску",
+    "BadgeHost": "задано хостом",
+    "CardAuthor": "автор: {0}",
+    "SettingsCount": {
+      "one": "{0} налаштування",
+      "few": "{0} налаштування",
+      "many": "{0} налаштувань"
+    },
+    "PendingRestart": {
+      "one": "{0} чекає перезапуску",
+      "few": "{0} чекають перезапуску",
+      "many": "{0} чекають перезапуску"
+    },
+    "LobbyPlayers": {
+      "one": "{0} гравець",
+      "few": "{0} гравці",
+      "many": "{0} гравців"
+    },
+    "LobbyMods": {
+      "one": "{0} мод",
+      "few": "{0} моди",
+      "many": "{0} модів"
+    }
+  }
+}

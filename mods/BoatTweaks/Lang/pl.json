@@ -1,0 +1,70 @@
+{
+  "mod": {
+    "name": "Ustawienia łodzi"
+  },
+  "section": {
+    "Layout": "Układ pokładu",
+    "GameVariants": "Układy z gry",
+    "FixedVariant": "Jeden układ z gry",
+    "Height": "Wysokość",
+    "CustomLayouts": "Własne układy",
+    "Generated": "Generowany",
+    "Mixed": "Mieszany",
+    "Saving": "Zapis",
+    "Decoration": "Dekoracje"
+  },
+  "setting": {
+    "Layout.Mode": "Tryb",
+    "Layout.Mode.description": "Jak wybierane są przymocowane skrzynie, kosze i inne przeszkody na pokładzie łodzi. Paczki, które przypływają z łodzią, nigdy się nie zmieniają. Sekcje poniżej działają tylko we własnym trybie.",
+    "GameVariants.Allowed": "Dozwolone układy",
+    "GameVariants.Allowed.description": "Numery wariantów łodzi z gry, które mogą przypłynąć, na przykład 1,2,4. Puste oznacza wszystkie. Każdy wariant zachowuje własne przeszkody i własne przypływające paczki. Działa w trybie „Układy z gry”.",
+    "GameVariants.AvoidRepeats": "Bez powtórzeń z rzędu",
+    "GameVariants.AvoidRepeats.description": "Ten sam wariant nigdy nie przypłynie dwa razy z rzędu. Działa w trybie „Układy z gry”.",
+    "FixedVariant.Variant": "Numer układu",
+    "FixedVariant.Variant.description": "Wariant łodzi z gry, który przypływa za każdym razem, z własnymi przeszkodami i przypływającymi paczkami. Jeśli poziom ma mniej wariantów, używany jest ostatni. Działa w trybie „Jeden układ z gry”.",
+    "Height.ApprovedHeightScale": "Dopuszczalna wysokość",
+    "Height.ApprovedHeightScale.description": "Mnożnik wysokości, powyżej której stos na łodzi robi się czerwony. 1 zostawia wartość z gry.",
+    "Height.MaximumHeightScale": "Maksymalna wysokość",
+    "Height.MaximumHeightScale.description": "Mnożnik bezwzględnego limitu wysokości stosów na łodzi. Dopuszczalna wysokość nigdy go nie przekracza.",
+    "CustomLayouts.Order": "Kolejność",
+    "CustomLayouts.Order.description": "Jak wybierane są własne układy: losowo, po kolei według nazwy pliku albo zawsze jeden plik. Działa w trybach „Własne układy” i „Mieszany”.",
+    "CustomLayouts.File": "Plik",
+    "CustomLayouts.File.description": "Nazwa pliku układu używanego przy kolejności „Zawsze jeden plik”, na przykład deck_20260925_215809. Działa w trybie „Własne układy”.",
+    "CustomLayouts.AvoidRepeats": "Bez powtórzeń z rzędu",
+    "CustomLayouts.AvoidRepeats.description": "Przy losowym wyborze ten sam własny układ nigdy nie wypadnie dwa razy z rzędu.",
+    "Generated.Density": "Gęstość",
+    "Generated.Density.description": "Część pokładu zajęta przez generowane przeszkody. Działa w trybach „Generowany” i „Mieszany”.",
+    "Generated.EdgesOnly": "Tylko przy burtach",
+    "Generated.EdgesOnly.description": "Generowane przeszkody stoją przy burtach, jak w grze, a środek pokładu zostaje wolny.",
+    "Mixed.GameWeight": "Pokład z gry",
+    "Mixed.GameWeight.description": "Waga szansy pokładu z gry w trybie „Mieszany”.",
+    "Mixed.EmptyWeight": "Pusty pokład",
+    "Mixed.EmptyWeight.description": "Waga szansy pustego pokładu w trybie „Mieszany”.",
+    "Mixed.CustomWeight": "Własne układy",
+    "Mixed.CustomWeight.description": "Waga szansy własnych układów w trybie „Mieszany”. Pomijana, gdy ich nie ma.",
+    "Mixed.GeneratedWeight": "Generowany pokład",
+    "Mixed.GeneratedWeight.description": "Waga szansy generowanego pokładu w trybie „Mieszany”.",
+    "Saving.SaveHotkey": "Zapisz pokład",
+    "Saving.SaveHotkey.description": "Zapisuje pokład łodzi przy przystani jako własny układ. Pola paczek, które przypłynęły z tą łodzią, są pomijane; każde inne zajęte pole zostaje zapisane, więc najpierw zdejmij paczki, których w nim nie chcesz.",
+    "Decoration.Enabled": "Dekoruj przeszkody",
+    "Decoration.Enabled.description": "Na przeszkodach własnych i generowanych pokładów stają skrzynie, butelki i latarnie. Po wyłączeniu zajęte pola zostają puste. Zmienia tylko to, co widzisz."
+  },
+  "enum": {
+    "LayoutMode.Game": "Jak w grze",
+    "LayoutMode.Empty": "Pusty",
+    "LayoutMode.GameVariants": "Układy z gry",
+    "LayoutMode.FixedVariant": "Jeden układ z gry",
+    "LayoutMode.Custom": "Własne układy",
+    "LayoutMode.Generated": "Generowany",
+    "LayoutMode.Mixed": "Mieszany",
+    "CustomOrder.Random": "Losowo",
+    "CustomOrder.Sequence": "Po kolei",
+    "CustomOrder.Fixed": "Zawsze jeden plik"
+  },
+  "message": {
+    "saved": "Zapisano pokład: {0}",
+    "noBoat": "Brak łodzi przy przystani",
+    "noGrid": "Pokład łodzi jeszcze niegotowy",
+    "layoutFreed": "Pola układu pod paczkami: {0}"
+  }
+}

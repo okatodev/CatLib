@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "便捷修理"
+  },
+  "section": {
+    "Cardboard": "纸板",
+    "Messages": "提示"
+  },
+  "setting": {
+    "Cardboard.Unlimited": "无限纸板",
+    "Cardboard.Unlimited.description": "修理台的纸板永远不会用完。由房主为所有人决定。",
+    "Cardboard.Stock": "库存",
+    "Cardboard.Stock.description": "修理台能存放多少张纸板。台面上最多显示三张，其余留在库存里。游戏原本为 3 张。由房主为所有人决定。",
+    "Cardboard.Refill": "新的一天补充",
+    "Cardboard.Refill.description": "新的一天会补充什么：像游戏里一样补满库存，或者补充固定张数。由房主为所有人决定。",
+    "Cardboard.RefillAmount": "每天张数",
+    "Cardboard.RefillAmount.description": "上方选择“固定张数”时，每个新的一天补充的纸板张数。库存不会超过上限。由房主为所有人决定。",
+    "Messages.Enabled": "纸板提示",
+    "Messages.Enabled.description": "修理后显示还剩多少纸板，以及新的一天补充了多少。只对你生效。"
+  },
+  "enum": {
+    "RefillMode.Full": "补满库存",
+    "RefillMode.Amount": "固定张数"
+  },
+  "message": {
+    "left": "剩余纸板：{0}/{1}",
+    "empty": "纸板用完了，明天补充",
+    "refilled": "纸板：{0}/{1}"
+  }
+}

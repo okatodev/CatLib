@@ -10,6 +10,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CatLib\CatLib.csproj" Private="false" />
-    <EmbeddedResource Include="Lang\*.json" LogicalName="BetterRepair.Lang.%(Filename).json" />
   </ItemGroup>
 </Project>
