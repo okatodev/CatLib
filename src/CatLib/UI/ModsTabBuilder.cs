@@ -138,6 +138,7 @@ internal static class ModsTabBuilder
         EnableViewportMask(listScroll);
         EnableViewportMask(contentScroll);
         var scrollbarReference = FindLaidOutScrollbar(options);
+        log.Info($"The Mods tab scrollbars copy {SafeDescribe(scrollbarReference)}");
         StretchScrollbar(listScroll, scrollbarReference);
         StretchScrollbar(contentScroll, scrollbarReference);
 
@@ -212,7 +213,7 @@ internal static class ModsTabBuilder
         return fallback;
     }
 
-    private static ScrollRect FindDirectScroll(Transform panel)
+    internal static ScrollRect FindDirectScroll(Transform panel)
     {
         for (var index = 0; index < panel.childCount; index++)
         {
@@ -318,8 +319,10 @@ internal static class ModsTabBuilder
     internal static RectTransform ViewportOf(ScrollRect scroll) =>
         scroll.viewport ?? scroll.content?.parent?.TryCast<RectTransform>();
 
-    private static Scrollbar FindLaidOutScrollbar(OptionsInterface options)
+    internal static Scrollbar FindLaidOutScrollbar(OptionsInterface options)
     {
+        Scrollbar best = null;
+        var bestScore = -1;
         var tabs = options._tabs;
         for (var index = 0; index < tabs.Count; index++)
         {
@@ -327,16 +330,195 @@ internal static class ModsTabBuilder
             var scroll = panel == null ? null : FindDirectScroll(panel.transform);
             var scrollbar = scroll == null ? null : scroll.verticalScrollbar;
             var rect = scrollbar == null ? null : scrollbar.transform.TryCast<RectTransform>();
-            if (rect != null && rect.anchorMax.y > rect.anchorMin.y)
+            if (rect == null || rect.anchorMax.y <= rect.anchorMin.y || panel.name.StartsWith("panel_CatLib", StringComparison.Ordinal))
             {
-                return scrollbar;
+                continue;
+            }
+
+            int score;
+            try
+            {
+                score = StyleScore(scrollbar);
+            }
+            catch (Exception)
+            {
+                score = 0;
+            }
+
+            if (score > bestScore)
+            {
+                best = scrollbar;
+                bestScore = score;
             }
         }
 
-        return null;
+        return best;
     }
 
+    internal static int StyleScore(Scrollbar scrollbar)
+    {
+        var track = scrollbar.GetComponent<Image>();
+        var handle = scrollbar.handleRect == null ? null : scrollbar.handleRect.GetComponent<Image>();
+        var score = 0;
+        score += IsStyled(track) ? 2 : 0;
+        score += IsStyled(handle) ? 2 : 0;
+        score += handle != null && !IsWhite(handle.color) ? 1 : 0;
+        score += track != null && !IsWhite(track.color) ? 1 : 0;
+        return score;
+    }
+
+    internal static string Describe(Scrollbar scrollbar)
+    {
+        if (scrollbar == null)
+        {
+            return "none";
+        }
+
+        var track = scrollbar.GetComponent<Image>();
+        var handle = scrollbar.handleRect == null ? null : scrollbar.handleRect.GetComponent<Image>();
+        return $"{PathOf(scrollbar.transform)}, track {SpriteName(track)} {Hex(track)}, handle {SpriteName(handle)} {Hex(handle)}, style score {StyleScore(scrollbar)}";
+    }
+
+    internal static string SafeDescribe(Scrollbar scrollbar)
+    {
+        try
+        {
+            return Describe(scrollbar);
+        }
+        catch (Exception exception)
+        {
+            return $"a scrollbar that could not be described ({exception.GetType().Name})";
+        }
+    }
+
+    private static bool IsWhite(Color color) => color.r >= 0.999f && color.g >= 0.999f && color.b >= 0.999f && color.a >= 0.999f;
+
+    private static string Hex(Image image)
+    {
+        if (image == null)
+        {
+            return string.Empty;
+        }
+
+        var color = image.color;
+        return "#" + Byte(color.r) + Byte(color.g) + Byte(color.b) + Byte(color.a);
+    }
+
+    private static string Byte(float value) =>
+        ((int)Math.Round(Math.Clamp(value, 0f, 1f) * 255f)).ToString("X2", System.Globalization.CultureInfo.InvariantCulture);
+
+    private static string PathOf(Transform transform)
+    {
+        var path = transform.name;
+        for (var parent = transform.parent; parent != null && path.Length < 400; parent = parent.parent)
+        {
+            path = parent.name + "/" + path;
+        }
+
+        return path;
+    }
+
+    private static string SpriteName(Image image) => image == null ? "none" : image.sprite == null ? "no sprite" : image.sprite.name;
+
+    private static bool IsStyled(Image image) =>
+        image != null && image.sprite != null && Array.IndexOf(BuiltinSprites, image.sprite.name) < 0;
+
+    private static readonly string[] BuiltinSprites = { "UISprite", "Background", "Knob", "UIMask", "InputFieldBackground", "Checkmark", "DropdownArrow" };
+
     internal static void StretchScrollbar(ScrollRect scroll, Scrollbar reference)
+    {
+        if (ReplaceScrollbar(scroll, reference))
+        {
+            return;
+        }
+
+        LayOutScrollbar(scroll, reference);
+        StyleScrollbar(scroll.verticalScrollbar, reference);
+    }
+
+    internal static bool ReplaceScrollbar(ScrollRect scroll, Scrollbar reference)
+    {
+        if (scroll == null || reference == null)
+        {
+            return false;
+        }
+
+        var old = scroll.verticalScrollbar;
+        if (old != null && old.Pointer == reference.Pointer)
+        {
+            return false;
+        }
+
+        var parent = old != null ? old.transform.parent : scroll.transform;
+        var clone = UnityEngine.Object.Instantiate(reference.gameObject, parent, false);
+        clone.name = reference.gameObject.name;
+        clone.SetActive(true);
+        var scrollbar = clone.GetComponent<Scrollbar>();
+        if (scrollbar == null)
+        {
+            UnityEngine.Object.DestroyImmediate(clone);
+            return false;
+        }
+
+        if (old != null)
+        {
+            clone.transform.SetSiblingIndex(old.transform.GetSiblingIndex());
+            scroll.verticalScrollbar = null;
+            UnityEngine.Object.DestroyImmediate(old.gameObject);
+        }
+
+        scroll.verticalScrollbar = scrollbar;
+        var referenceScroll = reference.GetComponentInParent<ScrollRect>();
+        if (referenceScroll != null)
+        {
+            scroll.verticalScrollbarVisibility = referenceScroll.verticalScrollbarVisibility;
+            scroll.verticalScrollbarSpacing = referenceScroll.verticalScrollbarSpacing;
+        }
+
+        return true;
+    }
+
+    internal static void StyleScrollbar(Scrollbar scrollbar, Scrollbar reference)
+    {
+        if (scrollbar == null || reference == null || scrollbar.Pointer == reference.Pointer)
+        {
+            return;
+        }
+
+        CopyLook(scrollbar.GetComponent<Image>(), reference.GetComponent<Image>());
+        CopyLook(scrollbar.handleRect == null ? null : scrollbar.handleRect.GetComponent<Image>(),
+            reference.handleRect == null ? null : reference.handleRect.GetComponent<Image>());
+        scrollbar.transition = reference.transition;
+        scrollbar.colors = reference.colors;
+        scrollbar.spriteState = reference.spriteState;
+
+        var area = scrollbar.handleRect == null ? null : scrollbar.handleRect.parent.TryCast<RectTransform>();
+        var referenceArea = reference.handleRect == null ? null : reference.handleRect.parent.TryCast<RectTransform>();
+        if (area != null && referenceArea != null)
+        {
+            area.anchorMin = referenceArea.anchorMin;
+            area.anchorMax = referenceArea.anchorMax;
+            area.offsetMin = referenceArea.offsetMin;
+            area.offsetMax = referenceArea.offsetMax;
+        }
+    }
+
+    private static void CopyLook(Image target, Image reference)
+    {
+        if (target == null || reference == null)
+        {
+            return;
+        }
+
+        target.sprite = reference.sprite;
+        target.color = reference.color;
+        target.type = reference.type;
+        target.fillCenter = reference.fillCenter;
+        target.pixelsPerUnitMultiplier = reference.pixelsPerUnitMultiplier;
+        target.preserveAspect = reference.preserveAspect;
+    }
+
+    private static void LayOutScrollbar(ScrollRect scroll, Scrollbar reference)
     {
         var scrollbar = scroll.verticalScrollbar;
         var rect = scrollbar == null ? null : scrollbar.transform.TryCast<RectTransform>();

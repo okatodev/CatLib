@@ -30,6 +30,20 @@ come from the shared build files. Add the project to `CatLib.sln` with `dotnet s
 
 A mod outside this repository references `CatLib.dll` directly and writes its own `BepInPlugin` values.
 
+### Icon
+
+Put a 256x256 `icon.png` with a transparent background into `mods/<Name>/`, the same file Thunderstore needs.
+The build copies it next to the mod's DLL and into the game, and the Mods tab shows it left of the mod's name and at the top of its settings.
+A project without `icon.png` builds with warning CATLIB001. Set `CatLibIcon` in the project file to take the icon from another path,
+or `CatLibIconCheck` to `false` to turn the check off.
+CatLib looks for `icon.png` next to the DLL and up to two folders above it, but never in the shared `plugins` folder,
+so the layout of a Thunderstore package installed by a mod manager works too. `settings.IconPath` sets another file.
+Without an icon the Mods tab shows a question mark in its place. The log line `[Icons]` names the icon of every mod
+or the folder where it was looked for, and warns when the icon is not 256x256.
+
+The author shown under the version comes from the Thunderstore package folder (`Author-ModName`) when the mod is installed
+by a mod manager, otherwise from `Authors` in the project file. `settings.Author` sets it from code.
+
 ### Folders
 
 Every mod in this repository keeps the same layout. The namespace follows the folder, for example `BoatTweaks.Logic`.

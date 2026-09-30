@@ -1,14 +1,26 @@
 <Project>
-  <Target Name="CatLibDeploy" AfterTargets="Build" Condition="'$(CatLibDeploy)' == 'true' and '$(CatLibDeployFolder)' != ''">
+  <PropertyGroup>
+    <CatLibIcon Condition="'$(CatLibIcon)' == ''">$(MSBuildProjectDirectory)\icon.png</CatLibIcon>
+    <CatLibIconCheck Condition="'$(CatLibIconCheck)' == '' and '$(OutputType)' == 'Library'">true</CatLibIconCheck>
+  </PropertyGroup>
+
+  <Target Name="CatLibIcon" AfterTargets="Build" Condition="'$(CatLibIconCheck)' == 'true'">
+    <Warning Code="CATLIB001" Condition="!Exists('$(CatLibIcon)')" Text="$(MSBuildProjectName) has no icon: $(CatLibIcon) was not found. Put a 256x256 icon.png next to the project file, Thunderstore needs it and the Mods tab shows it next to the mod name." />
+    <Copy SourceFiles="$(CatLibIcon)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" Condition="Exists('$(CatLibIcon)')" />
+  </Target>
+
+  <Target Name="CatLibDeploy" AfterTargets="Build" DependsOnTargets="CatLibIcon" Condition="'$(CatLibDeploy)' == 'true' and '$(CatLibDeployFolder)' != ''">
     <PropertyGroup>
       <CatLibDeployDir>$(BepInExPluginsDir)\$(CatLibDeployFolder)</CatLibDeployDir>
       <CatLibSecondDeployDir Condition="'$(SecondGameDir)' != ''">$(SecondGameDir)\BepInEx\plugins\$(CatLibDeployFolder)</CatLibSecondDeployDir>
     </PropertyGroup>
     <MakeDir Directories="$(CatLibDeployDir)" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(CatLibDeployDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(CatLibIcon)" DestinationFolder="$(CatLibDeployDir)" SkipUnchangedFiles="true" Condition="'$(CatLibIconCheck)' == 'true' and Exists('$(CatLibIcon)')" />
     <Message Importance="high" Text="$(TargetFileName) -&gt; $(CatLibDeployDir)" />
     <MakeDir Directories="$(CatLibSecondDeployDir)" Condition="'$(CatLibSecondDeployDir)' != ''" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(CatLibSecondDeployDir)" SkipUnchangedFiles="true" Condition="'$(CatLibSecondDeployDir)' != ''" />
+    <Copy SourceFiles="$(CatLibIcon)" DestinationFolder="$(CatLibSecondDeployDir)" SkipUnchangedFiles="true" Condition="'$(CatLibSecondDeployDir)' != '' and '$(CatLibIconCheck)' == 'true' and Exists('$(CatLibIcon)')" />
     <Message Importance="high" Text="$(TargetFileName) -&gt; $(CatLibSecondDeployDir)" Condition="'$(CatLibSecondDeployDir)' != ''" />
   </Target>
 </Project>

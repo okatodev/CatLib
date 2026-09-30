@@ -6,6 +6,7 @@
     <PluginGuid>catlib.core</PluginGuid>
     <PluginMetaName>CatLib</PluginMetaName>
     <CatLibDeployFolder>CatLib</CatLibDeployFolder>
+    <CatLibIcon>$(CatLibRoot)icon.png</CatLibIcon>
   </PropertyGroup>
 
   <ItemGroup>

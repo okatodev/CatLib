@@ -17,6 +17,20 @@ public sealed class FoldoutStyle
 
     public Sprite RowSprite { get; set; }
 
+    public GameObject ButtonTemplate { get; set; }
+
+    public float HeaderReferenceWidth { get; set; }
+
+    public float BodyReferenceWidth { get; set; }
+
+    public float SliceShare { get; set; } = 0.2f;
+
+    public float ButtonRowHeight { get; set; } = 50f;
+
+    public Vector2 ButtonSize { get; set; } = new(300f, 42f);
+
+    public float ButtonTextSize { get; set; } = 21f;
+
     public float HeaderWidth { get; set; } = 640f;
 
     public float HeaderHeight { get; set; } = 60f;

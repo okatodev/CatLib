@@ -12,6 +12,13 @@ public sealed class FoldoutList
 {
     public const float ArrowCollapsed = 180f;
     public const float ArrowExpanded = 90f;
+    public const float TitleInset = 64f;
+    public const float SummaryInset = 22f;
+    public const float HeaderGap = 18f;
+    public const float MaxTitleShare = 0.6f;
+    public const float ReferencePixelsPerUnit = 100f;
+
+    private static readonly Dictionary<IntPtr, Sprite> SlicedCache = new();
 
     private readonly FoldoutStyle _style;
     private readonly HashSet<string> _collapsed = new(StringComparer.Ordinal);
@@ -80,6 +87,7 @@ public sealed class FoldoutList
         _shown = content;
         SetText(_title, content.Title, _style.Text);
         SetText(_summary, content.Summary, _style.ToneColor(content.SummaryTone));
+        FitHeader();
         RebuildBody();
     }
 
@@ -105,7 +113,7 @@ public sealed class FoldoutList
         root.SetAsLastSibling();
 
         _header = Rect("header", root, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), Vector2.zero, new Vector2(_style.HeaderWidth, _style.HeaderHeight));
-        var headerImage = Picture(_header.gameObject, _style.HeaderSprite, Color.white);
+        var headerImage = Paper(_header.gameObject, _style.HeaderSprite, _style.HeaderReferenceWidth);
         Click(_header.gameObject, headerImage, () => Expanded = !Expanded);
 
         if (_style.TapeSprite != null)
@@ -122,13 +130,16 @@ public sealed class FoldoutList
         }
 
         _title = Text(_header, "title", _style.TitleSize, TextAlignmentOptions.Left);
-        Place(_title, 0f, 0.52f, 64f, 0f);
+        Place(_title, 0f, 0.45f, 64f, 0f);
         _summary = Text(_header, "summary", _style.SummarySize, TextAlignmentOptions.Right);
-        Place(_summary, 0.52f, 1f, 0f, 22f);
+        Place(_summary, 0.45f, 1f, 0f, SummaryInset);
+        _summary.enableAutoSizing = true;
+        _summary.fontSizeMax = _style.SummarySize;
+        _summary.fontSizeMin = _style.SummarySize * 0.75f;
 
         _body = Rect("body", root, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -(_style.HeaderHeight + _style.BodyGap)),
             new Vector2(_style.BodyWidth, 100f));
-        Picture(_body.gameObject, _style.BodySprite, Color.white);
+        Paper(_body.gameObject, _style.BodySprite, _style.BodyReferenceWidth);
         var viewport = Rect("viewport", _body, Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(-_style.Padding * 2f, -_style.Padding * 1.4f));
         viewport.gameObject.AddComponent<RectMask2D>();
         _content = Rect("content", viewport, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), Vector2.zero, new Vector2(0f, 0f));
@@ -141,6 +152,19 @@ public sealed class FoldoutList
         _scroll.scrollSensitivity = 30f;
         _scroll.inertia = false;
         ApplyExpanded();
+    }
+
+    private void FitHeader()
+    {
+        var available = _style.HeaderWidth - TitleInset - SummaryInset;
+        var titleWidth = Mathf.Min(_title.GetPreferredValues(_title.text).x + 6f, available * MaxTitleShare);
+        var titleRect = _title.rectTransform;
+        titleRect.anchorMin = new Vector2(0f, 0f);
+        titleRect.anchorMax = new Vector2(0f, 1f);
+        titleRect.pivot = new Vector2(0f, 0.5f);
+        titleRect.offsetMin = new Vector2(TitleInset, 0f);
+        titleRect.offsetMax = new Vector2(TitleInset + titleWidth, 0f);
+        Place(_summary, 0f, 1f, TitleInset + titleWidth + HeaderGap, SummaryInset);
     }
 
     private void ApplyExpanded()
@@ -227,15 +251,28 @@ public sealed class FoldoutList
 
     private float AddRow(FoldoutRow row, float y, float indent, float width)
     {
+        if (row.OnClick != null && _style.ButtonTemplate != null)
+        {
+            return AddButtonRow(row, y, indent, width);
+        }
+
         var rect = Rect("row", _content, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(indent, -y), new Vector2(width - indent, _style.RowHeight));
+        var leftInset = 8f;
         if (row.OnClick != null)
         {
             var image = Picture(rect.gameObject, _style.RowSprite, _style.ClickTint);
             Click(rect.gameObject, image, row.OnClick);
+            if (_style.ArrowSprite != null)
+            {
+                var arrow = Rect("arrow", rect, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(20f, 0f), new Vector2(22f, 21f));
+                arrow.localEulerAngles = new Vector3(0f, 0f, ArrowCollapsed);
+                Picture(arrow.gameObject, _style.ArrowSprite, _style.Text).raycastTarget = false;
+                leftInset = 42f;
+            }
         }
 
         var left = Text(rect, "left", _style.RowSize, TextAlignmentOptions.Left);
-        Place(left, 0f, 0.46f, 8f, 0f);
+        Place(left, 0f, 0.46f, leftInset, 0f);
         SetText(left, row.Left, _style.Text);
         var middle = Text(rect, "middle", _style.RowSize, TextAlignmentOptions.Center);
         Place(middle, 0.46f, 0.62f, 0f, 0f);
@@ -244,6 +281,146 @@ public sealed class FoldoutList
         Place(right, 0.62f, 1f, 0f, 14f);
         SetText(right, row.Right, _style.ToneColor(row.Tone));
         return y + _style.RowHeight;
+    }
+
+    private float AddButtonRow(FoldoutRow row, float y, float indent, float width)
+    {
+        var height = _style.ButtonRowHeight;
+        var rect = Rect("row", _content, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(indent, -y), new Vector2(width - indent, height));
+        var left = Text(rect, "left", _style.RowSize, TextAlignmentOptions.Left);
+        Place(left, 0f, 0.55f, 8f, 0f);
+        SetText(left, row.Left, _style.Text);
+
+        var button = Object.Instantiate(_style.ButtonTemplate, rect, false);
+        button.name = "button";
+        button.SetActive(true);
+        UiClone.StripLocalization(button);
+        var buttonRect = button.GetComponent<RectTransform>();
+        buttonRect.anchorMin = buttonRect.anchorMax = new Vector2(1f, 0.5f);
+        buttonRect.pivot = new Vector2(1f, 0.5f);
+        buttonRect.anchoredPosition = new Vector2(-6f, 0f);
+        buttonRect.sizeDelta = _style.ButtonSize;
+        buttonRect.localEulerAngles = Vector3.zero;
+        buttonRect.localScale = Vector3.one;
+        ShrinkDecorations(button.transform);
+
+        var label = button.GetComponentInChildren<TMP_Text>(true);
+        if (label != null)
+        {
+            label.enableAutoSizing = true;
+            label.fontSizeMax = _style.ButtonTextSize;
+            label.fontSizeMin = _style.ButtonTextSize * 0.7f;
+            label.enableWordWrapping = false;
+            label.overflowMode = TextOverflowModes.Ellipsis;
+            var labelRect = label.rectTransform;
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.offsetMin = new Vector2(12f, 2f);
+            labelRect.offsetMax = new Vector2(-12f, -2f);
+            label.text = (row.Right ?? string.Empty).Replace("<", "\u2039");
+        }
+
+        var selectable = button.GetComponent<Button>();
+        if (selectable != null)
+        {
+            var navigation = selectable.navigation;
+            navigation.mode = Navigation.Mode.None;
+            selectable.navigation = navigation;
+            UiEvents.Listen(selectable.onClick, row.OnClick);
+        }
+
+        return y + height;
+    }
+
+    private void ShrinkDecorations(Transform button)
+    {
+        for (var index = 0; index < button.childCount; index++)
+        {
+            var child = button.GetChild(index);
+            if (child.GetComponent<TMP_Text>() != null)
+            {
+                continue;
+            }
+
+            var childRect = child.GetComponent<RectTransform>();
+            if (child.name == "img_Button_Background")
+            {
+                var tape = child.Find("img_Scotch");
+                if (tape != null)
+                {
+                    tape.gameObject.SetActive(false);
+                }
+
+                var image = child.GetComponent<Image>();
+                if (image != null)
+                {
+                    image.sprite = Sliced(image.sprite, _style.HeaderReferenceWidth);
+                    image.type = image.sprite != null && image.sprite.border != Vector4.zero ? Image.Type.Sliced : Image.Type.Simple;
+                    image.pixelsPerUnitMultiplier = Multiplier(image.sprite, _style.HeaderReferenceWidth);
+                }
+            }
+            else if (childRect != null && childRect.sizeDelta.x > 0f)
+            {
+                childRect.sizeDelta = childRect.sizeDelta * 0.5f;
+                childRect.anchoredPosition = new Vector2(childRect.anchoredPosition.x * 0.5f, -6f);
+            }
+        }
+    }
+
+    private Image Paper(GameObject gameObject, Sprite sprite, float referenceWidth)
+    {
+        var sliced = Sliced(sprite, referenceWidth);
+        var image = Picture(gameObject, sliced, Color.white);
+        if (sliced != null && sliced.border != Vector4.zero)
+        {
+            image.type = Image.Type.Sliced;
+            image.fillCenter = true;
+            image.pixelsPerUnitMultiplier = Multiplier(sliced, referenceWidth);
+        }
+
+        return image;
+    }
+
+    private Sprite Sliced(Sprite sprite, float referenceWidth)
+    {
+        if (sprite == null || referenceWidth <= 0f || sprite.border != Vector4.zero)
+        {
+            return sprite;
+        }
+
+        var key = sprite.Pointer;
+        if (SlicedCache.TryGetValue(key, out var cached) && cached != null && !cached.WasCollected)
+        {
+            return cached;
+        }
+
+        try
+        {
+            var rect = sprite.rect;
+            var border = new Vector4(rect.width * _style.SliceShare, rect.height * _style.SliceShare, rect.width * _style.SliceShare, rect.height * _style.SliceShare);
+            var created = Sprite.Create(sprite.texture, sprite.textureRect, new Vector2(0.5f, 0.5f), sprite.pixelsPerUnit, 0, SpriteMeshType.FullRect, border);
+            created.name = sprite.name + " (CatLib sliced)";
+            created.hideFlags = HideFlags.DontUnloadUnusedAsset;
+            SlicedCache[key] = created;
+            return created;
+        }
+        catch (Exception exception)
+        {
+            _log?.Debug($"Slicing {sprite.name} failed, it is stretched instead: {exception.Message}");
+            SlicedCache[key] = sprite;
+            return sprite;
+        }
+    }
+
+    private static float Multiplier(Sprite sprite, float referenceWidth)
+    {
+        if (sprite == null || referenceWidth <= 0f)
+        {
+            return 1f;
+        }
+
+        var nativeUnits = sprite.rect.width / sprite.pixelsPerUnit * ReferencePixelsPerUnit;
+        return Mathf.Max(0.01f, nativeUnits / referenceWidth);
     }
 
     private TMP_Text Text(Transform parent, string name, float size, TextAlignmentOptions alignment)

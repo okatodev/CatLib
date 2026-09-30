@@ -30,6 +30,10 @@ list.Show(new FoldoutContent("Parcels", "12 in the scene", FoldoutTone.Normal,
 - `Show` rebuilds only when the content differs, so it can be called every few frames with fresh data.
 - A row has three columns: left, middle and right. `FoldoutTone` colors the right column and section statuses:
   `Good`, `Warning`, `Bad`, `Muted` or `Normal`. A row with `onClick` becomes clickable.
+- With `ButtonTemplate` set to one of the game's buttons, a clickable row shows its right text on a copy of that button,
+  with the game's own click sound and press effect. Without it, a clickable row gets an arrow on the left.
+- `HeaderReferenceWidth` and `BodyReferenceWidth` are the widths at which the header and body sprites look right in the game.
+  The sprites are then drawn nine-sliced: the edges keep their size and only the middle grows, so paper edges stay sharp.
 - The body scrolls with the mouse wheel when it is taller than `MaxBodyHeight`.
 - Sizes in `FoldoutStyle` are in the parent canvas units; the defaults fit a 1920x1080 reference canvas.
 - `Destroy` removes it. Objects under a scene that unloads are removed by the game.

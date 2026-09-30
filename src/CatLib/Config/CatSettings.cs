@@ -30,6 +30,12 @@ public sealed class CatSettings : IDisposable
 
     public string Version { get; }
 
+    public string IconPath { get; set; }
+
+    public string Author { get; set; }
+
+    internal string PluginDirectory { get; set; }
+
     public TextCatalog Texts => CatLocalization.For(OwnerId);
 
     public ConfigFile ConfigFile { get; }
@@ -62,7 +68,20 @@ public sealed class CatSettings : IDisposable
             throw new ArgumentException($"{plugin.GetType().FullName} has no BepInPlugin attribute", nameof(plugin));
         }
 
-        return For(plugin.Config, metadata.GUID, metadata.Name, metadata.Version?.ToString());
+        var settings = For(plugin.Config, metadata.GUID, metadata.Name, metadata.Version?.ToString());
+        try
+        {
+            var assembly = plugin.GetType().Assembly;
+            var directory = System.IO.Path.GetDirectoryName(assembly.Location);
+            settings.PluginDirectory ??= directory;
+            settings.IconPath ??= IconLocator.Find(directory);
+            settings.Author ??= AuthorLocator.Find(directory, AuthorLocator.Company(assembly), assembly.GetName().Name);
+        }
+        catch (Exception)
+        {
+        }
+
+        return settings;
     }
 
     public static CatSettings For(ConfigFile configFile, string ownerId, string displayName = null, string version = null)

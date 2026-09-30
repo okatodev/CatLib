@@ -14,7 +14,6 @@ What is planned, in rough order. Finished work is removed from here and describe
 ## Mods tab
 
 - Polish of the small details.
-- Mod logos next to the mod names.
 
 ## Localization
 

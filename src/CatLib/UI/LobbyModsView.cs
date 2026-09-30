@@ -101,8 +101,17 @@ internal static class LobbyModsView
             TapeSprite = SpriteAt(lobby.InviteButton == null ? null : lobby.InviteButton.transform, "img_Button_Background/img_Scotch"),
             ArrowSprite = SpriteAt(lobby.BackButton == null ? null : lobby.BackButton.transform, "img_Button_Background/img_Arrow"),
             BodySprite = slot.GetComponent<Image>()?.sprite,
-            RowSprite = SpriteAt(lobby.transform, "img_background")
+            RowSprite = SpriteAt(lobby.transform, "img_background"),
+            ButtonTemplate = lobby.InviteButton == null ? null : lobby.InviteButton.gameObject,
+            HeaderReferenceWidth = WidthOf(lobby.InviteButton == null ? null : lobby.InviteButton.transform),
+            BodyReferenceWidth = WidthOf(slot.transform)
         };
+    }
+
+    private static float WidthOf(Transform transform)
+    {
+        var rect = transform == null ? null : transform.GetComponent<RectTransform>();
+        return rect == null ? 0f : rect.rect.width;
     }
 
     private static Sprite SpriteAt(Transform root, string path)

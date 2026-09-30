@@ -158,13 +158,15 @@ internal sealed class ModsPanel
     {
         var mods = CatConfig.All
             .Where(settings => !settings.IsDisposed && VisibleSettings(settings).Count > 0)
-            .OrderBy(settings => settings.DisplayName, StringComparer.OrdinalIgnoreCase)
+            .OrderBy(settings => settings.OwnerId == PluginMeta.Guid ? 0 : 1)
+            .ThenBy(settings => settings.DisplayName, StringComparer.OrdinalIgnoreCase)
             .ThenBy(settings => settings.OwnerId, StringComparer.Ordinal)
             .ToList();
 
         var signature = string.Join("|", mods.Select(settings => settings.OwnerId + ":" + VisibleSettings(settings).Count));
         if (!force && signature == _listSignature)
         {
+            UpdateBadges();
             return;
         }
 
@@ -186,6 +188,23 @@ internal sealed class ModsPanel
 
         var selected = _items.FirstOrDefault(item => item.Settings.OwnerId == _selectedOwnerId) ?? _items.FirstOrDefault();
         Select(selected?.Settings);
+        UpdateBadges();
+    }
+
+    private void UpdateBadges()
+    {
+        var language = UiText.LanguageCode;
+        foreach (var item in _items)
+        {
+            try
+            {
+                item.UpdateBadge(language);
+            }
+            catch (Exception exception)
+            {
+                _log.Debug($"Updating the list mark of {item.Settings.OwnerId} failed: {exception.Message}");
+            }
+        }
     }
 
     public void Select(CatSettings settings)
@@ -322,6 +341,47 @@ internal sealed class ModsPanel
         }
 
         RegisterControls();
+        WireNavigation();
+    }
+
+    private void WireNavigation()
+    {
+        var items = _items.Select(item => (Selectable)item.Toggle).Where(UiClone.IsAlive).ToList();
+        var controls = _rows.Select(row => row.Control).Where(control => control != null && UiClone.IsAlive(control)).ToList();
+        var selectedItem = _items.FirstOrDefault(item => item.IsSelected)?.Toggle ?? items.FirstOrDefault();
+        var reset = ResetButton != null && UiClone.IsAlive(ResetButton) ? ResetButton : null;
+        var firstControl = controls.FirstOrDefault() ?? (Selectable)reset;
+
+        for (var index = 0; index < items.Count; index++)
+        {
+            Explicit(items[index], index > 0 ? items[index - 1] : null, index < items.Count - 1 ? items[index + 1] : null, null, firstControl);
+        }
+
+        for (var index = 0; index < controls.Count; index++)
+        {
+            Explicit(controls[index], index > 0 ? controls[index - 1] : null, index < controls.Count - 1 ? controls[index + 1] : reset, selectedItem, null);
+        }
+
+        if (reset != null)
+        {
+            Explicit(reset, controls.LastOrDefault() ?? selectedItem, null, selectedItem, null);
+        }
+
+        if (selectedItem != null)
+        {
+            _tab.FirstSelected = selectedItem;
+        }
+    }
+
+    private static void Explicit(Selectable selectable, Selectable up, Selectable down, Selectable left, Selectable right)
+    {
+        var navigation = selectable.navigation;
+        navigation.mode = Navigation.Mode.Explicit;
+        navigation.selectOnUp = up;
+        navigation.selectOnDown = down;
+        navigation.selectOnLeft = left;
+        navigation.selectOnRight = right;
+        selectable.navigation = navigation;
     }
 
     private SettingRow CreateRow(ISetting setting, string languageCode)

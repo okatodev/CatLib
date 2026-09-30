@@ -61,7 +61,7 @@ public sealed class LobbyRosterTextTest : TestCase
             new RosterPeer(FriendId, "Friend", RosterPeerState.Evaluated, same, Compatibility.Compare(host, same), false)
         });
         var goodView = LobbyRosterText.Build(good, HostId, true, "en", null);
-        Assert.Equal("2 players · everything matches", goodView.Summary, "Everything matches");
+        Assert.Equal("2 players · all match", goodView.Summary, "Everything matches");
         Assert.Equal(FoldoutTone.Good, goodView.SummaryTone, "Good tone");
         Assert.Equal("works", goodView.Sections[1].Rows.First().Right, "Shared mods work");
         Assert.False(goodView.Signature() == content.Signature(), "Different content has a different signature");

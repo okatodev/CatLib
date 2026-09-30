@@ -21,12 +21,19 @@ Not released yet.
   and the game runs as without it (`CatNetwork.IsActive`, `CatNetwork.ActiveModsChanged`). Boat Tweaks, Shelf Labels and Better Repair pause.
 - Players' mods in the lobby: a folding list at the top of the lobby for every player, the host included, with each player's mods,
   versions and what to do about differences. The host switches what happens to players with other mods right there.
+- Mod icons in the Mods tab: `icon.png` next to the mod's DLL or in its Thunderstore package folder is shown left of the mod's name
+  and at the top of its settings (`CatSettings.IconPath`), a question mark stands in for a missing one. Every plugin project copies its `icon.png` next to its DLL and into the game;
+  without one the build warns (CATLIB001) and still succeeds. The log names the icon of every mod or where it was looked for.
+- The Mods tab: the author under the mod's version (`CatSettings.Author`, from the Thunderstore package folder or the assembly company),
+  a short mark under a mod's name when it is paused in this game, waits for a restart or has settings set by the host,
+  CatLib first in the list, and keyboard and gamepad navigation between the list, the settings and the reset button.
 - `FoldoutList` in `CatLib.UI`: a folding list built from the game's UI pieces, for mods too. See [Folding lists](docs/Foldout.md).
 - `CatNetwork.IncompatiblePlayers` reads and changes what the host does with incompatible players; a change applies to players already in the session.
 - Developer menu of `CatLib.Tests`: Session roster and Lobby dump.
 
 ### Changed
 
+- The scrollbars of the Mods tab are copies of the game's own.
 - A player that stays after a failed check gets the session settings of the mods it shares with the host.
 - Protocol 5: players with CatLib 0.5.0 are told that their CatLib differs.
 - Mods in `mods/` follow one folder layout (`Settings`, `Logic`, `Scene`, `Sync`, `Data`, `Patches`),

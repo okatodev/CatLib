@@ -30,6 +30,7 @@ internal static class ModsMenu
         _log = log;
         PlayerMessages.Initialize(log);
         LobbyModsView.Initialize(log.Scope("Lobby"));
+        ModIcons.Log = log.Scope("Icons");
         BootstrapEvents.GameRestartStarted += SuspendForRestart;
         BootstrapEvents.MainMenuLoaded += Resume;
         BootstrapEvents.LevelLoadFinalized += Resume;

@@ -68,7 +68,10 @@ internal static class UiText
     public const string PolicyTitle = "PolicyTitle";
     public const string PolicyWarn = "PolicyWarn";
     public const string PolicyDisconnect = "PolicyDisconnect";
-    public const string PolicyChange = "PolicyChange";
+    public const string BadgePaused = "BadgePaused";
+    public const string BadgeRestart = "BadgeRestart";
+    public const string BadgeHost = "BadgeHost";
+    public const string CardAuthor = "CardAuthor";
 
     private static readonly Dictionary<string, (string English, string Russian)> Strings = new()
     {
@@ -106,7 +109,7 @@ internal static class UiText
         [ProblemMissingOnHost] = ("{0} missing on the host", "{0} нет у хоста"),
         [ProblemVersion] = ("{0} {1} vs {2}", "{0} {1} против {2}"),
         [LobbyModsTitle] = ("Players' mods", "Моды игроков"),
-        [LobbyAllMatch] = ("{0} · everything matches", "{0} · всё совпадает"),
+        [LobbyAllMatch] = ("{0} · all match", "{0} · всё совпадает"),
         [LobbyPaused] = ("{0} · paused: {1}", "{0} · на паузе: {1}"),
         [LobbyHost] = ("host", "хост"),
         [LobbyYou] = ("you", "вы"),
@@ -129,7 +132,10 @@ internal static class UiText
         [PolicyTitle] = ("Players with other mods", "Игроки с другими модами"),
         [PolicyWarn] = ("let in, pause the mods", "пускать, моды на паузу"),
         [PolicyDisconnect] = ("disconnect", "отключать"),
-        [PolicyChange] = ("click to change", "нажмите, чтобы сменить")
+        [BadgePaused] = ("paused in this game", "на паузе в этой игре"),
+        [BadgeRestart] = ("needs a restart", "ждёт перезапуска"),
+        [BadgeHost] = ("set by the host", "задано хостом"),
+        [CardAuthor] = ("by {0}", "автор: {0}")
     };
 
     private static readonly Dictionary<string, (string EnglishOne, string EnglishOther, string RussianOne, string RussianFew, string RussianMany)> Plurals = new()

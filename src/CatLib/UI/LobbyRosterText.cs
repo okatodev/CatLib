@@ -25,7 +25,7 @@ internal static class LobbyRosterText
         var policyText = roster.Policy == IncompatiblePlayerAction.Disconnect
             ? UiText.Get(UiText.PolicyDisconnect, language)
             : UiText.Get(UiText.PolicyWarn, language);
-        var policy = new FoldoutRow(UiText.Get(UiText.PolicyTitle, language), isHost ? UiText.Get(UiText.PolicyChange, language) : string.Empty,
+        var policy = new FoldoutRow(UiText.Get(UiText.PolicyTitle, language), string.Empty,
             policyText, isHost ? FoldoutTone.Normal : FoldoutTone.Muted, isHost ? togglePolicy : null);
 
         var sections = roster.Players.Select(player => Section(roster, player, localId, language)).ToList();
