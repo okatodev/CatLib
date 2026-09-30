@@ -17,6 +17,9 @@ internal sealed class CrashSession
     public const string ModKey = "mod";
     public const string EventKey = "event";
     public const string CleanKey = "clean";
+    public const string MainThreadKey = "mainThread";
+    public const string ExceptionKey = "exception";
+    public const string TextPrefix = "text.";
 
     public string CatLibVersion { get; set; } = string.Empty;
 
@@ -40,7 +43,13 @@ internal sealed class CrashSession
 
     public string CleanExit { get; set; }
 
-    public bool IsRussian => Language.StartsWith("ru", StringComparison.OrdinalIgnoreCase);
+    public int MainThreadId { get; set; }
+
+    public List<string> ExceptionLines { get; } = new List<string>();
+
+    public Dictionary<string, string> Texts { get; } = new Dictionary<string, string>(StringComparer.Ordinal);
+
+    public CrashStrings Strings => new CrashStrings(Texts);
 
     public static string Line(string key, string value) => key + "=" + Flatten(value);
 
@@ -54,6 +63,10 @@ internal sealed class CrashSession
         yield return Line(PlayerLogKey, PlayerLog);
         yield return Line(BepInExLogKey, BepInExLog);
         yield return Line(ReportsKey, ReportsDirectory);
+        if (MainThreadId != 0)
+        {
+            yield return Line(MainThreadKey, MainThreadId.ToString(CultureInfo.InvariantCulture));
+        }
         foreach (var mod in Mods)
         {
             yield return Line(ModKey, mod);
@@ -73,6 +86,12 @@ internal sealed class CrashSession
 
             var key = line.Substring(0, split);
             var value = line.Substring(split + 1);
+            if (key.StartsWith(TextPrefix, StringComparison.Ordinal))
+            {
+                session.Texts[key.Substring(TextPrefix.Length)] = value;
+                continue;
+            }
+
             switch (key)
             {
                 case CatLibKey:
@@ -107,6 +126,12 @@ internal sealed class CrashSession
                     break;
                 case CleanKey:
                     session.CleanExit = value;
+                    break;
+                case ExceptionKey:
+                    session.ExceptionLines.Add(value);
+                    break;
+                case MainThreadKey:
+                    session.MainThreadId = int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var thread) ? thread : 0;
                     break;
             }
         }

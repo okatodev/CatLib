@@ -10,6 +10,8 @@
   "setting": {
     "Diagnostics.CrashWindow": "크래시 창",
     "Diagnostics.CrashWindow.description": "게임이 예기치 않게 종료되면 작은 창에 무슨 일이 있었는지 보여 주고, 로그가 담긴 보고서를 BepInEx/CatLib/Crashes에 보관해요.",
+    "Diagnostics.CrashDumps": "크래시 덤프",
+    "Diagnostics.CrashDumps.description": "크래시 창과 함께, 크래시 순간의 메모리 덤프를 모드 제작자를 위해 보고서 폴더에 보관해요. 이를 위해 크래시 감시 프로세스가 디버거처럼 게임에 연결돼요.",
     "Network.Enabled": "멀티플레이 모드",
     "Network.Enabled.description": "CatLib을 쓰는 다른 플레이어와 모드 목록과 세션 설정을 주고받아요. 다음 세션부터 적용돼요.",
     "Network.OnIncompatiblePlayer": "모드가 다른 플레이어",
@@ -98,6 +100,64 @@
     },
     "LobbyMods": {
       "other": "모드 {0}개"
+    }
+  },
+  "crash": {
+    "title": "Cat Mail Co: 크래시 보고서",
+    "openFolder": "보고서 폴더 열기",
+    "copy": "보고서 복사",
+    "showDetails": "세부 정보",
+    "hideDetails": "세부 정보 숨기기",
+    "footer": "보고서와 로그 저장 위치: {0}",
+    "help": "계속 이런 일이 생기면 보고서 폴더를 모드 제작자에게 보내 주세요.",
+    "copied": "보고서를 복사했어요",
+    "summary": "게임이 예기치 않게 종료됐어요: {0} ({1}).",
+    "where": "위치: {0}.",
+    "ran": "실행 시간: {0}.",
+    "quitting": "게임을 종료하는 중에 일어났어요.",
+    "dumpSaved": "메모리 덤프를 보고서와 함께 저장했어요.",
+    "hoursMinutes": "{0}시간 {1}분",
+    "minutes": "{0}분",
+    "seconds": "{0}초",
+    "detailTime": "시각",
+    "detailExitCode": "종료 코드",
+    "detailModule": "모듈",
+    "detailException": "예외",
+    "detailThread": "스레드",
+    "gameThread": "게임 스레드",
+    "otherThread": "다른 스레드",
+    "detailGame": "게임",
+    "detailMods": "모드",
+    "detailEvents": "최근 이벤트",
+    "exit": {
+      "normal": "정상 종료",
+      "closedOutside": "작업 관리자 등 외부에서 게임을 닫음",
+      "accessViolation": "잘못된 메모리 주소에 접근 (access violation)",
+      "heapCorruption": "메모리 힙 손상 (heap corruption)",
+      "failFast": "빠른 실패 (fail fast) 또는 스택 버퍼 오버런",
+      "stackOverflow": "스택 오버플로 (stack overflow)",
+      "illegalInstruction": "잘못된 명령어",
+      "divideByZero": "정수를 0으로 나눔",
+      "consoleClosed": "콘솔 창으로 게임을 닫음",
+      "dotnetException": "처리되지 않은 .NET 예외",
+      "dotnetFailFast": ".NET 빠른 실패 (FailFast)",
+      "unknown": "알 수 없는 이유"
+    },
+    "phrase": {
+      "1": "게임이 냥냥펀치를 맞았어요 :(",
+      "2": "고양이는 물이 싫고, 게임은 이게 싫대요",
+      "3": "누가 게임을 책상에서 툭 떨어뜨렸어요",
+      "4": "맨 위 선반에서 소포가 떨어졌어요",
+      "5": "고양이가 키보드 위에 앉았어요",
+      "6": "게임이 동그랗게 말고 잠들었어요",
+      "7": "배가 게임을 두고 떠났어요",
+      "8": "아홉 목숨 중 하나가 날아갔어요",
+      "9": "털실 뭉치가 완전히 엉켰어요",
+      "10": "하악! 뭔가 잘못됐어요",
+      "11": "게임이 레이저 점을 쫓다가 길을 잃었어요",
+      "12": "앗, 우편물이 젖었어요",
+      "13": "게임이 소파 밑에 숨었어요",
+      "14": "누가 꼬리를 밟았어요"
     }
   }
 }

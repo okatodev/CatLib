@@ -10,6 +10,8 @@
   "setting": {
     "Diagnostics.CrashWindow": "當機視窗",
     "Diagnostics.CrashWindow.description": "遊戲意外關閉時，會跳出一個小視窗說明發生了什麼事，並把附有記錄檔的報告保存在 BepInEx/CatLib/Crashes。",
+    "Diagnostics.CrashDumps": "當機傾印",
+    "Diagnostics.CrashDumps.description": "搭配當機視窗，在報告資料夾中保存當機當下的記憶體傾印，提供給模組作者。為此，當機監控程式會像偵錯工具一樣附加到遊戲上。",
     "Network.Enabled": "連線模組",
     "Network.Enabled.description": "與其他使用 CatLib 的玩家交換模組清單和本場設定。下一場遊戲起生效。",
     "Network.OnIncompatiblePlayer": "模組不同的玩家",
@@ -98,6 +100,64 @@
     },
     "LobbyMods": {
       "other": "{0} 個模組"
+    }
+  },
+  "crash": {
+    "title": "Cat Mail Co：當機報告",
+    "openFolder": "開啟報告資料夾",
+    "copy": "複製報告",
+    "showDetails": "詳細資訊",
+    "hideDetails": "隱藏詳細資訊",
+    "footer": "報告和記錄檔已儲存在 {0}",
+    "help": "如果一直發生這種狀況，請將報告資料夾傳給模組作者。",
+    "copied": "已複製報告",
+    "summary": "遊戲意外關閉：{0}（{1}）。",
+    "where": "位置：{0}。",
+    "ran": "遊戲執行了 {0}。",
+    "quitting": "發生在遊戲結束的過程中。",
+    "dumpSaved": "記憶體傾印已和報告一起儲存。",
+    "hoursMinutes": "{0} 小時 {1} 分鐘",
+    "minutes": "{0} 分鐘",
+    "seconds": "{0} 秒",
+    "detailTime": "時間",
+    "detailExitCode": "結束代碼",
+    "detailModule": "程式模組",
+    "detailException": "例外狀況",
+    "detailThread": "執行緒",
+    "gameThread": "遊戲執行緒",
+    "otherThread": "其他執行緒",
+    "detailGame": "遊戲",
+    "detailMods": "模組",
+    "detailEvents": "最近事件",
+    "exit": {
+      "normal": "正常結束",
+      "closedOutside": "遊戲被外部關閉，例如透過工作管理員",
+      "accessViolation": "存取了無效的記憶體位址（access violation）",
+      "heapCorruption": "記憶體堆積已損毀（heap corruption）",
+      "failFast": "快速失敗（fail fast）或堆疊緩衝區溢位",
+      "stackOverflow": "堆疊溢位（stack overflow）",
+      "illegalInstruction": "不合法的指令",
+      "divideByZero": "整數除以零",
+      "consoleClosed": "遊戲透過主控台視窗被關閉",
+      "dotnetException": "未處理的 .NET 例外狀況",
+      "dotnetFailFast": ".NET 快速失敗（FailFast）",
+      "unknown": "原因不明"
+    },
+    "phrase": {
+      "1": "你的遊戲被喵掉了 :(",
+      "2": "貓咪怕水，遊戲怕這個",
+      "3": "誰把遊戲從桌上推下去了",
+      "4": "最上層的架子掉下一個包裹",
+      "5": "有隻貓坐到鍵盤上了",
+      "6": "遊戲縮成一團睡著了",
+      "7": "船開走了，把遊戲留在岸上",
+      "8": "九條命，少了一條",
+      "9": "毛線球整個打結了",
+      "10": "哈——！出了點狀況",
+      "11": "遊戲追著雷射光點跑丟了",
+      "12": "糟糕，郵件淋濕了",
+      "13": "遊戲躲到沙發底下了",
+      "14": "有人踩到尾巴了"
     }
   }
 }

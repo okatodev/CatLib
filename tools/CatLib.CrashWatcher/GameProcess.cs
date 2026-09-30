@@ -37,16 +37,7 @@ internal static class GameProcess
             }
 
             exit.ExitCode = code;
-            if (NativeMethods.GetProcessTimes(handle, out var created, out var exited, out _, out _))
-            {
-                exit.Started = DateTime.FromFileTimeUtc(created).ToLocalTime();
-                exit.Exited = DateTime.FromFileTimeUtc(exited).ToLocalTime();
-            }
-            else
-            {
-                exit.Exited = DateTime.Now;
-            }
-
+            FillTimes(handle, exit);
             return exit;
         }
         finally
@@ -55,7 +46,20 @@ internal static class GameProcess
         }
     }
 
-    private static string ImagePath(IntPtr handle)
+    public static void FillTimes(IntPtr handle, GameExit exit)
+    {
+        if (NativeMethods.GetProcessTimes(handle, out var created, out var exited, out _, out _) && exited > 0)
+        {
+            exit.Started = DateTime.FromFileTimeUtc(created).ToLocalTime();
+            exit.Exited = DateTime.FromFileTimeUtc(exited).ToLocalTime();
+        }
+        else
+        {
+            exit.Exited = DateTime.Now;
+        }
+    }
+
+    public static string ImagePath(IntPtr handle)
     {
         var size = 1024u;
         var builder = new StringBuilder((int)size);

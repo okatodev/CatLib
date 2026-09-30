@@ -10,6 +10,8 @@
   "setting": {
     "Diagnostics.CrashWindow": "Absturzfenster",
     "Diagnostics.CrashWindow.description": "Wenn sich das Spiel unerwartet schließt, zeigt ein kleines Fenster, was passiert ist, und ein Bericht mit den Logs wird in BepInEx/CatLib/Crashes aufbewahrt.",
+    "Diagnostics.CrashDumps": "Speicherabbild bei Absturz",
+    "Diagnostics.CrashDumps.description": "Legt zusammen mit dem Absturzfenster ein Speicherabbild vom Moment des Absturzes im Berichtsordner ab, für die Mod-Autoren. Dafür folgt der Absturzwächter dem Spiel wie ein Debugger.",
     "Network.Enabled": "Mods im Mehrspieler",
     "Network.Enabled.description": "Tauscht Modlisten und Sitzungseinstellungen mit anderen Spielern aus, die CatLib nutzen. Gilt ab der nächsten Sitzung.",
     "Network.OnIncompatiblePlayer": "Spieler mit anderen Mods",
@@ -102,6 +104,64 @@
     "LobbyMods": {
       "one": "{0} Mod",
       "other": "{0} Mods"
+    }
+  },
+  "crash": {
+    "title": "Cat Mail Co: Absturzbericht",
+    "openFolder": "Berichtsordner öffnen",
+    "copy": "Bericht kopieren",
+    "showDetails": "Details",
+    "hideDetails": "Details ausblenden",
+    "footer": "Bericht und Logs sind gespeichert in {0}",
+    "help": "Wenn das öfter passiert, schick den Berichtsordner an die Mod-Autoren.",
+    "copied": "Bericht kopiert",
+    "summary": "Das Spiel wurde unerwartet beendet: {0} ({1}).",
+    "where": "Ort: {0}.",
+    "ran": "Das Spiel lief {0} lang.",
+    "quitting": "Es passierte, während das Spiel beendet wurde.",
+    "dumpSaved": "Ein Speicherabbild wurde mit dem Bericht gespeichert.",
+    "hoursMinutes": "{0} Std. {1} Min.",
+    "minutes": "{0} Min.",
+    "seconds": "{0} Sek.",
+    "detailTime": "Zeit",
+    "detailExitCode": "Exit-Code",
+    "detailModule": "Modul",
+    "detailException": "Ausnahme",
+    "detailThread": "Thread",
+    "gameThread": "der Spiel-Thread",
+    "otherThread": "ein anderer Thread",
+    "detailGame": "Spiel",
+    "detailMods": "Mods",
+    "detailEvents": "Letzte Ereignisse",
+    "exit": {
+      "normal": "normales Beenden",
+      "closedOutside": "das Spiel wurde von außen beendet, zum Beispiel über den Task-Manager",
+      "accessViolation": "Zugriff auf eine ungültige Speicheradresse (access violation)",
+      "heapCorruption": "der Speicher-Heap ist beschädigt (heap corruption)",
+      "failFast": "Notabbruch (fail fast) oder Pufferüberlauf auf dem Stack",
+      "stackOverflow": "Stapelüberlauf (stack overflow)",
+      "illegalInstruction": "ungültiger Prozessorbefehl",
+      "divideByZero": "ganzzahlige Division durch null",
+      "consoleClosed": "das Spiel wurde über sein Konsolenfenster geschlossen",
+      "dotnetException": "eine unbehandelte .NET-Ausnahme",
+      "dotnetFailFast": ".NET-Notabbruch (FailFast)",
+      "unknown": "unbekannter Grund"
+    },
+    "phrase": {
+      "1": "Dein Spiel hat Miau gemacht :(",
+      "2": "Katzen mögen kein Wasser, und das Spiel mochte das hier nicht",
+      "3": "Jemand hat das Spiel vom Tisch geschubst",
+      "4": "Ein Paket ist vom obersten Regal gefallen",
+      "5": "Eine Katze hat sich auf die Tastatur gesetzt",
+      "6": "Das Spiel hat sich eingerollt und schläft",
+      "7": "Das Boot hat ohne das Spiel abgelegt",
+      "8": "Sieben Leben, und eins davon ist weg",
+      "9": "Das Wollknäuel hat sich total verheddert",
+      "10": "Fauch! Da ist was schiefgegangen",
+      "11": "Das Spiel jagte einen Laserpunkt und hat sich verlaufen",
+      "12": "Hoppla, die Post ist nass geworden",
+      "13": "Das Spiel versteckt sich unterm Sofa",
+      "14": "Jemand ist einer Katze auf den Schwanz getreten"
     }
   }
 }

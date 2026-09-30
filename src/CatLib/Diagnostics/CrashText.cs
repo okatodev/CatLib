@@ -18,7 +18,33 @@ internal sealed class CrashEventInfo
 
     public string RuntimeMessage { get; set; } = string.Empty;
 
+    public int ThreadId { get; set; }
+
+    public bool FromDebugger { get; set; }
+
+    public bool Early { get; set; }
+
+    public string Access { get; set; } = string.Empty;
+
     public bool HasFault => Module.Length > 0;
+}
+
+internal sealed class CrashModule
+{
+    public CrashModule(string path, ulong start, ulong size)
+    {
+        Path = path ?? string.Empty;
+        Start = start;
+        Size = size;
+    }
+
+    public string Path { get; }
+
+    public string Name => Path.Substring(Path.LastIndexOfAny(new[] { '\\', '/' }) + 1);
+
+    public ulong Start { get; }
+
+    public ulong Size { get; }
 }
 
 internal static class CrashText
@@ -30,101 +56,110 @@ internal static class CrashText
     public const string ApplicationErrorProvider = "Application Error";
     public const string RuntimeProvider = ".NET Runtime";
 
-    public static readonly string[] EnglishPhrases =
-    {
-        "Your game got meowed :(",
-        "Cats don't like water, and the game didn't like this",
-        "Someone knocked the game off the table",
-        "A parcel fell off the top shelf",
-        "A cat sat on the keyboard",
-        "The game curled up and fell asleep",
-        "The boat sailed off without the game",
-        "Nine lives, and one of them is gone",
-        "The yarn got all tangled up",
-        "Hiss! Something went wrong",
-        "The game chased a laser dot and got lost",
-        "Oops, the mail got wet",
-        "The game is hiding under the sofa",
-        "Somebody stepped on a tail"
-    };
-
-    public static readonly string[] RussianPhrases =
-    {
-        "Игру замяукали :(",
-        "Коты не любят воду, а игра не любит вот это",
-        "Кто-то смахнул игру со стола",
-        "С верхней полки упала посылка",
-        "На клавиатуру сел кот",
-        "Игра свернулась клубочком и уснула",
-        "Корабль уплыл без игры",
-        "Из девяти жизней одна потрачена",
-        "Клубок совсем запутался",
-        "Шшш! Что-то пошло не так",
-        "Игра погналась за лазерной точкой и потерялась",
-        "Ой, почта промокла",
-        "Игра спряталась под диван",
-        "Кто-то наступил на хвост"
-    };
-
-    public static string Phrase(Random random, bool russian)
-    {
-        var phrases = russian ? RussianPhrases : EnglishPhrases;
-        return phrases[random.Next(phrases.Length)];
-    }
-
-    public static string WindowTitle(bool russian) => russian ? "Cat Mail Co: отчёт о падении" : "Cat Mail Co: crash report";
-
-    public static string OpenFolderButton(bool russian) => russian ? "Открыть папку отчёта" : "Open the report folder";
-
-    public static string CopyButton(bool russian) => russian ? "Скопировать отчёт" : "Copy the report";
-
-    public static string ShowDetails(bool russian) => russian ? "Подробности" : "Details";
-
-    public static string HideDetails(bool russian) => russian ? "Скрыть подробности" : "Hide details";
-
-    public static string Footer(bool russian, string folder) =>
-        (russian ? "Отчёт и логи сохранены: " : "The report and logs are saved in ") + folder;
-
-    public static string HelpLine(bool russian) => russian
-        ? "Если это повторяется, отправьте папку отчёта авторам модов."
-        : "If this keeps happening, send the report folder to the mod authors.";
-
-    public static string Copied(bool russian) => russian ? "Отчёт скопирован" : "The report is copied";
+    public const string ExecuteAccess = "execute";
 
     public static bool IsNormalExit(uint exitCode) => exitCode == 0;
 
-    public static string DescribeExitCode(uint exitCode, bool russian)
+    public static string AccessText(ulong kind, ulong address)
+    {
+        var what = kind == 0 ? "read" : kind == 1 ? "write" : kind == 8 ? ExecuteAccess : "access " + kind.ToString(CultureInfo.InvariantCulture);
+        return what + " at " + Hex64(address);
+    }
+
+    public static string ExitKey(uint exitCode)
     {
         switch (exitCode)
         {
             case 0:
-                return russian ? "обычный выход" : "normal exit";
+                return "exit.normal";
             case 1:
-                return russian ? "игру закрыли извне, например через диспетчер задач" : "the game was closed from outside, for example from the Task Manager";
+                return "exit.closedOutside";
             case 0xC0000005:
-                return russian ? "обращение по неверному адресу памяти (access violation)" : "access to an invalid memory address (access violation)";
+                return "exit.accessViolation";
             case 0xC0000374:
-                return russian ? "повреждена куча памяти (heap corruption)" : "the memory heap is damaged (heap corruption)";
+                return "exit.heapCorruption";
             case 0xC0000409:
-                return russian ? "аварийное завершение (fail fast или переполнение буфера на стеке)" : "fail fast or a stack buffer overrun";
+                return "exit.failFast";
             case 0xC00000FD:
-                return russian ? "переполнение стека (stack overflow)" : "stack overflow";
+                return "exit.stackOverflow";
             case 0xC000001D:
-                return russian ? "недопустимая инструкция процессора" : "illegal instruction";
+                return "exit.illegalInstruction";
             case 0xC0000094:
-                return russian ? "деление на ноль" : "integer division by zero";
+                return "exit.divideByZero";
             case 0xC000013A:
-                return russian ? "игру закрыли через окно консоли" : "the game was closed through its console window";
+                return "exit.consoleClosed";
             case 0xE0434352:
-                return russian ? "необработанное исключение .NET" : "an unhandled .NET exception";
+                return "exit.dotnetException";
             case 0x80131623:
-                return russian ? "аварийное завершение .NET (FailFast)" : ".NET fail fast";
+                return "exit.dotnetFailFast";
             default:
-                return russian ? "неизвестная причина" : "unknown reason";
+                return "exit.unknown";
         }
     }
 
+    public static string DescribeExitCode(uint exitCode, CrashStrings strings) => (strings ?? CrashStrings.EnglishOnly).Get(ExitKey(exitCode));
+
     public static string Hex(uint value) => "0x" + value.ToString("X8", CultureInfo.InvariantCulture);
+
+    public static string Hex64(ulong value) => "0x" + value.ToString("x16", CultureInfo.InvariantCulture);
+
+    public static CrashEventInfo Locate(IList<CrashModule> modules, ulong address, uint exceptionCode, int threadId)
+    {
+        var info = new CrashEventInfo { ExceptionCode = "0x" + exceptionCode.ToString("x8", CultureInfo.InvariantCulture), ThreadId = threadId, FromDebugger = true };
+        foreach (var module in modules ?? new List<CrashModule>())
+        {
+            if (address >= module.Start && address - module.Start < module.Size)
+            {
+                info.Module = module.Name;
+                info.ModulePath = module.Path;
+                info.Offset = Hex64(address - module.Start);
+                return info;
+            }
+        }
+
+        info.Module = "?";
+        info.Offset = Hex64(address);
+        return info;
+    }
+
+    public static bool IsManaged(CrashEventInfo info)
+    {
+        if (info.Module == "?")
+        {
+            return !info.Access.StartsWith(CrashText.ExecuteAccess, StringComparison.Ordinal);
+        }
+
+        var path = info.ModulePath.Replace('/', '\\');
+        return string.Equals(info.Module, "coreclr.dll", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(info.Module, "clrjit.dll", StringComparison.OrdinalIgnoreCase)
+               || path.IndexOf("\\dotnet\\", StringComparison.OrdinalIgnoreCase) >= 0
+               || path.IndexOf("\\BepInEx\\", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    public static CrashEventInfo WithManagedException(CrashEventInfo info, CrashSession session)
+    {
+        if (info != null && info.RuntimeMessage.Length == 0 && session != null && session.ExceptionLines.Count > 0)
+        {
+            info.RuntimeMessage = string.Join("\n", session.ExceptionLines);
+        }
+
+        return info;
+    }
+
+    public static CrashEventInfo Merge(CrashEventInfo fromDebugger, CrashEventInfo fromEvents)
+    {
+        if (fromDebugger == null)
+        {
+            return fromEvents ?? new CrashEventInfo();
+        }
+
+        if (fromEvents != null && fromDebugger.RuntimeMessage.Length == 0)
+        {
+            fromDebugger.RuntimeMessage = fromEvents.RuntimeMessage;
+        }
+
+        return fromDebugger;
+    }
 
     public static CrashEventInfo ParseEvents(string xml, int processId, DateTime exitTimeUtc)
     {
@@ -193,62 +228,91 @@ internal static class CrashText
         return tail;
     }
 
-    public static string Summary(CrashSession session, uint exitCode, CrashEventInfo info, TimeSpan played)
+    public static string Summary(CrashSession session, uint exitCode, CrashEventInfo info, TimeSpan played, CrashStrings strings, bool dumpSaved = false)
     {
-        var russian = session.IsRussian;
+        strings = strings ?? CrashStrings.EnglishOnly;
         var builder = new StringBuilder();
-        builder.Append(russian ? "Игра закрылась неожиданно: " : "The game closed unexpectedly: ");
-        builder.Append(DescribeExitCode(exitCode, russian));
-        builder.Append(" (").Append(Hex(exitCode)).Append(").");
+        builder.Append(strings.Format("summary", DescribeExitCode(exitCode, strings), Hex(exitCode)));
         if (info.HasFault)
         {
-            builder.Append(russian ? " Место: " : " Where: ").Append(info.Module).Append(" + ").Append(info.Offset).Append('.');
+            builder.Append(' ').Append(strings.Format("where", info.Module + " + " + info.Offset));
         }
 
         if (played > TimeSpan.Zero)
         {
-            builder.Append(russian ? " Игра проработала " : " The game ran for ").Append(Duration(played, russian)).Append('.');
+            builder.Append(' ').Append(strings.Format("ran", Duration(played, strings)));
         }
 
         if (!string.IsNullOrEmpty(session.CleanExit))
         {
-            builder.Append(russian ? " Это случилось уже при выходе из игры." : " It happened while the game was quitting.");
+            builder.Append(' ').Append(strings.Get("quitting"));
+        }
+
+        if (dumpSaved)
+        {
+            builder.Append(' ').Append(strings.Get("dumpSaved"));
         }
 
         return builder.ToString();
     }
 
+    public static string ThreadText(CrashSession session, CrashEventInfo info, CrashStrings strings)
+    {
+        if (info.ThreadId == 0)
+        {
+            return string.Empty;
+        }
+
+        var id = info.ThreadId.ToString(CultureInfo.InvariantCulture);
+        if (session.MainThreadId == 0)
+        {
+            return id;
+        }
+
+        return id + ", " + strings.Get(info.ThreadId == session.MainThreadId ? "gameThread" : "otherThread");
+    }
+
     public static string Report(CrashSession session, uint exitCode, CrashEventInfo info, DateTime exitTime, TimeSpan played, IList<string> logTail, string dumpPath = null)
     {
-        var russian = session.IsRussian;
+        var english = CrashStrings.EnglishOnly;
         var builder = new StringBuilder();
-        builder.AppendLine(Summary(session, exitCode, info, played));
+        builder.AppendLine(Summary(session, exitCode, info, played, english));
         builder.AppendLine();
-        builder.AppendLine((russian ? "Время: " : "Time: ") + exitTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-        builder.AppendLine((russian ? "Код выхода: " : "Exit code: ") + Hex(exitCode) + ", " + DescribeExitCode(exitCode, russian));
+        builder.AppendLine("Time: " + exitTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+        builder.AppendLine("Exit code: " + Hex(exitCode) + ", " + DescribeExitCode(exitCode, english));
         if (info.HasFault)
         {
-            builder.AppendLine((russian ? "Модуль: " : "Module: ") + info.Module + " + " + info.Offset + ", " + (russian ? "исключение " : "exception ") + info.ExceptionCode);
+            var source = !info.FromDebugger ? ", from the Windows event log" : info.Early ? ", seen by the crash watcher when it was raised, the game closed right after" : ", seen by the crash watcher";
+            builder.AppendLine("Module: " + info.Module + " + " + info.Offset + ", exception " + info.ExceptionCode + source);
+            if (info.Access.Length > 0)
+            {
+                builder.AppendLine("Access: " + info.Access);
+            }
             if (info.ModulePath.Length > 0)
             {
-                builder.AppendLine((russian ? "Путь модуля: " : "Module path: ") + info.ModulePath);
+                builder.AppendLine("Module path: " + info.ModulePath);
+            }
+
+            if (info.ThreadId != 0)
+            {
+                builder.AppendLine("Thread: " + ThreadText(session, info, english));
             }
         }
         else
         {
-            builder.AppendLine(russian ? "Запись о падении в журнале Windows не найдена." : "No crash record was found in the Windows event log.");
+            builder.AppendLine("No crash record: the crash watcher saw no exception and the Windows event log has none for this process.");
         }
 
-        builder.AppendLine((russian ? "Игра: " : "Game: ") + session.GameVersion + ", CatLib " + session.CatLibVersion + ", " + (russian ? "запущена " : "started ") + session.Started);
+        builder.AppendLine("Game: " + session.GameVersion + ", CatLib " + session.CatLibVersion + ", started " + session.Started + ", language " + session.Language);
         if (!string.IsNullOrEmpty(dumpPath))
         {
-            builder.AppendLine((russian ? "Дамп памяти: " : "Memory dump: ") + dumpPath);
+            builder.AppendLine("Memory dump: " + dumpPath);
         }
 
         if (info.RuntimeMessage.Length > 0)
         {
             builder.AppendLine();
-            builder.AppendLine(russian ? "Сообщение .NET:" : ".NET message:");
+            builder.AppendLine(".NET message:");
             foreach (var line in SplitLines(info.RuntimeMessage))
             {
                 builder.AppendLine("  " + line);
@@ -256,21 +320,21 @@ internal static class CrashText
         }
 
         builder.AppendLine();
-        builder.AppendLine(russian ? "Моды:" : "Mods:");
+        builder.AppendLine("Mods:");
         foreach (var mod in session.Mods)
         {
             builder.AppendLine("  " + mod);
         }
 
         builder.AppendLine();
-        builder.AppendLine(russian ? "Последние события игры:" : "Last game events:");
+        builder.AppendLine("Last game events:");
         foreach (var line in Tail(session.Events, EventTailLines))
         {
             builder.AppendLine("  " + line);
         }
 
         builder.AppendLine();
-        builder.AppendLine(russian ? "Конец лога BepInEx:" : "End of the BepInEx log:");
+        builder.AppendLine("End of the BepInEx log:");
         foreach (var line in logTail ?? new List<string>())
         {
             builder.AppendLine("  " + line);
@@ -279,15 +343,20 @@ internal static class CrashText
         return builder.ToString();
     }
 
-    public static string Details(CrashSession session, uint exitCode, CrashEventInfo info, DateTime exitTime)
+    public static string Details(CrashSession session, uint exitCode, CrashEventInfo info, DateTime exitTime, CrashStrings strings)
     {
-        var russian = session.IsRussian;
+        strings = strings ?? CrashStrings.EnglishOnly;
         var builder = new StringBuilder();
-        builder.AppendLine((russian ? "Время: " : "Time: ") + exitTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-        builder.AppendLine((russian ? "Код выхода: " : "Exit code: ") + Hex(exitCode));
+        builder.AppendLine(strings.Get("detailTime") + ": " + exitTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+        builder.AppendLine(strings.Get("detailExitCode") + ": " + Hex(exitCode));
         if (info.HasFault)
         {
-            builder.AppendLine((russian ? "Модуль: " : "Module: ") + info.Module + " + " + info.Offset + ", " + (russian ? "исключение " : "exception ") + info.ExceptionCode);
+            builder.AppendLine(strings.Get("detailModule") + ": " + info.Module + " + " + info.Offset + ", " + strings.Get("detailException") + " " + info.ExceptionCode);
+            var thread = ThreadText(session, info, strings);
+            if (thread.Length > 0)
+            {
+                builder.AppendLine(strings.Get("detailThread") + ": " + thread);
+            }
         }
 
         var headline = RuntimeHeadline(info.RuntimeMessage);
@@ -296,16 +365,16 @@ internal static class CrashText
             builder.AppendLine(".NET: " + headline);
         }
 
-        builder.AppendLine((russian ? "Игра " : "Game ") + session.GameVersion + ", CatLib " + session.CatLibVersion);
+        builder.AppendLine(strings.Get("detailGame") + " " + session.GameVersion + ", CatLib " + session.CatLibVersion);
         if (session.Mods.Count > 0)
         {
-            builder.AppendLine((russian ? "Моды: " : "Mods: ") + string.Join(", ", ModNames(session.Mods)));
+            builder.AppendLine(strings.Get("detailMods") + ": " + string.Join(", ", ModNames(session.Mods)));
         }
 
         var events = Tail(session.Events, DetailEventLines);
         if (events.Count > 0)
         {
-            builder.AppendLine(russian ? "Последние события:" : "Last events:");
+            builder.AppendLine(strings.Get("detailEvents") + ":");
             foreach (var line in events)
             {
                 builder.AppendLine("  " + line);
@@ -372,20 +441,20 @@ internal static class CrashText
     public static string Shorten(string text, int length) =>
         text == null || text.Length <= length ? text ?? string.Empty : text.Substring(0, length - 3) + "...";
 
-    public static string Duration(TimeSpan span, bool russian)
+    public static string Duration(TimeSpan span, CrashStrings strings)
     {
+        strings = strings ?? CrashStrings.EnglishOnly;
         if (span.TotalHours >= 1)
         {
-            return ((int)span.TotalHours).ToString(CultureInfo.InvariantCulture) + (russian ? " ч " : " h ") +
-                   span.Minutes.ToString(CultureInfo.InvariantCulture) + (russian ? " мин" : " min");
+            return strings.Format("hoursMinutes", ((int)span.TotalHours).ToString(CultureInfo.InvariantCulture), span.Minutes.ToString(CultureInfo.InvariantCulture));
         }
 
         if (span.TotalMinutes >= 1)
         {
-            return ((int)span.TotalMinutes).ToString(CultureInfo.InvariantCulture) + (russian ? " мин" : " min");
+            return strings.Format("minutes", ((int)span.TotalMinutes).ToString(CultureInfo.InvariantCulture));
         }
 
-        return ((int)span.TotalSeconds).ToString(CultureInfo.InvariantCulture) + (russian ? " с" : " s");
+        return strings.Format("seconds", ((int)span.TotalSeconds).ToString(CultureInfo.InvariantCulture));
     }
 
     private static string Prefixed(string value)

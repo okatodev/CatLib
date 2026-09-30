@@ -11,21 +11,21 @@ internal sealed class CrashWindow
     public const int CopyId = 101;
 
     private readonly CrashReport _report;
-    private readonly bool _russian;
+    private readonly CrashStrings _strings;
     private readonly string _gamePath;
     private readonly WatcherLog _log;
 
-    public CrashWindow(CrashReport report, bool russian, string gamePath, WatcherLog log)
+    public CrashWindow(CrashReport report, CrashStrings strings, string gamePath, WatcherLog log)
     {
         _report = report;
-        _russian = russian;
+        _strings = strings ?? CrashStrings.EnglishOnly;
         _gamePath = gamePath;
         _log = log;
     }
 
     public void Show(string phrase)
     {
-        var content = _report.Summary + "\n\n" + CrashText.HelpLine(_russian);
+        var content = _report.Summary + "\n\n" + _strings.Get("help");
         try
         {
             ShowTaskDialog(phrase, content);
@@ -33,8 +33,8 @@ internal sealed class CrashWindow
         catch (Exception exception)
         {
             _log.Write($"The task dialog is unavailable, using a message box: {exception.Message}");
-            NativeMethods.MessageBox(IntPtr.Zero, phrase + "\n\n" + content + "\n\n" + _report.Details + "\n\n" + CrashText.Footer(_russian, _report.Folder),
-                CrashText.WindowTitle(_russian), NativeMethods.IconError | NativeMethods.TopMost);
+            NativeMethods.MessageBox(IntPtr.Zero, phrase + "\n\n" + content + "\n\n" + _report.Details + "\n\n" + _strings.Format("footer", _report.Folder),
+                _strings.Get("title"), NativeMethods.IconError | NativeMethods.TopMost);
         }
     }
 
@@ -42,8 +42,8 @@ internal sealed class CrashWindow
     {
         var buttons = new[]
         {
-            (OpenFolderId, CrashText.OpenFolderButton(_russian)),
-            (CopyId, CrashText.CopyButton(_russian))
+            (OpenFolderId, _strings.Get("openFolder")),
+            (CopyId, _strings.Get("copy"))
         };
         var buttonSize = 4 + IntPtr.Size;
         var buttonMemory = Marshal.AllocHGlobal(buttonSize * buttons.Length);
@@ -63,7 +63,7 @@ internal sealed class CrashWindow
             {
                 Flags = NativeMethods.AllowCancellation | (icon == IntPtr.Zero ? 0 : NativeMethods.UseMainIconHandle),
                 CommonButtons = NativeMethods.CloseButton,
-                WindowTitle = CrashText.WindowTitle(_russian),
+                WindowTitle = _strings.Get("title"),
                 MainIcon = icon == IntPtr.Zero ? NativeMethods.WarningIcon : icon,
                 MainInstruction = phrase,
                 Content = content,
@@ -71,9 +71,9 @@ internal sealed class CrashWindow
                 Buttons = buttonMemory,
                 DefaultButton = NativeMethods.CloseResult,
                 ExpandedInformation = _report.Details,
-                ExpandedControlText = CrashText.HideDetails(_russian),
-                CollapsedControlText = CrashText.ShowDetails(_russian),
-                Footer = CrashText.Footer(_russian, _report.Folder),
+                ExpandedControlText = _strings.Get("hideDetails"),
+                CollapsedControlText = _strings.Get("showDetails"),
+                Footer = _strings.Format("footer", _report.Folder),
                 Callback = callback
             };
             config.Size = (uint)Marshal.SizeOf(typeof(NativeMethods.TaskDialogConfig));
@@ -127,7 +127,7 @@ internal sealed class CrashWindow
                 case CopyId:
                     if (ClipboardText.Set(window, _report.Text))
                     {
-                        SetFooter(window, CrashText.Copied(_russian) + ". " + CrashText.Footer(_russian, _report.Folder));
+                        SetFooter(window, _strings.Get("copied") + ". " + _strings.Format("footer", _report.Folder));
                     }
 
                     return NativeMethods.KeepOpen;

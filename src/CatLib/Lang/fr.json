@@ -10,6 +10,8 @@
   "setting": {
     "Diagnostics.CrashWindow": "Fenêtre de plantage",
     "Diagnostics.CrashWindow.description": "Quand le jeu se ferme de façon inattendue, une petite fenêtre montre ce qui s'est passé et un rapport avec les journaux est conservé dans BepInEx/CatLib/Crashes.",
+    "Diagnostics.CrashDumps": "Dump de plantage",
+    "Diagnostics.CrashDumps.description": "En plus de la fenêtre de plantage, conserve dans le dossier du rapport un dump mémoire du moment du plantage, pour les auteurs des mods. Pour cela, le surveillant de plantages suit le jeu comme un débogueur.",
     "Network.Enabled": "Mods en multijoueur",
     "Network.Enabled.description": "Échanger les listes de mods et les réglages de session avec les autres joueurs qui utilisent CatLib. Prend effet à la prochaine session.",
     "Network.OnIncompatiblePlayer": "Joueurs avec d'autres mods",
@@ -102,6 +104,64 @@
     "LobbyMods": {
       "one": "{0} mod",
       "other": "{0} mods"
+    }
+  },
+  "crash": {
+    "title": "Cat Mail Co: rapport de plantage",
+    "openFolder": "Ouvrir le dossier du rapport",
+    "copy": "Copier le rapport",
+    "showDetails": "Détails",
+    "hideDetails": "Masquer les détails",
+    "footer": "Le rapport et les journaux sont enregistrés dans {0}",
+    "help": "Si cela se reproduit, envoyez le dossier du rapport aux auteurs des mods.",
+    "copied": "Rapport copié",
+    "summary": "Le jeu s'est fermé de façon inattendue : {0} ({1}).",
+    "where": "Emplacement : {0}.",
+    "ran": "Le jeu a tourné pendant {0}.",
+    "quitting": "C'est arrivé pendant la fermeture du jeu.",
+    "dumpSaved": "Un dump mémoire est enregistré avec le rapport.",
+    "hoursMinutes": "{0} h {1} min",
+    "minutes": "{0} min",
+    "seconds": "{0} s",
+    "detailTime": "Heure",
+    "detailExitCode": "Code de sortie",
+    "detailModule": "Module",
+    "detailException": "exception",
+    "detailThread": "Thread",
+    "gameThread": "le thread du jeu",
+    "otherThread": "un autre thread",
+    "detailGame": "Jeu",
+    "detailMods": "Mods",
+    "detailEvents": "Derniers événements",
+    "exit": {
+      "normal": "sortie normale",
+      "closedOutside": "le jeu a été fermé de l'extérieur, par exemple depuis le Gestionnaire des tâches",
+      "accessViolation": "accès à une adresse mémoire invalide (access violation)",
+      "heapCorruption": "le tas mémoire est endommagé (heap corruption)",
+      "failFast": "arrêt forcé (fail fast) ou dépassement de tampon sur la pile",
+      "stackOverflow": "débordement de pile (stack overflow)",
+      "illegalInstruction": "instruction processeur illégale",
+      "divideByZero": "division entière par zéro",
+      "consoleClosed": "le jeu a été fermé via sa fenêtre de console",
+      "dotnetException": "une exception .NET non gérée",
+      "dotnetFailFast": "arrêt forcé .NET (FailFast)",
+      "unknown": "raison inconnue"
+    },
+    "phrase": {
+      "1": "Votre jeu a fait miaou :(",
+      "2": "Les chats détestent l'eau, et le jeu a détesté ça",
+      "3": "Quelqu'un a poussé le jeu de la table",
+      "4": "Un colis est tombé de l'étagère du haut",
+      "5": "Un chat s'est assis sur le clavier",
+      "6": "Le jeu s'est roulé en boule et s'est endormi",
+      "7": "Le bateau est parti sans le jeu",
+      "8": "Neuf vies, et une de moins",
+      "9": "La pelote s'est complètement emmêlée",
+      "10": "Pschhh ! Quelque chose a mal tourné",
+      "11": "Le jeu a couru après un point laser et s'est perdu",
+      "12": "Oups, le courrier a pris l'eau",
+      "13": "Le jeu se cache sous le canapé",
+      "14": "Quelqu'un a marché sur la queue du chat"
     }
   }
 }

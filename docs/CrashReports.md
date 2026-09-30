@@ -6,12 +6,13 @@ that waits for the game to close instead of code inside the crashing game.
 
 ## What the player sees
 
-A small window titled "Cat Mail Co: crash report". The heading is a random cozy phrase, different from crash to crash,
-in Russian when the game is in Russian and in English otherwise. Below it:
+A small window titled "Cat Mail Co: crash report" in the language of the game. The heading is a random cozy phrase,
+different from crash to crash. Below it:
 
-- what happened in one line: the reason from the exit code, the module and offset of the crash if Windows recorded one,
-  how long the game ran, and whether it happened while the game was quitting;
-- **Details**: time, exit code, module, the .NET exception, game and CatLib versions, the mods, the last game events;
+- what happened in one line: the reason from the exit code, the module and offset of the crash,
+  how long the game ran, whether it happened while the game was quitting and whether a memory dump was saved;
+- **Details**: time, exit code, module, the thread (the game thread or another one), the .NET exception,
+  game and CatLib versions, the mods, the last game events;
 - **Open the report folder** and **Copy the report**; the window stays open after both;
 - the path of the report folder at the bottom.
 
@@ -23,29 +24,42 @@ A normal exit shows nothing. Closing the game from the Task Manager shows the wi
 
 | File | Contents |
 |---|---|
-| `report.txt` | The full report: summary, exit code, crash record from the Windows event log, .NET message, versions, mods, the last 15 game events, the last 40 lines of the BepInEx log, the memory dump path if Windows wrote one |
+| `report.txt` | The full report in English for the mod authors: summary, exit code, module, offset and thread of the crash, .NET message, versions, game language, mods, the last 15 game events, the last 40 lines of the BepInEx log |
+| `crash.dmp` | The memory dump of the moment of the crash (5 to 50 MB): the stacks of every thread with the memory they point to, the modules, the handles |
 | `LogOutput.log` | The BepInEx log of the crashed session |
 | `Player.log` | The Unity log of the crashed session, which the game replaces on the next start |
 | `session.txt` | What CatLib recorded while the game ran |
 
-The last 10 reports are kept. `BepInEx/CatLib/Crashes/watcher.log` has the watcher's own messages if something went wrong with it.
+The last 10 reports are kept, memory dumps only in the last 3 of them. `BepInEx/CatLib/Crashes/watcher.log` has the watcher's own messages if something went wrong with it.
 
 ## How it works
 
-1. At start CatLib writes `session_<process id>.txt` in `BepInEx/CatLib/Crashes` with the versions and log paths,
-   and starts `CatLib.CrashWatcher.exe` from its own folder.
-2. While the game runs, CatLib adds the language, the mod list and the game events to that file
-   (network ticks are left out, the file keeps the last 200 events).
-3. On a normal quit CatLib marks the file. The watcher waits for the game process to end and reads its exit code.
-4. Exit code 0: the watcher removes the file and closes. Anything else: it reads the crash records of this process
-   from the Windows event log (Application Error 1000 and .NET Runtime 1026), writes the report folder and shows the window.
+1. At start CatLib writes `session_<process id>.txt` in `BepInEx/CatLib/Crashes` with the versions, the log paths,
+   the id of the game thread and the window texts in the game language, and starts `CatLib.CrashWatcher.exe` from its own folder.
+2. While the game runs, CatLib adds the mod list and the game events to that file (network ticks are left out,
+   the file keeps the last 200 events). When the player changes the language, CatLib writes the texts again.
+3. With memory dumps on, the watcher follows the game like a debugger. Exceptions the game handles itself go straight back to it.
+   An exception nobody handles is the crash: the watcher notes the module, the offset and the thread and writes the dump
+   while the game is still stopped at that moment, then lets it close.
+   Unity closes the game itself after a crash on the game thread, so such an exception never reaches the watcher as unhandled.
+   That is why the watcher also keeps a dump of every access violation, bad instruction or stack overflow the moment it is raised
+   in native code (not in .NET code, which turns them into ordinary exceptions): at most one every 5 seconds and 10 per session.
+   When the game then closes with that same code, this dump is the crash dump; otherwise it is deleted.
+4. On a normal quit CatLib marks the file. Exit code 0: the watcher removes the file and closes.
+   Anything else: it adds the .NET message from the Windows event log (.NET Runtime 1026), and without its own record
+   the crash record too (Application Error 1000), writes the report folder and shows the window.
+5. An unhandled .NET exception is written into the session file by CatLib, so the report shows it even when Windows logs nothing.
 
-The watcher does not attach to the game as a debugger and does not change anything in it.
-It is a .NET Framework 4.8 program, so it runs on every Windows 10 and 11 without installing anything.
+The watcher changes nothing in the game: it only pauses it for the moment of writing a dump. It is a .NET Framework 4.8 program, so it runs on every Windows 10 and 11 without installing anything.
+The window texts come from CatLib's translations (`crash.*` keys of `catlib.core`), so they are in every game language
+and can be fixed by a translation file like every other text; without them the window is in English.
 
 ## Settings
 
-`CrashWindow` in section `[Diagnostics]` of CatLib's config turns the watcher off. It takes effect on the next start.
+In section `[Diagnostics]` of CatLib's config, both on the Mods tab and taking effect on the next start:
+
+- `CrashWindow` turns the watcher off.
+- `CrashDumps` turns the memory dumps off; the watcher then only waits for the game to close.
 
 ## Checking it
 
@@ -62,5 +76,6 @@ To look at the window without crashing, run
 
 ## Memory dumps
 
-The watcher does not write memory dumps itself. When Windows Error Reporting is set up to keep dumps
-(`LocalDumps` in the registry), the report names the dump of the crashed process from `%LOCALAPPDATA%\CrashDumps`.
+`crash.dmp` opens in Visual Studio or WinDbg next to the game's `GameAssembly.dll` and `UnityPlayer.dll`.
+If the watcher cannot follow the game (another debugger is attached, for example), it waits without dumps and says so in `watcher.log`.
+When Windows Error Reporting is set up to keep dumps (`LocalDumps` in the registry), the report names that dump instead.

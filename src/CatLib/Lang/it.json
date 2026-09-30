@@ -10,6 +10,8 @@
   "setting": {
     "Diagnostics.CrashWindow": "Finestra di crash",
     "Diagnostics.CrashWindow.description": "Quando il gioco si chiude all'improvviso, una piccola finestra mostra cosa è successo e un rapporto con i log viene conservato in BepInEx/CatLib/Crashes.",
+    "Diagnostics.CrashDumps": "Dump del crash",
+    "Diagnostics.CrashDumps.description": "Insieme alla finestra di crash, conserva nella cartella del rapporto un dump della memoria al momento del crash, per gli autori delle mod. Per farlo, il monitor dei crash segue il gioco come un debugger.",
     "Network.Enabled": "Mod in multiplayer",
     "Network.Enabled.description": "Scambia l'elenco delle mod e le impostazioni della sessione con gli altri giocatori che usano CatLib. Ha effetto dalla prossima sessione.",
     "Network.OnIncompatiblePlayer": "Giocatori con altre mod",
@@ -102,6 +104,64 @@
     "LobbyMods": {
       "one": "{0} mod",
       "other": "{0} mod"
+    }
+  },
+  "crash": {
+    "title": "Cat Mail Co: rapporto del crash",
+    "openFolder": "Apri la cartella del rapporto",
+    "copy": "Copia il rapporto",
+    "showDetails": "Dettagli",
+    "hideDetails": "Nascondi i dettagli",
+    "footer": "Il rapporto e i log sono salvati in {0}",
+    "help": "Se continua a succedere, invia la cartella del rapporto agli autori delle mod.",
+    "copied": "Rapporto copiato",
+    "summary": "Il gioco si è chiuso all'improvviso: {0} ({1}).",
+    "where": "Dove: {0}.",
+    "ran": "Il gioco è rimasto in esecuzione per {0}.",
+    "quitting": "È successo durante la chiusura del gioco.",
+    "dumpSaved": "Un dump della memoria è stato salvato insieme al rapporto.",
+    "hoursMinutes": "{0} h {1} min",
+    "minutes": "{0} min",
+    "seconds": "{0} s",
+    "detailTime": "Ora",
+    "detailExitCode": "Codice di uscita",
+    "detailModule": "Modulo",
+    "detailException": "eccezione",
+    "detailThread": "Thread",
+    "gameThread": "il thread del gioco",
+    "otherThread": "un altro thread",
+    "detailGame": "Gioco",
+    "detailMods": "Mod",
+    "detailEvents": "Ultimi eventi",
+    "exit": {
+      "normal": "uscita normale",
+      "closedOutside": "il gioco è stato chiuso dall'esterno, per esempio da Gestione attività",
+      "accessViolation": "accesso a un indirizzo di memoria non valido (access violation)",
+      "heapCorruption": "l'heap della memoria è danneggiato (heap corruption)",
+      "failFast": "chiusura forzata (fail fast) o overflow di un buffer nello stack",
+      "stackOverflow": "overflow dello stack (stack overflow)",
+      "illegalInstruction": "istruzione del processore non valida",
+      "divideByZero": "divisione intera per zero",
+      "consoleClosed": "il gioco è stato chiuso dalla sua finestra della console",
+      "dotnetException": "un'eccezione .NET non gestita",
+      "dotnetFailFast": "chiusura forzata .NET (FailFast)",
+      "unknown": "motivo sconosciuto"
+    },
+    "phrase": {
+      "1": "Il tuo gioco ha fatto miao :(",
+      "2": "I gatti odiano l'acqua, e il gioco ha odiato questo",
+      "3": "Qualcuno ha buttato il gioco giù dal tavolo",
+      "4": "Un pacco è caduto dallo scaffale più alto",
+      "5": "Un gatto si è seduto sulla tastiera",
+      "6": "Il gioco si è acciambellato e si è addormentato",
+      "7": "La barca è salpata senza il gioco",
+      "8": "Sette vite, e una se n'è andata",
+      "9": "Il gomitolo si è tutto aggrovigliato",
+      "10": "Fsss! Qualcosa è andato storto",
+      "11": "Il gioco ha inseguito un puntino laser e si è perso",
+      "12": "Ops, la posta si è bagnata",
+      "13": "Il gioco si è nascosto sotto il divano",
+      "14": "Qualcuno ha pestato la coda al gatto"
     }
   }
 }

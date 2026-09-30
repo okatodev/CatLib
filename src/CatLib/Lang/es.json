@@ -10,6 +10,8 @@
   "setting": {
     "Diagnostics.CrashWindow": "Ventana de fallos",
     "Diagnostics.CrashWindow.description": "Cuando el juego se cierra de forma inesperada, una pequeña ventana muestra lo que pasó y se guarda un informe con los registros en BepInEx/CatLib/Crashes.",
+    "Diagnostics.CrashDumps": "Volcado de fallo",
+    "Diagnostics.CrashDumps.description": "Junto con la ventana de fallos, guarda en la carpeta del informe un volcado de memoria del momento del fallo, para los autores de los mods. Para ello, el vigilante de fallos sigue al juego como un depurador.",
     "Network.Enabled": "Mods en multijugador",
     "Network.Enabled.description": "Intercambia listas de mods y ajustes de sesión con otros jugadores que usan CatLib. Se aplica desde la próxima sesión.",
     "Network.OnIncompatiblePlayer": "Jugadores con otros mods",
@@ -102,6 +104,64 @@
     "LobbyMods": {
       "one": "{0} mod",
       "other": "{0} mods"
+    }
+  },
+  "crash": {
+    "title": "Cat Mail Co: informe de fallo",
+    "openFolder": "Abrir la carpeta del informe",
+    "copy": "Copiar el informe",
+    "showDetails": "Detalles",
+    "hideDetails": "Ocultar detalles",
+    "footer": "El informe y los registros se guardan en {0}",
+    "help": "Si vuelve a pasar, envía la carpeta del informe a los autores de los mods.",
+    "copied": "Informe copiado",
+    "summary": "El juego se cerró de forma inesperada: {0} ({1}).",
+    "where": "Ubicación: {0}.",
+    "ran": "El juego funcionó durante {0}.",
+    "quitting": "Ocurrió mientras el juego se cerraba.",
+    "dumpSaved": "Se guardó un volcado de memoria junto con el informe.",
+    "hoursMinutes": "{0} h {1} min",
+    "minutes": "{0} min",
+    "seconds": "{0} s",
+    "detailTime": "Hora",
+    "detailExitCode": "Código de salida",
+    "detailModule": "Módulo",
+    "detailException": "excepción",
+    "detailThread": "Hilo",
+    "gameThread": "el hilo del juego",
+    "otherThread": "otro hilo",
+    "detailGame": "Juego",
+    "detailMods": "Mods",
+    "detailEvents": "Últimos eventos",
+    "exit": {
+      "normal": "salida normal",
+      "closedOutside": "el juego se cerró desde fuera, por ejemplo desde el Administrador de tareas",
+      "accessViolation": "acceso a una dirección de memoria no válida (access violation)",
+      "heapCorruption": "el montón de memoria está dañado (heap corruption)",
+      "failFast": "cierre forzoso (fail fast) o desbordamiento de búfer en la pila",
+      "stackOverflow": "desbordamiento de pila (stack overflow)",
+      "illegalInstruction": "instrucción de procesador no válida",
+      "divideByZero": "división entera entre cero",
+      "consoleClosed": "el juego se cerró desde su ventana de consola",
+      "dotnetException": "una excepción de .NET no controlada",
+      "dotnetFailFast": "cierre forzoso de .NET (FailFast)",
+      "unknown": "motivo desconocido"
+    },
+    "phrase": {
+      "1": "Tu juego hizo miau :(",
+      "2": "A los gatos no les gusta el agua, y al juego no le gustó esto",
+      "3": "Alguien tiró el juego de la mesa",
+      "4": "Se cayó un paquete del estante de arriba",
+      "5": "Un gato se sentó en el teclado",
+      "6": "El juego se hizo un ovillo y se durmió",
+      "7": "El barco zarpó sin el juego",
+      "8": "Siete vidas, y una se fue",
+      "9": "El ovillo se enredó por completo",
+      "10": "¡Fffff! Algo salió mal",
+      "11": "El juego persiguió un puntito láser y se perdió",
+      "12": "Uy, el correo se mojó",
+      "13": "El juego se escondió debajo del sofá",
+      "14": "Alguien le pisó la cola al gato"
     }
   }
 }

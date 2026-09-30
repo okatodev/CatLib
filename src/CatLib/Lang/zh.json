@@ -10,6 +10,8 @@
   "setting": {
     "Diagnostics.CrashWindow": "崩溃窗口",
     "Diagnostics.CrashWindow.description": "游戏意外关闭时，会弹出一个小窗口说明发生了什么，并把附带日志的报告保存到 BepInEx/CatLib/Crashes。",
+    "Diagnostics.CrashDumps": "崩溃转储",
+    "Diagnostics.CrashDumps.description": "与崩溃窗口配合，在报告文件夹中保存崩溃瞬间的内存转储，供模组作者使用。为此，崩溃监视进程会像调试器一样附加到游戏上。",
     "Network.Enabled": "联机模组",
     "Network.Enabled.description": "与其他使用 CatLib 的玩家交换模组列表和本局设置。从下一局起生效。",
     "Network.OnIncompatiblePlayer": "模组不同的玩家",
@@ -98,6 +100,64 @@
     },
     "LobbyMods": {
       "other": "{0} 个模组"
+    }
+  },
+  "crash": {
+    "title": "Cat Mail Co：崩溃报告",
+    "openFolder": "打开报告文件夹",
+    "copy": "复制报告",
+    "showDetails": "详细信息",
+    "hideDetails": "隐藏详细信息",
+    "footer": "报告和日志已保存到 {0}",
+    "help": "如果反复出现这种情况，请把报告文件夹发给模组作者。",
+    "copied": "报告已复制",
+    "summary": "游戏意外关闭：{0}（{1}）。",
+    "where": "位置：{0}。",
+    "ran": "游戏运行了 {0}。",
+    "quitting": "发生在游戏退出过程中。",
+    "dumpSaved": "内存转储已随报告一同保存。",
+    "hoursMinutes": "{0} 小时 {1} 分钟",
+    "minutes": "{0} 分钟",
+    "seconds": "{0} 秒",
+    "detailTime": "时间",
+    "detailExitCode": "退出代码",
+    "detailModule": "模块",
+    "detailException": "异常",
+    "detailThread": "线程",
+    "gameThread": "游戏线程",
+    "otherThread": "其他线程",
+    "detailGame": "游戏",
+    "detailMods": "模组",
+    "detailEvents": "最近事件",
+    "exit": {
+      "normal": "正常退出",
+      "closedOutside": "游戏被外部关闭，例如通过任务管理器",
+      "accessViolation": "访问了无效的内存地址（access violation）",
+      "heapCorruption": "内存堆已损坏（heap corruption）",
+      "failFast": "快速失败（fail fast）或栈缓冲区溢出",
+      "stackOverflow": "栈溢出（stack overflow）",
+      "illegalInstruction": "非法指令",
+      "divideByZero": "整数除以零",
+      "consoleClosed": "游戏通过控制台窗口被关闭",
+      "dotnetException": "未处理的 .NET 异常",
+      "dotnetFailFast": ".NET 快速失败（FailFast）",
+      "unknown": "未知原因"
+    },
+    "phrase": {
+      "1": "你的游戏被喵掉了 :(",
+      "2": "猫咪怕水，游戏怕这个",
+      "3": "谁把游戏从桌上拍下去了",
+      "4": "顶层货架上掉下来一个包裹",
+      "5": "有只猫坐到了键盘上",
+      "6": "游戏蜷成一团睡着了",
+      "7": "船开走了，把游戏落下了",
+      "8": "九条命，没了一条",
+      "9": "毛线团缠成了一团乱麻",
+      "10": "哈——！出了点问题",
+      "11": "游戏追着激光点跑丢了",
+      "12": "哎呀，邮件湿透了",
+      "13": "游戏躲到沙发底下去了",
+      "14": "有人踩到了尾巴"
     }
   }
 }

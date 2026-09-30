@@ -17,6 +17,7 @@
   <ItemGroup>
     <Compile Include="..\..\src\CatLib\Diagnostics\CrashSession.cs" Link="Shared\CrashSession.cs" />
     <Compile Include="..\..\src\CatLib\Diagnostics\CrashText.cs" Link="Shared\CrashText.cs" />
+    <Compile Include="..\..\src\CatLib\Diagnostics\CrashStrings.cs" Link="Shared\CrashStrings.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(CatLibWatcherCheck)' == 'true' and '$(CatLibWatcherEventLogReference)' != ''">

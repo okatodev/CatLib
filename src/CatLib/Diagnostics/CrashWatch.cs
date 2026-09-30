@@ -20,7 +20,9 @@ internal static class CrashWatch
 {
     public const string WatcherFileName = "CatLib.CrashWatcher.exe";
     public const string SessionFilePrefix = "session_";
+    public const string DumpArgument = "--dump";
     public const int KeptEvents = 200;
+    public const int MaxExceptionLines = 40;
     public const int EventsBeforeTrim = 2000;
     public static readonly string[] ClearedVariablePrefixes = { "DOORSTOP_", "DOTNET_", "COMPlus_", "CORECLR_" };
 
@@ -33,6 +35,7 @@ internal static class CrashWatch
     private static string _sessionFile;
     private static bool _modsWritten;
     private static bool _closed;
+    private static bool _dumps;
 
     public static string ReportsDirectory => Path.Combine(Paths.BepInExRootPath, "CatLib", "Crashes");
 
@@ -44,6 +47,9 @@ internal static class CrashWatch
         var enabled = settings.Local("Diagnostics", "CrashWindow", true,
             "When the game closes unexpectedly, a small window shows what happened and a report with the logs is kept in BepInEx/CatLib/Crashes.")
             .RequiresRestart();
+        _dumps = settings.Local("Diagnostics", "CrashDumps", true,
+            "Together with the crash window, keeps a memory dump of the moment of the crash in the report folder, for the mod authors. The crash watcher follows the game like a debugger for this.")
+            .RequiresRestart().Value;
         if (!enabled.Value)
         {
             _log.Info("The crash window is turned off in the CatLib settings");
@@ -93,15 +99,17 @@ internal static class CrashWatch
             Language = SafeLanguage(),
             PlayerLog = Application.consoleLogPath ?? string.Empty,
             BepInExLog = Path.Combine(Paths.BepInExRootPath, "LogOutput.log"),
-            ReportsDirectory = ReportsDirectory
+            ReportsDirectory = ReportsDirectory,
+            MainThreadId = CurrentThreadId()
         };
         Header.AddRange(session.HeaderLines());
+        Header.AddRange(TextLines(session.Language));
         File.WriteAllLines(_sessionFile, Header, Encoding.UTF8);
         RemoveStaleSessions(process.Id);
 
         var start = new ProcessStartInfo(watcher)
         {
-            Arguments = $"--pid {process.Id.ToString(CultureInfo.InvariantCulture)} --session \"{_sessionFile}\"",
+            Arguments = $"--pid {process.Id.ToString(CultureInfo.InvariantCulture)} --session \"{_sessionFile}\"" + (_dumps ? " " + DumpArgument : string.Empty),
             UseShellExecute = false,
             CreateNoWindow = true,
             WorkingDirectory = ReportsDirectory
@@ -115,12 +123,87 @@ internal static class CrashWatch
 
         GameEventStream.Raised += OnEvent;
         BootstrapEvents.MainMenuLoaded += OnMainMenuLoaded;
-        _log.Info($"Crash watcher started, reports go to {ReportsDirectory}");
+        CatLanguage.Changed += OnLanguageChanged;
+        AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+        _log.Info($"Crash watcher started{(_dumps ? " with memory dumps" : string.Empty)}, reports go to {ReportsDirectory}");
     }
+
+    private static void OnLanguageChanged(string language) => WriteLanguage(language);
+
+    private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+    {
+        try
+        {
+            Append(ExceptionLines(args.ExceptionObject).ToArray());
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+    internal static List<string> ExceptionLines(object exception)
+    {
+        var lines = new List<string>();
+        foreach (var line in CrashText.SplitLines(exception?.ToString() ?? "unknown exception"))
+        {
+            lines.Add(CrashSession.Line(CrashSession.ExceptionKey, line));
+            if (lines.Count >= MaxExceptionLines)
+            {
+                break;
+            }
+        }
+
+        return lines;
+    }
+
+    private static void WriteLanguage(string language)
+    {
+        var lines = new List<string> { CrashSession.Line(CrashSession.LanguageKey, language) };
+        lines.AddRange(TextLines(language));
+        AppendHeader(lines.ToArray());
+    }
+
+    internal static List<string> TextLines(string language)
+    {
+        var lines = new List<string>();
+        try
+        {
+            var catalog = CatLib.UI.UiText.Catalog;
+            foreach (var key in CrashStrings.Keys)
+            {
+                var text = catalog.Find(CrashStrings.CatalogPrefix + key, language);
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    lines.Add(CrashSession.Line(CrashSession.TextPrefix + key, text));
+                }
+            }
+        }
+        catch (Exception exception)
+        {
+            _log?.Warning($"The crash window texts could not be written: {exception.Message}");
+        }
+
+        return lines;
+    }
+
+    private static int CurrentThreadId()
+    {
+        try
+        {
+            return (int)GetCurrentThreadId();
+        }
+        catch (Exception)
+        {
+            return 0;
+        }
+    }
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+    private static extern uint GetCurrentThreadId();
 
     private static void OnMainMenuLoaded()
     {
-        AppendHeader(CrashSession.Line(CrashSession.LanguageKey, SafeLanguage()));
+        WriteLanguage(SafeLanguage());
         if (!string.IsNullOrEmpty(GameInfo.GameVersion))
         {
             AppendHeader(CrashSession.Line(CrashSession.GameKey, GameInfo.GameVersion));

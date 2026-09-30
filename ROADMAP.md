@@ -11,14 +11,8 @@ What is planned, in rough order. Finished work is removed from here and describe
 - Boat Tweaks: improvements and bug fixes.
 - Late join: joining a game in progress. Builds on patches, mod messages and entity synchronization.
 
-## Localization
-
-- The crash window and crash reports in every game language. The crash watcher runs outside the game, so it needs its own copy of the texts.
-
 ## Crash reports
 
-- Memory dumps: the crash watcher writes a minidump itself at the moment of the crash, also without Windows Error Reporting settings.
-  Needs the watcher to attach to the game as a debugger. Medium.
 - Readable reports: at start CatLib writes a map of game method addresses from IL2CPP, so offsets in `GameAssembly.dll`
   become method names; `UnityPlayer.dll` has public symbols. The report then names the top frames of every thread. Medium.
 - The last BepInEx log lines before a native crash on the game thread may not reach the log file.

@@ -10,6 +10,8 @@
   "setting": {
     "Diagnostics.CrashWindow": "クラッシュ画面",
     "Diagnostics.CrashWindow.description": "ゲームが予期せず終了したとき、何が起きたかを小さなウィンドウで表示し、ログ付きのレポートを BepInEx/CatLib/Crashes に保存します。",
+    "Diagnostics.CrashDumps": "クラッシュダンプ",
+    "Diagnostics.CrashDumps.description": "クラッシュ画面と合わせて、クラッシュした瞬間のメモリダンプを MOD 作者向けにレポートのフォルダーへ保存します。このため、クラッシュ監視プロセスがデバッガーのようにゲームにアタッチします。",
     "Network.Enabled": "マルチプレイのMOD",
     "Network.Enabled.description": "CatLib を使っている他のプレイヤーと、MODの一覧やセッションの設定をやり取りします。次のセッションから反映されます。",
     "Network.OnIncompatiblePlayer": "MODが違うプレイヤー",
@@ -98,6 +100,64 @@
     },
     "LobbyMods": {
       "other": "MOD {0} 個"
+    }
+  },
+  "crash": {
+    "title": "Cat Mail Co：クラッシュレポート",
+    "openFolder": "レポートのフォルダーを開く",
+    "copy": "レポートをコピー",
+    "showDetails": "詳細",
+    "hideDetails": "詳細を隠す",
+    "footer": "レポートとログの保存先：{0}",
+    "help": "何度も起きる場合は、レポートのフォルダーをMOD作者に送ってください。",
+    "copied": "レポートをコピーしました",
+    "summary": "ゲームが予期せず終了しました：{0}（{1}）。",
+    "where": "場所：{0}。",
+    "ran": "実行時間：{0}。",
+    "quitting": "ゲームの終了中に起きました。",
+    "dumpSaved": "メモリダンプもレポートと一緒に保存しました。",
+    "hoursMinutes": "{0}時間{1}分",
+    "minutes": "{0}分",
+    "seconds": "{0}秒",
+    "detailTime": "時刻",
+    "detailExitCode": "終了コード",
+    "detailModule": "モジュール",
+    "detailException": "例外",
+    "detailThread": "スレッド",
+    "gameThread": "ゲームのスレッド",
+    "otherThread": "別のスレッド",
+    "detailGame": "ゲーム",
+    "detailMods": "MOD",
+    "detailEvents": "最近のイベント",
+    "exit": {
+      "normal": "通常の終了",
+      "closedOutside": "タスクマネージャーなど、外部からゲームが閉じられた",
+      "accessViolation": "無効なメモリアドレスへのアクセス（access violation）",
+      "heapCorruption": "メモリのヒープが破損（heap corruption）",
+      "failFast": "フェイルファスト（fail fast）またはスタックバッファーオーバーラン",
+      "stackOverflow": "スタックオーバーフロー（stack overflow）",
+      "illegalInstruction": "不正な命令",
+      "divideByZero": "整数のゼロ除算",
+      "consoleClosed": "コンソールウィンドウからゲームが閉じられた",
+      "dotnetException": "未処理の .NET 例外",
+      "dotnetFailFast": ".NET のフェイルファスト（FailFast）",
+      "unknown": "不明な理由"
+    },
+    "phrase": {
+      "1": "ゲームがにゃーんされました :(",
+      "2": "猫は水が苦手、ゲームはこれが苦手",
+      "3": "誰かがゲームを机から落としちゃった",
+      "4": "いちばん上の棚から小包が落ちた",
+      "5": "猫がキーボードに座りました",
+      "6": "ゲームが丸くなって寝ちゃった",
+      "7": "ゲームを置いて船が出航しました",
+      "8": "九つの命のうち、ひとつ使っちゃった",
+      "9": "毛糸玉がこんがらがっちゃった",
+      "10": "シャーッ！何かがおかしいみたい",
+      "11": "レーザーの光を追いかけて迷子に",
+      "12": "あらら、郵便物がびしょぬれ",
+      "13": "ゲームがソファの下に隠れちゃった",
+      "14": "誰かがしっぽを踏んじゃった"
     }
   }
 }

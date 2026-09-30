@@ -10,6 +10,8 @@
   "setting": {
     "Diagnostics.CrashWindow": "Crash window",
     "Diagnostics.CrashWindow.description": "When the game closes unexpectedly, a small window shows what happened and a report with the logs is kept in BepInEx/CatLib/Crashes.",
+    "Diagnostics.CrashDumps": "Crash dump",
+    "Diagnostics.CrashDumps.description": "Together with the crash window, keeps a memory dump of the moment of the crash in the report folder, for the mod authors. The crash watcher follows the game like a debugger for this.",
     "Network.Enabled": "Mods in multiplayer",
     "Network.Enabled.description": "Exchange mod lists and session settings with other players who use CatLib. Takes effect from the next session.",
     "Network.OnIncompatiblePlayer": "Players with other mods",
@@ -102,6 +104,64 @@
     "LobbyMods": {
       "one": "{0} mod",
       "other": "{0} mods"
+    }
+  },
+  "crash": {
+    "title": "Cat Mail Co: crash report",
+    "openFolder": "Open the report folder",
+    "copy": "Copy the report",
+    "showDetails": "Details",
+    "hideDetails": "Hide details",
+    "footer": "The report and logs are saved in {0}",
+    "help": "If this keeps happening, send the report folder to the mod authors.",
+    "copied": "The report is copied",
+    "summary": "The game closed unexpectedly: {0} ({1}).",
+    "where": "Where: {0}.",
+    "ran": "The game ran for {0}.",
+    "quitting": "It happened while the game was quitting.",
+    "dumpSaved": "A memory dump is saved with the report.",
+    "hoursMinutes": "{0} h {1} min",
+    "minutes": "{0} min",
+    "seconds": "{0} s",
+    "detailTime": "Time",
+    "detailExitCode": "Exit code",
+    "detailModule": "Module",
+    "detailException": "exception",
+    "detailThread": "Thread",
+    "gameThread": "the game thread",
+    "otherThread": "another thread",
+    "detailGame": "Game",
+    "detailMods": "Mods",
+    "detailEvents": "Last events",
+    "exit": {
+      "normal": "normal exit",
+      "closedOutside": "the game was closed from outside, for example from the Task Manager",
+      "accessViolation": "access to an invalid memory address (access violation)",
+      "heapCorruption": "the memory heap is damaged (heap corruption)",
+      "failFast": "fail fast or a stack buffer overrun",
+      "stackOverflow": "stack overflow",
+      "illegalInstruction": "illegal instruction",
+      "divideByZero": "integer division by zero",
+      "consoleClosed": "the game was closed through its console window",
+      "dotnetException": "an unhandled .NET exception",
+      "dotnetFailFast": ".NET fail fast",
+      "unknown": "unknown reason"
+    },
+    "phrase": {
+      "1": "Your game got meowed :(",
+      "2": "Cats don't like water, and the game didn't like this",
+      "3": "Someone knocked the game off the table",
+      "4": "A parcel fell off the top shelf",
+      "5": "A cat sat on the keyboard",
+      "6": "The game curled up and fell asleep",
+      "7": "The boat sailed off without the game",
+      "8": "Nine lives, and one of them is gone",
+      "9": "The yarn got all tangled up",
+      "10": "Hiss! Something went wrong",
+      "11": "The game chased a laser dot and got lost",
+      "12": "Oops, the mail got wet",
+      "13": "The game is hiding under the sofa",
+      "14": "Somebody stepped on a tail"
     }
   }
 }

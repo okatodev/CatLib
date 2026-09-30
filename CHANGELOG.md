@@ -39,6 +39,12 @@ Not released yet.
 - Translation files of players in `BepInEx/config/CatLib/Translations/<mod id>/<language>.json` win over built-in texts.
   The developer menu writes a translation report, exports texts for translators and reloads the files.
   `TranslationCheck` finds missing, unknown and broken texts; the log lists them at the main menu. See [Localization](docs/Localization.md).
+- Memory dumps: the crash watcher follows the game like a debugger and writes `crash.dmp` into the report folder
+  at the moment of the crash, without Windows Error Reporting settings. The module, offset and thread of the crash come
+  from the watcher itself, the report says whether it was the game thread and what memory access failed.
+  Crashes that Unity closes itself on the game thread are caught the moment the exception is raised.
+  The text of an unhandled .NET exception comes from CatLib when Windows logs nothing. Setting `CrashDumps`, on by default.
+- The crash window in every game language, with texts from CatLib's translations; `report.txt` is always in English for the mod authors.
 - CatLib, Better Repair, Boat Tweaks and Shelf Labels in every language of the game: English, French, Italian, German, Spanish,
   Brazilian Portuguese, Polish, Simplified and Traditional Chinese, Japanese, Korean, Ukrainian and Russian.
 
