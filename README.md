@@ -53,6 +53,7 @@ Each mod in `mods/` is its own BepInEx plugin, released separately from CatLib:
 |---|---|
 | [Boat Tweaks](mods/BoatTweaks/README.md) | Deck blockers and stack height limits of the boat |
 | [Shelf Labels](mods/ShelfLabels/README.md) | Up to three extra labels next to every shelf label, stored per save |
+| [Better Repair](mods/BetterRepair/README.md) | Cardboard of the repair table: unlimited, a larger stock, what a new day brings |
 
 ## Building
 

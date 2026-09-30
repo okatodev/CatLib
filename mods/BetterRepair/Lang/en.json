@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Better Repair"
+  },
+  "section": {
+    "Cardboard": "Cardboard",
+    "Messages": "Messages"
+  },
+  "setting": {
+    "Cardboard.Unlimited": "Unlimited cardboard",
+    "Cardboard.Unlimited.description": "The repair table never runs out of cardboard. The host decides for everyone.",
+    "Cardboard.Stock": "Stock",
+    "Cardboard.Stock.description": "How many sheets of cardboard the repair table holds. The table shows up to three, the rest waits in stock. 3 is the game's amount. The host decides for everyone.",
+    "Cardboard.Refill": "New day brings",
+    "Cardboard.Refill.description": "What a new day brings: the full stock, like in the game, or a set number of sheets. The host decides for everyone.",
+    "Cardboard.RefillAmount": "Sheets per day",
+    "Cardboard.RefillAmount.description": "Sheets added every new day when a set number is chosen above. The stock never grows above its size. The host decides for everyone.",
+    "Messages.Enabled": "Cardboard messages",
+    "Messages.Enabled.description": "Shows how much cardboard is left after a repair and how much a new day brought. Only for you."
+  },
+  "enum": {
+    "RefillMode.Full": "Full stock",
+    "RefillMode.Amount": "A set number of sheets"
+  },
+  "message": {
+    "left": "Cardboard left: {0} of {1}",
+    "empty": "Out of cardboard until tomorrow",
+    "refilled": "Cardboard: {0} of {1}"
+  }
+}

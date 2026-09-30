@@ -1,11 +1,6 @@
 # Roadmap
 
-What is planned, in rough order. Finished work is removed from here and described in [CHANGELOG.md](CHANGELOG.md).
-
-## Now
-
-- Workshop mod (`RequiredOnAll`): the amount of paper and cardboard used to repair parcels.
-  Waits for research of what a repair consumes.
+What is planned, in rough order. Finished work is removed from here and described in [CHANGELOG.md](CHANGELOG.md) or in the mod's README.
 
 ## Mods
 
@@ -18,7 +13,7 @@ What is planned, in rough order. Finished work is removed from here and describe
 
 ## Mod compatibility in the lobby
 
-After the Workshop mod.
+Next.
 
 - Every player sees in the lobby, before the level starts, which mods each player has, themselves included:
   a short list with name, version and a mark (fine, missing, other version, only on this player).

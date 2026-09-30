@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>BetterRepair</AssemblyName>
+    <RootNamespace>BetterRepair</RootNamespace>
+    <Version>0.1.0</Version>
+    <PluginGuid>catlib.betterrepair</PluginGuid>
+    <PluginMetaName>Better Repair</PluginMetaName>
+    <CatLibDeployFolder>BetterRepair</CatLibDeployFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CatLib\CatLib.csproj" Private="false" />
+    <EmbeddedResource Include="Lang\*.json" LogicalName="BetterRepair.Lang.%(Filename).json" />
+  </ItemGroup>
+</Project>
