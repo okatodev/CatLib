@@ -41,6 +41,7 @@ public sealed class ShelfLabelsPlugin : BasePlugin
         _store = new LabelStore(CatSaves.For(this, DataVersion), board, placements, stands, log);
         var patched = LabelClickPatch.Install(PluginMeta.Guid, _controller.HandleClick, log);
         FrameLoop.Update += _controller.Update;
+        CatNetwork.ActiveModsChanged += _controller.RequestLayout;
         log.Info($"Shelf Labels {PluginMeta.Version} loaded with {translations} translated text(s), clicks {(patched ? "patched" : "not patched")}");
     }
 }

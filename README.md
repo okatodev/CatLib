@@ -38,7 +38,7 @@ docs/                        documentation
 | `CatLib.Localization` | Translation catalogs for mods, `CatLanguage` follows the game language |
 | `CatLib.Diagnostics` | Crash watcher: a report and a small window when the game closes unexpectedly |
 | `CatLib.DevTools` | Keyboard developer menu, `DevMenu.Command` and `DevMenu.Toggle` |
-| `CatLib.UI` | Mods tab in the game's settings menu; `Notifications.Show` for messages to the player |
+| `CatLib.UI` | Mods tab in the game's settings menu; `Notifications.Show` for messages to the player; `FoldoutList`, a folding list built from game UI; the players' mods list in the lobby |
 | `CatLib.Net` | Mod compatibility handshake, session settings sync, messages between mods (`CatNetwork.Channel`), `CatNetwork.Role` and `IsAuthority` |
 
 ## Mods
@@ -106,6 +106,7 @@ Mods add their own commands with `DevMenu.Command`, see [Developer menu](docs/De
 - [Mod data in game saves](docs/Saves.md)
 - [Developer menu](docs/DevTools.md)
 - [Crash reports](docs/CrashReports.md)
+- [Folding lists](docs/Foldout.md)
 - [Game events: observed behaviour](docs/GameEvents.md)
 - [Changelog](CHANGELOG.md)
 - [Roadmap](ROADMAP.md)

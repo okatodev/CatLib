@@ -15,6 +15,8 @@ public sealed record AnnounceMessage;
 
 public sealed record ModMessageData(string ModId, string Name, byte[] Data);
 
+public sealed record RosterMessage(SessionRoster Roster);
+
 public sealed record DecodedMessage(ushort Protocol, MessageType Type, object Payload)
 {
     public bool IsProtocolMismatch => Protocol != MessageCodec.ProtocolVersion;

@@ -55,6 +55,13 @@ public sealed class WireReader
         return value;
     }
 
+    public ulong ReadUInt64()
+    {
+        var low = ReadUInt32();
+        var high = ReadUInt32();
+        return ((ulong)high << 32) | low;
+    }
+
     public int ReadCount()
     {
         var count = ReadUInt16();

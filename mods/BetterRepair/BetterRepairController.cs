@@ -24,6 +24,7 @@ public sealed class BetterRepairController
     private double _nextScan;
     private bool _hostStockKnown;
     private bool _reported;
+    private bool _paused;
 
     public BetterRepairController(CatLogger log, TextCatalog texts)
     {
@@ -85,6 +86,24 @@ public sealed class BetterRepairController
 
     public void Update()
     {
+        if (!CatNetwork.IsActive(PluginMeta.Guid))
+        {
+            if (!_paused)
+            {
+                _paused = true;
+                Forget();
+                _log.Info("Better Repair is paused in this session because not every player has it, the repair table works like in the game");
+            }
+
+            return;
+        }
+
+        if (_paused)
+        {
+            _paused = false;
+            _log.Info("Better Repair is active again in this session");
+        }
+
         try
         {
             Track();
@@ -110,7 +129,7 @@ public sealed class BetterRepairController
 
     public string Describe()
     {
-        var parts = new List<string> { $"cardboard {Stock.Describe()}", $"role {CatNetwork.Role}" };
+        var parts = new List<string> { $"cardboard {Stock.Describe()}", $"role {CatNetwork.Role}", _paused ? "paused in this session" : "active" };
         if (!CatNetwork.IsAuthority)
         {
             parts.Add(_hostStockKnown ? "stock from the host" : "waiting for the host");

@@ -104,6 +104,7 @@ public sealed class HostSession
         {
             var problems = new[] { new CompatibilityProblem(ProblemKind.ProtocolMismatch, "catlib", MessageCodec.ProtocolVersion.ToString(), message.Protocol.ToString()) };
             var disconnect = ShouldDisconnect();
+            state.Identity = null;
             Complete(peer, state, new PeerReport(peer, SessionStatus.Rejected, problems, null, null, disconnect));
             Send(peer, MessageCodec.Encode(new VerdictMessage(false, problems, Array.Empty<SessionSettingValue>(), disconnect)));
             return;
@@ -130,7 +131,9 @@ public sealed class HostSession
         var found = Compatibility.Compare(_identity, hello.Identity);
         var accepted = found.Count == 0;
         var disconnecting = !accepted && ShouldDisconnect();
-        var settings = accepted ? _snapshot() : Array.Empty<SessionSettingValue>();
+        state.Identity = hello.Identity;
+        state.Excluded = ExcludedOwners(found);
+        var settings = disconnecting ? Array.Empty<SessionSettingValue>() : Filter(_snapshot(), state.Excluded);
         var shared = disconnecting ? new List<string>() : SharedMods(_identity, hello.Identity, found);
         state.SharedMods = new HashSet<string>(shared, StringComparer.Ordinal);
         Send(peer, MessageCodec.Encode(new VerdictMessage(accepted, found, settings, disconnecting, shared)));
@@ -182,11 +185,45 @@ public sealed class HostSession
             return 0;
         }
 
-        var payload = MessageCodec.Encode(new SettingsUpdateMessage(values));
         var sent = 0;
         foreach (var pair in _peers)
         {
-            if (pair.Value.Report?.Status == SessionStatus.Accepted)
+            if (!ReceivesSettings(pair.Value))
+            {
+                continue;
+            }
+
+            var filtered = Filter(values, pair.Value.Excluded);
+            if (filtered.Count == 0)
+            {
+                continue;
+            }
+
+            Send(pair.Key, MessageCodec.Encode(new SettingsUpdateMessage(filtered)));
+            sent++;
+        }
+
+        return sent;
+    }
+
+    public SessionRoster BuildRoster(ulong hostId, string hostName, IncompatiblePlayerAction policy, Func<ulong, string> nameOf)
+    {
+        var peers = _peers
+            .OrderBy(pair => pair.Value.ConnectedAt)
+            .ThenBy(pair => pair.Key)
+            .Select(pair => new RosterPeer(pair.Key, nameOf?.Invoke(pair.Key) ?? pair.Key.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                PeerStateOf(pair.Value), pair.Value.Identity, pair.Value.Report?.Problems, pair.Value.Report?.Disconnecting ?? false))
+            .ToList();
+        return RosterBuilder.Build(_identity, hostId, hostName, policy, peers);
+    }
+
+    public int SendRoster(SessionRoster roster)
+    {
+        var payload = MessageCodec.Encode(new RosterMessage(roster));
+        var sent = 0;
+        foreach (var pair in _peers)
+        {
+            if (pair.Value.Report != null && pair.Value.Identity != null)
             {
                 Send(pair.Key, payload);
                 sent++;
@@ -195,6 +232,56 @@ public sealed class HostSession
 
         return sent;
     }
+
+    public IReadOnlyList<ulong> SetDisconnecting(bool disconnect)
+    {
+        var changed = new List<ulong>();
+        foreach (var pair in _peers)
+        {
+            var report = pair.Value.Report;
+            if (report == null || report.IsCompatible || report.Disconnecting == disconnect)
+            {
+                continue;
+            }
+
+            pair.Value.Report = report with { Disconnecting = disconnect };
+            if (disconnect)
+            {
+                pair.Value.SharedMods = new HashSet<string>(StringComparer.Ordinal);
+            }
+            else if (pair.Value.Identity != null)
+            {
+                pair.Value.SharedMods = new HashSet<string>(SharedMods(_identity, pair.Value.Identity, report.Problems), StringComparer.Ordinal);
+            }
+
+            changed.Add(pair.Key);
+        }
+
+        return changed;
+    }
+
+    public static IReadOnlyList<SessionSettingValue> Filter(IReadOnlyList<SessionSettingValue> values, ISet<string> excludedOwners)
+    {
+        if (excludedOwners == null || excludedOwners.Count == 0)
+        {
+            return values;
+        }
+
+        return values.Where(value => !excludedOwners.Contains(value.OwnerId)).ToList();
+    }
+
+    private static HashSet<string> ExcludedOwners(IReadOnlyList<CompatibilityProblem> problems) =>
+        new(problems.Where(problem => problem.Kind is ProblemKind.MissingOnClient or ProblemKind.MissingOnHost or ProblemKind.VersionMismatch)
+            .Select(problem => problem.Subject), StringComparer.Ordinal);
+
+    private static bool ReceivesSettings(PeerState state) =>
+        state.Report != null && !state.Report.Disconnecting && state.Identity != null &&
+        state.Report.Status is SessionStatus.Accepted or SessionStatus.Rejected;
+
+    private static RosterPeerState PeerStateOf(PeerState state) =>
+        state.Report == null
+            ? RosterPeerState.Checking
+            : state.Report.Status == SessionStatus.PeerWithoutCatLib ? RosterPeerState.WithoutCatLib : RosterPeerState.Evaluated;
 
     public static List<string> SharedMods(LocalIdentity host, LocalIdentity client, IReadOnlyList<CompatibilityProblem> problems) =>
         host.Mods
@@ -251,5 +338,9 @@ public sealed class HostSession
         public int Announces { get; set; }
 
         public HashSet<string> SharedMods { get; set; } = new(StringComparer.Ordinal);
+
+        public LocalIdentity Identity { get; set; }
+
+        public HashSet<string> Excluded { get; set; } = new(StringComparer.Ordinal);
     }
 }

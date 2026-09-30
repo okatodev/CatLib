@@ -31,7 +31,7 @@ A save without it starts with a full stock. Removing the mod leaves the game sav
 
 ## Multiplayer
 
-Every player needs the mod. The host counts the cardboard and sends the stock to everyone;
+Every player needs the mod; while someone does not have it, the mod is paused for everyone. The host counts the cardboard and sends the stock to everyone;
 a player who joins gets it from the host.
 
 ## Changes
@@ -39,3 +39,4 @@ a player who joins gets it from the host.
 ### 0.1.0
 
 - Unlimited cardboard, the stock size and what a new day brings.
+- Paused while not every player has Better Repair: the repair table works like in the game.

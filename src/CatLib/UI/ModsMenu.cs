@@ -11,11 +11,13 @@ internal static class ModsMenu
     public const string RemovedEventName = "UI.ModsTabRemoved";
     public const string SuspendedEventName = "UI.Suspended";
     public const string ResumedEventName = "UI.Resumed";
+    public const int LobbyUpdateFrames = 6;
 
     private static readonly Dictionary<MenuContext, ModsTab> Tabs = new();
     private static readonly Dictionary<MenuContext, IntPtr> FailedPointers = new();
     private static CatLogger _log;
     private static bool _suspendRequested;
+    private static int _lobbyCountdown;
 
     public static bool IsSuspended { get; private set; }
 
@@ -27,6 +29,7 @@ internal static class ModsMenu
     {
         _log = log;
         PlayerMessages.Initialize(log);
+        LobbyModsView.Initialize(log.Scope("Lobby"));
         BootstrapEvents.GameRestartStarted += SuspendForRestart;
         BootstrapEvents.MainMenuLoaded += Resume;
         BootstrapEvents.LevelLoadFinalized += Resume;
@@ -66,6 +69,7 @@ internal static class ModsMenu
             }
 
             FailedPointers.Clear();
+            LobbyModsView.Forget();
             _log.Info("The game is restarting, the Mods tab is released until the next menu");
             GameEventStream.Publish(SuspendedEventName);
         }
@@ -76,6 +80,12 @@ internal static class ModsMenu
         }
 
         MenuNotices.Update();
+        if (++_lobbyCountdown >= LobbyUpdateFrames)
+        {
+            _lobbyCountdown = 0;
+            LobbyModsView.Update();
+        }
+
         Track(MenuContext.MainMenu, FindMainMenuOptions());
         Track(MenuContext.InGame, FindInGameOptions());
 

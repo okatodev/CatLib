@@ -50,6 +50,7 @@ public sealed class BoatController
     private double _nextScan;
     private string _lastSummary;
     private bool _suspended;
+    private bool _wasActive = true;
     private readonly HashSet<string> _freedReported = new(StringComparer.Ordinal);
 
     public BoatController(CatLogger log, TextCatalog texts, PatternLibrary library)
@@ -75,11 +76,34 @@ public sealed class BoatController
 
     public bool IsAuthority => Settings != null && CatNetwork.IsAuthority;
 
+    public bool IsActive => CatNetwork.IsActive(PluginMeta.Guid);
+
+    public LayoutMode EffectiveMode => IsActive ? Settings.Mode.Value : LayoutMode.Game;
+
+    public float ApprovedScale => IsActive ? Settings.ApprovedHeightScale.Value : 1f;
+
+    public float MaximumScale => IsActive ? Settings.MaximumHeightScale.Value : 1f;
+
+    public void OnActiveModsChanged()
+    {
+        var active = IsActive;
+        if (active == _wasActive)
+        {
+            return;
+        }
+
+        _wasActive = active;
+        _log.Info(active
+            ? "Boat Tweaks is active again in this session"
+            : "Boat Tweaks is paused in this session because not every player has it, boats come like in the game");
+        RequestDecision();
+    }
+
     public DeckPlan CurrentPlan
     {
         get
         {
-            if (!IsAuthority && !Settings.Plan.IsOverridden)
+            if (!IsActive || (!IsAuthority && !Settings.Plan.IsOverridden))
             {
                 return DeckPlan.Game;
             }
@@ -164,7 +188,7 @@ public sealed class BoatController
         }
 
         var current = CurrentStore(manager);
-        if (current != null && Settings.Mode.Value != LayoutMode.Game)
+        if (current != null && EffectiveMode != LayoutMode.Game)
         {
             _log.Warning($"The boat {KeyOf(current)} was chosen before Boat Tweaks could apply its settings to this level");
         }
@@ -251,13 +275,13 @@ public sealed class BoatController
         }
 
         var role = CatNetwork.Role;
-        _log.Info($"Boats in the scene as {role}: {(lines.Count == 0 ? "none" : string.Join("; ", lines))}; scales approved x{Settings.ApprovedHeightScale.Value:0.##}, maximum x{Settings.MaximumHeightScale.Value:0.##}");
+        _log.Info($"Boats in the scene as {role}: {(lines.Count == 0 ? "none" : string.Join("; ", lines))}; scales approved x{ApprovedScale:0.##}, maximum x{MaximumScale:0.##}{(IsActive ? string.Empty : ", paused in this session")}");
         return lines.Count == 0 ? "no boat in the scene" : $"{lines.Count} boat(s), see the log";
     }
 
     private void Apply(IReadOnlyList<Pool> pools)
     {
-        var mode = Settings.Mode.Value;
+        var mode = EffectiveMode;
         var allowed = VariantList.Parse(Settings.AllowedVariants.Value);
         var clearDeck = CurrentPlan.ClearsGameDeck;
 
@@ -283,7 +307,7 @@ public sealed class BoatController
 
         var summary = $"Boat: mode {mode}, next deck {CurrentPlan.Describe()}, {pools.Count} pool(s), {_prefabs.Count} boat storage prefab(s), " +
                       $"{_prefabs.Values.Sum(state => state.BlockerCount)} blocker(s) and {_prefabs.Values.Sum(state => state.PropCount)} prop(s) {(clearDeck ? "hidden" : "shown")}, " +
-                      $"height x{Settings.ApprovedHeightScale.Value:0.##} approved, x{Settings.MaximumHeightScale.Value:0.##} maximum" +
+                      $"height x{ApprovedScale:0.##} approved, x{MaximumScale:0.##} maximum{(IsActive ? string.Empty : ", paused in this session")}" +
                       (EntityObjects > 0 ? $", {EntityObjects} object(s) with game entities left untouched" : string.Empty);
         var plans = string.Join(", ", pools.Where(pool => _plans[pool.Key].Kind != LayoutPlanKind.KeepGame).Take(3).Select(pool => pool.Key + ": " + _plans[pool.Key]));
         if (summary != _lastSummary)
@@ -328,7 +352,7 @@ public sealed class BoatController
             return;
         }
 
-        var (approved, maximum) = HeightRule.Apply(state.Approved, state.Maximum, Settings.ApprovedHeightScale.Value, Settings.MaximumHeightScale.Value);
+        var (approved, maximum) = HeightRule.Apply(state.Approved, state.Maximum, ApprovedScale, MaximumScale);
         store._StorageMaximumApprovedHeight_k__BackingField = approved;
         store._StorageMaximumHeight_k__BackingField = maximum;
     }

@@ -80,6 +80,37 @@ Settings that require a restart are never changed live; a different host value i
 
 In the Mods tab, overridden settings are read-only, marked "(host)", and the context line shows the player's own value.
 
+## Session roster and paused mods
+
+The rule that keeps a session consistent: **a `RequiredOnAll` mod runs for everyone or for no one.**
+
+- The host keeps a roster of the session: every player with the game and CatLib versions, the mods and a status
+  (`Checking`, `Compatible`, `Limited`, `WithoutCatLib`, `Leaving`). Each mod of a player carries a mark:
+  `Same`, `Missing`, `OtherVersion`, `NotOnHost` or `Local` for mods that are not checked.
+- A `RequiredOnAll` mod of the host is active only while every player that finished the check has it in a compatible version.
+  A player still being checked or already leaving does not count. A player without CatLib or with another CatLib protocol pauses every such mod.
+- The host sends the roster with the list of active mods to every player whenever it changes. A client pauses its own
+  `RequiredOnAll` mods that the host does not list as active, so a mod the host does not have never runs on a client either.
+- Without CatLib on the host, or with another protocol, a client builds the roster itself and pauses all its `RequiredOnAll` mods.
+- `HostOnly` and `ClientOnly` mods are never paused.
+
+```csharp
+if (!CatNetwork.IsActive(this))
+{
+    return;
+}
+
+CatNetwork.ActiveModsChanged += () => Rebuild();
+CatNetwork.RosterChanged += roster => ShowPlayers(roster);
+```
+
+A paused mod behaves like the game without it until it is active again, and keeps its saved data.
+Boat Tweaks lets boats come like in the game with the game's heights, Shelf Labels hides its extra labels,
+Better Repair leaves the repair table to the game. `CatNetwork.Roster` is `null` outside a session.
+
+A player that stays after a failed check gets the session settings of every mod except the ones the check found a problem with,
+and their later changes too, so the mods both sides share run with the host's values.
+
 ## Mod messages
 
 A mod talks to the same mod on other players through its channel:
@@ -130,6 +161,7 @@ Little-endian binary. Every message starts with a 7-byte header: the magic `CATL
 Strings are a presence flag, a 16-bit byte length and UTF-8 bytes.
 Limits: 64 KiB per message, 1 KiB per string, 1024 items per list.
 Protocol 4 added mod messages (type 5) and the list of shared mods at the end of the verdict.
+Protocol 5 added the session roster (type 6). The roster is only sent to players that answered with protocol 5.
 A message with another protocol version is detected from the header and its payload is not parsed.
 Malformed messages are rejected with `WireFormatException` and ignored by the sessions.
 
@@ -151,7 +183,9 @@ Players without CatLib never read that channel, so they are not affected.
 
 ### Incompatible players
 
-With `OnIncompatiblePlayer = Warn` both sides are told and the player stays.
+With `OnIncompatiblePlayer = Warn` both sides are told, the player stays and the mods not everyone has are paused.
+Changing the setting while such players are in the session applies to them at once: `Disconnect` marks them as leaving,
+`Warn` lets them stay again. `CatNetwork.IncompatiblePlayers` reads and changes it from code.
 With `Disconnect` the verdict carries a flag that the host will disconnect the player:
 
 - the client shows the reason in the lobby and leaves after 4 seconds through the lobby's own back button, the same way a player leaves;
@@ -177,5 +211,5 @@ CatLib's own settings, shown as "CatLib" on the Mods tab:
 | Setting | Default | Meaning |
 |---|---|---|
 | `Network.Enabled` | `true` | Take part in checks and session settings. Applies from the next session. |
-| `Network.OnIncompatiblePlayer` | `Warn` | `Warn` shows a message to the host, `Disconnect` also disconnects the player. |
+| `Network.OnIncompatiblePlayer` | `Warn` | `Warn` lets the player in and pauses the mods not everyone has, `Disconnect` disconnects the player. |
 | `Network.SteamApi` | `Interop` | How Steam is called. Only for diagnostics. Applies from the next session. |

@@ -63,6 +63,10 @@ Decoration is a personal setting: with `Decoration/Enabled` off the blocked cell
 
 ## Changes
 
+### Next version
+
+- Paused while not every player has Boat Tweaks: boats come like in the game with the game's heights. Needs CatLib 0.6.0.
+
 ### 0.2.0
 
 - Own layouts from files, picked at random, one after another or always one file.

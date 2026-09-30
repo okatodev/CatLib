@@ -6,5 +6,6 @@ public enum MessageType : byte
     Verdict = 2,
     SettingsUpdate = 3,
     Announce = 4,
-    Mod = 5
+    Mod = 5,
+    Roster = 6
 }

@@ -15,8 +15,20 @@ Not released yet.
 - Developer menu of `CatLib.Tests`: the Crash group with a native crash on the game thread, a native crash on a worker thread
   and a managed crash.
 
+- Session roster: the host keeps every player's versions, mods and status and sends it to everyone
+  (`CatNetwork.Roster`, `CatNetwork.RosterChanged`). Protocol 5.
+- Paused mods: a `RequiredOnAll` mod runs only while every player has it in a compatible version, otherwise it is paused for everyone
+  and the game runs as without it (`CatNetwork.IsActive`, `CatNetwork.ActiveModsChanged`). Boat Tweaks, Shelf Labels and Better Repair pause.
+- Players' mods in the lobby: a folding list at the top of the lobby for every player, the host included, with each player's mods,
+  versions and what to do about differences. The host switches what happens to players with other mods right there.
+- `FoldoutList` in `CatLib.UI`: a folding list built from the game's UI pieces, for mods too. See [Folding lists](docs/Foldout.md).
+- `CatNetwork.IncompatiblePlayers` reads and changes what the host does with incompatible players; a change applies to players already in the session.
+- Developer menu of `CatLib.Tests`: Session roster and Lobby dump.
+
 ### Changed
 
+- A player that stays after a failed check gets the session settings of the mods it shares with the host.
+- Protocol 5: players with CatLib 0.5.0 are told that their CatLib differs.
 - Mods in `mods/` follow one folder layout (`Settings`, `Logic`, `Scene`, `Sync`, `Data`, `Patches`),
   with namespaces that follow the folders. See [Writing a mod](docs/WritingMods.md#folders).
 

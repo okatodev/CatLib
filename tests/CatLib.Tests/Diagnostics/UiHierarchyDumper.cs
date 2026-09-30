@@ -58,6 +58,48 @@ public sealed class UiHierarchyDumper
         }
     }
 
+    public void DumpLobby()
+    {
+        var lobby = Singleton<MainMenuInterfacesManager>.HasInstance() ? Singleton<MainMenuInterfacesManager>.Instance.MultiplayerLobbyInterface : null;
+        if (lobby == null || !lobby.gameObject.activeInHierarchy)
+        {
+            _log.Warning("The lobby is not open. Open the multiplayer lobby and try again");
+            return;
+        }
+
+        var root = lobby.transform;
+        var canvasRoot = root;
+        while (canvasRoot.parent != null)
+        {
+            canvasRoot = canvasRoot.parent;
+        }
+
+        var builder = new StringBuilder();
+        builder.AppendLine("CatLib UI dump: Lobby");
+        builder.AppendLine("Created: " + InvariantFormat.Timestamp(DateTime.Now));
+        builder.AppendLine("Root: " + PathOf(root));
+        builder.AppendLine($"Screen: {Screen.width}x{Screen.height}");
+        builder.AppendLine();
+        Section(builder, "Canvas chain", () =>
+        {
+            for (var node = root; node != null; node = node.parent)
+            {
+                foreach (var component in node.GetComponents<Component>())
+                {
+                    if (component != null && (component.TryCast<Canvas>() != null || component.TryCast<CanvasScaler>() != null || component.TryCast<RectTransform>() != null))
+                    {
+                        builder.AppendLine("  " + PathOf(node) + ": " + Describe(component));
+                    }
+                }
+            }
+        });
+        Section(builder, "Lobby hierarchy", () => AppendHierarchy(builder, root));
+        Directory.CreateDirectory(_directory);
+        var path = Path.Combine(_directory, "ui_Lobby_" + InvariantFormat.FileStamp(DateTime.Now) + ".txt");
+        File.WriteAllText(path, builder.ToString());
+        _log.Message($"UI dump of the lobby written to {path}");
+    }
+
     private void Dump(string context, GameObject root, OptionsInterface options)
     {
         var builder = new StringBuilder();
@@ -221,7 +263,25 @@ public sealed class UiHierarchyDumper
         var text = component.TryCast<TMP_Text>();
         if (text != null)
         {
-            return $" text=\"{Clip(text.text)}\" fontSize={Number(text.fontSize)}{Maskable(text)}{Enabled(text)}";
+            return $" text=\"{Clip(text.text)}\" fontSize={Number(text.fontSize)} font={(text.font == null ? "none" : text.font.name)} material={(text.fontSharedMaterial == null ? "none" : text.fontSharedMaterial.name)} color={Color(text.color)} align={text.alignment} autoSize={text.enableAutoSizing} wrap={text.enableWordWrapping}{Maskable(text)}{Enabled(text)}";
+        }
+
+        var image = component.TryCast<Image>();
+        if (image != null)
+        {
+            return $" sprite={(image.sprite == null ? "none" : image.sprite.name)} color={Color(image.color)} type={image.type} raycast={image.raycastTarget} pixelsPerUnit={Number(image.pixelsPerUnitMultiplier)}{Maskable(image)}{Enabled(image)}";
+        }
+
+        var scaler = component.TryCast<CanvasScaler>();
+        if (scaler != null)
+        {
+            return $" mode={scaler.uiScaleMode} reference={Vector(scaler.referenceResolution)} match={Number(scaler.matchWidthOrHeight)} screen={Screen.width}x{Screen.height}";
+        }
+
+        var layoutGroup = component.TryCast<HorizontalOrVerticalLayoutGroup>();
+        if (layoutGroup != null)
+        {
+            return $" spacing={Number(layoutGroup.spacing)} padding=({layoutGroup.padding.left},{layoutGroup.padding.right},{layoutGroup.padding.top},{layoutGroup.padding.bottom}) align={layoutGroup.childAlignment} controlSize=({layoutGroup.childControlWidth},{layoutGroup.childControlHeight}) expand=({layoutGroup.childForceExpandWidth},{layoutGroup.childForceExpandHeight}){Enabled(layoutGroup)}";
         }
 
         var mask = component.TryCast<Mask>();
@@ -282,7 +342,7 @@ public sealed class UiHierarchyDumper
         var button = component.TryCast<Button>();
         if (button != null)
         {
-            return Selectable(button) + Listeners("onClick", button.onClick);
+            return $" transition={button.transition}" + Selectable(button) + Listeners("onClick", button.onClick);
         }
 
         var layout = component.TryCast<LayoutElement>();
@@ -360,6 +420,8 @@ public sealed class UiHierarchyDumper
     }
 
     private static string Number(float value) => value.ToString("0.###", CultureInfo.InvariantCulture);
+
+    private static string Color(UnityEngine.Color value) => "(" + Number(value.r) + "," + Number(value.g) + "," + Number(value.b) + "," + Number(value.a) + ")";
 
     private static string Vector(Vector2 value) => "(" + Number(value.x) + "," + Number(value.y) + ")";
 }

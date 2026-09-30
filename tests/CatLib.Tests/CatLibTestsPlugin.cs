@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
@@ -95,6 +96,29 @@ public sealed class CatLibTestsPlugin : BasePlugin
             _uiDumper.DumpSettingsMenus();
             return "written to BepInEx/CatLib.Tests/Dumps";
         }, "Writes the hierarchy of the open settings menu.");
+        DevMenu.Command("Inspect", "Lobby dump", () =>
+        {
+            _uiDumper.DumpLobby();
+            return "written to BepInEx/CatLib.Tests/Dumps";
+        }, "Writes the hierarchy of the open multiplayer lobby with sizes, fonts, colors and sprites.");
+        DevMenu.Command("Network", "Session roster", () =>
+        {
+            var roster = CatNetwork.Roster;
+            if (roster == null)
+            {
+                return "no session";
+            }
+
+            foreach (var player in roster.Players)
+            {
+                _log.Info($"Roster: {player.Name} ({player.Id}){(player.IsHost ? " host" : string.Empty)} {player.Status}, CatLib {player.CatLibVersion}, " +
+                          string.Join(", ", player.Mods.Select(mod => $"{mod.Name} {mod.Version} {mod.Mark}")));
+            }
+
+            var paused = roster.PausedMods(CatNetwork.DeclaredMods);
+            _log.Info($"Roster: policy {roster.Policy}, active {string.Join(", ", roster.ActiveMods)}, paused here {(paused.Count == 0 ? "none" : string.Join(", ", paused))}");
+            return $"{roster.Players.Count} player(s), {paused.Count} paused, see the log";
+        }, "Writes every player of the session with their mods and marks, and which mods are paused.");
         DevMenu.Command("Inspect", "Label clone experiment", () =>
         {
             _labelClone.Toggle();

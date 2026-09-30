@@ -25,6 +25,9 @@ internal static class SessionNetwork
     public const string PeerEvaluatedEventName = "Net.PeerEvaluated";
     public const string HandshakeCompletedEventName = "Net.HandshakeCompleted";
     public const string StoppedEventName = "Net.Stopped";
+    public const string RosterEventName = "Net.Roster";
+    public const string ActiveModsEventName = "Net.ActiveMods";
+    public const double RosterIntervalSeconds = 0.5;
 
     private static readonly Stopwatch Clock = new();
     private static readonly HashSet<ulong> HostCandidates = new();
@@ -39,6 +42,40 @@ internal static class SessionNetwork
     private static double _leaveAt = double.PositiveInfinity;
     private static bool _restarting;
     private static ClientSession _heldSettings;
+    private static double _nextRoster;
+    private static byte[] _lastRosterBytes;
+    private static HashSet<string> _active;
+    private static bool _leaveFromRoster;
+
+    public static SessionRoster Roster { get; private set; }
+
+    public static event Action<SessionRoster> RosterChanged;
+
+    public static event Action ActiveModsChanged;
+
+    public static IncompatiblePlayerAction IncompatiblePolicy
+    {
+        get => _onIncompatible?.Value ?? IncompatiblePlayerAction.Warn;
+        set
+        {
+            if (_onIncompatible != null && _onIncompatible.LocalValue != value)
+            {
+                _onIncompatible.LocalValue = value;
+            }
+        }
+    }
+
+    public static bool IsModActive(string modId)
+    {
+        var active = _active;
+        if (active == null || string.IsNullOrEmpty(modId))
+        {
+            return true;
+        }
+
+        var declared = CatNetwork.DeclaredMods.FirstOrDefault(mod => string.Equals(mod.Id, modId, StringComparison.Ordinal));
+        return declared == null || declared.Policy != SessionPolicy.RequiredOnAll || active.Contains(modId);
+    }
 
     public static SteamMessagesTransport Transport { get; private set; }
 
@@ -65,7 +102,8 @@ internal static class SessionNetwork
         _enabled = settings.Local("Network", "Enabled", true,
             "Exchange mod lists and session settings with other players who use CatLib. Takes effect from the next session.");
         _onIncompatible = settings.Local("Network", "OnIncompatiblePlayer", IncompatiblePlayerAction.Warn,
-            "What the host does when a joining player's mods do not match.");
+            "What the host does when a joining player's mods do not match: let the player in and pause the mods that not everyone has, or disconnect the player.");
+        _onIncompatible.Changed += (_, value) => MainThread.RunOrPost(() => OnPolicyChanged(value));
         _backend = settings.Local("Network", "SteamApi", SteamApiBackend.Interop,
             "How CatLib calls Steam. Change it only when asked to while diagnosing a problem. Takes effect from the next session.");
 
@@ -140,6 +178,11 @@ internal static class SessionNetwork
             Transport.Poll(Route);
             Host?.Update();
             ProcessPendingKicks(now);
+            if (Host != null && now >= _nextRoster)
+            {
+                _nextRoster = now + RosterIntervalSeconds;
+                PublishHostRoster();
+            }
 
             if (Client != null)
             {
@@ -203,6 +246,10 @@ internal static class SessionNetwork
         Client = null;
         Transport = null;
         Messenger.Reset();
+        _lastRosterBytes = null;
+        _leaveFromRoster = false;
+        SetRoster(null);
+        SetActive(null);
         _log.Info(holdSettings
             ? "Network session stopped, session overrides are kept until the level is unloaded"
             : "Network session stopped, session overrides cleared");
@@ -298,6 +345,8 @@ internal static class SessionNetwork
         host.PeerEvaluated += OnPeerEvaluated;
         host.PeerEvaluated += report => Messenger.OnPeerEvaluated(report.PeerId, host.SharedModsOf(report.PeerId));
         host.ModMessageReceived += Messenger.OnHostReceived;
+        _nextRoster = 0;
+        _lastRosterBytes = null;
         _log.Info($"Hosting as {localId} through the {Transport.ApiName} Steam API, declared mods: {CatNetwork.DeclaredMods.Count}");
         GameEventStream.Publish(HostStartedEventName, $"id={localId} api={Transport.ApiName}");
     }
@@ -366,6 +415,7 @@ internal static class SessionNetwork
         Client.SettingsApplied += OnSettingsApplied;
         var client = Client;
         client.ModMessageReceived += data => Messenger.OnClientReceived(client.HostId, data);
+        client.RosterReceived += OnClientRoster;
         Client.Start();
         MenuNotices.ClearLobby();
         _lastAccept = double.NegativeInfinity;
@@ -460,6 +510,15 @@ internal static class SessionNetwork
         _log.Info($"Handshake with the host: {report.Status}{(problems.Length > 0 ? ", " + problems : string.Empty)}");
         GameEventStream.Publish(HandshakeCompletedEventName, $"status={report.Status} problems={report.Problems.Count}");
 
+        if (report.Status == SessionStatus.PeerWithoutCatLib || report.Problems.Any(problem => problem.Kind == ProblemKind.ProtocolMismatch))
+        {
+            var client = Client;
+            var roster = RosterBuilder.WithoutHostCatLib(Identity(), Transport?.LocalId ?? 0, OwnName(), client?.HostId ?? 0,
+                client == null || client.HostId == 0 ? string.Empty : PlayerName(client.HostId), report.Problems);
+            SetRoster(roster);
+            SetActive(roster.ActiveMods);
+        }
+
         if (report.IsCompatible)
         {
             return;
@@ -479,6 +538,127 @@ internal static class SessionNetwork
 
         PlayerMessages.Post(message);
         MenuNotices.ShowInLobby(message);
+    }
+
+    private static void PublishHostRoster()
+    {
+        var host = Host;
+        var roster = host.BuildRoster(Transport.LocalId, OwnName(), IncompatiblePolicy, PlayerName);
+        var bytes = MessageCodec.Encode(new RosterMessage(roster));
+        if (_lastRosterBytes != null && bytes.AsSpan().SequenceEqual(_lastRosterBytes))
+        {
+            return;
+        }
+
+        _lastRosterBytes = bytes;
+        var sent = host.SendRoster(roster);
+        SetRoster(roster);
+        SetActive(roster.ActiveMods);
+        _log.Info($"Session roster: {Describe(roster)}, sent to {sent} player(s)");
+    }
+
+    private static void OnClientRoster(SessionRoster roster)
+    {
+        SetRoster(roster);
+        SetActive(roster.ActiveMods);
+        _log.Info($"Session roster from the host: {Describe(roster)}");
+
+        var self = Transport == null ? null : roster.Find(Transport.LocalId);
+        var language = UiText.LanguageCode;
+        if (self != null && self.Status == RosterStatus.Leaving && double.IsPositiveInfinity(_leaveAt))
+        {
+            _leaveFromRoster = true;
+            _leaveAt = Now + ClientLeaveDelaySeconds;
+            var message = UiText.Format(UiText.NetYouWillBeDisconnected, language, ProblemText.Summarize(self.Problems, language, ModName));
+            _log.Info($"The host will disconnect this player because of incompatible mods, leaving the lobby in {ClientLeaveDelaySeconds} seconds");
+            PlayerMessages.Post(message);
+            MenuNotices.ShowInLobby(message);
+        }
+        else if (self != null && self.Status != RosterStatus.Leaving && _leaveFromRoster)
+        {
+            _leaveFromRoster = false;
+            _leaveAt = double.PositiveInfinity;
+            MenuNotices.ClearLobby();
+            _log.Info("The host lets this player stay after all");
+        }
+    }
+
+    private static void OnPolicyChanged(IncompatiblePlayerAction value)
+    {
+        var host = Host;
+        if (host == null)
+        {
+            return;
+        }
+
+        var changed = host.SetDisconnecting(value == IncompatiblePlayerAction.Disconnect);
+        foreach (var peer in changed)
+        {
+            if (value == IncompatiblePlayerAction.Disconnect)
+            {
+                PendingKicks[peer] = Now + KickGraceSeconds;
+            }
+            else
+            {
+                PendingKicks.Remove(peer);
+            }
+        }
+
+        _nextRoster = 0;
+        _log.Info($"Incompatible players: {value}, {changed.Count} player(s) affected");
+    }
+
+    private static void SetRoster(SessionRoster roster)
+    {
+        Roster = roster;
+        if (roster != null)
+        {
+            GameEventStream.Publish(RosterEventName, $"players={roster.Players.Count} active={roster.ActiveMods.Count} policy={roster.Policy}");
+        }
+
+        Events.SafeInvoker.Invoke(RosterChanged, roster, "CatNetwork.RosterChanged", _log);
+    }
+
+    private static void SetActive(IReadOnlyList<string> active)
+    {
+        var next = active == null ? null : new HashSet<string>(active, StringComparer.Ordinal);
+        var previous = _active;
+        var same = previous == null ? next == null : next != null && previous.SetEquals(next);
+        if (same)
+        {
+            return;
+        }
+
+        _active = next;
+        var paused = CatNetwork.DeclaredMods.Where(mod => mod.Policy == SessionPolicy.RequiredOnAll && !IsModActive(mod.Id)).Select(mod => mod.Id).ToList();
+        _log.Info(paused.Count == 0 ? "All mods are active in this session" : $"Paused in this session because not every player has them: {string.Join(", ", paused)}");
+        GameEventStream.Publish(ActiveModsEventName, $"paused={(paused.Count == 0 ? "none" : string.Join(",", paused))}");
+        Events.SafeInvoker.Invoke(ActiveModsChanged, "CatNetwork.ActiveModsChanged", _log);
+    }
+
+    private static string Describe(SessionRoster roster) =>
+        string.Join("; ", roster.Players.Select(player =>
+            $"{player.Name} ({player.Id}){(player.IsHost ? " host" : string.Empty)} {player.Status}, {player.ModCount} mod(s)" +
+            (player.ProblemCount > 0 ? $", {player.ProblemCount} problem(s)" : string.Empty))) +
+        $"; active: {(roster.ActiveMods.Count == 0 ? "none" : string.Join(", ", roster.ActiveMods))}";
+
+    private static string OwnName()
+    {
+        try
+        {
+            var name = SteamFriends.GetPersonaName();
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                return name;
+            }
+        }
+        catch (Exception exception)
+        {
+            _log.Debug($"Reading the own Steam name failed: {exception.Message}");
+        }
+
+        var id = Transport?.LocalId ?? 0;
+        return id == 0 ? string.Empty : PlayerName(id);
     }
 
     private static void LeaveLobby()
@@ -502,7 +682,7 @@ internal static class SessionNetwork
 
     private static string ModName(string id) => CatNetwork.DeclaredMods.FirstOrDefault(mod => mod.Id == id)?.Name;
 
-    private static string PlayerName(ulong steamId)
+    internal static string PlayerName(ulong steamId)
     {
         try
         {
@@ -515,6 +695,12 @@ internal static class SessionNetwork
         catch (Exception exception)
         {
             _log.Debug($"Reading the Steam name of {steamId} failed: {exception.Message}");
+        }
+
+        var lobbyName = MenuNotices.LobbyName(steamId);
+        if (!string.IsNullOrWhiteSpace(lobbyName))
+        {
+            return lobbyName;
         }
 
         return steamId.ToString(System.Globalization.CultureInfo.InvariantCulture);

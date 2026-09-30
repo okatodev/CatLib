@@ -120,7 +120,11 @@ public sealed class LabelsController
             return;
         }
 
-        HandleHotkey();
+        if (!IsPaused)
+        {
+            HandleHotkey();
+        }
+
         if (Time.unscaledTime < _nextScan)
         {
             return;
@@ -132,7 +136,9 @@ public sealed class LabelsController
         {
             _log.Info(slots == Settings.Slots.Value
                 ? $"Showing {slots} extra label(s) per shelf label"
-                : "Extra labels are hidden: the host does not have Shelf Labels");
+                : IsPaused
+                    ? "Extra labels are hidden: Shelf Labels is paused in this session because not every player has it"
+                    : "Extra labels are hidden: the host does not have Shelf Labels");
             _shownSlots = slots;
         }
 
@@ -158,7 +164,9 @@ public sealed class LabelsController
         RebuildLookups();
     }
 
-    private int VisibleSlots() => CatNetwork.Role == SessionRole.Client && !_channel.CanSendToHost ? 0 : Settings.Slots.Value;
+    private bool IsPaused => !CatNetwork.IsActive(PluginMeta.Guid);
+
+    private int VisibleSlots() => IsPaused || (CatNetwork.Role == SessionRole.Client && !_channel.CanSendToHost) ? 0 : Settings.Slots.Value;
 
     private Placement Effective(int labelId) => _placements.Get(labelId, Settings.Placement.Value);
 

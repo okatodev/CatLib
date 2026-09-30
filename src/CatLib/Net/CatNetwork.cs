@@ -15,6 +15,34 @@ public static class CatNetwork
 
     public static bool IsAuthority => Role != SessionRole.Client;
 
+    public static SessionRoster Roster => SessionNetwork.Roster;
+
+    public static event Action<SessionRoster> RosterChanged
+    {
+        add => SessionNetwork.RosterChanged += value;
+        remove => SessionNetwork.RosterChanged -= value;
+    }
+
+    public static event Action ActiveModsChanged
+    {
+        add => SessionNetwork.ActiveModsChanged += value;
+        remove => SessionNetwork.ActiveModsChanged -= value;
+    }
+
+    public static IncompatiblePlayerAction IncompatiblePlayers
+    {
+        get => SessionNetwork.IncompatiblePolicy;
+        set => SessionNetwork.IncompatiblePolicy = value;
+    }
+
+    public static bool IsActive(string modId) => SessionNetwork.IsModActive(modId);
+
+    public static bool IsActive(BasePlugin plugin)
+    {
+        var metadata = plugin == null ? null : MetadataHelper.GetMetadata(plugin);
+        return metadata == null || IsActive(metadata.GUID);
+    }
+
     public static SessionRole ResolveRole(bool hosting, bool joined) =>
         joined ? SessionRole.Client : hosting ? SessionRole.Host : SessionRole.Offline;
 

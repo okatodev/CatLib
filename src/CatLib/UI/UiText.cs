@@ -42,6 +42,33 @@ internal static class UiText
     public const string ProblemVersion = "ProblemVersion";
     public const string SettingsCount = "SettingsCount";
     public const string PendingRestart = "PendingRestart";
+    public const string LobbyModsTitle = "LobbyModsTitle";
+    public const string LobbyAllMatch = "LobbyAllMatch";
+    public const string LobbyPaused = "LobbyPaused";
+    public const string LobbyHost = "LobbyHost";
+    public const string LobbyYou = "LobbyYou";
+    public const string LobbyPlayers = "LobbyPlayers";
+    public const string LobbyMods = "LobbyMods";
+    public const string RosterChecking = "RosterChecking";
+    public const string RosterCompatible = "RosterCompatible";
+    public const string RosterLimited = "RosterLimited";
+    public const string RosterWithoutCatLib = "RosterWithoutCatLib";
+    public const string RosterLeaving = "RosterLeaving";
+    public const string MarkWorks = "MarkWorks";
+    public const string MarkPaused = "MarkPaused";
+    public const string MarkMissing = "MarkMissing";
+    public const string MarkOtherVersion = "MarkOtherVersion";
+    public const string MarkNotOnHost = "MarkNotOnHost";
+    public const string MarkLocal = "MarkLocal";
+    public const string RowGameVersion = "RowGameVersion";
+    public const string RowHostHas = "RowHostHas";
+    public const string RowCatLib = "RowCatLib";
+    public const string RowCatLibOther = "RowCatLibOther";
+    public const string RowNoMods = "RowNoMods";
+    public const string PolicyTitle = "PolicyTitle";
+    public const string PolicyWarn = "PolicyWarn";
+    public const string PolicyDisconnect = "PolicyDisconnect";
+    public const string PolicyChange = "PolicyChange";
 
     private static readonly Dictionary<string, (string English, string Russian)> Strings = new()
     {
@@ -77,13 +104,40 @@ internal static class UiText
         [ProblemGame] = ("game version", "версия игры"),
         [ProblemMissingOnClient] = ("{0} missing on the client", "{0} нет у клиента"),
         [ProblemMissingOnHost] = ("{0} missing on the host", "{0} нет у хоста"),
-        [ProblemVersion] = ("{0} {1} vs {2}", "{0} {1} против {2}")
+        [ProblemVersion] = ("{0} {1} vs {2}", "{0} {1} против {2}"),
+        [LobbyModsTitle] = ("Players' mods", "Моды игроков"),
+        [LobbyAllMatch] = ("{0} · everything matches", "{0} · всё совпадает"),
+        [LobbyPaused] = ("{0} · paused: {1}", "{0} · на паузе: {1}"),
+        [LobbyHost] = ("host", "хост"),
+        [LobbyYou] = ("you", "вы"),
+        [RosterChecking] = ("checking…", "проверка…"),
+        [RosterCompatible] = ("everything matches", "всё совпадает"),
+        [RosterLimited] = ("other mods", "другие моды"),
+        [RosterWithoutCatLib] = ("no CatLib", "нет CatLib"),
+        [RosterLeaving] = ("will be disconnected", "будет отключён"),
+        [MarkWorks] = ("works", "работает"),
+        [MarkPaused] = ("paused", "на паузе"),
+        [MarkMissing] = ("missing · host has {0}", "нет · у хоста {0}"),
+        [MarkOtherVersion] = ("host has {0}", "у хоста {0}"),
+        [MarkNotOnHost] = ("not on the host · paused", "нет у хоста · на паузе"),
+        [MarkLocal] = ("only here", "только у себя"),
+        [RowGameVersion] = ("Game version", "Версия игры"),
+        [RowHostHas] = ("host has {0}", "у хоста {0}"),
+        [RowCatLib] = ("CatLib", "CatLib"),
+        [RowCatLibOther] = ("other version, update CatLib", "другая версия, обновите CatLib"),
+        [RowNoMods] = ("no mods", "нет модов"),
+        [PolicyTitle] = ("Players with other mods", "Игроки с другими модами"),
+        [PolicyWarn] = ("let in, pause the mods", "пускать, моды на паузу"),
+        [PolicyDisconnect] = ("disconnect", "отключать"),
+        [PolicyChange] = ("click to change", "нажмите, чтобы сменить")
     };
 
     private static readonly Dictionary<string, (string EnglishOne, string EnglishOther, string RussianOne, string RussianFew, string RussianMany)> Plurals = new()
     {
         [SettingsCount] = ("{0} setting", "{0} settings", "{0} настройка", "{0} настройки", "{0} настроек"),
-        [PendingRestart] = ("{0} waiting for a restart", "{0} waiting for a restart", "{0} ждёт перезапуска", "{0} ждут перезапуска", "{0} ждут перезапуска")
+        [PendingRestart] = ("{0} waiting for a restart", "{0} waiting for a restart", "{0} ждёт перезапуска", "{0} ждут перезапуска", "{0} ждут перезапуска"),
+        [LobbyPlayers] = ("{0} player", "{0} players", "{0} игрок", "{0} игрока", "{0} игроков"),
+        [LobbyMods] = ("{0} mod", "{0} mods", "{0} мод", "{0} мода", "{0} модов")
     };
 
     public static string LanguageCode

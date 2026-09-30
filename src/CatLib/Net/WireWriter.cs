@@ -26,6 +26,12 @@ public sealed class WireWriter
         _stream.Write(_buffer, 0, 4);
     }
 
+    public void WriteUInt64(ulong value)
+    {
+        WriteUInt32((uint)(value & 0xFFFFFFFF));
+        WriteUInt32((uint)(value >> 32));
+    }
+
     public void WriteCount(int count)
     {
         if (count < 0 || count > MessageCodec.MaxItems)

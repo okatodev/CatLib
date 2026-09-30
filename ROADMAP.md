@@ -11,24 +11,6 @@ What is planned, in rough order. Finished work is removed from here and describe
 - Boat Tweaks: improvements and bug fixes.
 - Late join: joining a game in progress. Builds on patches, mod messages and entity synchronization.
 
-## Mod compatibility in the lobby
-
-Next.
-
-- Every player sees in the lobby, before the level starts, which mods each player has, themselves included:
-  a short list with name, version and a mark (fine, missing, other version, only on this player).
-  Today only the host sees "other mods" on a player's card, and a client only knows its own verdict.
-  Needs the host to send the list of every player's mods to everyone (a new message, protocol 5).
-  Players without CatLib are listed as such.
-- Clear advice for every problem: which mod to install or remove and in which version, who has to do it,
-  what a different game version means.
-- Part of CatLib or a separate client-side mod: to decide. The data comes from the CatLib handshake, and the lobby
-  list and advice are only useful if every player sees them, which speaks for CatLib with a setting to hide the list.
-- Revisit `OnIncompatiblePlayer = Warn`. A player who stays after a failed check gets mod messages for the mods
-  both sides share, but no session settings at all, so even shared mods run with the player's own values.
-  Options: send session settings of shared mods to such players too; make `Disconnect` the default;
-  let the host decide per player in the lobby (keep or remove).
-
 ## Mods tab
 
 - Polish of the small details.

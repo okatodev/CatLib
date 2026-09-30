@@ -85,6 +85,35 @@ internal static class MenuNotices
         }
     }
 
+    internal static string LobbyName(ulong steamId)
+    {
+        try
+        {
+            var lobby = Lobby();
+            var slots = lobby == null ? null : lobby._playerSlots;
+            if (slots == null)
+            {
+                return null;
+            }
+
+            for (var index = 0; index < slots.Count; index++)
+            {
+                var slot = slots[index];
+                if (slot != null && !slot.IsEmpty && slot.SteamId == steamId && slot.PlayerNameText != null)
+                {
+                    var text = slot.PlayerNameText.text ?? string.Empty;
+                    var marker = text.IndexOf(Marker, StringComparison.Ordinal);
+                    return (marker >= 0 ? text.Substring(0, marker) : text).Trim();
+                }
+            }
+        }
+        catch (Exception)
+        {
+        }
+
+        return null;
+    }
+
     internal static bool LeaveLobby()
     {
         var lobby = Lobby();

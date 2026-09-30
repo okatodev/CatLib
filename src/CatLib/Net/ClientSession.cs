@@ -37,6 +37,10 @@ public sealed class ClientSession
 
     public event Action<ModMessageData> ModMessageReceived;
 
+    public event Action<SessionRoster> RosterReceived;
+
+    public SessionRoster Roster { get; private set; }
+
     public IReadOnlyCollection<string> SharedMods { get; private set; } = Array.Empty<string>();
 
     public bool SharesWithHost(string modId) => HostId != 0 && Status is SessionStatus.Accepted or SessionStatus.Rejected && SharedMods.Contains(modId);
@@ -157,15 +161,19 @@ public sealed class ClientSession
                 break;
             case VerdictMessage verdict when Status == SessionStatus.Waiting:
                 SharedMods = new HashSet<string>(verdict.SharedModIds, StringComparer.Ordinal);
-                if (verdict.Accepted)
+                if (verdict.Accepted || verdict.Settings.Count > 0)
                 {
                     ApplySettings(verdict.Settings);
                 }
 
                 Complete(verdict.Accepted ? SessionStatus.Accepted : SessionStatus.Rejected, verdict.Problems, verdict.Disconnecting);
                 break;
-            case SettingsUpdateMessage update when Status == SessionStatus.Accepted:
+            case SettingsUpdateMessage update when Status is SessionStatus.Accepted or SessionStatus.Rejected:
                 ApplySettings(update.Settings);
+                break;
+            case RosterMessage roster when Status is SessionStatus.Accepted or SessionStatus.Rejected:
+                Roster = roster.Roster;
+                SafeInvoker.Invoke(RosterReceived, roster.Roster, "ClientSession.RosterReceived", _log);
                 break;
             case ModMessageData modMessage when Status is SessionStatus.Accepted or SessionStatus.Rejected:
                 if (SharedMods.Contains(modMessage.ModId))
@@ -203,6 +211,7 @@ public sealed class ClientSession
 
         Status = SessionStatus.Stopped;
         SharedMods = Array.Empty<string>();
+        Roster = null;
         if (releaseSettings)
         {
             _sink.Clear();
