@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using CatLib.Tests.Framework;
+using ShelfLabels.Logic;
+using ShelfLabels.Sync;
 using ShelfLabels;
 
 namespace CatLib.Tests.Suites.ShelfLabels;

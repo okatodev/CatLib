@@ -3,6 +3,8 @@ using System.Linq;
 using CatLib.Net;
 using CatLib.Tests.Framework;
 using CatLib.Tests.Suites.Network;
+using ShelfLabels.Logic;
+using ShelfLabels.Sync;
 using ShelfLabels;
 using static CatLib.Tests.Suites.Network.NetworkFixture;
 

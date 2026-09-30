@@ -15,6 +15,11 @@ Not released yet.
 - Developer menu of `CatLib.Tests`: the Crash group with a native crash on the game thread, a native crash on a worker thread
   and a managed crash.
 
+### Changed
+
+- Mods in `mods/` follow one folder layout (`Settings`, `Logic`, `Scene`, `Sync`, `Data`, `Patches`),
+  with namespaces that follow the folders. See [Writing a mod](docs/WritingMods.md#folders).
+
 ## 0.5.0
 
 For mod authors: localization, mod data in game saves, messages between mods, a developer menu,

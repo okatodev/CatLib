@@ -1,10 +1,15 @@
-using BepInEx;
 using BepInEx.Unity.IL2CPP;
+using BepInEx;
 using CatLib.Config;
 using CatLib.Core;
 using CatLib.Logging;
 using CatLib.Net;
 using CatLib.Saves;
+using ShelfLabels.Data;
+using ShelfLabels.Logic;
+using ShelfLabels.Patches;
+using ShelfLabels.Settings;
+using ShelfLabels.Sync;
 
 namespace ShelfLabels;
 

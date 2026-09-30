@@ -1,9 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using CatLib.Localization;
 using CatLib.Tests.Framework;
 using CatLib.Tests.Suites.Settings;
+using ShelfLabels.Logic;
+using ShelfLabels.Settings;
 using ShelfLabels;
 
 namespace CatLib.Tests.Suites.ShelfLabels;

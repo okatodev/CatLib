@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CatLib.Tests.Framework;
+using ShelfLabels.Logic;
 using ShelfLabels;
 
 namespace CatLib.Tests.Suites.ShelfLabels;

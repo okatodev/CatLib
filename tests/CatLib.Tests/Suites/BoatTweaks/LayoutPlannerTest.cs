@@ -1,6 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using BoatTweaks.Logic;
 using BoatTweaks;
 using CatLib.Tests.Framework;
 

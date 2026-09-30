@@ -1,6 +1,8 @@
 using System.IO;
-using BepInEx;
 using BepInEx.Unity.IL2CPP;
+using BepInEx;
+using BoatTweaks.Logic;
+using BoatTweaks.Settings;
 using CatLib.Config;
 using CatLib.Core;
 using CatLib.DevTools;

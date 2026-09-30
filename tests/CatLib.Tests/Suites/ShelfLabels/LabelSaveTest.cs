@@ -3,6 +3,8 @@ using System.IO;
 using CatLib.Saves;
 using CatLib.Tests.Framework;
 using CatLib.Tests.Suites.Saves;
+using ShelfLabels.Data;
+using ShelfLabels.Logic;
 using ShelfLabels;
 
 namespace CatLib.Tests.Suites.ShelfLabels;

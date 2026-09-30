@@ -30,6 +30,28 @@ come from the shared build files. Add the project to `CatLib.sln` with `dotnet s
 
 A mod outside this repository references `CatLib.dll` directly and writes its own `BepInPlugin` values.
 
+### Folders
+
+Every mod in this repository keeps the same layout. The namespace follows the folder, for example `BoatTweaks.Logic`.
+
+```
+mods/<Name>/
+  <Name>Plugin.cs     entry point: declarations, settings, events, developer commands
+  <Name>Controller.cs ties the parts together while the game runs
+  <Name>.csproj
+  README.md           what the mod does, settings, changes per version
+  Lang/               en.json, ru.json and other languages
+  Settings/           the mod's settings
+  Logic/              rules, plans and state without game objects; covered by offline tests
+  Scene/              code that reads or changes game objects
+  Sync/               multiplayer: mod messages and shared state
+  Data/               mod data in game saves
+  Patches/            Harmony patches
+```
+
+A folder appears only when the mod needs it. Code that can live in `Logic` goes there,
+so most of the mod is tested without starting the game.
+
 ## Plugin
 
 ```csharp

@@ -1,12 +1,16 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using CatLib.Game.Events;
 using CatLib.Localization;
 using CatLib.Logging;
 using CatLib.Net;
 using CatLib.UI;
 using Il2CppInterop.Runtime;
+using ShelfLabels.Logic;
+using ShelfLabels.Scene;
+using ShelfLabels.Settings;
+using ShelfLabels.Sync;
 using UnityEngine;
 
 namespace ShelfLabels;
