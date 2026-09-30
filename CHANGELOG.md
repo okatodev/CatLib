@@ -4,7 +4,10 @@ CatLib follows semantic versioning. Mods in `mods/` have their own versions and 
 
 ## 0.6.0
 
-Not released yet.
+For players: the players' mods in the lobby with paused mods instead of disconnects, mod icons and authors on the Mods tab,
+gamepad navigation, every text in all 13 languages of the game, memory dumps and a translated crash window.
+For mod authors: the session roster, `FoldoutList`, texts loaded from `Lang/*.json` without code, plural forms,
+translation files and checks. New mod: Better Repair. Checked with two game copies on one computer.
 
 ### Added
 
