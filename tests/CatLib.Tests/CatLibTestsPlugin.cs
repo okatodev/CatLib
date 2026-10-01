@@ -25,6 +25,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
     private ConfigEntry<bool> _runOnMainMenu;
     private ConfigEntry<float> _fallbackDelaySeconds;
     private ConfigEntry<string> _entityDumpTypes;
+    private ConfigEntry<string> _textureNames;
     private CatLib.Tests.Diagnostics.Inspection.EntityInspector _entityInspector;
     private CatLib.Tests.Diagnostics.Inspection.LabelCloneExperiment _labelClone;
     private CatLib.Tests.Diagnostics.LocalJoin _localJoin;
@@ -32,6 +33,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
     private MessageProbe _probes;
     private SaveProbe _saveProbe;
     private UiHierarchyDumper _uiDumper;
+    private SpriteExporter _sprites;
     private StressMods _stressMods;
     private CatLogger _log;
     private TestRunner _runner;
@@ -47,6 +49,9 @@ public sealed class CatLibTestsPlugin : BasePlugin
             "Run all tests automatically the first time the main menu is loaded.");
         _fallbackDelaySeconds = Config.Bind("Run", "FallbackDelaySeconds", 45f,
             "Run all tests after this many seconds if the main menu event was never observed. Set to 0 to disable.");
+        _textureNames = Config.Bind("Diagnostics", "TextureExportNames",
+            "t_RepairWorkstation_Elements,t_DamagedParcel,t_Tools_BC,t_StorageTags,t_ParcelsConstraint_Icon,t_PackageConstraint_Heavy,t_Boat_Props_BC,t_Boat_Hull_BC,t_WorldsAndStampsMaps_BC,t_Progression_Objetcs_BC,t_Dock_Props_BC,t_Workstations_BC,t_CatStuff_BC",
+            "Comma separated texture names the Texture export command writes as PNG.");
         _entityDumpTypes = Config.Bind("Diagnostics", "EntityDumpTypes", CatLib.Tests.Diagnostics.Inspection.EntityInspector.DefaultFocusTypes,
             "Comma separated game types to list in every entity dump.");
 
@@ -57,6 +62,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
         _timeline.Start();
 
         _uiDumper = new UiHierarchyDumper(Path.Combine(outputDirectory, "Dumps"), _log.Scope("UiDump"));
+        _sprites = new SpriteExporter(Path.Combine(outputDirectory, "Dumps"), _log.Scope("Sprites"));
         _stressMods = new StressMods(Path.Combine(outputDirectory, "Stress"), _log.Scope("Stress"));
         _probes = new MessageProbe(_log.Scope("Probe"));
         _saveProbe = new SaveProbe(PluginMeta.Version, _log.Scope("SaveProbe"));
@@ -101,6 +107,10 @@ public sealed class CatLibTestsPlugin : BasePlugin
             _uiDumper.DumpLobby();
             return "written to BepInEx/CatLib.Tests/Dumps";
         }, "Writes the hierarchy of the open multiplayer lobby with sizes, fonts, colors and sprites.");
+        DevMenu.Command("Inspect", "Sprite export", () => "written to " + _sprites.Export(),
+            "Writes every texture that holds loaded UI sprites as PNG, with index.txt naming each sprite and its place. Run it in the menu and in a level.");
+        DevMenu.Command("Inspect", "Texture export", () => "written to " + _sprites.ExportTextures(_textureNames.Value.Split(',')),
+            "Writes the textures named in TextureExportNames of catlib.tests.cfg as PNG. Run it in a level, where they are loaded.");
         DevMenu.Command("Network", "Session roster", () =>
         {
             var roster = CatNetwork.Roster;
