@@ -6,3 +6,4 @@ obj/
 *.suo
 GamePaths.props
 Thunderstore-build/
+.codegraphy/*

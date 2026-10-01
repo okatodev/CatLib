@@ -6,6 +6,8 @@
   "pluginBuildSignature": null,
   "settingsSignature": "7d3b4df51a1831d996ffb21be6c90cb5a104a3c4",
   "analysisVersion": "2.3.0",
-  "pendingChangedFiles": [],
+  "pendingChangedFiles": [
+    "c:\\dev\\dev\\CatLib\\.gitignore"
+  ],
   "failedPluginIds": []
 }
