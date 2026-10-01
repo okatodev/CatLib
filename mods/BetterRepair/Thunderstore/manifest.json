@@ -1,0 +1,9 @@
+{
+  "name": "BetterRepair",
+  "version_number": "{version}",
+  "website_url": "",
+  "description": "TODO: one or two sentences about the package, 250 characters at most.",
+  "dependencies": [
+    "TODO-CatLib-{catlib_version}"
+  ]
+}

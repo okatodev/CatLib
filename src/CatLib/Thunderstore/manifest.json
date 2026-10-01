@@ -1,0 +1,9 @@
+{
+  "name": "CatLib",
+  "version_number": "{version}",
+  "website_url": "",
+  "description": "TODO: one or two sentences about the package, 250 characters at most.",
+  "dependencies": [
+    "TODO-BepInExPack_IL2CPP-6.0.0"
+  ]
+}

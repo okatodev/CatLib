@@ -1,0 +1,208 @@
+<Project>
+  <PropertyGroup>
+    <CatLibThunderstoreDir Condition="'$(CatLibThunderstoreDir)' == ''">$(CatLibRoot)Thunderstore-build</CatLibThunderstoreDir>
+    <CatLibThunderstoreSource Condition="'$(CatLibThunderstoreSource)' == ''">$(MSBuildProjectDirectory)\Thunderstore</CatLibThunderstoreSource>
+    <CatLibThunderstoreChangelog Condition="'$(CatLibThunderstoreChangelog)' == ''">$(MSBuildProjectDirectory)\CHANGELOG.md</CatLibThunderstoreChangelog>
+    <CatLibProject Condition="'$(CatLibProject)' == ''">$(CatLibRoot)src\CatLib\CatLib.csproj</CatLibProject>
+  </PropertyGroup>
+
+  <UsingTask TaskName="CatLibThunderstoreManifest" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Template ParameterType="System.String" Required="true" />
+      <Icon ParameterType="System.String" Required="true" />
+      <OutputRoot ParameterType="System.String" Required="true" />
+      <Version ParameterType="System.String" Required="true" />
+      <CatLibVersion ParameterType="System.String" />
+      <ReferenceVersions ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+      <ProjectName ParameterType="System.String" Required="true" />
+      <PackageName ParameterType="System.String" Output="true" />
+      <PackageVersion ParameterType="System.String" Output="true" />
+      <PackageDirectory ParameterType="System.String" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.Collections.Generic" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+var prefix = ProjectName + ": ";
+var text = File.ReadAllText(Template)
+    .Replace("{version}", Version ?? string.Empty)
+    .Replace("{catlib_version}", CatLibVersion ?? string.Empty);
+foreach (var reference in ReferenceVersions ?? new Microsoft.Build.Framework.ITaskItem[0])
+{
+    var project = Path.GetFileNameWithoutExtension(reference.GetMetadata("MSBuildSourceProjectFile"));
+    text = Regex.Replace(text, "\\{version:" + Regex.Escape(project) + "\\}", reference.ItemSpec.Replace("$", "$$"), RegexOptions.IgnoreCase);
+}
+
+var failed = false;
+Func<string, string> field = key =>
+{
+    var match = Regex.Match(text, "\"" + key + "\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"");
+    return match.Success ? Regex.Unescape(match.Groups[1].Value) : null;
+};
+Action<string> fail = message =>
+{
+    Log.LogError(null, "CATLIB004", null, Template, 0, 0, 0, 0, prefix + message);
+    failed = true;
+};
+
+foreach (Match unknown in Regex.Matches(text, "\\{version:([^}]*)\\}"))
+{
+    fail("{version:" + unknown.Groups[1].Value + "} names no project this one references");
+}
+
+var name = field("name");
+if (name == null)
+{
+    fail("manifest.json has no \"name\"");
+}
+else if (!Regex.IsMatch(name, "^[A-Za-z0-9_]{1,128}$"))
+{
+    fail("the package name \"" + name + "\" may only have letters a-z and A-Z, digits and _, at most 128 characters");
+}
+
+var version = field("version_number");
+if (version == null)
+{
+    fail("manifest.json has no \"version_number\"");
+}
+else if (!Regex.IsMatch(version, "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"))
+{
+    fail("the version \"" + version + "\" must be Major.Minor.Patch, for example 1.2.0");
+}
+else if (version != Version)
+{
+    Log.LogWarning(null, "CATLIB003", null, Template, 0, 0, 0, 0, prefix + "the manifest version " + version + " differs from the project version " + Version + ", write {version} to take it from the project");
+}
+
+var description = field("description");
+if (description == null)
+{
+    fail("manifest.json has no \"description\"");
+}
+else if (description.Length > 250)
+{
+    fail("the description has " + description.Length + " characters, Thunderstore allows 250");
+}
+
+if (field("website_url") == null)
+{
+    fail("manifest.json has no \"website_url\", write \"\" when there is no website");
+}
+
+var dependencies = Regex.Match(text, "\"dependencies\"\\s*:\\s*\\[([^\\]]*)\\]");
+if (!dependencies.Success)
+{
+    fail("manifest.json has no \"dependencies\", write [] when there are none");
+}
+else
+{
+    foreach (Match item in Regex.Matches(dependencies.Groups[1].Value, "\"([^\"]*)\""))
+    {
+        if (!Regex.IsMatch(item.Groups[1].Value, "^[A-Za-z0-9_]+-[A-Za-z0-9_]+-[0-9]+\\.[0-9]+\\.[0-9]+$"))
+        {
+            fail("the dependency \"" + item.Groups[1].Value + "\" must be Team-Package-1.2.3");
+        }
+    }
+}
+
+if (Regex.IsMatch(text, "TODO"))
+{
+    Log.LogWarning(null, "CATLIB003", null, Template, 0, 0, 0, 0, prefix + "manifest.json still has TODO placeholders, fill them in before uploading");
+}
+
+if (!File.Exists(Icon))
+{
+    fail("the package needs icon.png, " + Icon + " was not found");
+}
+else
+{
+    var bytes = File.ReadAllBytes(Icon);
+    var signature = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 };
+    var png = bytes.Length >= 24;
+    for (var index = 0; png && index < signature.Length; index++)
+    {
+        png = bytes[index] == signature[index];
+    }
+
+    if (!png)
+    {
+        fail(Icon + " is not a PNG file");
+    }
+    else
+    {
+        var width = (bytes[16] << 24) | (bytes[17] << 16) | (bytes[18] << 8) | bytes[19];
+        var height = (bytes[20] << 24) | (bytes[21] << 16) | (bytes[22] << 8) | bytes[23];
+        if (width != 256 || height != 256)
+        {
+            fail("icon.png is " + width + "x" + height + ", Thunderstore needs exactly 256x256");
+        }
+    }
+}
+
+if (failed)
+{
+    return false;
+}
+
+PackageName = name;
+PackageVersion = version;
+PackageDirectory = Path.Combine(OutputRoot, name);
+if (Directory.Exists(PackageDirectory))
+{
+    Directory.Delete(PackageDirectory, true);
+}
+
+Directory.CreateDirectory(PackageDirectory);
+File.WriteAllText(Path.Combine(PackageDirectory, "manifest.json"), text, new UTF8Encoding(false));
+]]></Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="CatLibGetVersion" Returns="$(Version)" />
+
+  <Target Name="CatLibThunderstoreSkipped" AfterTargets="Build" Condition="'$(CatLibThunderstore)' == 'true' and '$(OutputType)' == 'Library' and !Exists('$(CatLibThunderstoreSource)\manifest.json')">
+    <Message Importance="high" Text="$(MSBuildProjectName) is not packaged for Thunderstore: $(CatLibThunderstoreSource)\manifest.json was not found" />
+  </Target>
+
+  <Target Name="CatLibThunderstore" AfterTargets="Build" DependsOnTargets="CatLibIcon" Condition="'$(CatLibThunderstore)' == 'true' and Exists('$(CatLibThunderstoreSource)\manifest.json')">
+    <Error Code="CATLIB002" Condition="!Exists('$(CatLibThunderstoreSource)\README.md')" Text="$(MSBuildProjectName): the package needs README.md, put it into $(CatLibThunderstoreSource)" />
+
+    <Warning Code="CATLIB003" Condition="Exists('$(CatLibThunderstoreSource)\README.md') and '$([System.IO.File]::ReadAllText(`$(CatLibThunderstoreSource)\README.md`).Trim())' == ''" Text="$(MSBuildProjectName): $(CatLibThunderstoreSource)\README.md is empty, write it before uploading" />
+
+    <MSBuild Projects="$(CatLibProject)" Targets="CatLibGetVersion" Condition="Exists('$(CatLibProject)')">
+      <Output TaskParameter="TargetOutputs" PropertyName="CatLibPackageDependencyVersion" />
+    </MSBuild>
+
+    <MSBuild Projects="@(ProjectReference)" Targets="CatLibGetVersion" Condition="'@(ProjectReference)' != ''">
+      <Output TaskParameter="TargetOutputs" ItemName="CatLibThunderstoreReferenceVersion" />
+    </MSBuild>
+
+    <MSBuild Projects="@(CatLibThunderstoreProject)" Targets="GetTargetPath" Condition="'@(CatLibThunderstoreProject)' != ''">
+      <Output TaskParameter="TargetOutputs" ItemName="CatLibThunderstorePluginFile" />
+    </MSBuild>
+
+    <ItemGroup>
+      <CatLibThunderstorePluginFile Include="$(TargetPath)" />
+      <CatLibThunderstorePluginFile Include="@(CatLibThunderstoreFile)" />
+      <CatLibThunderstoreRootFile Include="$(CatLibThunderstoreSource)\**\*" Exclude="$(CatLibThunderstoreSource)\manifest.json" />
+    </ItemGroup>
+
+    <Error Code="CATLIB002" Condition="!Exists('%(CatLibThunderstorePluginFile.FullPath)')" Text="$(MSBuildProjectName): %(CatLibThunderstorePluginFile.FullPath) was not found, build it first" />
+
+    <CatLibThunderstoreManifest Template="$(CatLibThunderstoreSource)\manifest.json" Icon="$(CatLibIcon)" OutputRoot="$(CatLibThunderstoreDir)" Version="$(Version)" CatLibVersion="$(CatLibPackageDependencyVersion)" ReferenceVersions="@(CatLibThunderstoreReferenceVersion)" ProjectName="$(MSBuildProjectName)">
+      <Output TaskParameter="PackageName" PropertyName="CatLibPackageName" />
+      <Output TaskParameter="PackageVersion" PropertyName="CatLibPackageVersion" />
+      <Output TaskParameter="PackageDirectory" PropertyName="CatLibPackageDir" />
+    </CatLibThunderstoreManifest>
+
+    <Copy SourceFiles="$(CatLibIcon)" DestinationFiles="$(CatLibPackageDir)\icon.png" />
+    <Copy SourceFiles="@(CatLibThunderstoreRootFile)" DestinationFolder="$(CatLibPackageDir)\%(RecursiveDir)" />
+    <Copy SourceFiles="$(CatLibThunderstoreChangelog)" DestinationFiles="$(CatLibPackageDir)\CHANGELOG.md" Condition="Exists('$(CatLibThunderstoreChangelog)')" />
+    <Copy SourceFiles="@(CatLibThunderstorePluginFile)" DestinationFolder="$(CatLibPackageDir)\plugins" />
+    <ZipDirectory SourceDirectory="$(CatLibPackageDir)" DestinationFile="$(CatLibThunderstoreDir)\$(CatLibPackageName)-$(CatLibPackageVersion).zip" Overwrite="true" />
+    <Message Importance="high" Text="$(MSBuildProjectName) -&gt; $(CatLibThunderstoreDir)\$(CatLibPackageName)-$(CatLibPackageVersion).zip" />
+  </Target>
+</Project>

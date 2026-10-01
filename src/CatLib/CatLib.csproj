@@ -7,10 +7,15 @@
     <PluginMetaName>CatLib</PluginMetaName>
     <CatLibDeployFolder>CatLib</CatLibDeployFolder>
     <CatLibIcon>$(CatLibRoot)icon.png</CatLibIcon>
+    <CatLibThunderstoreChangelog>$(CatLibRoot)CHANGELOG.md</CatLibThunderstoreChangelog>
   </PropertyGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="CatLib.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <CatLibThunderstoreProject Include="..\..\tools\CatLib.CrashWatcher\CatLib.CrashWatcher.csproj" />
   </ItemGroup>
 
   <ItemGroup>

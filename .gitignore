@@ -5,4 +5,4 @@ obj/
 *.user
 *.suo
 GamePaths.props
-.codegraphy/*
+Thunderstore-build/

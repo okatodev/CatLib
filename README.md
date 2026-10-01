@@ -13,6 +13,7 @@ build/
   GameReferences.targets     references to BepInEx core and generated interop assemblies
   PluginMeta.targets         generates PluginMeta (Guid, Name, Version) from the project file
   Deploy.targets             copies the built plugin into BepInEx/plugins/<folder>
+  Thunderstore.targets       packs a project into Thunderstore-build/ with -p:CatLibThunderstore=true
 src/CatLib/                  the library, shipped to players
 tools/CatLib.CrashWatcher/   small Windows program that shows the crash window, shipped next to CatLib.dll
 mods/                        gameplay mods built on CatLib, one project per mod
@@ -66,6 +67,8 @@ Each build copies every plugin into its own folder in `BepInEx/plugins`: `CatLib
 `CatLib.CrashWatcher.exe` is built for .NET Framework 4.8, which every Windows 10 and 11 has, and goes into the `CatLib` folder next to `CatLib.dll`.
 Players install both files.
 Pass `-p:CatLibDeploy=false` to build without copying.
+Pass `-p:CatLibThunderstore=true` to also pack CatLib, `CatLib.Tests` and every mod for Thunderstore into `Thunderstore-build/`,
+see [Thunderstore package](docs/WritingMods.md#thunderstore-package).
 Set `SecondGameDir` in `GamePaths.props` to a second copy of the game to copy the plugins there as well, for running two instances on one computer.
 
 ## Tests

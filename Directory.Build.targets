@@ -3,4 +3,5 @@
   <Import Project="$(CatLibRoot)build\PluginMeta.targets" />
   <Import Project="$(CatLibRoot)build\Lang.targets" />
   <Import Project="$(CatLibRoot)build\Deploy.targets" />
+  <Import Project="$(CatLibRoot)build\Thunderstore.targets" />
 </Project>

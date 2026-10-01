@@ -63,25 +63,4 @@ Decoration is a personal setting: with `Decoration/Enabled` off the blocked cell
 
 ## Changes
 
-### Next version
-
-- Paused while not every player has Boat Tweaks: boats come like in the game with the game's heights. Needs CatLib 0.6.0.
-
-### 0.2.0
-
-- Own layouts from files, picked at random, one after another or always one file.
-- Saving the deck of the boat at the dock as an own layout (Ctrl+B); cells of arriving parcels are left out.
-- Generated decks with a set density, near the rails or anywhere, rebuilt from the same seed on every player.
-- Mixed mode picking the deck source for each boat by weight.
-- Blockers of own and generated decks are decorated with the game's crates, bottles and lamps sized to their cells.
-- For an own layout only boat variants whose arriving parcels miss it come; if none does, the closest ones, so the deck is the same every time.
-- Nothing is changed while the game restarts.
-- Blockers of own and generated decks are plain box colliders instead of copies of the game's objects.
-- Decoration can be turned off per player.
-- Height multipliers reach every boat in the scene, also on clients, and the game recomputes the approved height at once.
-- The host decides the next deck and sends it to clients.
-
-### 0.1.0
-
-- Game layouts with allowed numbers and no repeats, one fixed game layout, an empty deck.
-- Approved and maximum stack height multipliers.
+See [CHANGELOG.md](CHANGELOG.md).

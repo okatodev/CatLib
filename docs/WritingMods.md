@@ -52,7 +52,10 @@ mods/<Name>/
   <Name>Plugin.cs     entry point: declarations, settings, events, developer commands
   <Name>Controller.cs ties the parts together while the game runs
   <Name>.csproj
-  README.md           what the mod does, settings, changes per version
+  README.md           what the mod does, settings, how it works, for GitHub
+  CHANGELOG.md        changes per version, for GitHub and the Thunderstore package
+  icon.png            256x256, for the Mods tab and the Thunderstore package
+  Thunderstore/       manifest.json and README.md of the Thunderstore package
   Lang/               en.json, ru.json and other languages
   Settings/           the mod's settings
   Logic/              rules, plans and state without game objects; covered by offline tests
@@ -181,4 +184,45 @@ and check each rule once with a deliberately broken implementation to see that t
 
 - Follow semantic versioning for the mod's `Version`. The default network rule `SameMinor` treats a minor bump as incompatible,
   so players in one lobby need the same minor version.
-- Describe settings, modes and multiplayer behaviour in the mod's `README.md`.
+- Describe settings, modes and multiplayer behaviour in the mod's `README.md`, and the changes of every version in `CHANGELOG.md`.
+
+### Thunderstore package
+
+`dotnet build -c Release -p:CatLibThunderstore=true` packs every project that has `Thunderstore/manifest.json`
+into `Thunderstore-build/<name>/` and `Thunderstore-build/<name>-<version>.zip`, the file to upload:
+
+```
+manifest.json      from Thunderstore/manifest.json
+icon.png           the project's icon.png
+README.md          from Thunderstore/, written for players
+CHANGELOG.md       the project's CHANGELOG.md, when there is one
+plugins/<Name>.dll
+```
+
+Every other file in `Thunderstore/` goes to the root of the package as well. A mod manager installs the package
+into `BepInEx/plugins/<Team>-<name>/`, where CatLib finds the icon and the author.
+`Thunderstore-build/` is not in git, and each build replaces the package folder.
+
+`manifest.json` is written for Thunderstore with placeholders: `{version}` becomes the project's `Version`,
+`{catlib_version}` the version of CatLib the mod is built against, and `{version:<Project>}` the version of a referenced project,
+for example `{version:BoatTweaks}` in the package of `CatLib.Tests`.
+
+```json
+{
+  "name": "MyMod",
+  "version_number": "{version}",
+  "website_url": "",
+  "description": "What the mod does, 250 characters at most.",
+  "dependencies": [
+    "Team-CatLib-{catlib_version}"
+  ]
+}
+```
+
+The build checks the package the way Thunderstore does and fails with CATLIB004 when it would be rejected:
+the name only has `a-z A-Z 0-9 _`, the version is `Major.Minor.Patch`, the description is at most 250 characters,
+`website_url` is there even when empty, every dependency is `Team-Package-1.2.3`, and `icon.png` is a PNG of exactly 256x256.
+A placeholder that names no referenced project fails as well. A missing `Thunderstore/README.md` fails with CATLIB002.
+An empty `Thunderstore/README.md`, a `TODO` left in the manifest or a version that differs from the project give warning CATLIB003. Properties: `CatLibThunderstoreDir` for the output folder, `CatLibThunderstoreSource` for the template folder,
+`CatLibThunderstoreChangelog` for another changelog. Items `CatLibThunderstoreFile` and `CatLibThunderstoreProject`
+add files or the output of other projects to `plugins/`; CatLib adds `CatLib.CrashWatcher.exe` this way.

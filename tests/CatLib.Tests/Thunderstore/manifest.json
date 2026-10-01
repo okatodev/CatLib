@@ -1,0 +1,12 @@
+{
+  "name": "CatLibTests",
+  "version_number": "{version}",
+  "website_url": "",
+  "description": "TODO: one or two sentences about the package, 250 characters at most.",
+  "dependencies": [
+    "TODO-CatLib-{version:CatLib}",
+    "TODO-BoatTweaks-{version:BoatTweaks}",
+    "TODO-ShelfLabels-{version:ShelfLabels}",
+    "TODO-BetterRepair-{version:BetterRepair}"
+  ]
+}

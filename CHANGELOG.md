@@ -1,6 +1,17 @@
 # Changelog
 
-CatLib follows semantic versioning. Mods in `mods/` have their own versions and changes in their README files.
+CatLib follows semantic versioning. Mods in `mods/` have their own versions and changes in their `CHANGELOG.md` files.
+
+## Not released yet
+
+### Added
+
+- Thunderstore packages: `dotnet build -p:CatLibThunderstore=true` packs CatLib, `CatLib.Tests` and every mod with `Thunderstore/manifest.json`
+  into `Thunderstore-build/`, a folder and a zip per package with the manifest, icon, README, changelog and plugins.
+  The build checks the manifest and the icon by Thunderstore's rules (CATLIB002, CATLIB003, CATLIB004).
+  See [Thunderstore package](docs/WritingMods.md#thunderstore-package).
+- Mods keep their changes in `CHANGELOG.md` next to `README.md`, and a README for players in `Thunderstore/README.md`.
+- `CatLib.Tests` is its own package that depends on CatLib and the three mods; its versions come from the projects.
 
 ## 0.6.0
 
