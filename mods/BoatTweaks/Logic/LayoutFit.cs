@@ -15,9 +15,9 @@ public static class LayoutFit
 
     public static LayoutFitResult ClosestVariants(DeckPattern pattern, IReadOnlyList<ISet<(int Row, int Column)>> arrivingPerVariant)
     {
-        var blocked = pattern.BlockedCells().ToList();
+        var pieces = pattern.Pieces();
         var overlaps = arrivingPerVariant
-            .Select(arriving => arriving == null ? new HashSet<(int Row, int Column)>() : new HashSet<(int Row, int Column)>(blocked.Where(arriving.Contains)))
+            .Select(arriving => DeckPieces.FreedBy(pieces, arriving))
             .ToList();
         if (overlaps.Count == 0)
         {

@@ -17,13 +17,31 @@ public enum DeckBuildResult
 
 public sealed class DeckDecorTemplates
 {
-    public List<GameObject> LargeCrates { get; } = new();
+    private readonly Dictionary<(int Short, int Long), List<GameObject>> _byFootprint = new();
 
-    public List<GameObject> SmallCrates { get; } = new();
+    public List<string> Unused { get; } = new();
 
-    public List<GameObject> Singles { get; } = new();
+    public List<string> Used { get; } = new();
 
-    public bool IsEmpty => LargeCrates.Count == 0 && SmallCrates.Count == 0 && Singles.Count == 0;
+    public bool IsEmpty => _byFootprint.Count == 0;
+
+    public void Add(GameObject prop, (int Short, int Long) footprint, string label)
+    {
+        if (!_byFootprint.TryGetValue(footprint, out var list))
+        {
+            list = new List<GameObject>();
+            _byFootprint[footprint] = list;
+        }
+
+        list.Add(prop);
+        Used.Add(label);
+    }
+
+    public IReadOnlyList<GameObject> For((int Short, int Long) footprint) =>
+        _byFootprint.TryGetValue(footprint, out var list) ? list : Array.Empty<GameObject>();
+
+    public string Describe() =>
+        $"used: {(Used.Count == 0 ? "none" : string.Join(", ", Used))}; not used: {(Unused.Count == 0 ? "none" : string.Join(", ", Unused))}";
 }
 
 public sealed class DeckBuilder
@@ -91,14 +109,12 @@ public sealed class DeckBuilder
         var baseY = templateTransform.localPosition.y;
         var random = new System.Random(plan.Seed ^ (plan.Name ?? string.Empty).Length);
 
+        var allPieces = pattern.Pieces();
+        var pieces = DeckPieces.Avoiding(allPieces, reserved);
+        var droppedPieces = allPieces.Count - pieces.Count;
         var placed = new List<(int Row, int Column)>();
-        foreach (var (row, column) in pattern.BlockedCells())
+        foreach (var (row, column) in pieces.SelectMany(piece => piece.Cells()))
         {
-            if (reserved.Contains((row, column)))
-            {
-                continue;
-            }
-
             var position = grid[row, column];
             var blocker = new GameObject($"{ClonePrefix}Blocker {row},{column}");
             blocker.layer = template.layer;
@@ -114,7 +130,6 @@ public sealed class DeckBuilder
             placed.Add((row, column));
         }
 
-        var pieces = DeckPieces.Split(rows, columns, new HashSet<(int Row, int Column)>(placed));
         var decorated = 0;
         foreach (var piece in pieces)
         {
@@ -123,7 +138,7 @@ public sealed class DeckBuilder
 
         Physics.SyncTransforms();
         var skipped = pattern.BlockedCount - placed.Count;
-        _log.Info($"Deck built for {key}: {plan.Describe()}, {placed.Count} cell(s) taken, {skipped} left free for arriving parcels, " +
+        _log.Info($"Deck built for {key}: {plan.Describe()}, {placed.Count} cell(s) taken, {skipped} cell(s) of {droppedPieces} piece(s) left free for arriving parcels, " +
                   $"pieces {string.Join(" ", pieces.Select(piece => $"{piece.Rows}x{piece.Columns}@{piece.Row},{piece.Column}"))} with {decorated} decoration object(s)");
         takenCells = placed;
         return DeckBuildResult.Done;
@@ -131,15 +146,10 @@ public sealed class DeckBuilder
 
     private static int Decorate(DeckPiece piece, Vector3[,] grid, DeckDecorTemplates decor, Transform parent, System.Random random)
     {
-        var templates = piece.CellCount == 4 ? decor.LargeCrates : piece.CellCount == 2 ? decor.SmallCrates : decor.Singles;
+        var templates = decor.For(piece.Footprint);
         if (templates.Count == 0)
         {
-            if (piece.CellCount == 1 || decor.Singles.Count == 0)
-            {
-                return 0;
-            }
-
-            return piece.Cells().Sum(cell => Decorate(new DeckPiece(cell.Row, cell.Column, 1, 1), grid, decor, parent, random));
+            return piece.CellCount == 1 ? 0 : DeckPieces.SplitPiece(piece).Sum(part => Decorate(part, grid, decor, parent, random));
         }
 
         var center = Vector3.zero;
@@ -157,11 +167,11 @@ public sealed class DeckBuilder
         prop.transform.localRotation = Quaternion.identity;
 
         float yaw;
-        if (piece.CellCount == 2)
+        if (piece.Rows != piece.Columns)
         {
             var extent = LocalExtent(prop, parent);
             var longAlongRows = extent.x >= extent.z;
-            var pieceAlongRows = piece.Rows == 2;
+            var pieceAlongRows = piece.Rows > piece.Columns;
             yaw = (longAlongRows == pieceAlongRows ? 0f : 90f) + 180f * random.Next(2);
         }
         else
@@ -171,6 +181,51 @@ public sealed class DeckBuilder
 
         prop.transform.localRotation = Quaternion.Euler(0f, yaw, 0f);
         return 1;
+    }
+
+    public static bool TryMeasure(GameObject prop, out Vector3 size)
+    {
+        size = Vector3.zero;
+        var space = prop.transform.parent;
+        if (space == null)
+        {
+            return false;
+        }
+
+        var toSpace = space.worldToLocalMatrix;
+        var min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        var max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+        var found = false;
+        foreach (var filter in prop.GetComponentsInChildren<MeshFilter>(true))
+        {
+            var mesh = filter == null ? null : filter.sharedMesh;
+            if (mesh == null)
+            {
+                continue;
+            }
+
+            var matrix = toSpace * filter.transform.localToWorldMatrix;
+            var bounds = mesh.bounds;
+            for (var corner = 0; corner < 8; corner++)
+            {
+                var local = new Vector3(
+                    (corner & 1) == 0 ? bounds.min.x : bounds.max.x,
+                    (corner & 2) == 0 ? bounds.min.y : bounds.max.y,
+                    (corner & 4) == 0 ? bounds.min.z : bounds.max.z);
+                var point = matrix.MultiplyPoint3x4(local);
+                min = Vector3.Min(min, point);
+                max = Vector3.Max(max, point);
+                found = true;
+            }
+        }
+
+        if (!found)
+        {
+            return false;
+        }
+
+        size = max - min;
+        return true;
     }
 
     public static Vector3 LocalExtent(GameObject prop, Transform parent)

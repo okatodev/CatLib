@@ -11,10 +11,17 @@ public sealed class DeckPattern
     public const string FreeChars = ".o_";
 
     private readonly bool[,] _blocked;
+    private readonly IReadOnlyList<DeckPiece> _pieces;
 
     public DeckPattern(bool[,] blocked)
+        : this(blocked, null)
+    {
+    }
+
+    public DeckPattern(bool[,] blocked, IEnumerable<DeckPiece> pieces)
     {
         _blocked = (bool[,])blocked.Clone();
+        _pieces = pieces?.ToList();
     }
 
     public int Rows => _blocked.GetLength(0);
@@ -24,6 +31,8 @@ public sealed class DeckPattern
     public int BlockedCount => BlockedCells().Count();
 
     public bool IsBlocked(int row, int column) => _blocked[row, column];
+
+    public IReadOnlyList<DeckPiece> Pieces() => _pieces ?? DeckPieces.Split(Rows, Columns, new HashSet<(int Row, int Column)>(BlockedCells()));
 
     public IEnumerable<(int Row, int Column)> BlockedCells()
     {

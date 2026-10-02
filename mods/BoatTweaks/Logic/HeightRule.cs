@@ -24,5 +24,8 @@ public static class HeightRule
         return (scaledApproved, scaledMaximum);
     }
 
+    public static float VisualHeight(float visualY, float approvedBefore, float approvedAfter) =>
+        approvedBefore > 0f && approvedAfter > 0f ? visualY + approvedAfter - approvedBefore : visualY;
+
     private static float Clamp(float scale) => Math.Min(Math.Max(scale, MinimumScale), MaximumScale);
 }

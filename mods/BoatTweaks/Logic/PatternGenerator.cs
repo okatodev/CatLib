@@ -10,7 +10,10 @@ public static class PatternGenerator
     public const float MaximumDensity = 0.6f;
     public const int EdgeWidth = 2;
 
-    private static readonly (int Rows, int Columns)[] Shapes = { (2, 2), (2, 1), (1, 2), (1, 1) };
+    private static readonly (int Rows, int Columns, double Weight)[] Shapes =
+    {
+        (3, 3, 1), (2, 5, 0.5), (5, 2, 0.5), (2, 2, 4), (2, 1, 2), (1, 2, 2), (1, 1, 1)
+    };
 
     public static DeckPattern Generate(int rows, int columns, float density, bool edgesOnly, ISet<(int Row, int Column)> reserved, int seed)
     {
@@ -18,6 +21,7 @@ public static class PatternGenerator
         var blocked = new bool[rows, columns];
         var target = (int)Math.Round(Math.Min(Math.Max(density, MinimumDensity), MaximumDensity) * rows * columns);
         var count = 0;
+        var pieces = new List<DeckPiece>();
 
         bool Allowed(int row, int column) =>
             row >= 0 && column >= 0 && row < rows && column < columns
@@ -33,7 +37,7 @@ public static class PatternGenerator
                 break;
             }
 
-            foreach (var shape in Shapes.OrderBy(_ => random.Next()))
+            foreach (var shape in Shapes.OrderByDescending(shape => Math.Pow(random.NextDouble(), 1.0 / shape.Weight)))
             {
                 var cells = Enumerable.Range(0, shape.Rows).SelectMany(dr => Enumerable.Range(0, shape.Columns).Select(dc => (Row: row + dr, Column: column + dc))).ToList();
                 if (count + cells.Count > target + 1 || !cells.All(cell => Allowed(cell.Row, cell.Column)))
@@ -47,11 +51,12 @@ public static class PatternGenerator
                 }
 
                 count += cells.Count;
+                pieces.Add(new DeckPiece(row, column, shape.Rows, shape.Columns));
                 break;
             }
         }
 
-        return new DeckPattern(blocked);
+        return new DeckPattern(blocked, pieces);
     }
 
     public static bool IsEdge(int row, int column, int rows, int columns) =>

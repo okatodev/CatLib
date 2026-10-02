@@ -34,6 +34,24 @@ public sealed class DeckGenerationTest : TestCase
         Assert.Equal(0, hits, "Across 200 dense decks no cell of an arriving parcel is ever taken");
         Assert.True(first.BlockedCells().All(cell => PatternGenerator.IsEdge(cell.Row, cell.Column, 8, 8)), "Edges only keeps the middle free");
         Assert.True(first.BlockedCount >= 14 && first.BlockedCount <= 17, $"About a quarter of 64 cells is taken, got {first.BlockedCount}");
+        context.Note("Seed 42 pieces: " + string.Join(", ", first.Pieces().Select(piece => $"{piece.Rows}x{piece.Columns}@{piece.Row},{piece.Column}")));
+        var generatedCells = first.Pieces().SelectMany(piece => piece.Cells()).ToList();
+        Assert.Equal(first.BlockedCount, generatedCells.Count, "A generated deck is made of whole pieces that cover every taken cell once");
+        Assert.True(generatedCells.Distinct().Count() == generatedCells.Count && generatedCells.All(cell => first.IsBlocked(cell.Row, cell.Column)), "Generated pieces never overlap or leave the taken cells");
+        var shapes = Enumerable.Range(1, 50)
+            .SelectMany(seed => PatternGenerator.Generate(8, 8, 0.3f, true, reserved, seed).Pieces())
+            .Select(piece => piece.CellCount)
+            .Distinct()
+            .OrderBy(count => count)
+            .ToList();
+        Assert.True(new[] { 1, 2, 4 }.All(shapes.Contains), "Generated decks use squares, pairs and single cells");
+        Assert.False(shapes.Contains(9), "A 3x3 crate does not fit the two rows along the rails");
+        var middleShapes = Enumerable.Range(1, 100)
+            .SelectMany(seed => PatternGenerator.Generate(8, 8, 0.3f, false, reserved, seed).Pieces())
+            .Select(piece => piece.CellCount)
+            .Distinct()
+            .ToList();
+        Assert.True(middleShapes.Contains(9) && middleShapes.Contains(10), "Anywhere on the deck big and long crates come too");
 
         DeckPattern.TryParse(".##..##.\n.##..##.\n........\n........\n........\n........\n..##....\n..##....", out var saved, out _);
         var variants = new List<ISet<(int Row, int Column)>>

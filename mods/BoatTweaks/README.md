@@ -33,6 +33,8 @@ The boat deck is 8 by 8 cells on most levels; a layout of another size is skippe
 The easiest way to make one: switch to Empty, put parcels where the blockers should be, then press the save hotkey (Ctrl+B by default).
 Every taken cell of the boat at the dock is saved except the cells of the parcels that arrived with it, so take off other parcels that should not be part of the layout first.
 Cells where arriving parcels stand are always left free: the host prefers boat variants whose parcels miss the layout.
+A layout is cut into pieces, the biggest first: 4x5, 4x4, 2x5, 3x3, 2x2, 1x2 and single cells. A piece that an arriving parcel touches is left out whole,
+so a square never turns into a smaller odd shape.
 If every variant has parcels on the layout, which is common for boats of two or more players, only the variants that free the fewest cells,
 and the same cells, come, so the deck looks the same every time, and a notification tells how many cells stay free.
 
@@ -50,15 +52,18 @@ Decoration is a personal setting: with `Decoration/Enabled` off the blocked cell
 - Own and generated decks get plain box colliders on the `StorageBlocker` layer, one per cell, not copies of the game's blocker objects.
 - Game layouts replace the variant list of each level with the chosen variant, so the game itself spawns it.
 - Empty, own layouts and generated decks hide the game's blockers and decoration in every boat prefab.
-  For own layouts and generated decks, decoration is added to the boat that arrives: large crates on 2x2 pieces,
-  small crates on pairs, bottles and lamps on single cells.
+  For own layouts and generated decks, decoration is added to the boat that arrives: every crate, bottle and lamp of the game's boats
+  decorates pieces of its size, measured from its model: 4x5, 4x4, 2x5, 3x3, 2x2, 1x2 and single cells. Rope coils and paddles are not used.
+  A piece whose size has no prop gets smaller props that cover it. The log lists which props are used.
+  Generated decks are made of whole pieces, mostly squares and pairs, like the game's own decks; big 3x3 and long 2x5 crates come where they fit.
   The game reads blockers only when a boat is created, so the mod holds its cells taken in the storage grid every frame
   while that boat is at the dock; the game recounts the grid whenever a parcel is placed or taken, and the mod keeps its cells taken.
 - For an own layout the host only lets the boat variants come whose arriving parcels do not stand on the layout.
-  If no variant fits, the closest variants come and the cells under their arriving parcels are left free.
+  If no variant fits, the closest variants come and the pieces under their arriving parcels are left free.
 - Objects of the boat prefabs that carry game entities are never hidden, so the game's network identifiers are not affected.
 - From the start of a game restart until the next level loads the mod changes nothing, so the level is never touched while it is destroyed.
 - Heights are scaled from the remembered original values of every prefab and applied to every boat in the scene, after which the game recomputes whether the stack is approved.
+  The red mark of the approved height moves with it, also on a boat that is already at the dock.
 - The developer menu has **Boat Tweaks → Boat heights**, which writes the limits of every boat in the scene to the log.
 
 ## Changes

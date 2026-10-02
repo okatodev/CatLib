@@ -12,8 +12,11 @@ CatLib follows semantic versioning. Mods in `mods/` have their own versions and 
   See [Thunderstore package](docs/WritingMods.md#thunderstore-package).
 - Mods keep their changes in `CHANGELOG.md` next to `README.md`, and a README for players in `Thunderstore/README.md`.
 - `CatLib.Tests` is its own package that depends on CatLib and the three mods; its versions come from the projects.
-- Works with the game update of October 2026 (Unity 6000.3.23, single player without internet).
 - Text settings on the Mods tab title the virtual keyboard of Steam Deck and Big Picture with the setting's name.
+
+### Changed
+
+- Works with the game update of October 2026 (Unity 6000.3.23, single player without internet).
 
 ## 0.6.0
 

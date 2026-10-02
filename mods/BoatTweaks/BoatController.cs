@@ -23,6 +23,7 @@ public sealed class BoatController
     public const string FallbackPoolKey = "fallback";
 
     private readonly CatLogger _log;
+    private string _lastCatalog;
     private readonly TextCatalog _texts;
     private readonly PatternLibrary _library;
     private readonly DeckBuilder _builder;
@@ -252,9 +253,43 @@ public sealed class BoatController
                 continue;
             }
 
+            var before = store._StorageMaximumApprovedHeight_k__BackingField;
             ApplyHeight(store, state);
+            MoveApprovedVisual(store, before, store._StorageMaximumApprovedHeight_k__BackingField);
             store.UpdateApprovedHeight();
         }
+    }
+
+    private static string DescribeVisual(EntityInteractableStore store)
+    {
+        var visual = store._ApprovedHeightVisual_k__BackingField;
+        if (visual == null)
+        {
+            return "no approved height visual";
+        }
+
+        var transform = visual.transform;
+        return $"approved height visual at local y {transform.localPosition.y:0.###}, scale y {transform.localScale.y:0.###}, parent {(transform.parent == null ? "none" : transform.parent.name)}";
+    }
+
+    private void MoveApprovedVisual(EntityInteractableStore store, float before, float after)
+    {
+        if (before <= 0f || after <= 0f || Math.Abs(before - after) < 0.001f)
+        {
+            return;
+        }
+
+        var visual = store._ApprovedHeightVisual_k__BackingField;
+        if (visual == null)
+        {
+            return;
+        }
+
+        var transform = visual.transform;
+        var position = transform.localPosition;
+        var moved = HeightRule.VisualHeight(position.y, before, after);
+        transform.localPosition = new Vector3(position.x, moved, position.z);
+        _log.Debug($"Approved height visual of {KeyOf(store)} moved from {position.y:0.###} to {moved:0.###} for approved height {before:0.##} -> {after:0.##}");
     }
 
     public string DescribeBoats()
@@ -371,7 +406,7 @@ public sealed class BoatController
             var plan = _plans.TryGetValue(pool.Key, out var planned) ? planned : LayoutPlan.KeepGame;
             _lastVariant[pool.Key] = position;
             _log.Info($"Boat arrived: {key}, variant {position + 1} of pool {pool.Key}, planned {plan}, deck {CurrentPlan.Describe()}, " +
-                      $"approved height {store._StorageMaximumApprovedHeight_k__BackingField:0.##}, maximum {store._StorageMaximumHeight_k__BackingField:0.##}");
+                      $"approved height {store._StorageMaximumApprovedHeight_k__BackingField:0.##}, maximum {store._StorageMaximumHeight_k__BackingField:0.##}, {DescribeVisual(store)}");
             StartBuild(store);
             return;
         }
@@ -530,29 +565,48 @@ public sealed class BoatController
     {
         var templates = new DeckDecorTemplates();
         var props = _prefabs.Values
-            .SelectMany(state => state.Props)
-            .Select(prop => prop.Object)
-            .Where(prop => prop != null)
-            .GroupBy(prop => prop.name.Split(' ')[0])
+            .SelectMany(state => state.Props.Select(prop => (prop.Object, Cell: CellSize(state.Prefab))))
+            .Where(prop => prop.Object != null)
+            .GroupBy(prop => prop.Object.name.Split(' ')[0], StringComparer.Ordinal)
+            .OrderBy(group => group.Key, StringComparer.Ordinal)
             .Select(group => group.First());
 
-        foreach (var prop in props)
+        foreach (var (prop, cell) in props)
         {
-            if (DeckDecor.IsLargeCrate(prop.name))
+            var label = prop.name.Split(' ')[0];
+            var footprint = DeckDecor.ByName(prop.name);
+            var size = string.Empty;
+            if (DeckBuilder.TryMeasure(prop, out var extent))
             {
-                templates.LargeCrates.Add(prop);
+                var measured = DeckDecor.Footprint(extent.x, extent.z, cell);
+                var flat = DeckDecor.IsFlat(extent.y, cell);
+                footprint = flat ? null : measured;
+                size = $" {measured.Short}x{measured.Long} h{extent.y:0.##}{(flat ? " flat" : string.Empty)}";
             }
-            else if (DeckDecor.IsSmallCrate(prop.name))
+
+            if (footprint == null || DeckDecor.IsExcluded(prop.name) || !DeckPieces.IsKnown(footprint.Value))
             {
-                templates.SmallCrates.Add(prop);
+                templates.Unused.Add(label + size);
+                continue;
             }
-            else if (DeckDecor.IsSmallProp(prop.name))
-            {
-                templates.Singles.Add(prop);
-            }
+
+            templates.Add(prop, footprint.Value, label + size);
+        }
+
+        var catalog = templates.Describe();
+        if (catalog != _lastCatalog)
+        {
+            _lastCatalog = catalog;
+            _log.Info("Decoration of own and generated decks: " + catalog);
         }
 
         return templates;
+    }
+
+    private static float CellSize(EntityInteractableStore prefab)
+    {
+        var cell = prefab == null ? 0f : prefab._Padding_k__BackingField * 2f;
+        return cell > 0f ? cell : DeckBuilder.DefaultCellSize;
     }
 
     private int EntityObjects => _prefabs.Values.Sum(state => state.EntityObjects);

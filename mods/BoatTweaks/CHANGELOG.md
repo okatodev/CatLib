@@ -1,8 +1,15 @@
 # Changelog
 
-## Next version
+## 0.3.0
 
 - Paused while not every player has Boat Tweaks: boats come like in the game with the game's heights. Needs CatLib 0.6.0.
+- The red mark of the approved height follows the height multiplier, also on the boat at the dock.
+- A piece of an own layout that an arriving parcel touches is left out whole, so a 2x2 square never becomes a pair and a single cell.
+- Generated decks are made of whole pieces, mostly squares and pairs, like the game's decks.
+- Every crate, bottle and lamp of the game's boats decorates blocked cells of its size, measured from its model: big 3x3 and 4x4 crates,
+  long 2x5 crates, the giant 4x5 crate, squares, pairs and single cells. Rope coils and paddles are not used.
+- Generated decks may have big 3x3 and long 2x5 crates where they fit; near the rails only long crates fit.
+- Works with the game update of October 2026.
 
 ## 0.2.0
 
