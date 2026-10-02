@@ -317,7 +317,14 @@ internal static class CrashText
                                " s later" + (string.IsNullOrEmpty(dumpPath) ? string.Empty : "; the memory dump shows every thread at the moment it hung"));
         }
 
-        builder.AppendLine("Game: " + session.GameVersion + ", CatLib " + session.CatLibVersion + ", started " + session.Started + ", language " + session.Language);
+        builder.AppendLine("Game: " + session.GameVersion + ", CatLib " + session.CatLibVersion +
+                           (string.IsNullOrEmpty(session.WatcherVersion) ? string.Empty : ", crash watcher " + session.WatcherVersion) +
+                           ", started " + session.Started + ", language " + session.Language);
+        if (session.IsNewerFormat)
+        {
+            builder.AppendLine("Session format " + session.Format.ToString(CultureInfo.InvariantCulture) + " is newer than this crash watcher reads (" +
+                               CrashSession.CurrentFormat.ToString(CultureInfo.InvariantCulture) + "), some details may be missing: update CatLib Crash Watcher");
+        }
         if (!string.IsNullOrEmpty(session.GameBuild))
         {
             builder.AppendLine("Game build check: " + session.GameBuild);

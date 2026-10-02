@@ -11,5 +11,5 @@ Checks that are not done yet because they need something we do not have now. Rem
 | Mods tab, gamepad | Moving through the mod list, the settings and the reset button with a real gamepad, sliders and text fields included | No gamepad; the automatic test passes |
 | Boat Tweaks | A generated deck "anywhere" gets a big 3x3 crate on its piece | Rare, not seen in a few boats yet |
 | Boat Tweaks | An own layout with a 3x3 block gets one big crate there, not smaller ones | Not run yet |
-| Thunderstore | A package from `Thunderstore-build` installed by a mod manager loads; the Mods tab shows its icon and the author from the package folder | Manifests are templates yet |
+| Thunderstore | A package from `Thunderstore-build` installed by a mod manager loads; the Mods tab shows its icon and the author from the package folder; CatLib starts the crash watcher from `plugins/CatLib-CrashWatcher` | Packages are not uploaded yet |
 | Crash watcher | In normal play no `looks hung` line appears in `watcher.log` after the fix of the quit hang | Needs time in normal play |

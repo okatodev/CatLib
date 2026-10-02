@@ -4,6 +4,7 @@
   "website_url": "https://github.com/okatodev/CatLib",
   "description": "Foundation library for Cat Mail Co. mods.",
   "dependencies": [
-    "BepInEx-BepInExPack_IL2CPP-6.0.755"
+    "BepInEx-BepInExPack_IL2CPP-6.0.755",
+    "CatLib-CrashWatcher-{version:CatLib.CrashWatcher}"
   ]
 }

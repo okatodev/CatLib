@@ -1,0 +1,7 @@
+{
+  "name": "CrashWatcher",
+  "version_number": "{version}",
+  "website_url": "https://github.com/okatodev/CatLib/tree/main/tools/CatLib.CrashWatcher",
+  "description": "The crash window of CatLib: a small Windows program that waits for the game to close and, if it crashed or froze, shows what happened and keeps a report. Comes with CatLib.",
+  "dependencies": []
+}

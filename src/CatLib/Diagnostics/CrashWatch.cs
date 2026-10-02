@@ -80,10 +80,10 @@ internal static class CrashWatch
 
     private static void Start()
     {
-        var watcher = Path.Combine(Path.GetDirectoryName(typeof(CrashWatch).Assembly.Location) ?? string.Empty, WatcherFileName);
-        if (!File.Exists(watcher))
+        var watcher = WatcherLocator.Find(Path.GetDirectoryName(typeof(CrashWatch).Assembly.Location), Paths.PluginPath, WatcherFileName);
+        if (watcher == null)
         {
-            _log.Warning($"The crash watcher {WatcherFileName} is missing next to CatLib.dll, crashes will not be reported");
+            _log.Warning($"The crash watcher {WatcherFileName} was not found in {Paths.PluginPath}, crashes will not be reported. It comes with the CatLib-CrashWatcher package");
             return;
         }
 
@@ -92,6 +92,7 @@ internal static class CrashWatch
         _sessionFile = Path.Combine(ReportsDirectory, SessionFilePrefix + process.Id.ToString(CultureInfo.InvariantCulture) + ".txt");
         var session = new CrashSession
         {
+            Format = CrashSession.CurrentFormat,
             CatLibVersion = PluginMeta.Version,
             GameVersion = GameInfo.ApplicationVersion ?? string.Empty,
             Started = Now(),
@@ -125,7 +126,7 @@ internal static class CrashWatch
         BootstrapEvents.MainMenuLoaded += OnMainMenuLoaded;
         CatLanguage.Changed += OnLanguageChanged;
         AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
-        _log.Info($"Crash watcher started{(_dumps ? " with memory dumps" : string.Empty)}, reports go to {ReportsDirectory}");
+        _log.Info($"Crash watcher {WatcherLocator.VersionText(watcher)} started from {watcher}{(_dumps ? " with memory dumps" : string.Empty)}, reports go to {ReportsDirectory}");
     }
 
     private static void OnLanguageChanged(string language) => WriteLanguage(language);

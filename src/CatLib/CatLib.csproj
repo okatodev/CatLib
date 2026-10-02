@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>CatLib</AssemblyName>
     <RootNamespace>CatLib</RootNamespace>
-    <Version>0.6.1</Version>
+    <Version>0.6.2</Version>
     <PluginGuid>catlib.core</PluginGuid>
     <PluginMetaName>CatLib</PluginMetaName>
     <CatLibDeployFolder>CatLib</CatLibDeployFolder>
@@ -12,10 +12,6 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="CatLib.Tests" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <CatLibThunderstoreProject Include="..\..\tools\CatLib.CrashWatcher\CatLib.CrashWatcher.csproj" />
   </ItemGroup>
 
   <ItemGroup>

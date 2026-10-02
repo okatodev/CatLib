@@ -241,4 +241,4 @@ The files in the repository keep their relative links. The changelog must start 
 
 Properties: `CatLibThunderstoreDir` for the output folder, `CatLibThunderstoreSource` for the template folder,
 `CatLibThunderstoreChangelog` for another changelog. Items `CatLibThunderstoreFile` and `CatLibThunderstoreProject`
-add files or the output of other projects to `plugins/`; CatLib adds `CatLib.CrashWatcher.exe` this way.
+add files or the output of other projects to `plugins/`. `CatLib.CrashWatcher.exe` is not added to CatLib this way: it has a package of its own.

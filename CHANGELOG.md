@@ -2,9 +2,21 @@
 
 CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels and Better Repair, have their own versions and changelogs.
 
+## 0.6.2
+
+The first release on Thunderstore, together with CatLib Crash Watcher 1.0.0, Boat Tweaks 0.3.0, Shelf Labels 0.2.0 and Better Repair 0.1.0.
+
+### Changed
+
+- The crash watcher is its own Thunderstore package, `CatLib-CrashWatcher`, with its own version and changelog, so a release of CatLib
+  does not change the program and its review stays small. CatLib depends on it, so a mod manager installs both.
+- CatLib finds `CatLib.CrashWatcher.exe` next to `CatLib.dll` or in any folder of `BepInEx/plugins`, and the log names its version and path.
+- The session file starts with a format number. A watcher that reads an older format says in the report and in `watcher.log` that it should be updated,
+  and the report names the version of the watcher.
+
 ## 0.6.1
 
-The first release on Thunderstore, together with Boat Tweaks 0.3.0, Shelf Labels 0.2.0 and Better Repair 0.1.0.
+Released together with Boat Tweaks 0.3.0, Shelf Labels 0.2.0 and Better Repair 0.1.0.
 For players: works with the game update of October 2026, the game no longer hangs when quitting after single player,
 the main menu shows the CatLib version and warns when the game and CatLib do not match, crash reports catch a hang while quitting.
 For mod authors: Thunderstore packages for CatLib and every mod, `GameCompatibility`.

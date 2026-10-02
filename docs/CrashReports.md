@@ -4,6 +4,11 @@ When the game closes unexpectedly, CatLib shows a small window with what happene
 This works for every kind of crash, native ones included, because the window comes from a separate program
 that waits for the game to close instead of code inside the crashing game.
 
+The program, `CatLib.CrashWatcher.exe`, is its own Thunderstore package, `CatLib-CrashWatcher`, with its own version,
+so a release of CatLib does not change it. CatLib depends on it, so a mod manager installs it with CatLib.
+CatLib looks for it next to `CatLib.dll` first, then in every folder of `BepInEx/plugins` up to 4 levels deep,
+and takes the newest one when there are several. The log names the version and the path it started.
+
 ## What the player sees
 
 A small window titled "Cat Mail Co: crash report" in the language of the game. The heading is a random cozy phrase,
@@ -35,7 +40,8 @@ The last 10 reports are kept, memory dumps only in the last 3 of them. `BepInEx/
 ## How it works
 
 1. At start CatLib writes `session_<process id>.txt` in `BepInEx/CatLib/Crashes` with the versions, the log paths,
-   the id of the game thread and the window texts in the game language, and starts `CatLib.CrashWatcher.exe` from its own folder.
+   the id of the game thread and the window texts in the game language, and starts `CatLib.CrashWatcher.exe`. The first line of the file is the format number of the session file:
+   a watcher that reads an older format still writes the report and says in it and in `watcher.log` that it should be updated.
 2. While the game runs, CatLib adds the mod list and the game events to that file (network ticks are left out,
    the file keeps the last 200 events). When the player changes the language, CatLib writes the texts again.
 3. With memory dumps on, the watcher follows the game like a debugger. Exceptions the game handles itself go straight back to it.
@@ -77,7 +83,7 @@ The developer menu of `CatLib.Tests` has the group **Crash**; the crash commands
 | Hang on quit | Turns on or off a 90 s hang of the game thread while Unity shuts down after a quit, like the real hangs; close the game from the Task Manager after 10 s to get the hang report |
 
 To look at the window without crashing, run
-`CatLib.CrashWatcher.exe --preview --session <any file>` from `BepInEx/plugins/CatLib`.
+`CatLib.CrashWatcher.exe --preview --session <any file>` from its folder in `BepInEx/plugins`.
 
 ## Memory dumps
 

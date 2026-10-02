@@ -6,6 +6,8 @@ namespace CatLib.Diagnostics;
 
 internal sealed class CrashSession
 {
+    public const int CurrentFormat = 1;
+    public const string FormatKey = "format";
     public const string CatLibKey = "catlib";
     public const string GameKey = "game";
     public const string GameBuildKey = "gameBuild";
@@ -21,6 +23,12 @@ internal sealed class CrashSession
     public const string MainThreadKey = "mainThread";
     public const string ExceptionKey = "exception";
     public const string TextPrefix = "text.";
+
+    public int Format { get; set; }
+
+    public bool IsNewerFormat => Format > CurrentFormat;
+
+    public string WatcherVersion { get; set; } = string.Empty;
 
     public string CatLibVersion { get; set; } = string.Empty;
 
@@ -58,6 +66,7 @@ internal sealed class CrashSession
 
     public IEnumerable<string> HeaderLines()
     {
+        yield return Line(FormatKey, Format.ToString(CultureInfo.InvariantCulture));
         yield return Line(CatLibKey, CatLibVersion);
         yield return Line(GameKey, GameVersion);
         yield return Line(StartedKey, Started);
@@ -97,6 +106,9 @@ internal sealed class CrashSession
 
             switch (key)
             {
+                case FormatKey:
+                    session.Format = int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var format) ? format : 0;
+                    break;
                 case CatLibKey:
                     session.CatLibVersion = value;
                     break;

@@ -13,6 +13,15 @@ internal static class Program
     public const string DumpArgument = "--dump";
     public const string LogFileName = "watcher.log";
 
+    public static string WatcherVersion
+    {
+        get
+        {
+            var version = typeof(Program).Assembly.GetName().Version;
+            return version == null ? "unknown" : version.Major + "." + version.Minor + "." + version.Build;
+        }
+    }
+
     [STAThread]
     private static int Main(string[] args)
     {
@@ -68,9 +77,15 @@ internal static class Program
         var exit = outcome?.Exit ?? GameProcess.WaitForExit(processId);
         hang.Stop();
         var session = CrashSession.Parse(ReportWriter.ReadLines(sessionFile));
+        session.WatcherVersion = WatcherVersion;
         if (session.ProcessId == 0)
         {
             session.ProcessId = processId;
+        }
+
+        if (session.IsNewerFormat)
+        {
+            log.Write($"The session file has format {session.Format}, this crash watcher {WatcherVersion} reads format {CrashSession.CurrentFormat}: update CatLib Crash Watcher, the report may miss details");
         }
 
         var quitSeconds = QuitSeconds(session, exit);
@@ -120,6 +135,7 @@ internal static class Program
     private static int Preview(string sessionFile, string reportsDirectory, WatcherLog log)
     {
         var session = CrashSession.Parse(ReportWriter.ReadLines(sessionFile));
+        session.WatcherVersion = WatcherVersion;
         var exit = new GameExit { ExitCode = 0xC0000005, Started = DateTime.Now.AddMinutes(-42), Exited = DateTime.Now };
         var info = new CrashEventInfo { Module = "example.dll", Offset = "0x0000000000001234", ExceptionCode = "0xc0000005" };
         var strings = session.Strings;

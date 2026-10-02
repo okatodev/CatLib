@@ -16,7 +16,7 @@ CatLib does nothing to the game by itself. Mods are built on top of it, so when 
 - **Your saves are safe.** Mods keep their data in their own files next to your save. The game's save itself is never touched,
   so removing a mod leaves it exactly as it was.
 - **When the game crashes.** A small window tells you what happened and keeps a report you can send to the mod's author.
-  It also notices when the game freezes while quitting.
+  It also notices when the game freezes while quitting. This part is the CatLib Crash Watcher package, installed together with CatLib.
 - **After a game update.** The corner of the main menu shows the CatLib version.
   If the game has been updated and CatLib hasn't caught up yet, or your game is older than CatLib expects, it says so there.
 
