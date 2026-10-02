@@ -1,6 +1,6 @@
 # Changelog
 
-## Next version
+## 0.2.0
 
 - Paused while not every player has Shelf Labels: the extra labels are hidden, their pictures stay in the save. Needs CatLib 0.6.0.
 - Clicks on extra labels play the game's label click sounds, the right click too since the game update.

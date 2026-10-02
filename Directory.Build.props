@@ -16,6 +16,8 @@
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Authors>CatLib contributors</Authors>
     <Product>CatLib</Product>
+    <CatLibRepositoryUrl>https://github.com/okatodev/CatLib</CatLibRepositoryUrl>
+    <CatLibRepositoryBranch>main</CatLibRepositoryBranch>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>ShelfLabels</AssemblyName>
     <RootNamespace>ShelfLabels</RootNamespace>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <PluginGuid>catlib.shelflabels</PluginGuid>
     <PluginMetaName>Shelf Labels</PluginMetaName>
     <CatLibDeployFolder>ShelfLabels</CatLibDeployFolder>

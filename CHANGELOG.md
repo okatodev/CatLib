@@ -1,27 +1,32 @@
 # Changelog
 
-CatLib follows semantic versioning. Mods in `mods/` have their own versions and changes in their `CHANGELOG.md` files.
+CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels and Better Repair, have their own versions and changelogs.
 
-## Not released yet
+## 0.6.1
+
+The first release on Thunderstore, together with Boat Tweaks 0.3.0, Shelf Labels 0.2.0 and Better Repair 0.1.0.
+For players: works with the game update of October 2026, the game no longer hangs when quitting after single player,
+the main menu shows the CatLib version and warns when the game and CatLib do not match, crash reports catch a hang while quitting.
+For mod authors: Thunderstore packages for CatLib and every mod, `GameCompatibility`.
 
 ### Added
 
-- Thunderstore packages: `dotnet build -p:CatLibThunderstore=true` packs CatLib, `CatLib.Tests` and every mod with `Thunderstore/manifest.json`
-  into `Thunderstore-build/`, a folder and a zip per package with the manifest, icon, README, changelog and plugins.
-  The build checks the manifest and the icon by Thunderstore's rules (CATLIB002, CATLIB003, CATLIB004).
-  See [Thunderstore package](docs/WritingMods.md#thunderstore-package).
-- Mods keep their changes in `CHANGELOG.md` next to `README.md`, and a README for players in `Thunderstore/README.md`.
-- `CatLib.Tests` is its own package that depends on CatLib and the three mods; its versions come from the projects.
-- Text settings on the Mods tab title the virtual keyboard of Steam Deck and Big Picture with the setting's name.
-- Crash reports catch a hang while quitting: when the game still runs 8 s after it began to quit, the crash watcher keeps a dump
-  of every thread, and the report and the window say the game stopped responding while quitting. See [Crash reports](docs/CrashReports.md).
-- Developer menu of `CatLib.Tests`: Crash → Hang on quit.
 - The main menu shows the CatLib version in the bottom right corner. CatLib knows the game build it is made for
   (October 2026, Steam build 25651540) and compares it with the running game by the build date in the game version.
   When the game is newer, the corner asks to look for a CatLib update; when it is older, to update the game.
   Pointing at the corner shows both build dates, or the number of mods when everything matches.
   Mods can read the same check from `GameCompatibility`. The log and crash reports name the result.
-- Developer menu of `CatLib.Tests`: UI → Version badge preview.
+- Crash reports catch a hang while quitting: when the game still runs 8 s after it began to quit, the crash watcher keeps a dump
+  of every thread, and the report and the window say the game stopped responding while quitting. See [Crash reports](docs/CrashReports.md).
+- Text settings on the Mods tab title the virtual keyboard of Steam Deck and Big Picture with the setting's name.
+- Thunderstore packages: `dotnet build -p:CatLibThunderstore=true` packs CatLib, `CatLib.Tests` and every mod with `Thunderstore/manifest.json`
+  into `Thunderstore-build/`, a folder and a zip per package with the manifest, icon, README, changelog and plugins.
+  The build checks the manifest and the icon by Thunderstore's rules (CATLIB002, CATLIB003, CATLIB004),
+  points relative links of the README and the changelog to the repository on GitHub, and warns when the changelog does not start with the package version.
+  See [Thunderstore package](docs/WritingMods.md#thunderstore-package).
+- Mods keep their changes in `CHANGELOG.md` next to `README.md`, and a README for players in `Thunderstore/README.md`.
+- `CatLib.Tests` is its own package that depends on CatLib and the three mods.
+- Developer menu of `CatLib.Tests`: Crash → Hang on quit, UI → Version badge preview.
 
 ### Changed
 

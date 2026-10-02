@@ -161,6 +161,91 @@ File.WriteAllText(Path.Combine(PackageDirectory, "manifest.json"), text, new UTF
     </Task>
   </UsingTask>
 
+  <UsingTask TaskName="CatLibThunderstoreText" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Source ParameterType="System.String" Required="true" />
+      <Destination ParameterType="System.String" Required="true" />
+      <Root ParameterType="System.String" Required="true" />
+      <RepositoryUrl ParameterType="System.String" />
+      <Branch ParameterType="System.String" />
+      <Version ParameterType="System.String" />
+      <ProjectName ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Using Namespace="Microsoft.Build.Framework" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+var prefix = ProjectName + ": ";
+var name = Path.GetFileName(Source);
+var text = File.ReadAllText(Source);
+var root = Path.GetFullPath(Root).TrimEnd('\\', '/');
+var folder = Path.GetDirectoryName(Path.GetFullPath(Source));
+var linked = 0;
+var outside = 0;
+var repository = (RepositoryUrl ?? string.Empty).TrimEnd('/');
+var branch = string.IsNullOrEmpty(Branch) ? "main" : Branch;
+text = Regex.Replace(text, "(!?)\\[([^\\]]*)\\]\\(([^)\\s]+)\\)", match =>
+{
+    var target = match.Groups[3].Value;
+    if (target.StartsWith("#") || target.StartsWith("/") || Regex.IsMatch(target, "^[A-Za-z][A-Za-z0-9+.-]*:"))
+    {
+        return match.Value;
+    }
+
+    if (repository.Length == 0)
+    {
+        outside++;
+        return match.Value;
+    }
+
+    var anchor = string.Empty;
+    var hash = target.IndexOf('#');
+    if (hash >= 0)
+    {
+        anchor = target.Substring(hash);
+        target = target.Substring(0, hash);
+    }
+
+    var full = Path.GetFullPath(Path.Combine(folder, target));
+    if (!full.StartsWith(root, StringComparison.OrdinalIgnoreCase))
+    {
+        outside++;
+        return match.Value;
+    }
+
+    var relative = full.Substring(root.Length).TrimStart('\\', '/').Replace('\\', '/');
+    var kind = match.Groups[1].Value == "!" ? "/raw/" : Directory.Exists(full) ? "/tree/" : "/blob/";
+    linked++;
+    return match.Groups[1].Value + "[" + match.Groups[2].Value + "](" + repository + kind + branch + "/" + relative + anchor + ")";
+});
+
+if (outside > 0)
+{
+    Log.LogWarning(null, "CATLIB003", null, Source, 0, 0, 0, 0, prefix + name + " has " + outside + " relative link(s) that will not open on Thunderstore, set CatLibRepositoryUrl or write full links");
+}
+
+if (!string.IsNullOrEmpty(Version))
+{
+    var heading = Regex.Match(text, "^##[ \\t]+([^\\r\\n]*?)[ \\t]*\\r?$", RegexOptions.Multiline);
+    if (heading.Success && heading.Groups[1].Value != Version)
+    {
+        Log.LogWarning(null, "CATLIB003", null, Source, 0, 0, 0, 0, prefix + name + " starts with the section \"" + heading.Groups[1].Value + "\", name it " + Version + " before uploading");
+    }
+}
+
+Directory.CreateDirectory(Path.GetDirectoryName(Destination));
+File.WriteAllText(Destination, text, new UTF8Encoding(false));
+if (linked > 0)
+{
+    Log.LogMessage(MessageImportance.Normal, prefix + name + ": " + linked + " relative link(s) point to " + repository);
+}
+]]></Code>
+    </Task>
+  </UsingTask>
+
   <Target Name="CatLibGetVersion" Returns="$(Version)" />
 
   <Target Name="CatLibThunderstoreSkipped" AfterTargets="Build" Condition="'$(CatLibThunderstore)' == 'true' and '$(OutputType)' == 'Library' and !Exists('$(CatLibThunderstoreSource)\manifest.json')">
@@ -199,8 +284,9 @@ File.WriteAllText(Path.Combine(PackageDirectory, "manifest.json"), text, new UTF
     </CatLibThunderstoreManifest>
 
     <Copy SourceFiles="$(CatLibIcon)" DestinationFiles="$(CatLibPackageDir)\icon.png" />
-    <Copy SourceFiles="@(CatLibThunderstoreRootFile)" DestinationFolder="$(CatLibPackageDir)\%(RecursiveDir)" />
-    <Copy SourceFiles="$(CatLibThunderstoreChangelog)" DestinationFiles="$(CatLibPackageDir)\CHANGELOG.md" Condition="Exists('$(CatLibThunderstoreChangelog)')" />
+    <Copy SourceFiles="@(CatLibThunderstoreRootFile)" DestinationFolder="$(CatLibPackageDir)\%(RecursiveDir)" Condition="'%(Extension)' != '.md'" />
+    <CatLibThunderstoreText Source="%(CatLibThunderstoreRootFile.FullPath)" Destination="$(CatLibPackageDir)\%(CatLibThunderstoreRootFile.RecursiveDir)%(CatLibThunderstoreRootFile.Filename)%(CatLibThunderstoreRootFile.Extension)" Root="$(CatLibRoot)" RepositoryUrl="$(CatLibRepositoryUrl)" Branch="$(CatLibRepositoryBranch)" ProjectName="$(MSBuildProjectName)" Condition="'%(CatLibThunderstoreRootFile.Extension)' == '.md'" />
+    <CatLibThunderstoreText Source="$(CatLibThunderstoreChangelog)" Destination="$(CatLibPackageDir)\CHANGELOG.md" Root="$(CatLibRoot)" RepositoryUrl="$(CatLibRepositoryUrl)" Branch="$(CatLibRepositoryBranch)" Version="$(CatLibPackageVersion)" ProjectName="$(MSBuildProjectName)" Condition="Exists('$(CatLibThunderstoreChangelog)')" />
     <Copy SourceFiles="@(CatLibThunderstorePluginFile)" DestinationFolder="$(CatLibPackageDir)\plugins" />
     <ZipDirectory SourceDirectory="$(CatLibPackageDir)" DestinationFile="$(CatLibThunderstoreDir)\$(CatLibPackageName)-$(CatLibPackageVersion).zip" Overwrite="true" />
     <Message Importance="high" Text="$(MSBuildProjectName) -&gt; $(CatLibThunderstoreDir)\$(CatLibPackageName)-$(CatLibPackageVersion).zip" />

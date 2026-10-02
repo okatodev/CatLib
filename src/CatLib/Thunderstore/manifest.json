@@ -1,9 +1,9 @@
 {
   "name": "CatLib",
   "version_number": "{version}",
-  "website_url": "",
-  "description": "TODO: one or two sentences about the package, 250 characters at most.",
+  "website_url": "https://github.com/okatodev/CatLib",
+  "description": "Foundation library for Cat Mail Co. mods.",
   "dependencies": [
-    "TODO-BepInExPack_IL2CPP-6.0.0"
+    "BepInEx-BepInExPack_IL2CPP-6.0.755"
   ]
 }

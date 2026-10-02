@@ -1,12 +1,12 @@
 {
   "name": "CatLibTests",
   "version_number": "{version}",
-  "website_url": "",
-  "description": "TODO: one or two sentences about the package, 250 characters at most.",
+  "website_url": "https://github.com/okatodev/CatLib",
+  "description": "In-game tests and developer tools for CatLib and its mods. For mod developers, players do not need it.",
   "dependencies": [
-    "TODO-CatLib-{version:CatLib}",
-    "TODO-BoatTweaks-{version:BoatTweaks}",
-    "TODO-ShelfLabels-{version:ShelfLabels}",
-    "TODO-BetterRepair-{version:BetterRepair}"
+    "CatLib-CatLib-{version:CatLib}",
+    "CatLib-BoatTweaks-{version:BoatTweaks}",
+    "CatLib-ShelfLabels-{version:ShelfLabels}",
+    "CatLib-BetterRepair-{version:BetterRepair}"
   ]
 }

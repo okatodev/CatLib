@@ -1,9 +1,9 @@
 {
   "name": "BoatTweaks",
   "version_number": "{version}",
-  "website_url": "",
-  "description": "TODO: one or two sentences about the package, 250 characters at most.",
+  "website_url": "https://github.com/okatodev/CatLib/tree/main/mods/BoatTweaks",
+  "description": "Changes the crates and baskets on the boat deck and the stack height limits.",
   "dependencies": [
-    "TODO-CatLib-{catlib_version}"
+    "CatLib-CatLib-{catlib_version}"
   ]
 }

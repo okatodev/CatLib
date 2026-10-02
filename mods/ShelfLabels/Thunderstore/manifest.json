@@ -1,9 +1,9 @@
 {
   "name": "ShelfLabels",
   "version_number": "{version}",
-  "website_url": "",
-  "description": "TODO: one or two sentences about the package, 250 characters at most.",
+  "website_url": "https://github.com/okatodev/CatLib/tree/main/mods/ShelfLabels",
+  "description": "Up to three extra labels next to every shelf label",
   "dependencies": [
-    "TODO-CatLib-{catlib_version}"
+    "CatLib-CatLib-{catlib_version}"
   ]
 }

@@ -1,9 +1,9 @@
 {
   "name": "BetterRepair",
   "version_number": "{version}",
-  "website_url": "",
-  "description": "TODO: one or two sentences about the package, 250 characters at most.",
+  "website_url": "https://github.com/okatodev/CatLib/tree/main/mods/BetterRepair",
+  "description": "Set how much cardboard the repair table holds and how much a new day brings back, or make it unlimited.",
   "dependencies": [
-    "TODO-CatLib-{catlib_version}"
+    "CatLib-CatLib-{catlib_version}"
   ]
 }

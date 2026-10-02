@@ -219,7 +219,7 @@ for example `{version:BoatTweaks}` in the package of `CatLib.Tests`.
 {
   "name": "MyMod",
   "version_number": "{version}",
-  "website_url": "",
+  "website_url": "https://github.com/you/MyMod",
   "description": "What the mod does, 250 characters at most.",
   "dependencies": [
     "Team-CatLib-{catlib_version}"
@@ -231,6 +231,14 @@ The build checks the package the way Thunderstore does and fails with CATLIB004 
 the name only has `a-z A-Z 0-9 _`, the version is `Major.Minor.Patch`, the description is at most 250 characters,
 `website_url` is there even when empty, every dependency is `Team-Package-1.2.3`, and `icon.png` is a PNG of exactly 256x256.
 A placeholder that names no referenced project fails as well. A missing `Thunderstore/README.md` fails with CATLIB002.
-An empty `Thunderstore/README.md`, a `TODO` left in the manifest or a version that differs from the project give warning CATLIB003. Properties: `CatLibThunderstoreDir` for the output folder, `CatLibThunderstoreSource` for the template folder,
+An empty `Thunderstore/README.md`, a `TODO` left in the manifest or a version that differs from the project give warning CATLIB003.
+
+Thunderstore shows the README and the changelog on the package page, where links relative to the repository do not open.
+The build turns them into links to the repository on GitHub, `CatLibRepositoryUrl` and `CatLibRepositoryBranch` in `Directory.Build.props`,
+so `[Crash reports](docs/CrashReports.md)` in the root changelog becomes `https://github.com/okatodev/CatLib/blob/main/docs/CrashReports.md`.
+The files in the repository keep their relative links. The changelog must start with a section named after the package version:
+`## Not released yet` or `## Next version` gives warning CATLIB003, so rename it when the version is set.
+
+Properties: `CatLibThunderstoreDir` for the output folder, `CatLibThunderstoreSource` for the template folder,
 `CatLibThunderstoreChangelog` for another changelog. Items `CatLibThunderstoreFile` and `CatLibThunderstoreProject`
 add files or the output of other projects to `plugins/`; CatLib adds `CatLib.CrashWatcher.exe` this way.
