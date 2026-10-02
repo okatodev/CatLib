@@ -30,6 +30,22 @@ internal sealed class TextRow : SettingRow
 
     public TMP_InputField Input => _input;
 
+    protected override void LabelChanged(string text)
+    {
+        try
+        {
+            var field = _input == null ? null : _input.TryCast<SelectableInputField>();
+            if (field != null)
+            {
+                field.BigPictureDescription = text ?? string.Empty;
+            }
+        }
+        catch (Exception exception)
+        {
+            Log.Debug($"Setting the virtual keyboard title of {Setting.Id} failed: {exception.Message}");
+        }
+    }
+
     public override Selectable Control => _input;
 
     public string Format(object value)

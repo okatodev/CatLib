@@ -19,7 +19,8 @@ public sealed class ControlsRegisteredTest : TestCase
         }
 
         var options = SettingsMenuFixture.Tab.Options;
-        var name = SettingsMenuFixture.Row<TextRow>("Name").Input;
+        var nameRow = SettingsMenuFixture.Row<TextRow>("Name");
+        var name = nameRow.Input;
         var color = SettingsMenuFixture.Row<DropdownRow>("Color").Dropdown;
 
         var inputs = options._inputFields;
@@ -41,9 +42,12 @@ public sealed class ControlsRegisteredTest : TestCase
         }
 
         context.Note($"Registered input fields: {inputs.Length}, dropdowns: {dropdowns.Length}");
+        var keyboardTitle = name.TryCast<SelectableInputField>()?.BigPictureDescription;
+        context.Note($"Virtual keyboard title of Name: \"{keyboardTitle}\"");
 
         Assert.True(nameRegistered, "Mod input fields must be registered in OptionsInterface._inputFields");
         Assert.True(colorRegistered, "Mod dropdowns must be registered in OptionsInterface._dropdowns");
         Assert.Equal(0, dead, "Destroyed controls left in the OptionsInterface arrays");
+        Assert.Equal(nameRow.Label.text, keyboardTitle, "The virtual keyboard of a text setting must be titled with the setting's name");
     }
 }

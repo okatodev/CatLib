@@ -141,10 +141,10 @@ public sealed class GamepadNavigationTest : TestCase
     {
         Assert.True(expected != null && UiClone.IsAlive(expected) && expected.IsActive(), $"{message}: the target must be active");
         Assert.True(actual != null && actual.Pointer == expected.gameObject.Pointer,
-            $"{message}, but the selection is {Name(actual)} instead of {Name(expected.gameObject)}");
+            $"{message}, but the selection is {Describe(actual)} instead of {Describe(expected.gameObject)}");
     }
 
-    private static string Name(GameObject gameObject)
+    private static string Describe(GameObject gameObject)
     {
         if (gameObject == null)
         {

@@ -32,6 +32,7 @@ public sealed class LabelsController
     private readonly StandBoard _stands;
     private readonly HashSet<string> _reportedStands = new(StringComparer.Ordinal);
     private readonly TextCatalog _texts;
+    private readonly LabelSound _sound;
     private float _nextScan;
     private bool _layoutDirty = true;
     private SessionRole _lastRole = SessionRole.Offline;
@@ -49,6 +50,7 @@ public sealed class LabelsController
         _placements = placements;
         _stands = stands;
         _texts = texts;
+        _sound = new LabelSound(log);
         _board.Changed += OnBoardChanged;
         _placements.Changed += ids => OnLayoutChanged(ids, false);
         _stands.Changed += ids => OnLayoutChanged(ids, true);
@@ -86,7 +88,11 @@ public sealed class LabelsController
         }
 
         var slot = new LabelSlot(target.View.LabelId, target.Slot);
-        if (!(Sync?.Click(slot, step) ?? false))
+        if (Sync?.Click(slot, step) ?? false)
+        {
+            _sound.Play(action, step);
+        }
+        else
         {
             _log.Info($"The click on extra label {slot} was not sent: {(CatNetwork.Role == SessionRole.Client ? "the host does not have Shelf Labels" : "the mod is not ready")}");
         }

@@ -83,6 +83,12 @@ internal abstract class SettingRow
         {
             Label.text = text;
         }
+
+        LabelChanged(text);
+    }
+
+    protected virtual void LabelChanged(string text)
+    {
     }
 
     public virtual void Update() => Pull();
