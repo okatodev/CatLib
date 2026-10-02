@@ -21,6 +21,12 @@ CatLib follows semantic versioning. Mods in `mods/` have their own versions and 
 
 - Works with the game update of October 2026 (Unity 6000.3.23, single player without internet).
 
+### Fixed
+
+- The game could hang while quitting after a single-player game: since the October update the game's own UDP client of single player
+  keeps waiting for a packet on a worker thread after the level is left, and the game waits for that thread forever when it quits.
+  CatLib closes the socket of a game network client when the game replaces it and when the game quits, so the thread ends.
+
 ## 0.6.0
 
 For players: the players' mods in the lobby with paused mods instead of disconnects, mod icons and authors on the Mods tab,
