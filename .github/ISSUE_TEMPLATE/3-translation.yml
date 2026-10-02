@@ -1,0 +1,60 @@
+name: Translation
+description: A text reads wrong, sounds odd or is missing in your language.
+title: "[Translation] "
+labels: ["translation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping with the language. You can also fix a text yourself right away with a small file,
+        see [translation files of players](https://github.com/okatodev/CatLib/blob/main/docs/Localization.md#translation-files-of-players).
+        If you did, attach the file here, so everyone gets the fix.
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+        - English
+        - French
+        - Italian
+        - German
+        - Spanish
+        - Portuguese (Brazil)
+        - Polish
+        - Chinese (Simplified)
+        - Chinese (Traditional)
+        - Japanese
+        - Korean
+        - Ukrainian
+        - Russian
+    validations:
+      required: true
+  - type: dropdown
+    id: mod
+    attributes:
+      label: Which mod?
+      options:
+        - CatLib (the Mods tab, the lobby, notifications, the crash window)
+        - Boat Tweaks
+        - Shelf Labels
+        - Better Repair
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: where
+    attributes:
+      label: Where is it?
+      description: The screen, the setting or the message. A screenshot is the easiest.
+    validations:
+      required: true
+  - type: textarea
+    id: now
+    attributes:
+      label: It says now
+  - type: textarea
+    id: better
+    attributes:
+      label: It should say
+    validations:
+      required: true

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Writing a mod with CatLib
+    url: https://github.com/okatodev/CatLib/blob/main/docs/WritingMods.md
+    about: How to build your own mod on CatLib. Look here before asking about the API.

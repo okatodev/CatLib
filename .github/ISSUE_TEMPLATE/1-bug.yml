@@ -1,0 +1,80 @@
+name: Bug
+description: Something in a mod works wrong, but the game keeps running.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time. If the game closed or froze, pick **Crash or freeze** instead.
+        English or Russian is fine.
+  - type: dropdown
+    id: mods
+    attributes:
+      label: Which mod?
+      multiple: true
+      options:
+        - CatLib
+        - Boat Tweaks
+        - Shelf Labels
+        - Better Repair
+        - CatLib Tests
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: CatLib's version is in the bottom right corner of the main menu, the mods' versions are on the Mods tab in Settings.
+      placeholder: CatLib 0.6.1, Boat Tweaks 0.3.0
+    validations:
+      required: true
+  - type: dropdown
+    id: corner
+    attributes:
+      label: Main menu corner
+      description: What the bottom right corner of the main menu says.
+      options:
+        - Only the CatLib version
+        - The game was updated, look for a CatLib update
+        - Your game is older, update it in Steam
+        - I didn't look
+  - type: dropdown
+    id: session
+    attributes:
+      label: How were you playing?
+      options:
+        - Alone
+        - Hosting
+        - Joined someone
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you saw and what you expected instead. A screenshot or a short video helps a lot.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How to make it happen again
+      description: If you know. Skip it if it happened once and you don't know why.
+      placeholder: |
+        1. Load a save
+        2. Wait for the boat
+        3. ...
+  - type: textarea
+    id: log
+    attributes:
+      label: Log
+      description: Drag `BepInEx/LogOutput.log` here. Do it before you start the game again, the next start overwrites it.
+    validations:
+      required: true
+  - type: textarea
+    id: others
+    attributes:
+      label: Other mods
+      description: Mods that are not from this repository, if you have any.

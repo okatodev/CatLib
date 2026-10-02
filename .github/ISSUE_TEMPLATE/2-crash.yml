@@ -1,0 +1,63 @@
+name: Crash or freeze
+description: The game closed by itself, froze, or the CatLib crash window showed up.
+title: "[Crash] "
+labels: ["bug", "crash"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Sorry about that. The crash window of CatLib already collected everything needed, it only has to get here.
+        English or Russian is fine.
+  - type: textarea
+    id: report
+    attributes:
+      label: Crash report
+      description: |
+        In the crash window press **Open the report folder**, zip that folder and drag the zip here.
+        Older reports are in `BepInEx/CatLib/Crashes`. The zip holds the logs and a memory dump of the game, nothing else.
+        If GitHub says the zip is too big, leave `crash.dmp` out.
+        No crash window? Drag `BepInEx/LogOutput.log` here instead, before you start the game again.
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What were you doing?
+      description: The last thing before it happened, for example leaving a level, the boat arriving, a friend joining.
+    validations:
+      required: true
+  - type: dropdown
+    id: often
+    attributes:
+      label: How often?
+      options:
+        - Every time
+        - Sometimes
+        - Once so far
+    validations:
+      required: true
+  - type: dropdown
+    id: session
+    attributes:
+      label: How were you playing?
+      options:
+        - Alone
+        - Hosting
+        - Joined someone
+    validations:
+      required: true
+  - type: dropdown
+    id: system
+    attributes:
+      label: Computer
+      options:
+        - Windows
+        - Steam Deck or Linux
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Only if there is no crash report, it already has them. CatLib's version is in the bottom right corner of the main menu.
+      placeholder: CatLib 0.6.1, Boat Tweaks 0.3.0

@@ -1,0 +1,34 @@
+name: Idea
+description: Something a mod could do, a change to how it works, or a new mod.
+title: "[Idea] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        English or Russian is fine. One idea per issue makes it easier to answer.
+  - type: dropdown
+    id: mod
+    attributes:
+      label: For which mod?
+      options:
+        - Boat Tweaks
+        - Shelf Labels
+        - Better Repair
+        - CatLib, for players
+        - CatLib, for mod developers
+        - A new mod
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What you'd like to see in the game. A sketch or a screenshot is welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: When would it help?
+      description: What gets in the way today, or what it would let you do.
