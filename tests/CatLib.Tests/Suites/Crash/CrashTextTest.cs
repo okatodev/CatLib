@@ -82,6 +82,16 @@ public sealed class CrashTextTest : TestCase
 
         var noFault = CrashText.Report(session, 1, new CrashEventInfo(), exit, TimeSpan.Zero, null);
         Assert.True(noFault.Contains("No crash record"), "A report without a crash record says so");
+
+        var hung = new CrashEventInfo { HangSeconds = 49 };
+        var hangSummary = CrashText.Summary(session, 1, hung, played, english, true);
+        Assert.True(hangSummary.Contains("stopped responding while quitting") && hangSummary.Contains("49 s"), "The summary says the game hung while quitting and for how long");
+        Assert.False(hangSummary.Contains("It happened while the game was quitting"), "A hang replaces the plain quitting note");
+        Assert.True(CrashText.Summary(session, 1, hung, played, russian).Contains("зависла при выходе"), "A Russian hang summary");
+        var hangReport = CrashText.Report(session, 1, hung, exit.ToLocalTime(), played, null, "C:\\Reports\\crash.dmp");
+        Assert.True(hangReport.Contains("Hang: the game began to quit at 2026-09-27 12:05:00 and was still running 49 s later"), "The report dates the hang");
+        Assert.True(hangReport.Contains("every thread"), "The report says what the dump of a hang shows");
+        Assert.False(hangReport.Contains("No crash record"), "A hang is a record of its own");
         Assert.Equal("1 h 5 min", CrashText.Duration(TimeSpan.FromMinutes(65), english), "Hours");
         Assert.Equal("12 с", CrashText.Duration(TimeSpan.FromSeconds(12), russian), "Russian seconds");
 

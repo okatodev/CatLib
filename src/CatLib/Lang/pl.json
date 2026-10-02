@@ -123,6 +123,7 @@
     "where": "Miejsce: {0}.",
     "ran": "Gra działała przez {0}.",
     "quitting": "Stało się to podczas zamykania gry.",
+    "hang": "Gra przestała odpowiadać podczas zamykania i została zamknięta po {0}.",
     "dumpSaved": "Razem z raportem zapisano zrzut pamięci.",
     "hoursMinutes": "{0} godz. {1} min",
     "minutes": "{0} min",

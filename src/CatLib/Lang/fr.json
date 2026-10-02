@@ -119,6 +119,7 @@
     "where": "Emplacement : {0}.",
     "ran": "Le jeu a tourné pendant {0}.",
     "quitting": "C'est arrivé pendant la fermeture du jeu.",
+    "hang": "Le jeu ne répondait plus pendant sa fermeture et a été fermé au bout de {0}.",
     "dumpSaved": "Un dump mémoire est enregistré avec le rapport.",
     "hoursMinutes": "{0} h {1} min",
     "minutes": "{0} min",

@@ -119,6 +119,7 @@
     "where": "Ort: {0}.",
     "ran": "Das Spiel lief {0} lang.",
     "quitting": "Es passierte, während das Spiel beendet wurde.",
+    "hang": "Das Spiel reagierte beim Beenden nicht mehr und wurde nach {0} geschlossen.",
     "dumpSaved": "Ein Speicherabbild wurde mit dem Bericht gespeichert.",
     "hoursMinutes": "{0} Std. {1} Min.",
     "minutes": "{0} Min.",

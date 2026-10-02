@@ -61,27 +61,55 @@ internal static class Program
     private static int Watch(int processId, string sessionFile, string reportsDirectory, bool dump, WatcherLog log)
     {
         var dumpPath = Path.Combine(reportsDirectory, "crash_" + processId.ToString(CultureInfo.InvariantCulture) + ".dmp");
+        var hangDumpPath = Path.ChangeExtension(dumpPath, ".hang.dmp");
+        var hang = new HangWatcher(processId, sessionFile, dump ? hangDumpPath : null, log);
+        hang.Start();
         var outcome = dump ? GameDebugger.Watch(processId, dumpPath, log) : null;
         var exit = outcome?.Exit ?? GameProcess.WaitForExit(processId);
+        hang.Stop();
         var session = CrashSession.Parse(ReportWriter.ReadLines(sessionFile));
         if (session.ProcessId == 0)
         {
             session.ProcessId = processId;
         }
 
+        var quitSeconds = QuitSeconds(session, exit);
+        if (quitSeconds >= 0)
+        {
+            log.Write($"The game (process {processId}) closed with {CrashText.Hex(exit.ExitCode)} {quitSeconds} s after it began to quit");
+        }
+
         if (CrashText.IsNormalExit(exit.ExitCode))
         {
+            if (hang.Hung)
+            {
+                log.Write($"The game (process {processId}) closed normally after all, the dump of the hang is not kept");
+            }
+
             TryDelete(sessionFile, log);
             TryDelete(dumpPath, log);
+            TryDelete(hangDumpPath, log);
             return 0;
         }
 
-        log.Write($"The game (process {processId}) exited with {CrashText.Hex(exit.ExitCode)}{(outcome == null ? string.Empty : $" after {outcome.PassedExceptions} handled exception(s)")}, writing a report");
+        log.Write($"The game (process {processId}) exited with {CrashText.Hex(exit.ExitCode)}{(outcome == null ? string.Empty : $" after {outcome.PassedExceptions} handled exception(s)")}{(hang.Hung ? ", it was hung while quitting" : string.Empty)}, writing a report");
         var expectFault = outcome?.Crash == null && CrashEvents.LooksLikeFault(exit.ExitCode);
         var events = CrashEvents.Collect(processId, exit.Exited.ToUniversalTime(), expectFault, log);
         var info = CrashText.WithManagedException(CrashText.Merge(outcome?.Crash, events), session);
-        var report = ReportWriter.Write(reportsDirectory, sessionFile, session, exit, info, outcome?.DumpPath, log);
+        var reportDump = outcome?.DumpPath;
+        if (hang.Hung && !info.HasFault)
+        {
+            info.HangSeconds = quitSeconds > 0 ? quitSeconds : hang.HungSeconds(exit.Exited);
+            reportDump = reportDump ?? hang.DumpPath;
+        }
+
+        var report = ReportWriter.Write(reportsDirectory, sessionFile, session, exit, info, reportDump, log);
         TryDelete(sessionFile, log);
+        if (!string.Equals(report.DumpPath, hangDumpPath, StringComparison.OrdinalIgnoreCase))
+        {
+            TryDelete(hangDumpPath, log);
+        }
+
         log.Write($"Report written to {report.Folder}");
 
         var strings = session.Strings;
@@ -105,6 +133,17 @@ internal static class Program
         report.Text = CrashText.Report(session, exit.ExitCode, info, exit.Exited, exit.Played, new string[0]);
         new CrashWindow(report, strings, string.Empty, log).Show(strings.Phrase(new Random()));
         return 0;
+    }
+
+    private static int QuitSeconds(CrashSession session, GameExit exit)
+    {
+        if (string.IsNullOrEmpty(session.CleanExit) ||
+            !DateTime.TryParseExact(session.CleanExit, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var began))
+        {
+            return -1;
+        }
+
+        return Math.Max(0, (int)Math.Round((exit.Exited - began).TotalSeconds));
     }
 
     private static void TryDelete(string path, WatcherLog log)

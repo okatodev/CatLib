@@ -119,6 +119,7 @@
     "where": "Local: {0}.",
     "ran": "O jogo rodou por {0}.",
     "quitting": "Isso aconteceu enquanto o jogo estava fechando.",
+    "hang": "O jogo parou de responder ao sair e foi fechado depois de {0}.",
     "dumpSaved": "Um dump de memória foi salvo junto com o relatório.",
     "hoursMinutes": "{0} h {1} min",
     "minutes": "{0} min",

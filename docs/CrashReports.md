@@ -49,6 +49,10 @@ The last 10 reports are kept, memory dumps only in the last 3 of them. `BepInEx/
    Anything else: it adds the .NET message from the Windows event log (.NET Runtime 1026), and without its own record
    the crash record too (Application Error 1000), writes the report folder and shows the window.
 5. An unhandled .NET exception is written into the session file by CatLib, so the report shows it even when Windows logs nothing.
+6. A hang while quitting: once CatLib has marked the quit, the watcher waits 8 seconds. If the game still runs then,
+   it notes a hang and, with memory dumps on, writes a dump of every thread at that moment. When the player then closes the game
+   from the Task Manager, the report and the window say the game stopped responding while quitting and for how long, and the dump goes with the report.
+   When the game closes normally after all, the dump is deleted. Either way `watcher.log` notes how many seconds quitting took.
 
 The watcher changes nothing in the game: it only pauses it for the moment of writing a dump. It is a .NET Framework 4.8 program, so it runs on every Windows 10 and 11 without installing anything.
 The window texts come from CatLib's translations (`crash.*` keys of `catlib.core`), so they are in every game language
@@ -63,13 +67,14 @@ In section `[Diagnostics]` of CatLib's config, both on the Mods tab and taking e
 
 ## Checking it
 
-The developer menu of `CatLib.Tests` has the group **Crash**, and every command needs a second press within 3 s:
+The developer menu of `CatLib.Tests` has the group **Crash**; the crash commands need a second press within 3 s:
 
 | Command | What happens |
 |---|---|
 | Native crash, game thread | Unity's own forced crash, an access violation on the game thread |
 | Native crash, worker thread | An access violation on a new native thread, like the Steam networking crash found in 0.5.0 |
 | Managed crash | An unhandled .NET exception on a new thread |
+| Hang on quit | Turns on or off a 90 s hang of the game thread while Unity shuts down after a quit, like the real hangs; close the game from the Task Manager after 10 s to get the hang report |
 
 To look at the window without crashing, run
 `CatLib.CrashWatcher.exe --preview --session <any file>` from `BepInEx/plugins/CatLib`.

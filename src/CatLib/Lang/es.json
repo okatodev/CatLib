@@ -119,6 +119,7 @@
     "where": "Ubicación: {0}.",
     "ran": "El juego funcionó durante {0}.",
     "quitting": "Ocurrió mientras el juego se cerraba.",
+    "hang": "El juego dejó de responder al salir y se cerró después de {0}.",
     "dumpSaved": "Se guardó un volcado de memoria junto con el informe.",
     "hoursMinutes": "{0} h {1} min",
     "minutes": "{0} min",

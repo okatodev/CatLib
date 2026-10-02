@@ -10,10 +10,12 @@ public sealed class CrashTrigger
 {
     public const double ConfirmSeconds = 3;
     public const string ConfirmHint = "press again within 3 s to crash the game";
+    public static readonly TimeSpan HangOnQuit = TimeSpan.FromSeconds(90);
 
     private readonly CatLogger _log;
     private string _armed;
     private DateTime _armedAt;
+    private bool _hangOnQuit;
 
     public CrashTrigger(CatLogger log)
     {
@@ -41,6 +43,30 @@ public sealed class CrashTrigger
         _log.Warning("Crashing the game on purpose: unhandled .NET exception on a new thread");
         new Thread(() => throw new InvalidOperationException("CatLib test crash from the developer menu")) { IsBackground = true }.Start();
     });
+
+    public string ToggleHangOnQuit()
+    {
+        if (!_hangOnQuit)
+        {
+            CatLib.Core.CatLibRuntime.ShuttingDown += HangNow;
+        }
+        else
+        {
+            CatLib.Core.CatLibRuntime.ShuttingDown -= HangNow;
+        }
+
+        _hangOnQuit = !_hangOnQuit;
+        _log.Info(_hangOnQuit
+            ? $"The game will hang for {HangOnQuit.TotalSeconds} s when it quits, to check the hang report of the crash watcher"
+            : "The game will quit normally");
+        return _hangOnQuit ? $"armed: the next quit hangs for {HangOnQuit.TotalSeconds} s" : "off";
+    }
+
+    private void HangNow()
+    {
+        _log.Warning($"Hanging the game thread on purpose for {HangOnQuit.TotalSeconds} s while Unity shuts down");
+        Thread.Sleep(HangOnQuit);
+    }
 
     private string Confirm(string kind, Action crash)
     {

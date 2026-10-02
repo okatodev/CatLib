@@ -119,6 +119,7 @@
     "where": "Where: {0}.",
     "ran": "The game ran for {0}.",
     "quitting": "It happened while the game was quitting.",
+    "hang": "The game stopped responding while quitting and was closed after {0}.",
     "dumpSaved": "A memory dump is saved with the report.",
     "hoursMinutes": "{0} h {1} min",
     "minutes": "{0} min",

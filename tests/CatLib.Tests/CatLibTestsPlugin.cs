@@ -167,6 +167,8 @@ public sealed class CatLibTestsPlugin : BasePlugin
             "Crashes the game from a new native thread, like the Steam networking crash. Press twice.");
         DevMenu.Command("Crash", "Managed crash", _crashes.Managed,
             "Crashes the game with an unhandled .NET exception on a new thread. Press twice.");
+        DevMenu.Command("Crash", "Hang on quit", _crashes.ToggleHangOnQuit,
+            "Turns on or off a 90 s hang of the game thread while Unity shuts down after a quit, to check that the crash watcher reports a hang and keeps a dump.");
     }
 
     private void DeclareDemoSettings()

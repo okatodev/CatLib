@@ -20,6 +20,8 @@ public static class CatLibRuntime
 
     public static CatSettings Settings { get; private set; }
 
+    internal static event Action ShuttingDown;
+
     internal static void Initialize(BasePlugin plugin)
     {
         if (IsInitialized)
@@ -42,6 +44,20 @@ public static class CatLibRuntime
         plugin.AddComponent<CatLibBehaviour>();
         IsInitialized = true;
         Log.Info($"CatLib {PluginMeta.Version} initialized on managed thread {MainThread.ManagedThreadId}");
+    }
+
+    internal static void Quit() => CrashWatch.MarkCleanExit();
+
+    internal static void ShutDown()
+    {
+        try
+        {
+            ShuttingDown?.Invoke();
+        }
+        catch (Exception exception)
+        {
+            Log?.Error("A shutdown handler failed", exception);
+        }
     }
 
     internal static void Tick()

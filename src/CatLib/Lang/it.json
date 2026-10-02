@@ -119,6 +119,7 @@
     "where": "Dove: {0}.",
     "ran": "Il gioco è rimasto in esecuzione per {0}.",
     "quitting": "È successo durante la chiusura del gioco.",
+    "hang": "Il gioco non rispondeva più durante la chiusura ed è stato chiuso dopo {0}.",
     "dumpSaved": "Un dump della memoria è stato salvato insieme al rapporto.",
     "hoursMinutes": "{0} h {1} min",
     "minutes": "{0} min",

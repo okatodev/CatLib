@@ -26,6 +26,10 @@ internal sealed class CrashEventInfo
 
     public string Access { get; set; } = string.Empty;
 
+    public int HangSeconds { get; set; }
+
+    public bool Hung => HangSeconds > 0;
+
     public bool HasFault => Module.Length > 0;
 }
 
@@ -243,7 +247,11 @@ internal static class CrashText
             builder.Append(' ').Append(strings.Format("ran", Duration(played, strings)));
         }
 
-        if (!string.IsNullOrEmpty(session.CleanExit))
+        if (info.Hung)
+        {
+            builder.Append(' ').Append(strings.Format("hang", Duration(TimeSpan.FromSeconds(info.HangSeconds), strings)));
+        }
+        else if (!string.IsNullOrEmpty(session.CleanExit))
         {
             builder.Append(' ').Append(strings.Get("quitting"));
         }
@@ -298,9 +306,15 @@ internal static class CrashText
                 builder.AppendLine("Thread: " + ThreadText(session, info, english));
             }
         }
-        else
+        else if (!info.Hung)
         {
             builder.AppendLine("No crash record: the crash watcher saw no exception and the Windows event log has none for this process.");
+        }
+
+        if (info.Hung)
+        {
+            builder.AppendLine("Hang: the game began to quit at " + session.CleanExit + " and was still running " + info.HangSeconds.ToString(CultureInfo.InvariantCulture) +
+                               " s later" + (string.IsNullOrEmpty(dumpPath) ? string.Empty : "; the memory dump shows every thread at the moment it hung"));
         }
 
         builder.AppendLine("Game: " + session.GameVersion + ", CatLib " + session.CatLibVersion + ", started " + session.Started + ", language " + session.Language);

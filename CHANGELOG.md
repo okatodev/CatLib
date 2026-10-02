@@ -13,6 +13,9 @@ CatLib follows semantic versioning. Mods in `mods/` have their own versions and 
 - Mods keep their changes in `CHANGELOG.md` next to `README.md`, and a README for players in `Thunderstore/README.md`.
 - `CatLib.Tests` is its own package that depends on CatLib and the three mods; its versions come from the projects.
 - Text settings on the Mods tab title the virtual keyboard of Steam Deck and Big Picture with the setting's name.
+- Crash reports catch a hang while quitting: when the game still runs 8 s after it began to quit, the crash watcher keeps a dump
+  of every thread, and the report and the window say the game stopped responding while quitting. See [Crash reports](docs/CrashReports.md).
+- Developer menu of `CatLib.Tests`: Crash → Hang on quit.
 
 ### Changed
 

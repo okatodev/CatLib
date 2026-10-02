@@ -21,6 +21,11 @@ public sealed class CatLibBehaviour : MonoBehaviour
 
     public void OnApplicationQuit()
     {
-        CatLib.Diagnostics.CrashWatch.MarkCleanExit();
+        CatLibRuntime.Quit();
+    }
+
+    public void OnDestroy()
+    {
+        CatLibRuntime.ShutDown();
     }
 }

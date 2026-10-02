@@ -95,7 +95,7 @@ Up and Down select, Enter or 1-9 run, Left and Right switch the group, the same 
 | Network | Steam channel self check |
 | UI | Sample network message shown as a game notification |
 | UI | Stress mods for the Mods tab |
-| Crash | Native crash on the game thread, native crash on a worker thread, managed crash: each needs a second press within 3 s |
+| Crash | Native crash on the game thread, native crash on a worker thread, managed crash: each needs a second press within 3 s; hang on quit |
 
 The key is `MenuHotkey` in section `[DevTools]` of CatLib's own config. The focus types of the entity dump are set with `EntityDumpTypes` in `catlib.tests.cfg`.
 Mods add their own commands with `DevMenu.Command`, see [Developer menu](docs/DevTools.md).

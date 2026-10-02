@@ -255,6 +255,48 @@ internal static class GameDebugger
         return info;
     }
 
+    public static bool TryWriteSnapshot(int processId, string path, WatcherLog log)
+    {
+        var access = NativeMethods.ProcessQueryInformation | NativeMethods.ProcessVmRead | NativeMethods.ProcessDuplicateHandle;
+        var process = NativeMethods.OpenProcess(access, false, processId);
+        if (process == IntPtr.Zero)
+        {
+            log.Write($"Could not open the game for a dump of the hang ({new Win32Exception().Message})");
+            return false;
+        }
+
+        try
+        {
+            using (var stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
+            {
+                if (!NativeMethods.MiniDumpWriteDump(process, processId, stream.SafeFileHandle.DangerousGetHandle(), DumpType, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero))
+                {
+                    throw new Win32Exception();
+                }
+            }
+
+            log.Write($"Memory dump of the hang written to {path}, {new FileInfo(path).Length / 1024} KiB");
+            return true;
+        }
+        catch (Exception exception)
+        {
+            log.Write($"The memory dump of the hang could not be written: {exception.Message}");
+            try
+            {
+                File.Delete(path);
+            }
+            catch (Exception)
+            {
+            }
+
+            return false;
+        }
+        finally
+        {
+            NativeMethods.CloseHandle(process);
+        }
+    }
+
     private static bool TryWriteDump(IntPtr process, int processId, int thread, IntPtr debugEvent, string path, WatcherLog log)
     {
         try
