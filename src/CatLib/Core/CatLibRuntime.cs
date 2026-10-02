@@ -33,6 +33,7 @@ public static class CatLibRuntime
         MainThread.Initialize();
         FrameLoop.Initialize();
         ManagerRegistry.Initialize(Log.Scope("Bridge"));
+        CatLib.Game.GameCompatibility.Initialize(Log.Scope("Version"));
         CatConfig.Initialize(Log.Scope("Config"));
         CatLib.Localization.TranslationTools.Initialize(Log.Scope("Lang"));
         ModsMenu.Initialize(Log.Scope("UI"));

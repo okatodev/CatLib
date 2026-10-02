@@ -8,6 +8,7 @@ internal sealed class CrashSession
 {
     public const string CatLibKey = "catlib";
     public const string GameKey = "game";
+    public const string GameBuildKey = "gameBuild";
     public const string StartedKey = "started";
     public const string ProcessKey = "pid";
     public const string LanguageKey = "language";
@@ -24,6 +25,8 @@ internal sealed class CrashSession
     public string CatLibVersion { get; set; } = string.Empty;
 
     public string GameVersion { get; set; } = string.Empty;
+
+    public string GameBuild { get; set; } = string.Empty;
 
     public string Started { get; set; } = string.Empty;
 
@@ -99,6 +102,9 @@ internal sealed class CrashSession
                     break;
                 case GameKey:
                     session.GameVersion = value;
+                    break;
+                case GameBuildKey:
+                    session.GameBuild = value;
                     break;
                 case StartedKey:
                     session.Started = value;

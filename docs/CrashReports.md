@@ -24,7 +24,7 @@ A normal exit shows nothing. Closing the game from the Task Manager shows the wi
 
 | File | Contents |
 |---|---|
-| `report.txt` | The full report in English for the mod authors: summary, exit code, module, offset and thread of the crash, .NET message, versions, game language, mods, the last 15 game events, the last 40 lines of the BepInEx log |
+| `report.txt` | The full report in English for the mod authors: summary, exit code, module, offset and thread of the crash, .NET message, versions, the game build check (whether the game is the build CatLib is made for), game language, mods, the last 15 game events, the last 40 lines of the BepInEx log |
 | `crash.dmp` | The memory dump of the moment of the crash (5 to 50 MB): the stacks of every thread with the memory they point to, the modules, the handles |
 | `LogOutput.log` | The BepInEx log of the crashed session |
 | `Player.log` | The Unity log of the crashed session, which the game replaces on the next start |

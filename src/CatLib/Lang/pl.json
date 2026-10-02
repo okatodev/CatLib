@@ -108,7 +108,13 @@
       "one": "{0} mod",
       "few": "{0} mody",
       "many": "{0} modów"
-    }
+    },
+    "BuildNewer": "Gra została zaktualizowana, poszukaj aktualizacji CatLib",
+    "BuildOlder": "Twoja gra jest starsza, zaktualizuj ją w Steam",
+    "BuildMatches": "Stworzony dla twojej gry: {0}",
+    "BuildCompare": "Stworzony dla {0} · twoja: {1}",
+    "BuildNumber": "kompilacja {0}",
+    "BuildUnknown": "Nie rozpoznano kompilacji gry"
   },
   "crash": {
     "title": "Cat Mail Co: raport awarii",

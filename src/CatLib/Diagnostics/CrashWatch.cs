@@ -207,6 +207,11 @@ internal static class CrashWatch
         if (!string.IsNullOrEmpty(GameInfo.GameVersion))
         {
             AppendHeader(CrashSession.Line(CrashSession.GameKey, GameInfo.GameVersion));
+            var check = GameCompatibility.TryCheck();
+            if (check != null)
+            {
+                AppendHeader(CrashSession.Line(CrashSession.GameBuildKey, DescribeCheck(check)));
+            }
         }
 
         if (_modsWritten)
@@ -222,6 +227,18 @@ internal static class CrashWatch
         }
 
         AppendHeader(lines.ToArray());
+    }
+
+    internal static string DescribeCheck(GameBuildCheck check)
+    {
+        var target = check.Target == null ? "no build" : check.Target.Describe();
+        return check.Status switch
+        {
+            GameBuildStatus.Supported => "supported",
+            GameBuildStatus.GameNewer => "the game is newer than the build CatLib is made for (" + target + ")",
+            GameBuildStatus.GameOlder => "the game is older than the build CatLib is made for (" + target + ")",
+            _ => "unknown, CatLib is made for " + target
+        };
     }
 
     private static void OnEvent(GameEventRecord record)

@@ -31,7 +31,7 @@ docs/                        documentation
 | `CatLib.Threading` | `MainThread` dispatcher |
 | `CatLib.Events` | `SafeInvoker`, exception-isolated event invocation |
 | `CatLib.Il2Cpp` | Binding managed code to IL2CPP events; `Il2CppArrays` reads and writes two-dimensional IL2CPP arrays that interop cannot type |
-| `CatLib.Game` | `GameInfo`, read-only game state including the current save |
+| `CatLib.Game` | `GameInfo`, read-only game state including the current save; `GameCompatibility`, whether the game build is the one CatLib is made for |
 | `CatLib.Game.Events` | Game events as plain .NET events, `GameEventStream` |
 | `CatLib.Game.Bridge` | Tracks game singletons and binds their events |
 | `CatLib.Config` | Live settings: `CatSettings`, `Setting<T>`, `CatConfig` |
@@ -71,11 +71,16 @@ Pass `-p:CatLibThunderstore=true` to also pack CatLib, `CatLib.Tests` and every 
 see [Thunderstore package](docs/WritingMods.md#thunderstore-package).
 Set `SecondGameDir` in `GamePaths.props` to a second copy of the game to copy the plugins there as well, for running two instances on one computer.
 
+When the game updates and CatLib is checked with the new build, put the new game version (`GameVersion` in the log)
+and Steam build into `GameCompatibility.Supported` in `src/CatLib/Game/GameCompatibility.cs` before the release.
+Keep an older build in the list only when CatLib still works with it.
+
 ## Tests
 
 `CatLib.Tests` runs all tests the first time the main menu loads and again from the developer menu.
 Reports are written to `BepInEx/CatLib.Tests/Reports`, game event timelines to `BepInEx/CatLib.Tests/Timelines`.
 Configuration: `BepInEx/config/catlib.tests.cfg`.
+Checks that wait for something we do not have yet are listed in [Deferred tests](tests/DeferredTests.md).
 
 ### Developer menu
 
@@ -95,6 +100,7 @@ Up and Down select, Enter or 1-9 run, Left and Right switch the group, the same 
 | Network | Steam channel self check |
 | UI | Sample network message shown as a game notification |
 | UI | Stress mods for the Mods tab |
+| UI | Version badge preview: the main menu corner as if the game were newer, then older, then the real check |
 | Crash | Native crash on the game thread, native crash on a worker thread, managed crash: each needs a second press within 3 s; hang on quit |
 
 The key is `MenuHotkey` in section `[DevTools]` of CatLib's own config. The focus types of the entity dump are set with `EntityDumpTypes` in `catlib.tests.cfg`.

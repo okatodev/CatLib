@@ -104,7 +104,13 @@
     "LobbyMods": {
       "one": "{0} mod",
       "other": "{0} mod"
-    }
+    },
+    "BuildNewer": "Il gioco è stato aggiornato, cerca un aggiornamento di CatLib",
+    "BuildOlder": "Il tuo gioco è più vecchio, aggiornalo su Steam",
+    "BuildMatches": "Fatto per il tuo gioco: {0}",
+    "BuildCompare": "Fatto per {0} · il tuo: {1}",
+    "BuildNumber": "build {0}",
+    "BuildUnknown": "La build del gioco è sconosciuta"
   },
   "crash": {
     "title": "Cat Mail Co: rapporto del crash",

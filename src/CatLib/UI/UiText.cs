@@ -71,6 +71,12 @@ internal static class UiText
     public const string BadgeRestart = "BadgeRestart";
     public const string BadgeHost = "BadgeHost";
     public const string CardAuthor = "CardAuthor";
+    public const string BuildNewer = "BuildNewer";
+    public const string BuildOlder = "BuildOlder";
+    public const string BuildMatches = "BuildMatches";
+    public const string BuildCompare = "BuildCompare";
+    public const string BuildNumber = "BuildNumber";
+    public const string BuildUnknown = "BuildUnknown";
 
     public const string KeyPrefix = "ui.";
 

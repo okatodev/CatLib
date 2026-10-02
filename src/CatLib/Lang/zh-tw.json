@@ -100,7 +100,13 @@
     },
     "LobbyMods": {
       "other": "{0} 個模組"
-    }
+    },
+    "BuildNewer": "遊戲已更新，請尋找 CatLib 的更新",
+    "BuildOlder": "你的遊戲版本較舊，請在 Steam 中更新",
+    "BuildMatches": "適用於你的遊戲：{0}",
+    "BuildCompare": "適用於 {0} · 你的：{1}",
+    "BuildNumber": "組建 {0}",
+    "BuildUnknown": "無法識別遊戲組建"
   },
   "crash": {
     "title": "Cat Mail Co：當機報告",

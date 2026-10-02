@@ -135,6 +135,14 @@ Key rules, plural forms, translation files of players and the checks are in [Loc
 `BootstrapEvents.LevelLoadFinalized`, `BootstrapEvents.GameRestartStarted`, `NetworkEvents.ClientConnected`
 or `PlayerEvents.LocalPlayerSpawned`. Their observed order and meaning are in [Game events](GameEvents.md).
 
+### Game build
+
+`GameCompatibility.Current` tells whether the running game is a build this CatLib is made for: `Supported`, `GameNewer`,
+`GameOlder` or `Unknown`, with the running and the expected `GameBuild` (version, build date, Steam build).
+The build is read from the game version: its last two numbers are the build date. A mod that relies on fragile game internals
+can stay quiet when `GameCompatibility.Status` is not `Supported`. The main menu shows the CatLib version in the bottom right
+corner and warns there when the game is newer or older.
+
 ## Data in saves
 
 Data that belongs to a playthrough, such as a picture a player chose, is stored per game save with `CatSaves.For(this)`.

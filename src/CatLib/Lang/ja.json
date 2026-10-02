@@ -100,7 +100,13 @@
     },
     "LobbyMods": {
       "other": "MOD {0} 個"
-    }
+    },
+    "BuildNewer": "ゲームが更新されました。CatLib の更新を探してください",
+    "BuildOlder": "ゲームが古いバージョンです。Steam で更新してください",
+    "BuildMatches": "お使いのゲーム向け：{0}",
+    "BuildCompare": "対応：{0} · お使い：{1}",
+    "BuildNumber": "ビルド {0}",
+    "BuildUnknown": "ゲームのビルドを判別できません"
   },
   "crash": {
     "title": "Cat Mail Co：クラッシュレポート",

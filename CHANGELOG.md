@@ -16,6 +16,12 @@ CatLib follows semantic versioning. Mods in `mods/` have their own versions and 
 - Crash reports catch a hang while quitting: when the game still runs 8 s after it began to quit, the crash watcher keeps a dump
   of every thread, and the report and the window say the game stopped responding while quitting. See [Crash reports](docs/CrashReports.md).
 - Developer menu of `CatLib.Tests`: Crash → Hang on quit.
+- The main menu shows the CatLib version in the bottom right corner. CatLib knows the game build it is made for
+  (October 2026, Steam build 25651540) and compares it with the running game by the build date in the game version.
+  When the game is newer, the corner asks to look for a CatLib update; when it is older, to update the game.
+  Pointing at the corner shows both build dates, or the number of mods when everything matches.
+  Mods can read the same check from `GameCompatibility`. The log and crash reports name the result.
+- Developer menu of `CatLib.Tests`: UI → Version badge preview.
 
 ### Changed
 

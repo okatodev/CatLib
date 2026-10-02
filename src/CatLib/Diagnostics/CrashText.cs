@@ -318,6 +318,10 @@ internal static class CrashText
         }
 
         builder.AppendLine("Game: " + session.GameVersion + ", CatLib " + session.CatLibVersion + ", started " + session.Started + ", language " + session.Language);
+        if (!string.IsNullOrEmpty(session.GameBuild))
+        {
+            builder.AppendLine("Game build check: " + session.GameBuild);
+        }
         if (!string.IsNullOrEmpty(dumpPath))
         {
             builder.AppendLine("Memory dump: " + dumpPath);

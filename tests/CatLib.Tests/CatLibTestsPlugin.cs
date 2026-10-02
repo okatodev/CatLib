@@ -156,6 +156,18 @@ public sealed class CatLibTestsPlugin : BasePlugin
                 CatLib.UI.UiText.Format(CatLib.UI.UiText.NetPlayerDisconnectedBrief, language, "RENTAI", "CatLib Demo Network Mod"));
             return "posted, it shows as a game notification in a level";
         }, "Posts a sample network message.");
+        DevMenu.Command("UI", "Version badge preview", () =>
+        {
+            var current = CatLib.UI.MenuVersionBadge.PreviewCheck?.Status;
+            var next = current switch
+            {
+                null => "CMC 1.02.00.1800.9800.100",
+                CatLib.Game.GameBuildStatus.GameNewer => "CMC 1.01.00.1700.9722.30000",
+                _ => null
+            };
+            CatLib.UI.MenuVersionBadge.PreviewCheck = next == null ? null : CatLib.Game.GameCompatibility.Compare(CatLib.Game.GameBuild.Parse(next), CatLib.Game.GameCompatibility.Supported);
+            return CatLib.UI.MenuVersionBadge.PreviewCheck == null ? "the real check" : "pretends the game is " + CatLib.UI.MenuVersionBadge.PreviewCheck.Status;
+        }, "Shows the main menu version badge as if the game were newer, then older, then the real check again.");
         DevMenu.Command("UI", "Stress mods on or off", () =>
         {
             _stressMods.Toggle();
