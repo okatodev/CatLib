@@ -4,7 +4,6 @@ What is planned, in rough order. Finished work is removed from here and describe
 
 ## Mods
 
-- Parcel list (`ClientOnly`): a list of all parcels in the scene with their types and counts.
 - Stacking (`RequiredOnAll`): better compatibility of parcel sizes when stacking, which parcels can stand on which.
   Needs patches of the game's placement code and a safe patching wrapper in CatLib
   (the method must exist, errors are isolated and logged).

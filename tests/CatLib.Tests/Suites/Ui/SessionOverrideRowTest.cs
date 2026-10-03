@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using CatLib.Net;
 using CatLib.Tests.Framework;
 using CatLib.UI;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace CatLib.Tests.Suites.Ui;
@@ -22,6 +23,8 @@ public sealed class SessionOverrideRowTest : TestCase
 
         var language = UiText.LanguageCode;
         var row = SettingsMenuFixture.Row<SliderRow>("Difficulty");
+        var pointer = new Vector3(-10000f, -10000f, 0f);
+        ModsPanel.PointerOverride = () => pointer;
         try
         {
             var result = SessionSettings.Instance.Apply(new[] { new SessionSettingValue(sandbox.Settings.OwnerId, "Session", "Difficulty", "4") });
@@ -56,6 +59,7 @@ public sealed class SessionOverrideRowTest : TestCase
         }
         finally
         {
+            ModsPanel.PointerOverride = null;
             SessionSettings.Instance.Clear();
             EventSystem.current?.SetSelectedGameObject(null);
         }

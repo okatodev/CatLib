@@ -31,7 +31,7 @@ docs/                        documentation
 | `CatLib.Threading` | `MainThread` dispatcher |
 | `CatLib.Events` | `SafeInvoker`, exception-isolated event invocation |
 | `CatLib.Il2Cpp` | Binding managed code to IL2CPP events; `Il2CppArrays` reads and writes two-dimensional IL2CPP arrays that interop cannot type |
-| `CatLib.Game` | `GameInfo`, read-only game state including the current save; `GameCompatibility`, whether the game build is the one CatLib is made for |
+| `CatLib.Game` | `GameInfo`, read-only game state including the current save; `GameCompatibility`, whether the game build is the one CatLib is made for; `CatParcels`, the parcels of the level |
 | `CatLib.Game.Events` | Game events as plain .NET events, `GameEventStream` |
 | `CatLib.Game.Bridge` | Tracks game singletons and binds their events |
 | `CatLib.Config` | Live settings: `CatSettings`, `Setting<T>`, `CatConfig` |
@@ -39,7 +39,7 @@ docs/                        documentation
 | `CatLib.Localization` | Translation catalogs for mods, `CatLanguage` follows the game language |
 | `CatLib.Diagnostics` | Crash watcher: a report and a small window when the game closes unexpectedly |
 | `CatLib.DevTools` | Keyboard developer menu, `DevMenu.Command` and `DevMenu.Toggle` |
-| `CatLib.UI` | Mods tab in the game's settings menu; `Notifications.Show` for messages to the player; `FoldoutList`, a folding list built from game UI; the players' mods list in the lobby |
+| `CatLib.UI` | Mods tab in the game's settings menu; `HudLayer`, `CountTable` and `CountList` for the screen during a level; `Notifications.Show` for messages to the player; `FoldoutList`, a folding list built from game UI; the players' mods list in the lobby |
 | `CatLib.Net` | Mod compatibility handshake, session settings sync, messages between mods (`CatNetwork.Channel`), `CatNetwork.Role` and `IsAuthority` |
 
 ## Mods
@@ -55,6 +55,7 @@ Each mod in `mods/` is its own BepInEx plugin, released separately from CatLib:
 | [Boat Tweaks](mods/BoatTweaks/README.md) | Deck blockers and stack height limits of the boat |
 | [Shelf Labels](mods/ShelfLabels/README.md) | Up to three extra labels next to every shelf label, stored per save |
 | [Better Repair](mods/BetterRepair/README.md) | Cardboard of the repair table: unlimited, a larger stock, what a new day brings |
+| [Parcel Board](mods/ParcelBoard/README.md) | Counts of the parcels in the level by destination, per mark and size, for the player only |
 
 ## Building
 
@@ -117,6 +118,7 @@ Mods add their own commands with `DevMenu.Command`, see [Developer menu](docs/De
 - [Developer menu](docs/DevTools.md)
 - [Crash reports](docs/CrashReports.md)
 - [Folding lists](docs/Foldout.md)
+- [HUD and parcels](docs/Hud.md)
 - [Game events: observed behaviour](docs/GameEvents.md)
 - [Changelog](CHANGELOG.md)
 - [Roadmap](ROADMAP.md)

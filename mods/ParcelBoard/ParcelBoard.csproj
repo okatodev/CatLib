@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>ParcelBoard</AssemblyName>
+    <RootNamespace>ParcelBoard</RootNamespace>
+    <Version>0.1.0</Version>
+    <PluginGuid>catlib.parcelboard</PluginGuid>
+    <PluginMetaName>Parcel Board</PluginMetaName>
+    <CatLibDeployFolder>ParcelBoard</CatLibDeployFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Icons\*.png" LogicalName="ParcelBoard.Icons.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CatLib\CatLib.csproj" Private="false" />
+  </ItemGroup>
+</Project>

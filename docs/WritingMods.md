@@ -135,6 +135,11 @@ Key rules, plural forms, translation files of players and the checks are in [Loc
 `BootstrapEvents.LevelLoadFinalized`, `BootstrapEvents.GameRestartStarted`, `NetworkEvents.ClientConnected`
 or `PlayerEvents.LocalPlayerSpawned`. Their observed order and meaning are in [Game events](GameEvents.md).
 
+### Parcels and the screen
+
+`CatParcels.Read()` lists the parcels of the level with their destinations, marks and sizes, and `HudLayer` with `CountList`
+draws on the screen during a level, out of the way of the game's menus. See [HUD and parcels](Hud.md).
+
 ### Game build
 
 `GameCompatibility.Current` tells whether the running game is a build this CatLib is made for: `Supported`, `GameNewer`,

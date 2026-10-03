@@ -13,3 +13,5 @@ Checks that are not done yet because they need something we do not have now. Rem
 | Boat Tweaks | An own layout with a 3x3 block gets one big crate there, not smaller ones | Not run yet |
 | Thunderstore | A package from `Thunderstore-build` installed by a mod manager loads; the Mods tab shows its icon and the author from the package folder; CatLib starts the crash watcher from `plugins/CatLib-CrashWatcher` | Packages are not uploaded yet |
 | Crash watcher | In normal play no `looks hung` line appears in `watcher.log` after the fix of the quit hang | Needs time in normal play |
+| Parcel Board | In a level with Giant parcels, **Parcel sizes in the log** gives their footprint and box; the drawn Giant box (guessed 4x4x4 cells) matches it | No Giant parcels in the levels played so far |
+| Parcel Board | The test run started in a level: `BoardSceneTest` checks the board, the size icons and that the sizes table is as tall as the destinations | The last runs were started in the menu, where the test only notes that it needs a level |

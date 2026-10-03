@@ -1,0 +1,9 @@
+{
+  "name": "ParcelBoard",
+  "version_number": "{version}",
+  "website_url": "https://github.com/okatodev/CatLib/tree/main/mods/ParcelBoard",
+  "description": "A small board in the corner that counts the parcels of the level by destination: all of them, fragile, heavy, frozen and every other mark.",
+  "dependencies": [
+    "CatLib-CatLib-{catlib_version}"
+  ]
+}

@@ -15,6 +15,7 @@ internal static class ModIcons
 
     private static readonly Dictionary<string, Sprite> Cache = new(StringComparer.OrdinalIgnoreCase);
     private static readonly HashSet<string> Reported = new(StringComparer.Ordinal);
+    private static bool _gameDecoderMissing;
 
     public static CatLogger Log { get; set; }
 
@@ -118,22 +119,32 @@ internal static class ModIcons
         return sprite;
     }
 
-    private static Texture2D Load(byte[] bytes, string path)
+    internal static Texture2D Load(byte[] bytes, string path)
     {
-        try
+        if (!_gameDecoderMissing)
         {
-            var texture = new Texture2D(2, 2, TextureFormat.RGBA32, true);
-            if (ImageConversion.LoadImage(texture, bytes, false) && texture.width > 2)
+            Texture2D texture = null;
+            try
             {
-                return texture;
-            }
+                texture = new Texture2D(2, 2, TextureFormat.RGBA32, true);
+                if (ImageConversion.LoadImage(texture, bytes, false) && texture.width > 2)
+                {
+                    return texture;
+                }
 
-            UnityEngine.Object.Destroy(texture);
-            Log?.Info($"The game did not decode {path}, CatLib decodes it itself");
-        }
-        catch (Exception exception)
-        {
-            Log?.Info($"The game cannot decode images itself ({exception.GetType().Name}: {exception.Message}), CatLib decodes {path}");
+                UnityEngine.Object.Destroy(texture);
+                Log?.Info($"The game did not decode {path}, CatLib decodes it itself");
+            }
+            catch (Exception exception)
+            {
+                if (texture != null)
+                {
+                    UnityEngine.Object.Destroy(texture);
+                }
+
+                _gameDecoderMissing = true;
+                Log?.Info($"The game cannot decode images itself ({exception.GetType().Name}: {exception.Message}), CatLib decodes {path} and every image after it");
+            }
         }
 
         if (!PngDecoder.TryDecode(bytes, out var width, out var height, out var rgba))

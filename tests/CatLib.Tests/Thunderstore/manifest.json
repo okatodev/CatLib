@@ -1,12 +1,13 @@
 {
   "name": "CatLibTests",
   "version_number": "{version}",
-  "website_url": "https://github.com/okatodev/CatLib",
+  "website_url": "https://github.com/okatodev/CatLib/tree/main/tests/CatLib.Tests",
   "description": "In-game tests and developer tools for CatLib and its mods. For mod developers, players do not need it.",
   "dependencies": [
     "CatLib-CatLib-{version:CatLib}",
     "CatLib-BoatTweaks-{version:BoatTweaks}",
     "CatLib-ShelfLabels-{version:ShelfLabels}",
-    "CatLib-BetterRepair-{version:BetterRepair}"
+    "CatLib-BetterRepair-{version:BetterRepair}",
+    "CatLib-ParcelBoard-{version:ParcelBoard}"
   ]
 }

@@ -34,6 +34,7 @@ public static class CatLibRuntime
         FrameLoop.Initialize();
         ManagerRegistry.Initialize(Log.Scope("Bridge"));
         CatLib.Game.GameCompatibility.Initialize(Log.Scope("Version"));
+        CatLib.Game.CatParcels.Initialize(Log.Scope("Parcels"));
         CatConfig.Initialize(Log.Scope("Config"));
         CatLib.Localization.TranslationTools.Initialize(Log.Scope("Lang"));
         ModsMenu.Initialize(Log.Scope("UI"));

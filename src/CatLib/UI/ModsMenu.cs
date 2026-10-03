@@ -32,6 +32,7 @@ internal static class ModsMenu
         LobbyModsView.Initialize(log.Scope("Lobby"));
         ModIcons.Log = log.Scope("Icons");
         MenuVersionBadge.Initialize(log.Scope("Version"));
+        HudLayer.Initialize(log.Scope("Hud"));
         BootstrapEvents.GameRestartStarted += SuspendForRestart;
         BootstrapEvents.MainMenuLoaded += Resume;
         BootstrapEvents.LevelLoadFinalized += Resume;
@@ -83,6 +84,7 @@ internal static class ModsMenu
 
         MenuNotices.Update();
         MenuVersionBadge.Update();
+        HudLayer.Update();
         if (++_lobbyCountdown >= LobbyUpdateFrames)
         {
             _lobbyCountdown = 0;

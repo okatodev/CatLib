@@ -42,7 +42,6 @@ internal static class MenuVersionBadge
     private static TMP_Text _text;
     private static CanvasGroup _group;
     private static Canvas _canvas;
-    private static Sprite _plateSprite;
     private static string _rendered;
     private static Vector2 _baseSize;
     private static float _lift;
@@ -185,7 +184,7 @@ internal static class MenuVersionBadge
         _group.alpha = 0f;
 
         _plate = _root.AddComponent<Image>();
-        _plate.sprite = PlateSprite();
+        _plate.sprite = UiSprites.RoundedPlate(CornerRadius);
         _plate.type = Image.Type.Sliced;
         _plate.raycastTarget = false;
         _plate.enabled = false;
@@ -469,38 +468,5 @@ internal static class MenuVersionBadge
         {
             return 0;
         }
-    }
-
-    private static Sprite PlateSprite()
-    {
-        if (_plateSprite != null && !_plateSprite.WasCollected)
-        {
-            return _plateSprite;
-        }
-
-        var size = CornerRadius * 2 + 4;
-        var pixels = new Color32[size * size];
-        for (var y = 0; y < size; y++)
-        {
-            for (var x = 0; x < size; x++)
-            {
-                var dx = Math.Max(Math.Max(CornerRadius - (x + 0.5f), x + 0.5f - (size - CornerRadius)), 0f);
-                var dy = Math.Max(Math.Max(CornerRadius - (y + 0.5f), y + 0.5f - (size - CornerRadius)), 0f);
-                var coverage = Mathf.Clamp01(CornerRadius - (float)Math.Sqrt(dx * dx + dy * dy) + 0.5f);
-                pixels[y * size + x] = new Color32(255, 255, 255, (byte)Math.Round(coverage * 255f));
-            }
-        }
-
-        var texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
-        texture.wrapMode = TextureWrapMode.Clamp;
-        texture.filterMode = FilterMode.Bilinear;
-        texture.SetPixels32(new Il2CppStructArray<Color32>(pixels), 0);
-        texture.Apply(false, false);
-        texture.hideFlags = HideFlags.DontUnloadUnusedAsset;
-        var border = new Vector4(CornerRadius, CornerRadius, CornerRadius, CornerRadius);
-        _plateSprite = Sprite.Create(texture, new Rect(0f, 0f, size, size), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect, border);
-        _plateSprite.name = "CatLib version plate";
-        _plateSprite.hideFlags = HideFlags.DontUnloadUnusedAsset;
-        return _plateSprite;
     }
 }

@@ -1,6 +1,17 @@
 # Changelog
 
-CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels and Better Repair, have their own versions and changelogs.
+CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair and Parcel Board, have their own versions and changelogs.
+
+## Not released yet
+
+### Added
+
+- `CatParcels` in `CatLib.Game`: every parcel of the level as a `ParcelInfo` with its destination, marks, size, footprint on a shelf, weight, damage,
+  missing stamps and place, the game's stamp icons and region names. See [HUD and parcels](docs/Hud.md).
+- `HudLayer` in `CatLib.UI`: a layer on the game's HUD during a level that steps aside for the game's menus, and texts in the game's font.
+- `CountTable` and `CountList` in `CatLib.UI`: a table and a list of icons and counts on a rounded, almost clear plate,
+  with light outlined texts like the game's hints, rows with an icon and a faint hint, rows wrapped into columns and tables of the same height side by side; `UiSprites.RoundedPlate`, `UiSprites.FromPng` and `UiSprites.FromResource`.
+- New mod: Parcel Board 0.1.0, counts of the parcels in the level by destination, per mark and size, only for the player who has it.
 
 ## 0.6.2
 

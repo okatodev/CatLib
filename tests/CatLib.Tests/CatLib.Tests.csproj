@@ -13,5 +13,6 @@
     <ProjectReference Include="..\..\mods\BoatTweaks\BoatTweaks.csproj" Private="false" />
     <ProjectReference Include="..\..\mods\ShelfLabels\ShelfLabels.csproj" Private="false" />
     <ProjectReference Include="..\..\mods\BetterRepair\BetterRepair.csproj" Private="false" />
+    <ProjectReference Include="..\..\mods\ParcelBoard\ParcelBoard.csproj" Private="false" />
   </ItemGroup>
 </Project>
