@@ -7,8 +7,10 @@ What is planned, in rough order. Finished work is removed from here and describe
 - Stacking (`RequiredOnAll`): better compatibility of parcel sizes when stacking, which parcels can stand on which.
   Needs patches of the game's placement code and a safe patching wrapper in CatLib
   (the method must exist, errors are isolated and logged).
-- Boat Tweaks: improvements and bug fixes.
 - Late join: joining a game in progress. Builds on patches, mod messages and entity synchronization.
+- Portable Magnifying Glass, after late join and harder than it: the mod works with 3D models.
+  Needs an asset API in CatLib, which has none yet: loading models, textures and other assets from a mod's folder.
+  Assets come up in many mods, so the API is for every mod author, not only for this one.
 
 ## Crash reports
 
