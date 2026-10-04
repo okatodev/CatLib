@@ -101,7 +101,9 @@ the full `text` goes to the status line of the Mods tab.
 ## In-game menu
 
 Every mod with at least one visible setting gets an entry on the Mods tab of the game's settings menu.
-The mod list shows the plugin name, the header shows the name and version.
+The mod list shows the icon and the name of every mod, and under the name its version and the number of settings,
+or a mark when the mod is paused in this game, waits for a restart or takes settings from the host.
+The card above the settings shows the name, version, author and the mod's description.
 Settings are grouped by section, in declaration order.
 
 | Setting type | Control |

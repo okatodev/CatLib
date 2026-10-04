@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Reparación fácil"
+    "name": "Reparación fácil",
+    "description": "Elige cuánto cartón cabe en la mesa de reparación y cuánto devuelve cada nuevo día, o hazlo ilimitado."
   },
   "section": {
     "Cardboard": "Cartón",

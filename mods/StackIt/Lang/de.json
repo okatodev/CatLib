@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Stack it!"
+    "name": "Stapel es!",
+    "description": "Stell ein Paket über zwei oder mehr Pakete mit gleich hoher Oberseite, wie an Deck des Boots. Nimm eins darunter weg, und es rutscht ab und fällt."
   },
   "section": {
     "Bridges": "Stapeln"

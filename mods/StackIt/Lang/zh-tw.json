@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Stack it!"
+    "name": "疊起來！",
+    "description": "像在船甲板上一樣，把包裹橫跨放在兩個或更多頂部齊平的包裹上。抽走下面一個，它就會滑下掉落。"
   },
   "section": {
     "Bridges": "堆疊"

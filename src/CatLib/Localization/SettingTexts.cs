@@ -6,6 +6,7 @@ namespace CatLib.Localization;
 public static class SettingTexts
 {
     public const string ModNameKey = "mod.name";
+    public const string ModDescriptionKey = "mod.description";
 
     public static string SectionKey(string section) => "section." + section;
 
@@ -17,6 +18,9 @@ public static class SettingTexts
 
     public static string ModName(CatSettings settings, string language) =>
         CatLocalization.Find(settings.OwnerId)?.Find(ModNameKey, language) ?? settings.DisplayName;
+
+    public static string ModDescription(CatSettings settings, string language) =>
+        CatLocalization.Find(settings.OwnerId)?.Find(ModDescriptionKey, language) ?? settings.Description ?? string.Empty;
 
     public static string Section(CatSettings settings, string section, string language) =>
         CatLocalization.Find(settings.OwnerId)?.Find(SectionKey(section), language) ?? LabelFormatter.Prettify(section);

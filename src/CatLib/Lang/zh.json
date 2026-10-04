@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "CatLib"
+    "name": "CatLib",
+    "description": "Cat Mail Co. 模组的基础库。"
   },
   "section": {
     "Diagnostics": "诊断",

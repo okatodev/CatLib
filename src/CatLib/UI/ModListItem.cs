@@ -15,7 +15,8 @@ internal sealed class ModListItem
         Toggle = root.GetComponent<Toggle>();
         Toggle.SetIsOnWithoutNotify(false);
         UiClone.SetText(root, CatLib.Localization.SettingTexts.ModName(settings, UiText.LanguageCode));
-        AddIcon(root, ModIcons.For(settings));
+        var sprite = ModIcons.Trimmed(settings, out var scale);
+        AddIcon(root, sprite, scale);
         UiEvents.Listen<bool>(Toggle.onValueChanged, isOn =>
         {
             if (isOn)
@@ -29,13 +30,16 @@ internal sealed class ModListItem
         });
     }
 
-    public const float IconLeft = 52f;
-    public const float IconSize = 38f;
-    public const float LabelLeft = 100f;
-    public const float BadgeHeight = 20f;
-    public const float BadgeSize = 16f;
-    public const float PlaceholderSize = 34f;
-    public static readonly Color PausedColor = new(0.68f, 0.43f, 0.1f, 1f);
+    public const float IconLeft = 50f;
+    public const float IconSize = 50f;
+    public const float LabelLeft = 108f;
+    public const float NameBottom = 33f;
+    public const float NameTop = 6f;
+    public const float MetaBottom = 7f;
+    public const float MetaHeight = 32f;
+    public const float MetaSize = 17f;
+    public const float MetaAlpha = 0.6f;
+    public const float PlaceholderSize = 40f;
 
     public CatSettings Settings { get; }
 
@@ -43,31 +47,26 @@ internal sealed class ModListItem
 
     public TMP_Text Placeholder { get; private set; }
 
-    public TMP_Text Badge { get; private set; }
+    public TMP_Text Meta { get; private set; }
+
+    public float IconScale { get; private set; } = 1f;
 
     public ModBadgeKind BadgeKind { get; private set; } = ModBadgeKind.None;
 
     public void UpdateBadge(string language)
     {
-        var kind = ModBadge.For(Settings);
-        if (kind == BadgeKind || Badge == null)
+        BadgeKind = ModBadge.For(Settings);
+        if (Meta == null)
         {
             return;
         }
 
-        BadgeKind = kind;
-        var label = Root.transform.Find("Item Label")?.TryCast<RectTransform>();
-        Badge.text = ModBadge.Text(kind, language);
-        Badge.color = kind is ModBadgeKind.Paused or ModBadgeKind.Restart ? PausedColor : new Color(_baseColor.r, _baseColor.g, _baseColor.b, _baseColor.a * 0.6f);
-        Badge.gameObject.SetActive(kind != ModBadgeKind.None);
-        if (label != null)
+        var text = ModListMeta.Text(Settings.Version, ModsPanel.VisibleSettings(Settings).Count, BadgeKind, language);
+        if (Meta.text != text)
         {
-            label.offsetMin = new Vector2(label.offsetMin.x, kind == ModBadgeKind.None ? _labelBottom : _labelBottom + BadgeHeight - 4f);
+            Meta.text = text;
         }
     }
-
-    private float _labelBottom;
-    private Color _baseColor;
 
     public GameObject Root { get; }
 
@@ -75,35 +74,47 @@ internal sealed class ModListItem
 
     public bool IsSelected { get; private set; }
 
-    private void AddIcon(GameObject root, Sprite sprite)
+    private void AddIcon(GameObject root, Sprite sprite, float scale)
     {
         var label = root.transform.Find("Item Label")?.TryCast<RectTransform>();
         var middle = 0f;
         if (label != null)
         {
             middle = LabelMiddle(label);
-            label.offsetMin = new Vector2(LabelLeft, label.offsetMin.y);
-            _labelBottom = label.offsetMin.y;
-            Badge = CloneText(label.gameObject, root.transform, "Item Badge");
-            var badgeRect = Badge.rectTransform;
-            badgeRect.anchorMin = new Vector2(0f, 0f);
-            badgeRect.anchorMax = new Vector2(1f, 0f);
-            badgeRect.pivot = new Vector2(0.5f, 0f);
-            badgeRect.offsetMin = new Vector2(LabelLeft, 6f);
-            badgeRect.offsetMax = new Vector2(label.offsetMax.x, 6f + BadgeHeight);
-            Badge.fontSize = BadgeSize;
-            Badge.alignment = TextAlignmentOptions.MidlineLeft;
-            _baseColor = Badge.color;
-            Badge.gameObject.SetActive(false);
+            label.offsetMin = new Vector2(LabelLeft, NameBottom);
+            label.offsetMax = new Vector2(label.offsetMax.x, -NameTop);
+            var name = label.GetComponent<TMP_Text>();
+            if (name != null)
+            {
+                name.textWrappingMode = TextWrappingModes.NoWrap;
+                name.overflowMode = TextOverflowModes.Ellipsis;
+            }
+
+            Meta = CloneText(label.gameObject, root.transform, "Item Meta");
+            var metaRect = Meta.rectTransform;
+            metaRect.anchorMin = new Vector2(0f, 0f);
+            metaRect.anchorMax = new Vector2(1f, 0f);
+            metaRect.pivot = new Vector2(0.5f, 0f);
+            metaRect.offsetMin = new Vector2(LabelLeft, MetaBottom);
+            metaRect.offsetMax = new Vector2(label.offsetMax.x, MetaBottom + MetaHeight);
+            Meta.fontSize = MetaSize;
+            Meta.fontStyle = FontStyles.Normal;
+            Meta.richText = true;
+            Meta.alignment = TextAlignmentOptions.MidlineLeft;
+            var color = Meta.color;
+            Meta.color = new Color(color.r, color.g, color.b, color.a * MetaAlpha);
+            Meta.text = string.Empty;
         }
 
+        IconScale = sprite == null ? 1f : scale;
+        var side = IconSize * IconScale;
         var iconObject = new GameObject("Item Icon");
         var rect = iconObject.AddComponent<RectTransform>();
         rect.SetParent(root.transform, false);
         rect.anchorMin = rect.anchorMax = new Vector2(0f, 0.5f);
-        rect.pivot = new Vector2(0f, 0.5f);
-        rect.anchoredPosition = new Vector2(IconLeft, middle);
-        rect.sizeDelta = new Vector2(IconSize, IconSize);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = new Vector2(IconLeft + IconSize / 2f, middle);
+        rect.sizeDelta = new Vector2(side, side);
         Icon = iconObject.AddComponent<Image>();
         Icon.sprite = sprite;
         Icon.preserveAspect = true;

@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Impostazioni barca"
+    "name": "Impostazioni barca",
+    "description": "Cambia casse e cesti sul ponte della barca e i limiti di altezza delle pile. In multigiocatore valgono per tutti le impostazioni dell'host."
   },
   "section": {
     "Layout": "Schema del ponte",

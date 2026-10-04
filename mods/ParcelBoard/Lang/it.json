@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Tabellone pacchi"
+    "name": "Tabellone pacchi",
+    "description": "Un piccolo tabellone nell'angolo conta i pacchi del livello per destinazione: tutti, fragili, pesanti, surgelati e ogni altro marchio."
   },
   "section": {
     "Board": "Tabellone",

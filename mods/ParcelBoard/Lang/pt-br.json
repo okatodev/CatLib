@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Painel de encomendas"
+    "name": "Painel de encomendas",
+    "description": "Um pequeno quadro no canto conta os pacotes do nível por destino: todos, frágeis, pesados, congelados e qualquer outra marca."
   },
   "section": {
     "Board": "Painel",

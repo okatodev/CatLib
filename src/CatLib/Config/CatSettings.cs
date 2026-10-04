@@ -34,6 +34,8 @@ public sealed class CatSettings : IDisposable
 
     public string Author { get; set; }
 
+    public string Description { get; set; }
+
     internal string PluginDirectory { get; set; }
 
     public TextCatalog Texts => CatLocalization.For(OwnerId);
@@ -83,6 +85,7 @@ public sealed class CatSettings : IDisposable
             settings.PluginDirectory ??= directory;
             settings.IconPath ??= IconLocator.Find(directory);
             settings.Author ??= AuthorLocator.Find(directory, AuthorLocator.Company(assembly), assembly.GetName().Name);
+            settings.Description ??= ManifestLocator.Description(directory);
         }
         catch (Exception)
         {

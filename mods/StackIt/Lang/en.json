@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Stack it!"
+    "name": "Stack it!",
+    "description": "Stand a parcel across two or more parcels whose tops are level, like on the boat deck. Take one from under it and it slides off and falls."
   },
   "section": {
     "Bridges": "Stacking"

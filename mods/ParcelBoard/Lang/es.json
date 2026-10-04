@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Tablero de paquetes"
+    "name": "Tablero de paquetes",
+    "description": "Un pequeño tablero en la esquina cuenta los paquetes del nivel por destino: todos, frágiles, pesados, congelados y cualquier otra marca."
   },
   "section": {
     "Board": "Tablero",

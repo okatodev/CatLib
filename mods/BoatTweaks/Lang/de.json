@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Bootsoptionen"
+    "name": "Bootsoptionen",
+    "description": "Ändert die Kisten und Körbe an Deck des Boots und die Höhengrenzen der Stapel. Im Mehrspielermodus gelten für alle die Einstellungen des Hosts."
   },
   "section": {
     "Layout": "Deck-Layout",

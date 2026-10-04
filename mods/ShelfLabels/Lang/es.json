@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Etiquetas de estantes"
+    "name": "Etiquetas de estantes",
+    "description": "Hasta tres etiquetas más junto a cada etiqueta de estante, que se cambian con los mismos clics que las del juego."
   },
   "section": {
     "Labels": "Etiquetas",

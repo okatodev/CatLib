@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Étiquettes d'étagères"
+    "name": "Étiquettes d'étagères",
+    "description": "Jusqu'à trois étiquettes de plus à côté de chaque étiquette d'étagère, changées avec les mêmes clics que celles du jeu."
   },
   "section": {
     "Labels": "Étiquettes",

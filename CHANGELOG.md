@@ -18,6 +18,16 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
   computed like the game does. See [Storages](docs/Storages.md), with how the game stacks parcels and checks their marks.
 - `Il2CppArrays.TryGet` reads one cell of a two-dimensional IL2CPP array.
 - New mod: Stack it! 0.1.0, parcels that stand across the joint of level parcels and fall when one is taken away. Every player needs it.
+- The mod card on the Mods tab shows the mod's description under the author, across the whole card: `mod.description` from the catalog,
+  else the description of the Thunderstore manifest. `CatSettings.Description` sets it from code. Every mod here has it in all 13 languages.
+
+### Changed
+
+- The mod list on the Mods tab has two lines per mod: the name, and under it the version and the number of settings,
+  or a mark such as "needs a restart" in its place. Icons are bigger, their empty edges are cut off and dense icons are drawn
+  a little smaller, so every icon looks about the same size.
+- Tests started in a level open the game's pause menu and its settings to reach the Mods tab, and stop waiting for the tab
+  when it did not appear earlier in the run, instead of waiting for it in every test.
 
 ### Fixed
 

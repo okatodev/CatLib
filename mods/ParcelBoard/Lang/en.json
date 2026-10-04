@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Parcel Board"
+    "name": "Parcel Board",
+    "description": "A small board in the corner that counts the parcels of the level by destination: all of them, fragile, heavy, frozen and every other mark."
   },
   "section": {
     "Board": "Board",

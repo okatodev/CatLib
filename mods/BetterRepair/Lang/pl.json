@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Wygodna naprawa"
+    "name": "Wygodna naprawa",
+    "description": "Ustal, ile tektury mieści stół naprawczy i ile wraca z nowym dniem, albo ustaw ją bez limitu."
   },
   "section": {
     "Cardboard": "Karton",

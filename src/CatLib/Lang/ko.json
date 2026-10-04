@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "CatLib"
+    "name": "CatLib",
+    "description": "Cat Mail Co. 모드를 위한 기반 라이브러리."
   },
   "section": {
     "Diagnostics": "진단",

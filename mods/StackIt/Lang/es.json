@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Stack it!"
+    "name": "¡Apílalo!",
+    "description": "Apoya un paquete sobre dos o más paquetes a la misma altura, como en la cubierta del barco. Quita uno de debajo y se desliza y cae."
   },
   "section": {
     "Bridges": "Apilar"

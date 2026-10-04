@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Stack it!"
+    "name": "Ułóż to!",
+    "description": "Postaw paczkę na dwóch lub więcej paczkach o równym wierzchu, jak na pokładzie łodzi. Zabierz jedną spod niej, a zsunie się i spadnie."
   },
   "section": {
     "Bridges": "Układanie"

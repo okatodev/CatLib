@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "CatLib"
+    "name": "CatLib",
+    "description": "Основа для модів Cat Mail Co."
   },
   "section": {
     "Diagnostics": "Діагностика",

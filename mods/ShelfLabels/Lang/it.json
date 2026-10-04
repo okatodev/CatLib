@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Etichette per scaffali"
+    "name": "Etichette per scaffali",
+    "description": "Fino a tre etichette in più accanto a ogni etichetta di scaffale, cambiate con gli stessi clic di quelle del gioco."
   },
   "section": {
     "Labels": "Etichette",

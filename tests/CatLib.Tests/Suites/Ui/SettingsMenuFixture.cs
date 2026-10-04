@@ -6,7 +6,13 @@ namespace CatLib.Tests.Suites.Ui;
 
 internal static class SettingsMenuFixture
 {
+    public const double MissingTabMemorySeconds = 120;
+
+    private static float _waitingSince = -1f;
+
     public static bool OpenedByTests { get; private set; }
+
+    public static bool OpenedInLevel { get; private set; }
 
     public static TabInterface PreviousTab { get; private set; }
 
@@ -21,18 +27,55 @@ internal static class SettingsMenuFixture
             yield break;
         }
 
+        var now = UnityEngine.Time.realtimeSinceStartup;
+        if (_waitingSince >= 0f && now - _waitingSince < MissingTabMemorySeconds)
+        {
+            Assert.Fail("The Mods tab did not appear in the " + Context + " settings menu earlier in this run, so this test does not wait for it again");
+        }
+
         if (Context == MenuContext.MainMenu && Singleton<MainMenuInterfacesManager>.HasInstance())
         {
             context.Note("The settings menu was not initialized yet, opening it");
             Singleton<MainMenuInterfacesManager>.Instance.ShowSettingsMenu();
             OpenedByTests = true;
         }
-        else
+        else if (Context == MenuContext.InGame)
         {
-            context.Note("Open the settings menu from the pause menu before running UI tests in a level");
+            OpenInLevel(context);
         }
 
+        _waitingSince = now;
         yield return Wait.Until(() => Tab != null, 10, "the Mods tab to be injected into the " + Context + " settings menu");
+        _waitingSince = -1f;
+    }
+
+    private static void OpenInLevel(TestContext context)
+    {
+        var manager = Singleton<InterfaceManager>.Instance;
+        var settings = manager.SettingsInterface;
+        if (settings == null || settings.IsShown)
+        {
+            return;
+        }
+
+        context.Note("Opening the settings menu of the level through the pause menu");
+        if (Singleton<PauseManager>.HasInstance() && !Singleton<PauseManager>.Instance.IsPaused)
+        {
+            Singleton<PauseManager>.Instance.PauseGame();
+        }
+
+        var pause = manager.PauseInterface;
+        if (pause != null)
+        {
+            pause.SettingsButton_OnClick();
+        }
+        else
+        {
+            settings.Show();
+        }
+
+        OpenedByTests = true;
+        OpenedInLevel = true;
     }
 
     public static IEnumerable<TestStep> ShowModsTab(TestContext context)
@@ -109,6 +152,20 @@ internal static class SettingsMenuFixture
         }
 
         OpenedByTests = false;
+        if (OpenedInLevel)
+        {
+            OpenedInLevel = false;
+            if (Singleton<InterfaceManager>.HasInstance())
+            {
+                var manager = Singleton<InterfaceManager>.Instance;
+                manager.SettingsInterface?.BackButton_OnClick();
+                manager.PauseInterface?.ResumeButton_OnClick();
+                context.Note("Closed the settings and pause menus opened by the tests");
+            }
+
+            return;
+        }
+
         if (Singleton<MainMenuInterfacesManager>.HasInstance())
         {
             Singleton<MainMenuInterfacesManager>.Instance.GoBackToLastInterface();

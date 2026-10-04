@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "便利修理"
+    "name": "便利修理",
+    "description": "設定修理台能放多少紙板、新的一天補回多少，或設為無限。"
   },
   "section": {
     "Cardboard": "紙板",

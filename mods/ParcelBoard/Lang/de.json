@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Paketanzeige"
+    "name": "Paketanzeige",
+    "description": "Eine kleine Tafel in der Ecke zählt die Pakete des Levels nach Ziel: alle, zerbrechliche, schwere, gefrorene und jede andere Markierung."
   },
   "section": {
     "Board": "Anzeige",

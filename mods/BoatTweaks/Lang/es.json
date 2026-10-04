@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Ajustes del barco"
+    "name": "Ajustes del barco",
+    "description": "Cambia las cajas y cestas de la cubierta del barco y los límites de altura de las pilas. En multijugador, la configuración del anfitrión vale para todos."
   },
   "section": {
     "Layout": "Diseño",

@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Tableau des colis"
+    "name": "Tableau des colis",
+    "description": "Un petit tableau dans le coin compte les colis du niveau par destination : tous, fragiles, lourds, surgelés et chaque autre marque."
   },
   "section": {
     "Board": "Tableau",

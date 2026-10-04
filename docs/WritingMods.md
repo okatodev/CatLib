@@ -42,6 +42,8 @@ or the folder where it was looked for, and warns when the icon is not 256x256.
 
 The author shown under the version comes from the Thunderstore package folder (`Author-ModName`) when the mod is installed
 by a mod manager, otherwise from `Authors` in the project file. `settings.Author` sets it from code.
+The card shows the mod's description under the author: `mod.description` of the catalog in the player's language,
+else `description` from the Thunderstore `manifest.json`, looked for like the icon. `settings.Description` sets it from code.
 
 ### Folders
 
@@ -111,7 +113,7 @@ the build embeds them and CatLib loads them by itself:
 
 ```json
 {
-  "mod": { "name": "My Mod" },
+  "mod": { "name": "My Mod", "description": "What the mod does, in one or two sentences." },
   "section": { "Height": "Height" },
   "setting": {
     "Height.Scale": "Height limit",

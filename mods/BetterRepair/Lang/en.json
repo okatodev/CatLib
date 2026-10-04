@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Better Repair"
+    "name": "Better Repair",
+    "description": "Set how much cardboard the repair table holds and how much a new day brings back, or make it unlimited."
   },
   "section": {
     "Cardboard": "Cardboard",

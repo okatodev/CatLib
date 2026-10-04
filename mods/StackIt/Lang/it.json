@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Stack it!"
+    "name": "Impila!",
+    "description": "Appoggia un pacco su due o più pacchi alla stessa altezza, come sul ponte della barca. Togline uno da sotto e scivola giù e cade."
   },
   "section": {
     "Bridges": "Impilare"

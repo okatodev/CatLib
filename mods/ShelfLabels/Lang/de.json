@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Regalschilder"
+    "name": "Regalschilder",
+    "description": "Bis zu drei zusätzliche Etiketten neben jedem Regaletikett, umgeschaltet mit denselben Klicks wie die des Spiels."
   },
   "section": {
     "Labels": "Schilder",

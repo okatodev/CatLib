@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Stack it!"
+    "name": "Empile !",
+    "description": "Posez un colis à cheval sur deux colis ou plus au même niveau, comme sur le pont du bateau. Retirez-en un dessous et il glisse et tombe."
   },
   "section": {
     "Bridges": "Empilage"

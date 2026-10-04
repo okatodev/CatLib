@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Tablica paczek"
+    "name": "Tablica paczek",
+    "description": "Mała tablica w rogu liczy paczki poziomu według celu: wszystkie, kruche, ciężkie, mrożone i z każdym innym oznaczeniem."
   },
   "section": {
     "Board": "Tablica",

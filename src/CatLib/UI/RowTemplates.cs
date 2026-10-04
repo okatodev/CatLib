@@ -8,7 +8,7 @@ namespace CatLib.UI;
 internal sealed class RowTemplates
 {
     public const float RowHeight = 50f;
-    public const float ListItemHeight = 60f;
+    public const float ListItemHeight = 78f;
 
     private RowTemplates(GameObject header, GameObject toggle, GameObject slider, GameObject dropdown, GameObject text, GameObject listItem, float templateRowWidth)
     {

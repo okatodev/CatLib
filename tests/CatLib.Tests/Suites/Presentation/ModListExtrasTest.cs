@@ -21,6 +21,32 @@ public sealed class ModListExtrasTest : TestCase
         Assert.Equal("на паузе в этой игре", ModBadge.Text(ModBadgeKind.Paused, "ru"), "Russian paused mark");
         Assert.Equal("needs a restart", ModBadge.Text(ModBadgeKind.Restart, "en"), "English restart mark");
         Assert.Equal(string.Empty, ModBadge.Text(ModBadgeKind.None, "en"), "No mark, no text");
+        Assert.Equal("v0.1.0 · 7 настроек", ModListMeta.Text("0.1.0", 7, ModBadgeKind.None, "ru"), "Second line: version and settings");
+        Assert.Equal("2 settings", ModListMeta.Text("", 2, ModBadgeKind.None, "en"), "Without a version only the settings");
+        Assert.Equal("v1.0 · set by the host", ModListMeta.Text("1.0", 2, ModBadgeKind.Host, "en"), "A mark takes the place of the settings");
+        Assert.Equal("v1.0 · <color=#AD6E1A>needs a restart</color>", ModListMeta.Text("1.0", 2, ModBadgeKind.Restart, "en"), "Restart and pause marks are colored");
+        Assert.Equal("v1.0 · needs a restart", ModListMeta.Text("1.0", 2, ModBadgeKind.Restart, "en", false), "Or plain");
+
+        var alpha = new byte[10 * 8];
+        for (var y = 2; y < 6; y++)
+        {
+            for (var x = 3; x < 9; x++)
+            {
+                alpha[y * 10 + x] = 255;
+            }
+        }
+
+        alpha[2 * 10 + 3] = 10;
+        var bounds = IconFit.Measure(alpha, 10, 8);
+        Assert.Equal(3, bounds.X, "Left edge of the drawing");
+        Assert.Equal(2, bounds.Y, "Bottom edge of the drawing");
+        Assert.Equal(6, bounds.Width, "Width of the drawing");
+        Assert.Equal(4, bounds.Height, "Height of the drawing");
+        Assert.True(bounds.Coverage > 0.95f && bounds.Coverage < 1f, "Nearly clear pixels do not count");
+        Assert.True(IconFit.Measure(new byte[16], 4, 4).IsEmpty, "A clear image has no drawing");
+        Assert.Equal(1f, IconFit.Scale(100, 40, 1f), "A thin icon keeps its full width");
+        Assert.True(IconFit.Scale(100, 100, 1f) < 0.8f, "A full square is drawn smaller");
+        Assert.Equal(IconFit.MinScale, IconFit.Scale(100, 100, 1f, 0.01f), "Never smaller than the limit");
 
         var root = Path.Combine(Path.GetTempPath(), "CatLibAuthorTest_" + System.Guid.NewGuid().ToString("N"));
         try

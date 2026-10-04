@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Réparation facile"
+    "name": "Réparation facile",
+    "description": "Choisissez combien de carton tient l'établi de réparation et combien chaque nouvelle journée en rapporte, ou rendez-le illimité."
   },
   "section": {
     "Cardboard": "Carton",

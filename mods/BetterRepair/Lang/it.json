@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Riparazione facile"
+    "name": "Riparazione facile",
+    "description": "Scegli quanto cartone tiene il banco di riparazione e quanto ne torna a ogni nuovo giorno, oppure rendilo illimitato."
   },
   "section": {
     "Cardboard": "Cartone",

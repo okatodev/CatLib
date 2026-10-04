@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Etiquetas de prateleira"
+    "name": "Etiquetas de prateleira",
+    "description": "Até três etiquetas extras ao lado de cada etiqueta de prateleira, trocadas com os mesmos cliques das do jogo."
   },
   "section": {
     "Labels": "Etiquetas",

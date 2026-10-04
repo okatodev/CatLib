@@ -13,9 +13,15 @@ internal sealed class ModCard
     public const float IconSize = 84f;
     public const float IconGap = 16f;
     public const float PlaceholderSize = 64f;
+    public const float DescriptionSize = 21f;
+    public const float DescriptionGap = 2f;
+    public const float DescriptionBottom = 14f;
+
+    private readonly float _width;
 
     public ModCard(RowTemplates templates, Transform parent, float width)
     {
+        _width = width;
         Root = new GameObject("group_CatLibModCard");
         Root.AddComponent<RectTransform>();
         Root.transform.SetParent(parent, false);
@@ -32,6 +38,12 @@ internal sealed class ModCard
         Place(Author, 52f, 36f, DetailSize, TextAlignmentOptions.Right);
         var authorColor = Author.color;
         Author.color = new Color(authorColor.r, authorColor.g, authorColor.b, authorColor.a * 0.7f);
+        Description = templates.CreateText(Root.transform, "text_CatLibModDescription");
+        Place(Description, Height + DescriptionGap, 0f, DescriptionSize, TextAlignmentOptions.TopLeft);
+        Description.textWrappingMode = TextWrappingModes.Normal;
+        Description.overflowMode = TextOverflowModes.Overflow;
+        var descriptionColor = Description.color;
+        Description.color = new Color(descriptionColor.r, descriptionColor.g, descriptionColor.b, descriptionColor.a * 0.85f);
 
         var iconObject = new GameObject("image_CatLibModIcon");
         var rect = iconObject.AddComponent<RectTransform>();
@@ -66,6 +78,10 @@ internal sealed class ModCard
 
     public TMP_Text Author { get; }
 
+    public TMP_Text Description { get; }
+
+    public float CurrentHeight { get; private set; } = Height;
+
     public GameObject Root { get; }
 
     public TMP_Text Title { get; }
@@ -85,6 +101,7 @@ internal sealed class ModCard
             Set(Title, UiText.Get(UiText.SelectMod, languageCode));
             Set(Version, string.Empty);
             Set(Status, string.Empty);
+            ShowDescription(string.Empty);
             return;
         }
 
@@ -100,6 +117,23 @@ internal sealed class ModCard
         Set(Title, CatLib.Localization.SettingTexts.ModName(settings, languageCode));
         Set(Version, string.IsNullOrEmpty(settings.Version) ? string.Empty : UiText.Format(UiText.Version, languageCode, settings.Version));
         Set(Status, ContextText.CardStatus(settings, languageCode));
+        ShowDescription(CatLib.Localization.SettingTexts.ModDescription(settings, languageCode));
+    }
+
+    private void ShowDescription(string value)
+    {
+        if (Description.text == value && Description.gameObject.activeSelf == !string.IsNullOrEmpty(value))
+        {
+            return;
+        }
+
+        Description.text = value;
+        Description.gameObject.SetActive(!string.IsNullOrEmpty(value));
+        var height = string.IsNullOrEmpty(value) ? 0f : Mathf.Ceil(Description.GetPreferredValues(value, _width, 0f).y);
+        var rect = Description.rectTransform;
+        rect.sizeDelta = new Vector2(0f, height);
+        CurrentHeight = height <= 0f ? Height : Height + DescriptionGap + height + DescriptionBottom;
+        RowSizer.Fit(Root, _width, CurrentHeight);
     }
 
     private static void Set(TMP_Text text, string value)

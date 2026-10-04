@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Etykiety półek"
+    "name": "Etykiety półek",
+    "description": "Do trzech dodatkowych etykiet przy każdej etykiecie półki, przełączanych tymi samymi kliknięciami co etykiety gry."
   },
   "section": {
     "Labels": "Etykiety",

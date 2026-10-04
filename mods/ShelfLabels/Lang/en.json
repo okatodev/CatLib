@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Shelf Labels"
+    "name": "Shelf Labels",
+    "description": "Up to three extra labels next to every shelf label, switched with the same clicks as the game's own."
   },
   "section": {
     "Labels": "Labels",

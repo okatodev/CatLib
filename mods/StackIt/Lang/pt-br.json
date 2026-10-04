@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Stack it!"
+    "name": "Empilha!",
+    "description": "Apoie um pacote sobre dois ou mais pacotes na mesma altura, como no convés do barco. Tire um de baixo e ele escorrega e cai."
   },
   "section": {
     "Bridges": "Empilhar"

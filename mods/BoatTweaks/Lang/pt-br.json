@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Ajustes do barco"
+    "name": "Ajustes do barco",
+    "description": "Muda as caixas e cestos no convés do barco e os limites de altura das pilhas. No multijogador, as configurações do anfitrião valem para todos."
   },
   "section": {
     "Layout": "Layout do convés",

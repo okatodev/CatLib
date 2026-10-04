@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Reparo fácil"
+    "name": "Reparo fácil",
+    "description": "Defina quanto papelão a mesa de reparo comporta e quanto cada novo dia devolve, ou deixe ilimitado."
   },
   "section": {
     "Cardboard": "Papelão",

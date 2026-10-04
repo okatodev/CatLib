@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Bequeme Reparatur"
+    "name": "Bequeme Reparatur",
+    "description": "Lege fest, wie viel Pappe der Reparaturtisch fasst und wie viel ein neuer Tag zurückbringt, oder mach sie unbegrenzt."
   },
   "section": {
     "Cardboard": "Pappe",

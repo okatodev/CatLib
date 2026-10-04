@@ -14,6 +14,7 @@ internal static class ModIcons
     public const int ThunderstoreSide = 256;
 
     private static readonly Dictionary<string, Sprite> Cache = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly Dictionary<string, (Sprite Sprite, float Scale)> TrimmedCache = new(StringComparer.OrdinalIgnoreCase);
     private static readonly HashSet<string> Reported = new(StringComparer.Ordinal);
     private static bool _gameDecoderMissing;
 
@@ -52,6 +53,59 @@ internal static class ModIcons
         }
 
         return sprite;
+    }
+
+    public static Sprite Trimmed(CatSettings settings, out float scale)
+    {
+        scale = 1f;
+        var sprite = For(settings);
+        if (sprite == null)
+        {
+            return null;
+        }
+
+        var path = settings.IconPath;
+        if (TrimmedCache.TryGetValue(path, out var cached) && cached.Sprite != null && !cached.Sprite.WasCollected)
+        {
+            scale = cached.Scale;
+            return cached.Sprite;
+        }
+
+        var result = (Sprite: sprite, Scale: 1f);
+        try
+        {
+            var texture = sprite.texture;
+            var width = texture.width;
+            var height = texture.height;
+            var pixels = texture.GetPixels32();
+            var alpha = new byte[width * height];
+            for (var index = 0; index < alpha.Length && index < pixels.Length; index++)
+            {
+                alpha[index] = pixels[index].a;
+            }
+
+            var bounds = IconFit.Measure(alpha, width, height);
+            if (!bounds.IsEmpty && (bounds.Width < width || bounds.Height < height))
+            {
+                var trimmed = Sprite.Create(texture, new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height), new Vector2(0.5f, 0.5f), 100f);
+                trimmed.name = sprite.name + " trimmed";
+                trimmed.hideFlags = HideFlags.DontUnloadUnusedAsset;
+                result.Sprite = trimmed;
+            }
+
+            if (!bounds.IsEmpty)
+            {
+                result.Scale = IconFit.Scale(bounds.Width, bounds.Height, bounds.Coverage);
+            }
+        }
+        catch (Exception exception)
+        {
+            Log?.Debug($"Measuring the icon of {settings.DisplayName} failed, it is shown whole: {exception.GetType().Name}: {exception.Message}");
+        }
+
+        TrimmedCache[path] = result;
+        scale = result.Scale;
+        return result.Sprite;
     }
 
     private static void Report(CatSettings settings, Sprite sprite)

@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Boat Tweaks"
+    "name": "Boat Tweaks",
+    "description": "Changes the crates and baskets on the boat deck and the stack height limits. In multiplayer the host's settings apply to everyone."
   },
   "section": {
     "Layout": "Deck layout",

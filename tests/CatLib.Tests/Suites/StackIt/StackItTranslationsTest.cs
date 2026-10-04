@@ -51,7 +51,10 @@ public sealed class StackItTranslationsTest : TestCase
         Assert.False(stack.KeepBalanced.Value, "By default a parcel falls when a parcel under it is taken");
         stack.KeepBalanced.LocalValue = true;
         Assert.AtLeast(1, changes, "Changing a setting tells the mod");
-        Assert.Equal("Stack it!", SettingTexts.ModName(sandbox.Settings, "ru"), "The name stays the same in every language");
+        Assert.Equal("Stack it!", SettingTexts.ModName(sandbox.Settings, "en"), "English name");
+        Assert.Equal("В стопку!", SettingTexts.ModName(sandbox.Settings, "ru"), "Russian name");
+        var description = SettingTexts.ModDescription(sandbox.Settings, "ru");
+        Assert.True(description.Length > 0 && description != SettingTexts.ModDescription(sandbox.Settings, "en"), "The description is translated");
         Assert.Equal("Держать равновесие", catalog.Find("setting.Bridges.KeepBalanced", "ru"), "Russian name of the balance setting");
         context.Note("Network policy of the mod: " + SessionPolicy.RequiredOnAll);
         yield break;

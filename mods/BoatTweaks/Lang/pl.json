@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Ustawienia łodzi"
+    "name": "Ustawienia łodzi",
+    "description": "Zmienia skrzynie i kosze na pokładzie łodzi oraz limity wysokości stosów. W trybie wieloosobowym wszystkich obowiązują ustawienia hosta."
   },
   "section": {
     "Layout": "Układ pokładu",

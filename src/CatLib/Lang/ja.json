@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "CatLib"
+    "name": "CatLib",
+    "description": "Cat Mail Co. のMOD用の基盤ライブラリ。"
   },
   "section": {
     "Diagnostics": "診断",

@@ -1,6 +1,7 @@
 {
   "mod": {
-    "name": "Réglages du bateau"
+    "name": "Réglages du bateau",
+    "description": "Change les caisses et paniers sur le pont du bateau et les limites de hauteur des piles. En multijoueur, les réglages de l'hôte s'appliquent à tous."
   },
   "section": {
     "Layout": "Disposition",

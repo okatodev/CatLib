@@ -102,6 +102,7 @@ foreach (var language in texts.Languages)
 | Key | Used for | Without a translation |
 |---|---|---|
 | `mod.name` | name in the mod list and on the card | plugin name |
+| `mod.description` | text on the card under the author, above the settings | `description` of the Thunderstore `manifest.json`, else nothing |
 | `section.<Section>` | section tape | section name split into words |
 | `setting.<Section>.<Key>` | row label | `Label(...)` from code, else the key split into words |
 | `setting.<Section>.<Key>.description` | context line | description from the declaration |
