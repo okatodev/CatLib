@@ -1,6 +1,6 @@
 # Changelog
 
-CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair and Parcel Board, have their own versions and changelogs.
+CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board and Stack it!, have their own versions and changelogs.
 
 ## Not released yet
 
@@ -12,6 +12,16 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
 - `CountTable` and `CountList` in `CatLib.UI`: a table and a list of icons and counts on a rounded, almost clear plate,
   with light outlined texts like the game's hints, rows with an icon and a faint hint, rows wrapped into columns and tables of the same height side by side; `UiSprites.RoundedPlate`, `UiSprites.FromPng` and `UiSprites.FromResource`.
 - New mod: Parcel Board 0.1.0, counts of the parcels in the level by destination, per mark and size, only for the player who has it.
+- `CatPatches` in `CatLib.Patching`: Harmony patches of a mod installed whole or not at all, each method and handler checked first;
+  errors in handlers are written a few times, counted, and turn the patches off after 50. See [Patching the game](docs/Patching.md).
+- `StoreGrid` and `GridView` in `CatLib.Game`: the grids of storages and parcels, free cells, roots of stacks and the cells a parcel takes,
+  computed like the game does. See [Storages](docs/Storages.md), with how the game stacks parcels and checks their marks.
+- `Il2CppArrays.TryGet` reads one cell of a two-dimensional IL2CPP array.
+- New mod: Stack it! 0.1.0, parcels that stand across the joint of level parcels and fall when one is taken away. Every player needs it.
+
+### Fixed
+
+- When the game cannot decode PNG images, CatLib says so once and decodes every icon itself, instead of trying the game first for each image.
 
 ## 0.6.2
 

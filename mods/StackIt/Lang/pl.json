@@ -1,0 +1,14 @@
+{
+  "mod": {
+    "name": "Stack it!"
+  },
+  "section": {
+    "Bridges": "Układanie"
+  },
+  "setting": {
+    "Bridges.Enabled": "Stawianie na styku",
+    "Bridges.Enabled.description": "Paczka może stać na dwóch lub więcej paczkach naraz, jeśli ich wierzch jest na tej samej wysokości i leży na nich całą powierzchnią.",
+    "Bridges.KeepBalanced": "Utrzymuj równowagę",
+    "Bridges.KeepBalanced.description": "Wyłączone: paczka stojąca na styku spada, gdy zabierzesz spod niej dowolną paczkę. Włączone: stoi, dopóki jej środek jest nad paczką, i jedzie razem z paczką pod swoim środkiem."
+  }
+}

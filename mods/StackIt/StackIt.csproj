@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>StackIt</AssemblyName>
     <RootNamespace>StackIt</RootNamespace>
-    <Version>0.0.1</Version>
+    <Version>0.1.0</Version>
     <PluginGuid>catlib.stackit</PluginGuid>
     <PluginMetaName>Stack it!</PluginMetaName>
     <CatLibDeployFolder>StackIt</CatLibDeployFolder>

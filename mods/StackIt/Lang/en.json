@@ -1,0 +1,14 @@
+{
+  "mod": {
+    "name": "Stack it!"
+  },
+  "section": {
+    "Bridges": "Stacking"
+  },
+  "setting": {
+    "Bridges.Enabled": "Stand across joints",
+    "Bridges.Enabled.description": "A parcel can stand on two or more parcels at once when their tops are level and it lies fully on them.",
+    "Bridges.KeepBalanced": "Keep balance",
+    "Bridges.KeepBalanced.description": "Off: a parcel standing across a joint falls when any parcel under it is taken away. On: it stays while its centre is above a parcel, and goes along with the parcel under its centre."
+  }
+}

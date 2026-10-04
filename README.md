@@ -31,7 +31,8 @@ docs/                        documentation
 | `CatLib.Threading` | `MainThread` dispatcher |
 | `CatLib.Events` | `SafeInvoker`, exception-isolated event invocation |
 | `CatLib.Il2Cpp` | Binding managed code to IL2CPP events; `Il2CppArrays` reads and writes two-dimensional IL2CPP arrays that interop cannot type |
-| `CatLib.Game` | `GameInfo`, read-only game state including the current save; `GameCompatibility`, whether the game build is the one CatLib is made for; `CatParcels`, the parcels of the level |
+| `CatLib.Patching` | `CatPatches`, Harmony patches of a mod installed whole or not at all, with errors in handlers isolated and counted |
+| `CatLib.Game` | `GameInfo`, read-only game state including the current save; `GameCompatibility`, whether the game build is the one CatLib is made for; `CatParcels`, the parcels of the level; `StoreGrid`, the grids of storages and parcels |
 | `CatLib.Game.Events` | Game events as plain .NET events, `GameEventStream` |
 | `CatLib.Game.Bridge` | Tracks game singletons and binds their events |
 | `CatLib.Config` | Live settings: `CatSettings`, `Setting<T>`, `CatConfig` |
@@ -56,6 +57,7 @@ Each mod in `mods/` is its own BepInEx plugin, released separately from CatLib:
 | [Shelf Labels](mods/ShelfLabels/README.md) | Up to three extra labels next to every shelf label, stored per save |
 | [Better Repair](mods/BetterRepair/README.md) | Cardboard of the repair table: unlimited, a larger stock, what a new day brings |
 | [Parcel Board](mods/ParcelBoard/README.md) | Counts of the parcels in the level by destination, per mark and size, for the player only |
+| [Stack it!](mods/StackIt/README.md) | Parcels that stand across the joint of level parcels, and fall when one is taken away |
 
 ## Building
 
@@ -119,6 +121,8 @@ Mods add their own commands with `DevMenu.Command`, see [Developer menu](docs/De
 - [Crash reports](docs/CrashReports.md)
 - [Folding lists](docs/Foldout.md)
 - [HUD and parcels](docs/Hud.md)
+- [Storages](docs/Storages.md)
+- [Patching the game](docs/Patching.md)
 - [Game events: observed behaviour](docs/GameEvents.md)
 - [Changelog](CHANGELOG.md)
 - [Roadmap](ROADMAP.md)

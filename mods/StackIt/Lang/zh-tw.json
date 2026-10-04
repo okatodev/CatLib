@@ -1,0 +1,14 @@
+{
+  "mod": {
+    "name": "Stack it!"
+  },
+  "section": {
+    "Bridges": "堆疊"
+  },
+  "setting": {
+    "Bridges.Enabled": "跨縫擺放",
+    "Bridges.Enabled.description": "只要下方包裹頂部齊平且包裹完全落在上面，就能橫跨兩個或更多包裹擺放。",
+    "Bridges.KeepBalanced": "保持平衡",
+    "Bridges.KeepBalanced.description": "關閉：橫跨接縫的包裹在下方任一包裹被拿走時掉落。開啟：只要中心還在某個包裹上方就不會掉，並隨中心下方的包裹一起移動。"
+  }
+}

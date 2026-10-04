@@ -1,0 +1,9 @@
+{
+  "name": "StackIt",
+  "version_number": "{version}",
+  "website_url": "https://github.com/okatodev/CatLib/tree/main/mods/StackIt",
+  "description": "Put a parcel across the joint of two level parcels, like on the boat. Take one away and it falls.",
+  "dependencies": [
+    "CatLib-CatLib-{catlib_version}"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "mod": {
+    "name": "Stack it!"
+  },
+  "section": {
+    "Bridges": "Impilare"
+  },
+  "setting": {
+    "Bridges.Enabled": "Appoggia sulle giunture",
+    "Bridges.Enabled.description": "Un pacco può poggiare su due o più pacchi insieme se i loro lati superiori sono alla stessa altezza e vi poggia per intero.",
+    "Bridges.KeepBalanced": "Mantieni l'equilibrio",
+    "Bridges.KeepBalanced.description": "Disattivato: un pacco appoggiato su una giuntura cade appena si toglie un pacco sotto di esso. Attivato: resta finché il suo centro è sopra un pacco e si sposta insieme al pacco sotto il suo centro."
+  }
+}

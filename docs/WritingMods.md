@@ -140,6 +140,12 @@ or `PlayerEvents.LocalPlayerSpawned`. Their observed order and meaning are in [G
 `CatParcels.Read()` lists the parcels of the level with their destinations, marks and sizes, and `HudLayer` with `CountList`
 draws on the screen during a level, out of the way of the game's menus. See [HUD and parcels](Hud.md).
 
+### Storages and patches
+
+`StoreGrid` reads the grids of storages and parcels the way the game uses them, see [Storages](Storages.md).
+A mod that changes the game's own behaviour patches its methods with `CatPatches`, which installs all patches or none
+and keeps errors in handlers away from the game, see [Patching the game](Patching.md).
+
 ### Game build
 
 `GameCompatibility.Current` tells whether the running game is a build this CatLib is made for: `Supported`, `GameNewer`,

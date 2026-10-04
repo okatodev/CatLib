@@ -1,0 +1,14 @@
+{
+  "mod": {
+    "name": "Stack it!"
+  },
+  "section": {
+    "Bridges": "積み重ね"
+  },
+  "setting": {
+    "Bridges.Enabled": "継ぎ目をまたいで置く",
+    "Bridges.Enabled.description": "上面の高さがそろっていて全体が乗るなら、荷物を2つ以上の荷物の上にまたがって置けます。",
+    "Bridges.KeepBalanced": "バランスを保つ",
+    "Bridges.KeepBalanced.description": "オフ：継ぎ目をまたいだ荷物は、下の荷物をどれか取ると落ちます。オン：中心が荷物の上にある間は残り、中心の下の荷物と一緒に動きます。"
+  }
+}

@@ -8,6 +8,7 @@
     "CatLib-BoatTweaks-{version:BoatTweaks}",
     "CatLib-ShelfLabels-{version:ShelfLabels}",
     "CatLib-BetterRepair-{version:BetterRepair}",
-    "CatLib-ParcelBoard-{version:ParcelBoard}"
+    "CatLib-ParcelBoard-{version:ParcelBoard}",
+    "CatLib-StackIt-{version:StackIt}"
   ]
 }

@@ -27,6 +27,10 @@ public sealed class Il2CppArraysTest : TestCase
         Assert.True(Il2CppArrays.TryRead2D<bool>(grid, out var values), "The array is read back");
         Assert.True(values[2, 3] && values[0, 1] && !values[1, 1], "Written cells hold their values, others stay false");
 
+        Assert.True(Il2CppArrays.TryGet(grid, 2, 3, out bool single) && single, "One cell is read alone");
+        Assert.True(Il2CppArrays.TryGet(grid, 1, 1, out bool empty) && !empty, "An unwritten cell reads false");
+        Assert.False(Il2CppArrays.TryGet(grid, 3, 0, out bool _), "Reading a row past the end is refused");
+        Assert.False(Il2CppArrays.TryGet(grid, 0, 0, out int _), "Reading a bool cell as an int is refused");
         Assert.False(Il2CppArrays.TrySet(grid, 3, 0, true), "A row past the end is refused");
         Assert.False(Il2CppArrays.TrySet(grid, 0, -1, true), "A negative column is refused");
         Assert.False(Il2CppArrays.TryRead2D<Vector3>(grid, out _), "Reading with a wrong element type is refused");

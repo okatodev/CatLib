@@ -1,0 +1,14 @@
+{
+  "mod": {
+    "name": "Stack it!"
+  },
+  "section": {
+    "Bridges": "Apilar"
+  },
+  "setting": {
+    "Bridges.Enabled": "Apoyar sobre juntas",
+    "Bridges.Enabled.description": "Un paquete puede apoyarse en dos o más paquetes a la vez si sus tapas están a la misma altura y descansa por completo sobre ellos.",
+    "Bridges.KeepBalanced": "Mantener el equilibrio",
+    "Bridges.KeepBalanced.description": "Desactivado: un paquete apoyado sobre una junta se cae en cuanto se quita cualquier paquete de debajo. Activado: se queda mientras su centro esté sobre un paquete y se va con el paquete que tiene bajo su centro."
+  }
+}

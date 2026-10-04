@@ -1,0 +1,14 @@
+{
+  "mod": {
+    "name": "Stack it!"
+  },
+  "section": {
+    "Bridges": "Stapeln"
+  },
+  "setting": {
+    "Bridges.Enabled": "Über Fugen stellen",
+    "Bridges.Enabled.description": "Ein Paket kann auf zwei oder mehr Paketen zugleich stehen, wenn ihre Oberseiten gleich hoch sind und es ganz auf ihnen liegt.",
+    "Bridges.KeepBalanced": "Gleichgewicht halten",
+    "Bridges.KeepBalanced.description": "Aus: Ein Paket über einer Fuge fällt, sobald ein Paket darunter weggenommen wird. An: Es bleibt stehen, solange seine Mitte über einem Paket liegt, und wandert mit dem Paket unter seiner Mitte mit."
+  }
+}

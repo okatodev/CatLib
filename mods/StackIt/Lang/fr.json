@@ -1,0 +1,14 @@
+{
+  "mod": {
+    "name": "Stack it!"
+  },
+  "section": {
+    "Bridges": "Empilage"
+  },
+  "setting": {
+    "Bridges.Enabled": "Poser à cheval",
+    "Bridges.Enabled.description": "Un colis peut reposer sur deux colis ou plus à la fois si leurs dessus sont au même niveau et qu'il repose entièrement dessus.",
+    "Bridges.KeepBalanced": "Garder l'équilibre",
+    "Bridges.KeepBalanced.description": "Désactivé : un colis posé à cheval tombe dès qu'on retire un colis en dessous. Activé : il reste en place tant que son centre est au-dessus d'un colis, et suit le colis situé sous son centre."
+  }
+}

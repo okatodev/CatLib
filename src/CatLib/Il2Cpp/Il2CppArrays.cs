@@ -93,6 +93,19 @@ public static unsafe class Il2CppArrays
         return true;
     }
 
+    public static bool TryGet<T>(Il2CppObjectBase array, int row, int column, out T value) where T : unmanaged
+    {
+        value = default;
+        if (!Fits<T>(array, out var rows, out var columns) || row < 0 || column < 0 || row >= rows || column >= columns)
+        {
+            return false;
+        }
+
+        var data = (T*)((byte*)array.Pointer + DataOffset);
+        value = data[row * columns + column];
+        return true;
+    }
+
     public static bool TrySet<T>(Il2CppObjectBase array, int row, int column, T value) where T : unmanaged
     {
         if (!Fits<T>(array, out var rows, out var columns) || row < 0 || column < 0 || row >= rows || column >= columns)

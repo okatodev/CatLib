@@ -1,0 +1,14 @@
+{
+  "mod": {
+    "name": "Stack it!"
+  },
+  "section": {
+    "Bridges": "Empilhar"
+  },
+  "setting": {
+    "Bridges.Enabled": "Apoiar sobre emendas",
+    "Bridges.Enabled.description": "Um pacote pode ficar sobre dois ou mais pacotes ao mesmo tempo se o topo deles estiver na mesma altura e ele ficar inteiro sobre eles.",
+    "Bridges.KeepBalanced": "Manter o equilíbrio",
+    "Bridges.KeepBalanced.description": "Desligado: um pacote apoiado sobre uma emenda cai quando qualquer pacote embaixo dele é retirado. Ligado: ele fica enquanto o centro estiver sobre um pacote e vai junto com o pacote sob o centro."
+  }
+}
