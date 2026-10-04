@@ -4,9 +4,9 @@ What is planned, in rough order. Finished work is removed from here and describe
 
 ## Mods
 
-- Stacking (`RequiredOnAll`): better compatibility of parcel sizes when stacking, which parcels can stand on which.
-  Needs patches of the game's placement code and a safe patching wrapper in CatLib
-  (the method must exist, errors are isolated and logged).
+- Stack it! (`RequiredOnAll`): parcels that stand across the joint of several level parcels, see [its README](mods/StackIt/README.md).
+  Needs patches of the game's placement, carrying and end-of-day checks and a safe patching wrapper in CatLib
+  (the method must exist, errors are isolated and logged). Research has started.
 - Late join: joining a game in progress. Builds on patches, mod messages and entity synchronization.
 - Portable Magnifying Glass, after late join and harder than it: the mod works with 3D models.
   Needs an asset API in CatLib, which has none yet: loading models, textures and other assets from a mod's folder.

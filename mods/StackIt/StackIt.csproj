@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>StackIt</AssemblyName>
+    <RootNamespace>StackIt</RootNamespace>
+    <Version>0.0.1</Version>
+    <PluginGuid>catlib.stackit</PluginGuid>
+    <PluginMetaName>Stack it!</PluginMetaName>
+    <CatLibDeployFolder>StackIt</CatLibDeployFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CatLib\CatLib.csproj" Private="false" />
+  </ItemGroup>
+</Project>
