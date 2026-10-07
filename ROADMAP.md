@@ -4,10 +4,13 @@ What is planned, in rough order. Finished work is removed from here and describe
 
 ## Mods
 
-- Late join: joining a game in progress. Builds on patches, mod messages and entity synchronization.
-- Portable Magnifying Glass, after late join and harder than it: the mod works with 3D models.
+- Portable Magnifying Glass, harder than Too Late: the mod works with 3D models.
   Needs an asset API in CatLib, which has none yet: loading models, textures and other assets from a mod's folder.
   Assets come up in many mods, so the API is for every mod author, not only for this one.
+- Custom stamps: an API for packs of stamp images that players put on parcels, and a mod that loads such packs.
+  A pack is a folder of images with a small description; the images are added to the game's stamps.
+  Builds on the asset API. Stamps stay on parcels in saves and are seen by every player,
+  so the API decides what others see when they do not have the pack.
 
 ## Crash reports
 

@@ -56,3 +56,31 @@ to work as without the mod until it restarts.
 A patch that changes what the game allows (where a parcel may stand, what breaks) must run on every player the same way,
 so such a mod is `RequiredOnAll`. Methods the game runs only on the host, like the end-of-day damage checks or the tipping over of stacks,
 are only patched in effect on the host. See [Storages](Storages.md) for how the game stacks parcels.
+
+## Changing a few bytes of the game's code
+
+Some rules of the game are numbers or jumps compiled into one method, where no Harmony patch can reach them.
+`CodePatch` changes such bytes in place, after checking that they are exactly what the mod expects:
+
+```csharp
+var connect = typeof(Server).GetMethods().First(method => method.Name == nameof(Server.HandleClientConnect)
+    && method.GetParameters()[0].ParameterType == typeof(ulong));
+var limit = CodePatch.Locate(PluginMeta.Guid, "player limit", log, connect, "E8 ?? ?? ?? ?? 83 F8 05 0F 8D", offset: 7, length: 1);
+if (limit.IsFound)
+{
+    limit.Write(new byte[] { 9 });
+}
+
+limit.Restore();
+```
+
+- `Locate` reads the start of the method's native code (2 KiB by default) and looks for the byte pattern; `??` matches any byte.
+  The pattern must be found exactly once. `offset` and `length` say which bytes of the match change.
+  Otherwise `IsFound` is false, `Problem` says why, and the mod keeps the game's behaviour.
+- `Write` and `Restore` first check that the bytes are still what the patch left there. If something else changed them,
+  the patch gives up and writes that to the log instead of overwriting foreign code.
+- Patterns hold the bytes around the change, so a game update that moves the method still works, and one that changes it is noticed.
+  Write them from the disassembly of the current `GameAssembly.dll`.
+- Only Windows is supported. Keep such changes small: a constant or a jump, never new code.
+
+`BytePattern.Parse` and `CodePatch.TryFindSite` work on plain byte arrays, so patterns can be tested without the game.

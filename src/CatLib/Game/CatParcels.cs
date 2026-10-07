@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CatLib.Localization;
 using CatLib.Logging;
+using Il2CppInterop.Runtime;
 using UnityEngine;
 
 namespace CatLib.Game;
@@ -40,39 +41,63 @@ public static class CatParcels
             return result;
         }
 
+        var stamps = Singleton<EntityPropertiesManager>.HasInstance() ? Singleton<EntityPropertiesManager>.Instance : null;
+        if (!IsHost())
+        {
+            var found = UnityEngine.Object.FindObjectsByType(Il2CppType.Of<EntityParcel>(), FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            if (found != null)
+            {
+                foreach (var item in found)
+                {
+                    Add(result, item?.TryCast<EntityParcel>(), stamps);
+                }
+            }
+
+            return result;
+        }
+
         var parcels = Singleton<ParcelManager>.Instance.GetAllParcels();
         if (parcels == null)
         {
             return result;
         }
 
-        var stamps = Singleton<EntityPropertiesManager>.HasInstance() ? Singleton<EntityPropertiesManager>.Instance : null;
         for (var index = 0; index < parcels.Count; index++)
         {
-            var parcel = parcels[index];
-            if (parcel == null || parcel.WasCollected || parcel.IsDisposed)
-            {
-                continue;
-            }
-
-            try
-            {
-                var info = Describe(parcel, stamps);
-                if (info != null)
-                {
-                    result.Add(info);
-                }
-            }
-            catch (Exception exception)
-            {
-                if (_failures++ < 5)
-                {
-                    _log?.Warning($"Reading a parcel failed: {exception.Message}");
-                }
-            }
+            Add(result, parcels[index], stamps);
         }
 
         return result;
+    }
+
+    private static bool IsHost()
+    {
+        var network = Singleton<NetworkManager>.HasInstance() ? Singleton<NetworkManager>.Instance : null;
+        return network == null || network.IsServer;
+    }
+
+    private static void Add(List<ParcelInfo> result, EntityParcel parcel, EntityPropertiesManager stamps)
+    {
+        if (parcel == null || parcel.WasCollected || parcel.IsDisposed)
+        {
+            return;
+        }
+
+        try
+        {
+            var info = Describe(parcel, stamps);
+            if (info != null)
+            {
+                result.Add(info);
+            }
+        }
+        catch (Exception exception)
+        {
+            if (_failures++ < 5)
+            {
+                _log?.Warning($"Reading a parcel failed: {exception.Message}");
+            }
+        }
     }
 
     public static ParcelInfo Describe(Entity parcel) =>

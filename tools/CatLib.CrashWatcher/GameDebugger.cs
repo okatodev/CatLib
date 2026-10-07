@@ -19,6 +19,8 @@ internal sealed class DebugOutcome
     public int PassedExceptions { get; set; }
 
     public int EarlyDumps { get; set; }
+
+    public int SkippedBreakpoints { get; set; }
 }
 
 internal static class GameDebugger
@@ -27,6 +29,7 @@ internal static class GameDebugger
     public const uint BreakpointCode = 0x80000003;
     public const uint Wow64BreakpointCode = 0x4000001F;
     public const int MaxEarlyDumps = 10;
+    public const int MaxLoggedBreakpoints = 5;
     public static readonly TimeSpan EarlyDumpPause = TimeSpan.FromSeconds(5);
     public static readonly uint[] FatalCodes = { 0xC0000005, 0xC000001D, 0xC0000096, 0xC00000FD, 0xC0000374, 0xC0000409, 0xC0000420 };
 
@@ -79,6 +82,16 @@ internal static class GameDebugger
                         if (firstChance && !initialBreak && (exceptionCode == BreakpointCode || exceptionCode == Wow64BreakpointCode))
                         {
                             initialBreak = true;
+                        }
+                        else if (firstChance && (exceptionCode == BreakpointCode || exceptionCode == Wow64BreakpointCode))
+                        {
+                            outcome.SkippedBreakpoints++;
+                            if (outcome.SkippedBreakpoints <= MaxLoggedBreakpoints)
+                            {
+                                var point = Describe(process, thread, exceptionCode, debugEvent, log);
+                                log.Write($"The game stopped at a breakpoint in {point.Module} + {point.Offset} on thread {thread}; " +
+                                          "such stops happen only while a debugger follows the game, so it goes on");
+                            }
                         }
                         else if (firstChance)
                         {

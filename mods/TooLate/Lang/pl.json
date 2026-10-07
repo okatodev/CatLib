@@ -1,0 +1,31 @@
+{
+  "mod": {
+    "name": "Za późno",
+    "description": "Dołączaj do gry, która już trwa. Do 8 graczy. Potrzebny tylko hostowi."
+  },
+  "section": {
+    "Join": "Dołączanie",
+    "Messages": "Komunikaty"
+  },
+  "setting": {
+    "Join.Enabled": "Dołączanie do trwającej gry",
+    "Join.Enabled.description": "Gracze mogą dołączyć, gdy już gracie. Dostają magazyn taki, jaki jest teraz. Mod potrzebny jest tylko hostowi.",
+    "Join.MaxPlayers": "Najwięcej graczy",
+    "Join.MaxPlayers.description": "Ilu graczy mieści się w twojej grze, razem z tobą. 4 to limit gry. Powyżej 4 lobby pokazuje dodatkowych graczy jako liczbę, a okienek nadal są cztery.",
+    "Messages.Enabled": "Komunikaty o dołączaniu",
+    "Messages.Enabled.description": "Mówi, kiedy gracz zaczyna dołączać, czeka na koniec podsumowania dnia i jest już w grze. Tylko dla ciebie."
+  },
+  "message": {
+    "joining": "{0} dołącza do gry",
+    "waiting": "{0} dołączy po podsumowaniu dnia",
+    "joined": "{0} jest w grze",
+    "failed": "{0} nie mógł dołączyć, szczegóły w logu"
+  },
+  "lobby": {
+    "more": {
+      "one": "+{0} gracz",
+      "few": "+{0} gracze",
+      "many": "+{0} graczy"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "mod": {
+    "name": "遲到了",
+    "description": "加入已經開始的遊戲。最多 8 名玩家。只有房主需要。"
+  },
+  "section": {
+    "Join": "加入",
+    "Messages": "訊息"
+  },
+  "setting": {
+    "Join.Enabled": "加入進行中的遊戲",
+    "Join.Enabled.description": "你已經在玩時，其他玩家也能加入。他們會得到倉庫此刻的樣子。只有房主需要此模組。",
+    "Join.MaxPlayers": "最多玩家",
+    "Join.MaxPlayers.description": "你的遊戲能容納多少玩家，包括你自己。4 人是遊戲的上限。超過 4 人時，大廳以數字顯示多出的玩家，櫃台仍是四個。",
+    "Messages.Enabled": "加入訊息",
+    "Messages.Enabled.description": "當玩家開始加入、等待當天結算結束以及進入遊戲時告訴你。只對你顯示。"
+  },
+  "message": {
+    "joining": "{0} 正在加入遊戲",
+    "waiting": "{0} 將在當天結算後加入",
+    "joined": "{0} 已加入遊戲",
+    "failed": "{0} 無法加入，請查看日誌"
+  },
+  "lobby": {
+    "more": {
+      "other": "+{0} 名玩家"
+    }
+  }
+}

@@ -3,6 +3,16 @@
 Everything below was recorded with `CatLib.Tests` timelines on game version `CMC 1.01.00.1763.9722.17497`
 in two two-player sessions (one host, one client, both on Windows). It describes what the game does, not what the event names suggest.
 
+## Records of mods
+
+A mod can add its own steps to the same stream, so they appear in timelines next to the game's events:
+
+```csharp
+GameEventStream.Publish("TooLate.Loading", $"client={clientId}");
+```
+
+Name the events after the mod, `ModName.Step`. Arguments are free text.
+
 ## Who receives what
 
 | Event | Host | Client | Meaning |

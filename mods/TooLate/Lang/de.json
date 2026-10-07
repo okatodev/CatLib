@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Zu spät",
+    "description": "Tritt einem laufenden Spiel bei. Bis zu 8 Spieler. Nur der Host braucht sie."
+  },
+  "section": {
+    "Join": "Beitreten",
+    "Messages": "Meldungen"
+  },
+  "setting": {
+    "Join.Enabled": "Laufendem Spiel beitreten",
+    "Join.Enabled.description": "Spieler können beitreten, während ihr schon spielt. Sie bekommen das Lager so, wie es gerade ist. Nur der Host braucht die Mod.",
+    "Join.MaxPlayers": "Höchstens Spieler",
+    "Join.MaxPlayers.description": "Wie viele Spieler in dein Spiel passen, du eingeschlossen. 4 ist die Grenze des Spiels. Über 4 zeigt die Lobby die weiteren Spieler als Zahl, und es bleibt bei vier Schaltern.",
+    "Messages.Enabled": "Beitrittsmeldungen",
+    "Messages.Enabled.description": "Sagt dir, wenn ein Spieler beitritt, auf das Ende der Tagesauswertung wartet und im Spiel ist. Nur für dich."
+  },
+  "message": {
+    "joining": "{0} tritt dem Spiel bei",
+    "waiting": "{0} kommt nach der Tagesauswertung",
+    "joined": "{0} ist im Spiel",
+    "failed": "{0} konnte nicht beitreten, siehe Log"
+  },
+  "lobby": {
+    "more": {
+      "one": "+{0} Spieler",
+      "other": "+{0} Spieler"
+    }
+  }
+}

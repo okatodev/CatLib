@@ -7,7 +7,7 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
 ### Added
 
 - `CatParcels` in `CatLib.Game`: every parcel of the level as a `ParcelInfo` with its destination, marks, size, footprint on a shelf, weight, damage,
-  missing stamps and place, the game's stamp icons and region names. See [HUD and parcels](docs/Hud.md).
+  missing stamps and place, the game's stamp icons and region names, on the host and on the other players, whose game keeps no list of parcels. See [HUD and parcels](docs/Hud.md).
 - `HudLayer` in `CatLib.UI`: a layer on the game's HUD during a level that steps aside for the game's menus, and texts in the game's font.
 - `CountTable` and `CountList` in `CatLib.UI`: a table and a list of icons and counts on a rounded, almost clear plate,
   with light outlined texts like the game's hints, rows with an icon and a faint hint, rows wrapped into columns and tables of the same height side by side; `UiSprites.RoundedPlate`, `UiSprites.FromPng` and `UiSprites.FromResource`.
@@ -18,6 +18,11 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
   computed like the game does. See [Storages](docs/Storages.md), with how the game stacks parcels and checks their marks.
 - `Il2CppArrays.TryGet` reads one cell of a two-dimensional IL2CPP array.
 - New mod: Stack it! 0.1.0, parcels that stand across the joint of level parcels and fall when one is taken away. Every player needs it.
+- `CodePatch` and `BytePattern` in `CatLib.Patching`: a few bytes of the game's code changed in place, found by a byte pattern
+  and checked before every change, for rules compiled into a method where no Harmony patch reaches. See [Patching the game](docs/Patching.md).
+- `GameEventStream.Publish` is public: mods add their own steps to the timelines.
+- `CatNetwork.PlayerName` gives the Steam name of a player.
+- New mod: Too Late 0.1.0, joining a game in progress and up to 8 players. Only the host needs it.
 - The mod card on the Mods tab shows the mod's description under the author, across the whole card: `mod.description` from the catalog,
   else the description of the Thunderstore manifest. `CatSettings.Description` sets it from code. Every mod here has it in all 13 languages.
 

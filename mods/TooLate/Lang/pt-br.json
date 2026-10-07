@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Tarde demais",
+    "description": "Entre numa partida que já começou. Até 8 jogadores. Só o anfitrião precisa."
+  },
+  "section": {
+    "Join": "Entrada",
+    "Messages": "Mensagens"
+  },
+  "setting": {
+    "Join.Enabled": "Entrar na partida em curso",
+    "Join.Enabled.description": "Jogadores podem entrar enquanto você já está jogando. Eles recebem o armazém como ele está agora. Só o anfitrião precisa do mod.",
+    "Join.MaxPlayers": "Máximo de jogadores",
+    "Join.MaxPlayers.description": "Quantos jogadores cabem na sua partida, contando você. 4 é o limite do jogo. Acima de 4, o lobby mostra os jogadores extras como um número, e continuam sendo quatro balcões.",
+    "Messages.Enabled": "Mensagens de entrada",
+    "Messages.Enabled.description": "Avisa quando um jogador começa a entrar, espera o fim do resumo do dia e já está na partida. Só para você."
+  },
+  "message": {
+    "joining": "{0} está entrando na partida",
+    "waiting": "{0} entra depois do resumo do dia",
+    "joined": "{0} está na partida",
+    "failed": "{0} não conseguiu entrar, veja o log"
+  },
+  "lobby": {
+    "more": {
+      "one": "+{0} jogador",
+      "other": "+{0} jogadores"
+    }
+  }
+}

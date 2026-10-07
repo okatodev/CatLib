@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Troppo tardi",
+    "description": "Unisciti a una partita già in corso. Fino a 8 giocatori. Serve solo all'host."
+  },
+  "section": {
+    "Join": "Ingresso",
+    "Messages": "Messaggi"
+  },
+  "setting": {
+    "Join.Enabled": "Unirsi a una partita in corso",
+    "Join.Enabled.description": "I giocatori possono unirsi mentre state già giocando. Ricevono il magazzino così com'è adesso. Solo l'host ha bisogno della mod.",
+    "Join.MaxPlayers": "Giocatori al massimo",
+    "Join.MaxPlayers.description": "Quanti giocatori entrano nella tua partita, te compreso. 4 è il limite del gioco. Oltre 4 la lobby mostra i giocatori in più come numero, e gli sportelli restano quattro.",
+    "Messages.Enabled": "Messaggi di ingresso",
+    "Messages.Enabled.description": "Ti avvisa quando un giocatore inizia a unirsi, aspetta la fine del riepilogo della giornata ed è in partita. Solo per te."
+  },
+  "message": {
+    "joining": "{0} si sta unendo alla partita",
+    "waiting": "{0} entra dopo il riepilogo della giornata",
+    "joined": "{0} è in partita",
+    "failed": "{0} non è riuscito a unirsi, vedi il log"
+  },
+  "lobby": {
+    "more": {
+      "one": "+{0} giocatore",
+      "other": "+{0} giocatori"
+    }
+  }
+}

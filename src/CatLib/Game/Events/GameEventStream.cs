@@ -20,9 +20,9 @@ public static class GameEventStream
     public static IReadOnlyList<KeyValuePair<string, long>> SnapshotCounters() =>
         Counters.OrderBy(pair => pair.Key, StringComparer.Ordinal).ToList();
 
-    internal static void Publish(string eventName) => Publish(eventName, string.Empty);
+    public static void Publish(string eventName) => Publish(eventName, string.Empty);
 
-    internal static void Publish(string eventName, string arguments)
+    public static void Publish(string eventName, string arguments)
     {
         Counters.AddOrUpdate(eventName, 1, (_, count) => count + 1);
 

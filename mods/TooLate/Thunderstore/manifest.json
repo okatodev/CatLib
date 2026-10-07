@@ -1,0 +1,9 @@
+{
+  "name": "TooLate",
+  "version_number": "{version}",
+  "website_url": "https://github.com/okatodev/CatLib/tree/main/mods/TooLate",
+  "description": "Join a game that is already running. Up to 8 players. Only the host needs it.",
+  "dependencies": [
+    "CatLib-CatLib-{catlib_version}"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "mod": {
+    "name": "迟到了",
+    "description": "加入已经开始的游戏。最多 8 名玩家。只有房主需要。"
+  },
+  "section": {
+    "Join": "加入",
+    "Messages": "消息"
+  },
+  "setting": {
+    "Join.Enabled": "加入进行中的游戏",
+    "Join.Enabled.description": "你已经在玩时，其他玩家也能加入。他们会得到仓库此刻的样子。只有房主需要此模组。",
+    "Join.MaxPlayers": "最多玩家",
+    "Join.MaxPlayers.description": "你的游戏能容纳多少玩家，包括你自己。4 人是游戏的上限。超过 4 人时，大厅以数字显示多出的玩家，柜台仍是四个。",
+    "Messages.Enabled": "加入消息",
+    "Messages.Enabled.description": "当玩家开始加入、等待当天结算结束以及进入游戏时告诉你。只对你显示。"
+  },
+  "message": {
+    "joining": "{0} 正在加入游戏",
+    "waiting": "{0} 将在当天结算后加入",
+    "joined": "{0} 已加入游戏",
+    "failed": "{0} 无法加入，请查看日志"
+  },
+  "lobby": {
+    "more": {
+      "other": "+{0} 名玩家"
+    }
+  }
+}

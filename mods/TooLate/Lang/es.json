@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Demasiado tarde",
+    "description": "Únete a una partida ya empezada. Hasta 8 jugadores. Solo lo necesita el anfitrión."
+  },
+  "section": {
+    "Join": "Unirse",
+    "Messages": "Mensajes"
+  },
+  "setting": {
+    "Join.Enabled": "Unirse a una partida en curso",
+    "Join.Enabled.description": "Otros jugadores pueden unirse mientras ya estás jugando. Reciben el almacén tal como está ahora. Solo el anfitrión necesita el mod.",
+    "Join.MaxPlayers": "Jugadores como máximo",
+    "Join.MaxPlayers.description": "Cuántos jugadores caben en tu partida, contándote a ti. 4 es el límite del juego. Por encima de 4, la sala muestra a los jugadores de más como un número, y siguen siendo cuatro mostradores.",
+    "Messages.Enabled": "Mensajes de entrada",
+    "Messages.Enabled.description": "Te avisa cuando un jugador empieza a unirse, espera al final del resumen del día y ya está en la partida. Solo para ti."
+  },
+  "message": {
+    "joining": "{0} se está uniendo a la partida",
+    "waiting": "{0} entrará después del resumen del día",
+    "joined": "{0} está en la partida",
+    "failed": "{0} no pudo unirse, mira el registro"
+  },
+  "lobby": {
+    "more": {
+      "one": "+{0} jugador",
+      "other": "+{0} jugadores"
+    }
+  }
+}

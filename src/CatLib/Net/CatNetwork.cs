@@ -37,6 +37,8 @@ public static class CatNetwork
 
     public static bool IsActive(string modId) => SessionNetwork.IsModActive(modId);
 
+    public static string PlayerName(ulong steamId) => SessionNetwork.PlayerName(steamId);
+
     public static bool IsActive(BasePlugin plugin)
     {
         var metadata = plugin == null ? null : MetadataHelper.GetMetadata(plugin);

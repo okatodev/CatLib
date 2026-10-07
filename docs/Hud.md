@@ -18,7 +18,8 @@ Parcel Board is built on both.
 | `Place` | `Carried`, `Stored`, `Boat`, `Customer` or `Loose`, from the root of the stack the parcel stands in |
 
 `Read()` builds a fresh list, so call it a few times a second, not every frame. It works on the host and on clients:
-the game sends every parcel's destination, marks and size to every player.
+the game sends every parcel's destination, marks and size to every player. Only the host's `ParcelManager` lists the parcels
+(`EntityParcel.Start` registers them on the server only), so on the other players `Read()` finds the parcels in the scene.
 `RegionIcon`, `ConstraintIcon` and `RegionName` give the game's own stamp sprites and the translated region names.
 
 Missing stamps are read from the stamps on the parcel, not from the game's own checks: `IsDestinationValid` shows the wrong-stamp feedback

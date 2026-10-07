@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>TooLate</AssemblyName>
+    <RootNamespace>TooLate</RootNamespace>
+    <Version>0.1.0</Version>
+    <PluginGuid>catlib.toolate</PluginGuid>
+    <PluginMetaName>Too Late</PluginMetaName>
+    <CatLibDeployFolder>TooLate</CatLibDeployFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CatLib\CatLib.csproj" Private="false" />
+  </ItemGroup>
+</Project>

@@ -15,5 +15,6 @@
     <ProjectReference Include="..\..\mods\BetterRepair\BetterRepair.csproj" Private="false" />
     <ProjectReference Include="..\..\mods\ParcelBoard\ParcelBoard.csproj" Private="false" />
     <ProjectReference Include="..\..\mods\StackIt\StackIt.csproj" Private="false" />
+    <ProjectReference Include="..\..\mods\TooLate\TooLate.csproj" Private="false" />
   </ItemGroup>
 </Project>

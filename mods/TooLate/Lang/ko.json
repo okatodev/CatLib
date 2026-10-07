@@ -1,0 +1,29 @@
+{
+  "mod": {
+    "name": "지각생",
+    "description": "이미 진행 중인 게임에 참가하세요. 최대 8명. 호스트만 있으면 됩니다."
+  },
+  "section": {
+    "Join": "참가",
+    "Messages": "메시지"
+  },
+  "setting": {
+    "Join.Enabled": "진행 중인 게임에 참가",
+    "Join.Enabled.description": "이미 플레이 중일 때도 플레이어가 들어올 수 있습니다. 지금 그대로의 창고를 받습니다. 모드는 호스트만 있으면 됩니다.",
+    "Join.MaxPlayers": "최대 인원",
+    "Join.MaxPlayers.description": "당신을 포함해 게임에 들어올 수 있는 인원. 4명이 게임의 한도입니다. 4명을 넘으면 로비에 추가 인원이 숫자로 표시되고 창구는 네 개 그대로입니다.",
+    "Messages.Enabled": "참가 메시지",
+    "Messages.Enabled.description": "플레이어가 참가를 시작할 때, 하루 결과가 끝나기를 기다릴 때, 게임에 들어왔을 때 알려 줍니다. 나에게만 보입니다."
+  },
+  "message": {
+    "joining": "{0} 님이 게임에 들어오는 중",
+    "waiting": "{0} 님은 하루 결과 뒤에 들어옵니다",
+    "joined": "{0} 님이 게임에 들어왔습니다",
+    "failed": "{0} 님이 들어오지 못했습니다. 로그를 확인하세요"
+  },
+  "lobby": {
+    "more": {
+      "other": "+{0}명"
+    }
+  }
+}

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+- The game no longer closes when it stops at a breakpoint. Steam and other libraries stop there only when a debugger follows the game,
+  and the watcher is one, so the game closed with 0x80000003 where it goes on without the watcher, for example when the host returned to the menu
+  right after a player left. The watcher now lets the game go on and writes the first stops into its log.
+
 ## 1.0.0
 
 - A package of its own. Until now the crash watcher came inside CatLib (0.6.0 and 0.6.1); CatLib 0.6.2 and later depend on this package

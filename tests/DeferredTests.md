@@ -6,7 +6,14 @@ Checks that are not done yet because they need something we do not have now. Rem
 |---|---|---|
 | Better Repair, multiplayer | On a new day the cardboard stock is refilled for the host and the client by the setting | Not run yet |
 | Game, multiplayer | The client quits to the menu while the end-of-day summary is open; the host closes the summary and plays on | Not run yet |
-| Late join | A client joins a game in progress and gets the labels, placements, stands, the cardboard stock and the next boat deck of the host | Late join does not exist yet |
+| Too Late | A client joins a game in progress and gets the labels, placements, stands, the cardboard stock and the next boat deck of the host | Not run yet |
+| Too Late | A second player joins during the day: sees the warehouse as on the host, parcels moved while they loaded are where the host has them, their counter opens for everyone | Not run yet |
+| Too Late | A player connects during the day's results: waits in the lobby, loads when the next part of the day starts | Not run yet |
+| Too Late | A player joins, leaves and joins again in the same day; a player leaves while loading | Not run yet |
+| Too Late | 5 to 8 players: the limit setting lets the fifth in, the lobby shows "+1 player", the CatLib mods list in the lobby lists everyone | Needs five game copies |
+| Too Late | A player without mods joins a host with Too Late | Not run yet |
+| Game, multiplayer | A client quits to the menu and the host goes to the menu a few seconds later, ten times without Too Late: the host does not crash. With Too Late it crashed twice in `steamclient64.dll` while the game shut Steam down | Not run yet |
+| Parcel Board, multiplayer | On a client the board counts the parcels like on the host (the client's game keeps no list of parcels, CatLib finds them in the scene) | Not run yet |
 | Mods tab, Steam Deck | A text setting opens the virtual keyboard in Big Picture and on Steam Deck, the keyboard is titled with the setting's name, the typed text is saved | No Steam Deck |
 | Mods tab, gamepad | Moving through the mod list, the settings and the reset button with a real gamepad, sliders and text fields included | No gamepad; the automatic test passes |
 | Boat Tweaks | A generated deck "anywhere" gets a big 3x3 crate on its piece | Rare, not seen in a few boats yet |

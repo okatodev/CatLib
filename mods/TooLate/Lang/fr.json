@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Trop tard",
+    "description": "Rejoignez une partie déjà en cours. Jusqu'à 8 joueurs. Seul l'hôte en a besoin."
+  },
+  "section": {
+    "Join": "Rejoindre",
+    "Messages": "Messages"
+  },
+  "setting": {
+    "Join.Enabled": "Rejoindre une partie en cours",
+    "Join.Enabled.description": "Des joueurs peuvent rejoindre pendant que vous jouez déjà. Ils reçoivent l'entrepôt tel qu'il est en ce moment. Seul l'hôte a besoin du mod.",
+    "Join.MaxPlayers": "Joueurs au maximum",
+    "Join.MaxPlayers.description": "Combien de joueurs tiennent dans votre partie, vous compris. 4 est la limite du jeu. Au-delà de 4, le salon affiche les joueurs en plus sous forme de nombre, et il reste quatre guichets.",
+    "Messages.Enabled": "Messages d'arrivée",
+    "Messages.Enabled.description": "Vous prévient quand un joueur commence à rejoindre, attend la fin du bilan de la journée et est dans la partie. Pour vous seulement."
+  },
+  "message": {
+    "joining": "{0} rejoint la partie",
+    "waiting": "{0} arrive après le bilan de la journée",
+    "joined": "{0} est dans la partie",
+    "failed": "{0} n'a pas pu rejoindre, voir le journal"
+  },
+  "lobby": {
+    "more": {
+      "one": "+{0} joueur",
+      "other": "+{0} joueurs"
+    }
+  }
+}

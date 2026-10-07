@@ -1,0 +1,30 @@
+{
+  "mod": {
+    "name": "Too Late",
+    "description": "Join a game that is already running. Up to 8 players. Only the host needs it."
+  },
+  "section": {
+    "Join": "Joining",
+    "Messages": "Messages"
+  },
+  "setting": {
+    "Join.Enabled": "Join a running game",
+    "Join.Enabled.description": "Players can join while you are already playing. They get the warehouse as it is right now. Only the host needs the mod.",
+    "Join.MaxPlayers": "Players at most",
+    "Join.MaxPlayers.description": "How many players fit in your game, you included. 4 is the game's limit. Above 4 the lobby shows the extra players as a count, and the counters stay four.",
+    "Messages.Enabled": "Joining messages",
+    "Messages.Enabled.description": "Tells you when a player starts joining, waits for the end of the day's results and is in the game. Only for you."
+  },
+  "message": {
+    "joining": "{0} is joining the game",
+    "waiting": "{0} joins after the day's results",
+    "joined": "{0} joined the game",
+    "failed": "{0} could not join, see the log"
+  },
+  "lobby": {
+    "more": {
+      "one": "+{0} player",
+      "other": "+{0} players"
+    }
+  }
+}
