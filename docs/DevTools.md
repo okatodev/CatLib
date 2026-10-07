@@ -10,14 +10,20 @@ The `` ` `` key (the key left of 1, `MenuHotkey` in section `[DevTools]` of CatL
 | Key | Action |
 |---|---|
 | Up, Down | select a command |
+| Home, End | the first or the last command |
 | Enter | run the selected command |
 | 1-9 | run the command with that number |
-| Left, Right | previous or next group |
+| Left, Right or Page Up, Page Down | previous or next group |
 | Esc | close |
 
+The groups are listed on the left with the number of their commands, the commands of the selected group on the right,
+toggles with their state. A long list scrolls with the selection and says how many lines are above and below.
+Under the lists: the hint of the selected command, then the result of the last command with its time, green when it worked
+and red when it failed.
+
 The menu works without the mouse, so the camera keeps looking where it did: a dump of what the camera looks at
-captures exactly that. The menu stays open after a command so several can be run in a row.
-The line under the list shows the hint of the selected command, the line below it the result of the last one.
+captures exactly that. Where the cursor is free, as in the menus, a click selects a group or runs a command.
+The menu stays open after a command so several can be run in a row.
 
 ## Adding commands
 
@@ -42,5 +48,10 @@ and return where the file is.
 
 ## Drawing
 
-The panel is drawn with the game's IMGUI through `GUI.Box` and `GUI.Label` and scaled with `GUI.matrix` to the screen height.
-Windows, textures and font setters of IMGUI are stripped from the game build and are not used.
+The panel is drawn with the game's IMGUI and scaled with `GUI.matrix` to the screen height. The game build strips a lot of IMGUI:
+`GUI.DrawTexture`, windows and the setters of font size, font style, word wrap and clipping are missing. The panel only uses what is left:
+filled areas are `GUI.Box` with an empty `GUIStyle` whose background is `Texture2D.whiteTexture`, tinted with `GUI.color`
+(a copy of the skin's box style keeps its borders and draws thin lines thick);
+texts are `GUI.Label` with copies of the label style, aligned with `alignment` and coloured with `normal.textColor`.
+Lines that do not fit are cut with "…", measured with `GUIStyle.CalcMinMaxWidth`.
+Commands started with a click run in the next `Update`, not while the panel is drawn.

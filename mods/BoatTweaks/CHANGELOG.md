@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+
+- The Mods tab shows what Boat Tweaks does under its name, in all 13 languages. Needs CatLib 0.7.0.
+
 ## 0.3.0
 
 - Paused while not every player has Boat Tweaks: boats come like in the game with the game's heights. Needs CatLib 0.6.0.

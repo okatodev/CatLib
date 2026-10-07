@@ -35,11 +35,13 @@ public sealed class DevMenuModelTest : TestCase
 
         model.Press(DevKey.Digit2);
         Assert.Equal("UI dump: written", model.Status, "Digits run the command with that number");
+        Assert.False(model.StatusFailed, "A command that worked is not marked as failed");
         Assert.Equal(1, model.Selected, "and select it");
 
         model.Press(DevKey.Down);
         model.Press(DevKey.Enter);
         Assert.True(model.Status.StartsWith("Broken: failed, InvalidOperationException"), "A failing command is reported, not thrown");
+        Assert.True(model.StatusFailed, "A failing command is marked as failed");
 
         model.Press(DevKey.Down);
         Assert.Equal(0, model.Selected, "Down wraps to the first item");
@@ -69,6 +71,27 @@ public sealed class DevMenuModelTest : TestCase
         Assert.Equal(1, model.Selected, "Selection stays inside the shorter group");
         Assert.Equal(2, model.Current.Count, "Two items are left");
         Assert.Throws<ArgumentException>(() => DevItem.Command("Inspect", "", () => { }), "An item needs a label");
+
+        Assert.SequenceEqual(new[] { ("Inspect", 2), ("Network", 2) }, model.GroupSizes, "Every group with the number of its commands");
+        model.Press(DevKey.NextGroup);
+        Assert.Equal("Network", model.CurrentGroup, "Page Down shows the next group");
+        model.Press(DevKey.PreviousGroup);
+        Assert.Equal("Inspect", model.CurrentGroup, "Page Up shows the previous group");
+        model.Press(DevKey.Last);
+        Assert.Equal(1, model.Selected, "End selects the last command");
+        model.Press(DevKey.First);
+        Assert.Equal(0, model.Selected, "Home selects the first command");
+        Assert.True(model.SelectGroup(1), "A click selects a group");
+        Assert.Equal("Network", model.CurrentGroup, "The clicked group is shown");
+        Assert.False(model.SelectGroup(5), "A group that is not there is not selected");
+        Assert.True(model.SelectItem(1), "A click selects a command");
+        Assert.Equal(1, model.Selected, "The clicked command is selected");
+        Assert.False(model.SelectItem(-1), "A command that is not there is not selected");
+
+        Assert.Equal(0, DevMenuModel.FirstVisible(5, 4, 10), "A short list is shown whole");
+        Assert.Equal(0, DevMenuModel.FirstVisible(30, 3, 10), "The top of a long list stays at the top");
+        Assert.Equal(10, DevMenuModel.FirstVisible(30, 15, 10), "The selection is kept in the middle");
+        Assert.Equal(20, DevMenuModel.FirstVisible(30, 29, 10), "The end of a long list stays at the bottom");
         yield break;
     }
 }

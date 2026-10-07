@@ -1,8 +1,15 @@
 # Changelog
 
-CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board and Stack it!, have their own versions and changelogs.
+CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it! and Too Late, and CatLib Crash Watcher have their own versions and changelogs.
 
-## Not released yet
+## 0.7.0
+
+Released together with three new mods, Parcel Board 0.1.0, Stack it! 0.1.0 and Too Late 0.1.0,
+and with Boat Tweaks 0.3.1, Shelf Labels 0.2.1, Better Repair 0.1.1 and CatLib Crash Watcher 1.0.2.
+For players: the new mods, what every mod does on its card on the Mods tab, a paper label with the version in the main menu,
+no more crashes of the host in `steamclient64.dll` after a player leaves, and mod messages that keep arriving after a few quiet minutes.
+For mod authors: `CatParcels`, `StoreGrid`, `HudLayer`, `CountTable`, `CatPatches`, `CodePatch`, public `GameEventStream.Publish`,
+`CatNetwork.PlayerName` and a clearer developer menu. Checked with two game copies on one computer.
 
 ### Added
 
@@ -28,6 +35,13 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
 
 ### Changed
 
+- The developer menu is easier to read and to find things in: the groups are a list on the left with the number of their commands,
+  the commands on the right with a clear highlight and on/off marks for toggles, long lists scroll with the selection,
+  the result of the last command shows its time and is red when it failed. Home, End, Page Up and Page Down work, and a click selects
+  a group or runs a command where the cursor is free. See [Developer menu](docs/DevTools.md).
+- The CatLib version in the corner of the main menu is a paper label now, on the paper and tape of the game's lobby, with the CatLib icon
+  and a slight tilt. Pointing at it straightens it and unfolds the game build it was made for and the list of installed mods.
+  When the game build does not match, the label turns warm, shows the warning in red ink and gets a red stamp, pressed on as the menu opens.
 - The mod list on the Mods tab has two lines per mod: the name, and under it the version and the number of settings,
   or a mark such as "needs a restart" in its place. Icons are bigger, their empty edges are cut off and dense icons are drawn
   a little smaller, so every icon looks about the same size.

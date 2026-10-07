@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using CatLib.Game;
 
@@ -14,15 +16,10 @@ internal static class VersionBadgeText
     {
         var builder = new StringBuilder();
         var warning = Warning(check, languageCode);
-        if (warning != null)
-        {
-            builder.Append("<color=").Append(MarkColor).Append("><b>!</b></color>  ");
-        }
-
         builder.Append(Title);
         if (warning != null)
         {
-            builder.Append("\n<size=80%>").Append(warning).Append("</size>");
+            builder.Append("\n<size=80%><color=").Append(MarkColor).Append('>').Append(warning).Append("</color></size>");
         }
 
         if (hovered)
@@ -32,6 +29,9 @@ internal static class VersionBadgeText
 
         return builder.ToString();
     }
+
+    public static string ModList(IEnumerable<string> names) =>
+        string.Join(Separator, (names ?? Enumerable.Empty<string>()).Where(name => !string.IsNullOrWhiteSpace(name)).Select(name => name.Trim()));
 
     public static string Warning(GameBuildCheck check, string languageCode) => check?.Status switch
     {

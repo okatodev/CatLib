@@ -24,6 +24,10 @@ public sealed class DevMenuModel
 
     public string Status { get; private set; }
 
+    public bool StatusFailed { get; private set; }
+
+    public DateTime StatusTime { get; private set; }
+
     public int Count
     {
         get
@@ -63,6 +67,17 @@ public sealed class DevMenuModel
             lock (_sync)
             {
                 return _items.Where(item => item.Group == group).ToList();
+            }
+        }
+    }
+
+    public IReadOnlyList<(string Group, int Count)> GroupSizes
+    {
+        get
+        {
+            lock (_sync)
+            {
+                return _items.GroupBy(item => item.Group, StringComparer.Ordinal).Select(group => (group.Key, group.Count())).ToList();
             }
         }
     }
@@ -115,13 +130,19 @@ public sealed class DevMenuModel
             case DevKey.Down when items.Count > 0:
                 Selected = (Selected + 1) % items.Count;
                 break;
-            case DevKey.Left when groups.Count > 0:
+            case DevKey.Left or DevKey.PreviousGroup when groups.Count > 0:
                 GroupIndex = (GroupIndex - 1 + groups.Count) % groups.Count;
                 Selected = 0;
                 break;
-            case DevKey.Right when groups.Count > 0:
+            case DevKey.Right or DevKey.NextGroup when groups.Count > 0:
                 GroupIndex = (GroupIndex + 1) % groups.Count;
                 Selected = 0;
+                break;
+            case DevKey.First:
+                Selected = 0;
+                break;
+            case DevKey.Last when items.Count > 0:
+                Selected = items.Count - 1;
                 break;
             case DevKey.Enter:
                 Run(SelectedItem);
@@ -138,6 +159,45 @@ public sealed class DevMenuModel
         }
     }
 
+    public bool SelectGroup(int index)
+    {
+        var groups = Groups;
+        if (index < 0 || index >= groups.Count)
+        {
+            return false;
+        }
+
+        if (index != GroupIndex)
+        {
+            GroupIndex = index;
+            Selected = 0;
+        }
+
+        return true;
+    }
+
+    public bool SelectItem(int index)
+    {
+        if (index < 0 || index >= Current.Count)
+        {
+            return false;
+        }
+
+        Selected = index;
+        return true;
+    }
+
+    public static int FirstVisible(int count, int selected, int visible)
+    {
+        if (visible <= 0 || count <= visible)
+        {
+            return 0;
+        }
+
+        var first = Math.Clamp(selected, 0, count - 1) - visible / 2;
+        return Math.Clamp(first, 0, count - visible);
+    }
+
     public string Run(DevItem item)
     {
         if (item == null)
@@ -149,11 +209,15 @@ public sealed class DevMenuModel
         {
             var result = item.Run();
             Status = item.Label + ": " + (string.IsNullOrWhiteSpace(result) ? "done" : result);
+            StatusFailed = false;
+            StatusTime = DateTime.Now;
             Log?.Info("Developer menu: " + Status);
         }
         catch (Exception exception)
         {
             Status = item.Label + ": failed, " + exception.GetType().Name + ": " + exception.Message;
+            StatusFailed = true;
+            StatusTime = DateTime.Now;
             Log?.Error("Developer menu command " + item.Label + " failed", exception);
         }
 

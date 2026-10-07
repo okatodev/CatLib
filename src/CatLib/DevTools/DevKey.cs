@@ -15,5 +15,9 @@ public enum DevKey
     Digit6,
     Digit7,
     Digit8,
-    Digit9
+    Digit9,
+    PreviousGroup,
+    NextGroup,
+    First,
+    Last
 }

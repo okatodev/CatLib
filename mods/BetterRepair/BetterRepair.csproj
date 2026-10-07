@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>BetterRepair</AssemblyName>
     <RootNamespace>BetterRepair</RootNamespace>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <PluginGuid>catlib.betterrepair</PluginGuid>
     <PluginMetaName>Better Repair</PluginMetaName>
     <CatLibDeployFolder>BetterRepair</CatLibDeployFolder>

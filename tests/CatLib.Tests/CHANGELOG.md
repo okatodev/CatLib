@@ -1,7 +1,8 @@
 # Changelog
 
-## Not released yet
+## 0.7.0
 
+- Tests of Parcel Board, Stack it! and Too Late, and of the new parts of CatLib: parcels, storages, patches, the HUD and the version label.
 - Tests of a mod that is not installed are skipped and counted apart.
 - Developer menu group Game, for the host in a level: serve the customers waiting at the counters, the next part of the day,
   and skip to the day's results.

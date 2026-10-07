@@ -6,9 +6,6 @@
   another exit and removed the dump it wrote when the overflow happened. Now that dump stays, and the report names the place
   of the overflow instead of "no crash record". The same goes for any crash within 10 seconds after an exception the game did not survive.
 - The exit code 0x800703E9 is named as a stack overflow.
-
-## 1.0.1
-
 - The game no longer closes when it stops at a breakpoint. Steam and other libraries stop there only when a debugger follows the game,
   and the watcher is one, so the game closed with 0x80000003 where it goes on without the watcher, for example when the host returned to the menu
   right after a player left. The watcher now lets the game go on and writes the first stops into its log.

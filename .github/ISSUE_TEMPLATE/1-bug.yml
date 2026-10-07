@@ -18,6 +18,10 @@ body:
         - Boat Tweaks
         - Shelf Labels
         - Better Repair
+        - Parcel Board
+        - Stack it!
+        - Too Late
+        - CatLib Crash Watcher (the crash window)
         - CatLib Tests
         - Not sure
     validations:
@@ -26,15 +30,15 @@ body:
     id: versions
     attributes:
       label: Versions
-      description: CatLib's version is in the bottom right corner of the main menu, the mods' versions are on the Mods tab in Settings.
-      placeholder: CatLib 0.6.1, Boat Tweaks 0.3.0
+      description: CatLib's version is on the label in the bottom right corner of the main menu, the mods' versions are on the Mods tab in Settings.
+      placeholder: CatLib 0.7.0, Stack it! 0.1.0, Too Late 0.1.0
     validations:
       required: true
   - type: dropdown
     id: corner
     attributes:
       label: Main menu corner
-      description: What the bottom right corner of the main menu says.
+      description: What the label in the bottom right corner of the main menu says.
       options:
         - Only the CatLib version
         - The game was updated, look for a CatLib update
@@ -47,7 +51,8 @@ body:
       options:
         - Alone
         - Hosting
-        - Joined someone
+        - Joined someone from the lobby
+        - Joined a game already running (Too Late)
     validations:
       required: true
   - type: textarea

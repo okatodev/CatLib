@@ -74,10 +74,15 @@ public sealed class MenuVersionBadgeTest : TestCase
             Assert.True(MenuVersionBadge.IsHovered, "Pointing at the badge is noticed");
             Assert.True(MenuVersionBadge.Label.text.Split('\n').Length > calmText.Split('\n').Length, "Pointing at the badge shows the detail line");
             context.Note("Hover: " + MenuVersionBadge.Label.text.Replace("\n", " | "));
+            var mods = MenuVersionBadge.ModsLabel;
+            Assert.True(mods != null && mods.gameObject.activeSelf && mods.text.Length > 0, "Pointing at the badge lists the installed mods");
+            context.Note("Mods: " + mods.text);
+            context.Note(MenuVersionBadge.UsesGamePaper ? "The badge is on the game's paper" : "The game's paper was not found, the badge is on a plain plate");
 
             MenuVersionBadge.PointerOverride = () => new Vector3(-10000f, -10000f, 0f);
             yield return Wait.Frames(3);
             Assert.Equal(calmText, MenuVersionBadge.Label.text, "Moving the pointer away hides the detail line");
+            Assert.False(MenuVersionBadge.ModsLabel.gameObject.activeSelf, "Moving the pointer away hides the mods");
 
             foreach (var preview in new[] { "CMC 1.02.00.1800.9800.100", "CMC 1.01.00.1700.9722.30000" })
             {
@@ -85,7 +90,7 @@ public sealed class MenuVersionBadgeTest : TestCase
                 yield return Wait.Frames(3);
                 var warning = VersionBadgeText.Warning(MenuVersionBadge.PreviewCheck, UiText.LanguageCode);
                 Assert.True(MenuVersionBadge.Label.text.Contains(warning), $"The {MenuVersionBadge.PreviewCheck.Status} warning is shown");
-                Assert.True(MenuVersionBadge.IsPlateWarning, "A warning has an amber plate");
+                Assert.True(MenuVersionBadge.IsPlateWarning, "A warning puts the stamp on the badge");
                 Assert.True(rect.sizeDelta.y > calmSize.y || check.IsWarning, "A warning makes the badge taller");
                 var bounds = CanvasRect(rect, canvasRect);
                 Assert.True(bounds.xMin >= area.xMin && bounds.xMax <= area.xMax + 0.5f, "The warning fits on the screen");

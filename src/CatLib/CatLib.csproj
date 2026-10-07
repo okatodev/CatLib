@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>CatLib</AssemblyName>
     <RootNamespace>CatLib</RootNamespace>
-    <Version>0.6.2</Version>
+    <Version>0.7.0</Version>
     <PluginGuid>catlib.core</PluginGuid>
     <PluginMetaName>CatLib</PluginMetaName>
     <CatLibDeployFolder>CatLib</CatLibDeployFolder>

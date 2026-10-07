@@ -6,7 +6,7 @@ CatLib does nothing to the game by itself. Mods are built on top of it, so when 
 
 ## For players
 
-- **Mods tab.** Open Settings and you'll find a Mods tab with every installed mod, its icon, author and version.
+- **Mods tab.** Open Settings and you'll find a Mods tab with every installed mod, its icon, author, version and what it does.
   Change settings right there and most of them apply straight away. Point at a setting to see what it does and what the default is.
   Each mod has a reset button.
 - **Your language.** Mods use the game's language, all 13 of them.
@@ -17,7 +17,7 @@ CatLib does nothing to the game by itself. Mods are built on top of it, so when 
   so removing a mod leaves it exactly as it was.
 - **When the game crashes.** A small window tells you what happened and keeps a report you can send to the mod's author.
   It also notices when the game freezes while quitting. This part is the CatLib Crash Watcher package, installed together with CatLib.
-- **After a game update.** The corner of the main menu shows the CatLib version.
+- **After a game update.** A small paper label in the corner of the main menu shows the CatLib version; point at it to see your mods.
   If the game has been updated and CatLib hasn't caught up yet, or your game is older than CatLib expects, it says so there.
 
 CatLib's own settings are on the Mods tab too: the crash window, and whether a player with other mods can stay in your lobby.
@@ -35,7 +35,12 @@ Everything below is documented in the repository.
 - **Saves.** `CatSaves.For(this)` stores data per game save, written with the game's save, atomically and with a backup.
   Only the host writes. The game's save file is never opened.
 - **Game events.** Loading, saving, the network and the player as plain .NET events, with their real order documented.
-- **UI.** `Notifications.Show` for messages in the game's style, `FoldoutList` for lists built from the game's own UI.
+- **UI.** `Notifications.Show` for messages in the game's style, `FoldoutList` for lists built from the game's own UI,
+  `HudLayer` and `CountTable` for small tables on the screen during a level.
+- **Parcels and storages.** `CatParcels` lists every parcel of the level with its marks, size, damage and place, for every player.
+  `StoreGrid` gives the grids of shelves and parcels, computed like the game does.
+- **Patching.** `CatPatches` installs Harmony patches all or nothing and turns them off after repeated errors;
+  `CodePatch` changes a few bytes of the game's code, found by a pattern and checked before every change.
 - **Game build.** `GameCompatibility.Status` tells whether the running game is the build CatLib was made for.
 - **Developer menu.** `DevMenu.Command` adds your tools to one in-game panel on the `` ` `` key.
 - **Crash reports.** Crashes in your mod come with a report, both logs and a memory dump.
