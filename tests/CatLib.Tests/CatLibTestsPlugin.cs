@@ -30,6 +30,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
     private CatLib.Tests.Diagnostics.Inspection.LabelCloneExperiment _labelClone;
     private CatLib.Tests.Diagnostics.LocalJoin _localJoin;
     private CrashTrigger _crashes;
+    private GameCheats _cheats;
     private MessageProbe _probes;
     private SaveProbe _saveProbe;
     private UiHierarchyDumper _uiDumper;
@@ -69,6 +70,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
         _labelClone = new CatLib.Tests.Diagnostics.Inspection.LabelCloneExperiment(_log.Scope("LabelClone"));
         _localJoin = new CatLib.Tests.Diagnostics.LocalJoin(_log.Scope("LocalJoin"));
         _crashes = new CrashTrigger(_log.Scope("Crash"));
+        _cheats = new GameCheats(_log.Scope("Cheats"));
         _entityInspector = new CatLib.Tests.Diagnostics.Inspection.EntityInspector(Path.Combine(outputDirectory, "Dumps"), () => _entityDumpTypes.Value, _log.Scope("Inspect"));
         _reportWriter = new TestReportWriter(Path.Combine(outputDirectory, "Reports"));
         _runner = new TestRunner(TestRegistry.Discover(typeof(CatLibTestsPlugin).Assembly), _log.Scope("Runner"));
@@ -92,6 +94,12 @@ public sealed class CatLibTestsPlugin : BasePlugin
         }, "Runs every test again. They also run by themselves when the main menu loads.");
         DevMenu.Toggle("Tests", "Run on main menu", () => _runOnMainMenu.Value, value => _runOnMainMenu.Value = value,
             "Runs all tests the first time the main menu loads. Saved as OnMainMenu in section [Run] of catlib.tests.cfg.");
+        DevMenu.Command("Game", "Serve the waiting customers", _cheats.ServeCustomers,
+            "Host only. Every customer who waits at a counter gets their request as if the right parcel was given.");
+        DevMenu.Command("Game", "Next part of the day", _cheats.NextPeriod,
+            "Host only. The game's own cheat: day, evening, results, night, dawn, results, day. Every player follows.");
+        DevMenu.Command("Game", "Skip to the day's results", _cheats.SkipToResults,
+            "Host only. Moves on one part of the day per frame until the results of the evening or the dawn are shown.");
         DevMenu.Command("Inspect", "Entity dump", () =>
         {
             _entityInspector.Dump();

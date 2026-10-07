@@ -33,9 +33,16 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
   a little smaller, so every icon looks about the same size.
 - Tests started in a level open the game's pause menu and its settings to reach the Mods tab, and stop waiting for the tab
   when it did not appear earlier in the run, instead of waiting for it in every test.
+- Tests of a mod that is not installed in the game are skipped and counted apart, instead of erroring on the missing assembly.
 
 ### Fixed
 
+- The game could crash in `steamclient64.dll` when it quit with a CatLib channel session open. CatLib now closes its sessions right before
+  the game shuts Steam down (a patch of `SteamAPI.Shutdown`), when returning to the menu and when quitting.
+  When a player left less than 5 seconds before, it waits for the rest of those 5 seconds first: the host crashed in `steamclient64.dll`
+  when it quit or returned to the menu a moment after a player left, while Steam was still closing the session with that player.
+- Mod messages sent after a few quiet minutes did not arrive, for example the cardboard stock of Better Repair at a new day:
+  Steam closes an idle session and the other side has to accept the new one. CatLib now keeps accepting the host and every player for the whole session.
 - When the game cannot decode PNG images, CatLib says so once and decodes every icon itself, instead of trying the game first for each image.
 
 ## 0.6.2

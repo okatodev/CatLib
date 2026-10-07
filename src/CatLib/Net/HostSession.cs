@@ -62,6 +62,8 @@ public sealed class HostSession
         return true;
     }
 
+    public IReadOnlyList<ulong> Peers => _peers.Keys.ToList();
+
     public IReadOnlyList<ulong> PendingPeers => _peers.Where(pair => pair.Value.Report == null).Select(pair => pair.Key).ToList();
 
     public void OnPeerConnected(ulong peer)

@@ -54,6 +54,11 @@ public sealed class BoardSceneTest : TestCase
             context.Note($"{constraint} icon: {(CatParcels.ConstraintIcon(constraint) == null ? "none" : CatParcels.ConstraintIcon(constraint).name)}");
         }
 
+        foreach (var list in System.Enum.GetValues(typeof(BoardList)).Cast<BoardList>().Where(list => list != BoardList.Sizes))
+        {
+            Assert.NotNull(global::ParcelBoard.Scene.BoardView.ListIcon(list), $"The list {list} has an icon, from the game or the mod");
+        }
+
         var wasHidden = controller.IsHidden;
         var wasOpen = controller.IsOpen;
         var wasEnabled = controller.Settings.Enabled.Value;

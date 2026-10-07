@@ -38,6 +38,13 @@ public sealed class CrashTextTest : TestCase
         Assert.True(CrashText.DescribeExitCode(0xC0000005, english).Contains("access violation"), "Access violation is named");
         Assert.True(CrashText.DescribeExitCode(0xE0434352, english).Contains(".NET"), "A .NET exception is named");
         Assert.Equal("unknown reason", CrashText.DescribeExitCode(0x12345678, english), "Unknown codes");
+        Assert.Equal(CrashText.DescribeExitCode(0xC00000FD, english), CrashText.DescribeExitCode(0x800703E9, english), "The .NET exit after a stack overflow is a stack overflow");
+        Assert.True(CrashText.ClosedByRaised(0xC0000005, 0xC0000005, TimeSpan.FromMinutes(5)), "The same code closes the game whenever it was raised");
+        Assert.True(CrashText.ClosedByRaised(0x800703E9, 0xC00000FD, TimeSpan.FromMinutes(5)), "A stack overflow closes the game through .NET");
+        Assert.True(CrashText.ClosedByRaised(0xC0000409, 0xC0000005, TimeSpan.FromSeconds(2)), "Another crash right after the exception comes from it");
+        Assert.False(CrashText.ClosedByRaised(0xC0000409, 0xC0000005, TimeSpan.FromMinutes(1)), "A crash long after the game recovered is another one");
+        Assert.False(CrashText.ClosedByRaised(0, 0xC0000005, TimeSpan.FromSeconds(2)), "A normal exit is not a crash");
+        Assert.False(CrashText.ClosedByRaised(1, 0xC0000005, TimeSpan.FromSeconds(2)), "Closing from outside is not a crash");
 
         var exit = new DateTime(2026, 9, 27, 12, 5, 0, DateTimeKind.Utc);
         var info = CrashText.ParseEvents(SampleEvents(exit), ProcessId, exit);

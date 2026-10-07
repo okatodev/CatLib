@@ -4,24 +4,15 @@ Checks that are not done yet because they need something we do not have now. Rem
 
 | Area | What to check | Why it waits |
 |---|---|---|
-| Better Repair, multiplayer | On a new day the cardboard stock is refilled for the host and the client by the setting | Not run yet |
-| Game, multiplayer | The client quits to the menu while the end-of-day summary is open; the host closes the summary and plays on | Not run yet |
 | Too Late | A client joins a game in progress and gets the labels, placements, stands, the cardboard stock and the next boat deck of the host | Not run yet |
 | Too Late | A second player joins during the day: sees the warehouse as on the host, parcels moved while they loaded are where the host has them, their counter opens for everyone | Not run yet |
 | Too Late | A player connects during the day's results: waits in the lobby, loads when the next part of the day starts | Not run yet |
 | Too Late | A player joins, leaves and joins again in the same day; a player leaves while loading | Not run yet |
 | Too Late | 5 to 8 players: the limit setting lets the fifth in, the lobby shows "+1 player", the CatLib mods list in the lobby lists everyone | Needs five game copies |
 | Too Late | A player without mods joins a host with Too Late | Not run yet |
-| Game, multiplayer | A client quits to the menu and the host goes to the menu a few seconds later, ten times without Too Late: the host does not crash. With Too Late it crashed twice in `steamclient64.dll` while the game shut Steam down | Not run yet |
-| Parcel Board, multiplayer | On a client the board counts the parcels like on the host (the client's game keeps no list of parcels, CatLib finds them in the scene) | Not run yet |
+| Too Late | The host quits or goes to the menu a second or two after a player left: no crash in `steamclient64.dll`, the log says CatLib waits for Steam | Checked without Too Late only |
 | Mods tab, Steam Deck | A text setting opens the virtual keyboard in Big Picture and on Steam Deck, the keyboard is titled with the setting's name, the typed text is saved | No Steam Deck |
 | Mods tab, gamepad | Moving through the mod list, the settings and the reset button with a real gamepad, sliders and text fields included | No gamepad; the automatic test passes |
-| Boat Tweaks | A generated deck "anywhere" gets a big 3x3 crate on its piece | Rare, not seen in a few boats yet |
-| Boat Tweaks | An own layout with a 3x3 block gets one big crate there, not smaller ones | Not run yet |
 | Thunderstore | A package from `Thunderstore-build` installed by a mod manager loads; the Mods tab shows its icon and the author from the package folder; CatLib starts the crash watcher from `plugins/CatLib-CrashWatcher` | Packages are not uploaded yet |
 | Crash watcher | In normal play no `looks hung` line appears in `watcher.log` after the fix of the quit hang | Needs time in normal play |
-| Parcel Board | In a level with Giant parcels, **Parcel sizes in the log** gives their footprint and box; the drawn Giant box (guessed 4x4x4 cells) matches it | No Giant parcels in the levels played so far |
-| Parcel Board, Stack it! | The test run started in a level: `BoardSceneTest` checks the board, the size icons and that the sizes table is as tall as the destinations; `StackSceneTest` checks that the mod finds the same cells as the game for every stored parcel | The last runs were started in the menu, where these tests only note that they need a level |
-| Stack it!, marks | A heavy parcel across a joint damages the side parcel under it at the next time of day, a fragile side parcel under any bridge breaks | Not run yet |
-| Stack it!, multiplayer | A client puts a parcel across a joint, the host and a second client see it there; the host takes a side parcel away and the parcel falls for everyone | Not run yet |
-| Stack it!, saves | A save with a parcel across a joint, loaded with the game without Stack it!: it loads and the parcel stands on the parcel under its centre | Not run yet |
+| Game, multiplayer | A client joins from the lobby into a big save (about 780 entities): no stack overflow. Once the client crashed with 0xC00000FD on the game thread a second after the second entity sync, inside the game's runtime; the dump was lost, the crash watcher 1.0.2 keeps it now | Rare, seen once; send the crash folder with `crash.dmp` if it happens again |

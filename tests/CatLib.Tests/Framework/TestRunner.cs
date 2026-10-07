@@ -12,6 +12,7 @@ public sealed class TestRunner
 
     private readonly IReadOnlyList<TestCase> _tests;
     private readonly CatLogger _log;
+    private readonly Dictionary<string, bool> _installed = new(StringComparer.Ordinal);
     private RunState _run;
 
     public TestRunner(IReadOnlyList<TestCase> tests, CatLogger log)
@@ -50,6 +51,11 @@ public sealed class TestRunner
                 return;
             }
 
+            if (_run.Active == null)
+            {
+                continue;
+            }
+
             if (!Advance(_run.Active))
             {
                 return;
@@ -66,6 +72,14 @@ public sealed class TestRunner
 
         var test = _tests[_run.NextIndex++];
         var context = new TestContext(_log.Scope(test.FullName), _run.Trigger);
+        var mod = test.RequiredMod;
+        if (mod != null && !IsInstalled(mod))
+        {
+            _run.Active = new ActiveTest(test, context, null);
+            Complete(TestStatus.Skipped, $"{mod} is not installed in this game");
+            return true;
+        }
+
         IEnumerator<TestStep> steps;
         try
         {
@@ -80,6 +94,17 @@ public sealed class TestRunner
 
         _run.Active = new ActiveTest(test, context, steps);
         return true;
+    }
+
+    private bool IsInstalled(string mod)
+    {
+        if (!_installed.TryGetValue(mod, out var installed))
+        {
+            installed = TestCase.IsModInstalled(mod);
+            _installed[mod] = installed;
+        }
+
+        return installed;
     }
 
     private bool Advance(ActiveTest active)
@@ -152,6 +177,10 @@ public sealed class TestRunner
         {
             _log.Info(line);
         }
+        else if (result.Status == TestStatus.Skipped)
+        {
+            _log.Info(line + ": " + result.Message);
+        }
         else
         {
             _log.Error(line + ": " + result.Message);
@@ -170,7 +199,7 @@ public sealed class TestRunner
 
         var summary = new TestRunSummary(run.Trigger, run.StartedAt, run.Stopwatch.Elapsed, run.Results);
         var line = $"Test run finished: {summary.Count(TestStatus.Passed)} passed, {summary.Count(TestStatus.Failed)} failed, " +
-                   $"{summary.Count(TestStatus.Errored)} errored, {summary.Count(TestStatus.TimedOut)} timed out " +
+                   $"{summary.Count(TestStatus.Errored)} errored, {summary.Count(TestStatus.TimedOut)} timed out, {summary.Count(TestStatus.Skipped)} skipped " +
                    "in " + InvariantFormat.Seconds(summary.Duration);
         if (summary.IsSuccessful)
         {

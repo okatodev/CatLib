@@ -5,5 +5,6 @@ public enum TestStatus
     Passed,
     Failed,
     Errored,
-    TimedOut
+    TimedOut,
+    Skipped
 }

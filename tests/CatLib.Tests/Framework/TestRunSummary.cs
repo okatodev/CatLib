@@ -8,5 +8,5 @@ public sealed record TestRunSummary(string Trigger, DateTime StartedAt, TimeSpan
 {
     public int Count(TestStatus status) => Results.Count(result => result.Status == status);
 
-    public bool IsSuccessful => Results.All(result => result.Status == TestStatus.Passed);
+    public bool IsSuccessful => Results.All(result => result.Status is TestStatus.Passed or TestStatus.Skipped);
 }

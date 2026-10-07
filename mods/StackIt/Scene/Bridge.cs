@@ -36,5 +36,28 @@ public sealed class Bridge
 
     public bool Waiting { get; set; }
 
+    public bool HasPose { get; private set; }
+
+    public Vector3 Position { get; private set; }
+
+    public Quaternion Rotation { get; private set; }
+
+    public void RememberPose(Transform transform)
+    {
+        Position = transform.position;
+        Rotation = transform.rotation;
+        HasPose = true;
+    }
+
+    public float CarriedSince { get; set; } = -1f;
+
+    public bool HasFallPlan { get; set; }
+
+    public StackIt.Logic.SlidePlan FallPlan { get; set; }
+
+    public int PlannedAt { get; set; } = -1000;
+
+    public void ForgetPose() => HasPose = false;
+
     public IntPtr Pointer => Entity == null ? IntPtr.Zero : Entity.Pointer;
 }

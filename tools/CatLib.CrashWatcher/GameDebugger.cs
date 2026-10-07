@@ -59,6 +59,7 @@ internal static class GameDebugger
         var earlyPath = string.IsNullOrEmpty(dumpPath) ? null : Path.ChangeExtension(dumpPath, ".early.dmp");
         CrashEventInfo early = null;
         var earlyAt = DateTime.MinValue;
+        var exitAt = DateTime.MinValue;
         try
         {
             while (!finished)
@@ -141,6 +142,7 @@ internal static class GameDebugger
                         break;
                     case NativeMethods.ExitProcessDebugEvent:
                         outcome.Exit.ExitCode = unchecked((uint)Marshal.ReadInt32(debugEvent, 16));
+                        exitAt = DateTime.UtcNow;
                         finished = true;
                         break;
                 }
@@ -159,7 +161,17 @@ internal static class GameDebugger
 
             NativeMethods.WaitForSingleObject(process, 5000);
             GameProcess.FillTimes(process, outcome.Exit);
-            if (outcome.Crash == null && early != null && outcome.Exit.ExitCode == ParseCode(early.ExceptionCode))
+            if (exitAt == DateTime.MinValue)
+            {
+                exitAt = DateTime.UtcNow;
+            }
+
+            if (outcome.Crash == null && early != null && !CrashText.ClosedByRaised(outcome.Exit.ExitCode, ParseCode(early.ExceptionCode), exitAt - earlyAt))
+            {
+                log.Write($"The game closed with {CrashText.Hex(outcome.Exit.ExitCode)} {(int)(exitAt - earlyAt).TotalSeconds} s after it raised {early.ExceptionCode} in {early.Module} + {early.Offset}, " +
+                          "it recovered from that, so its dump is removed");
+            }
+            else if (outcome.Crash == null && early != null)
             {
                 outcome.Crash = early;
                 if (Move(earlyPath, dumpPath, log))

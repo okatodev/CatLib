@@ -31,7 +31,7 @@ public sealed class TestReportWriter
         builder.AppendLine($"Unity:          {Safe(() => GameInfo.UnityVersion)}");
         builder.AppendLine($"Game version:   {Safe(() => GameInfo.GameVersion)}");
         builder.AppendLine($"Result:         {summary.Count(TestStatus.Passed)} passed, {summary.Count(TestStatus.Failed)} failed, " +
-                           $"{summary.Count(TestStatus.Errored)} errored, {summary.Count(TestStatus.TimedOut)} timed out");
+                           $"{summary.Count(TestStatus.Errored)} errored, {summary.Count(TestStatus.TimedOut)} timed out, {summary.Count(TestStatus.Skipped)} skipped");
         builder.AppendLine();
 
         foreach (var result in summary.Results)

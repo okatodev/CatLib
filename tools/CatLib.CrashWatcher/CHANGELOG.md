@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2
+
+- A stack overflow keeps its memory dump. .NET closes the game with 0x800703E9 after a stack overflow, the watcher took that for
+  another exit and removed the dump it wrote when the overflow happened. Now that dump stays, and the report names the place
+  of the overflow instead of "no crash record". The same goes for any crash within 10 seconds after an exception the game did not survive.
+- The exit code 0x800703E9 is named as a stack overflow.
+
 ## 1.0.1
 
 - The game no longer closes when it stops at a breakpoint. Steam and other libraries stop there only when a debugger follows the game,

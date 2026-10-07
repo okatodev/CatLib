@@ -62,7 +62,27 @@ internal static class CrashText
 
     public const string ExecuteAccess = "execute";
 
+    public const uint StackOverflowCode = 0xC00000FD;
+    public const uint DotnetStackOverflowCode = 0x800703E9;
+    public const uint ClosedOutsideCode = 1;
+    public static readonly TimeSpan RaisedBeforeExit = TimeSpan.FromSeconds(10);
+
     public static bool IsNormalExit(uint exitCode) => exitCode == 0;
+
+    public static bool ClosedByRaised(uint exitCode, uint raisedCode, TimeSpan raisedBeforeExit)
+    {
+        if (exitCode == raisedCode)
+        {
+            return true;
+        }
+
+        if (raisedCode == StackOverflowCode && exitCode == DotnetStackOverflowCode)
+        {
+            return true;
+        }
+
+        return !IsNormalExit(exitCode) && exitCode != ClosedOutsideCode && raisedBeforeExit >= TimeSpan.Zero && raisedBeforeExit <= RaisedBeforeExit;
+    }
 
     public static string AccessText(ulong kind, ulong address)
     {
@@ -84,7 +104,8 @@ internal static class CrashText
                 return "exit.heapCorruption";
             case 0xC0000409:
                 return "exit.failFast";
-            case 0xC00000FD:
+            case StackOverflowCode:
+            case DotnetStackOverflowCode:
                 return "exit.stackOverflow";
             case 0xC000001D:
                 return "exit.illegalInstruction";

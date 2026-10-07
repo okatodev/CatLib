@@ -17,6 +17,8 @@ internal static class SessionNetwork
     public const double HandshakeTimeoutSeconds = 12;
     public const double HelloResendSeconds = 2;
     public const double AcceptRetrySeconds = 1;
+    public static readonly TimeSpan DepartedCloseSettle = TimeSpan.FromSeconds(5);
+    public const string SteamShutdownPatchOwner = "catlib.core.steamshutdown";
     public const double KickGraceSeconds = 8;
     public const double ClientLeaveDelaySeconds = 4;
     public const string HostStartedEventName = "Net.HostStarted";
@@ -31,6 +33,8 @@ internal static class SessionNetwork
 
     private static readonly Stopwatch Clock = new();
     private static readonly HashSet<ulong> HostCandidates = new();
+    private static CatLib.Patching.CatPatches _steamShutdown;
+    private static TimeSpan _departedClosedAt = TimeSpan.MinValue;
     private static readonly Dictionary<ulong, double> PendingKicks = new();
     private static CatLogger _log;
     private static Setting<bool> _enabled;
@@ -118,6 +122,9 @@ internal static class SessionNetwork
             CloseChannelSessions();
             MainThread.Post(Stop);
         };
+        _steamShutdown = new CatLib.Patching.CatPatches(SteamShutdownPatchOwner, log)
+            .Prefix(typeof(SteamAPI), nameof(SteamAPI.Shutdown), Type.EmptyTypes, typeof(SessionNetwork), nameof(BeforeSteamShutdown));
+        _steamShutdown.Apply();
         BootstrapEvents.MainMenuLoaded += EndRestart;
         BootstrapEvents.LevelLoadStarted += EndRestart;
         CatConfig.EffectiveValueChanged += OnEffectiveValueChanged;
@@ -256,6 +263,35 @@ internal static class SessionNetwork
         GameEventStream.Publish(StoppedEventName);
     }
 
+    internal static void OnQuitting() => CloseChannelSessions();
+
+    private static void BeforeSteamShutdown()
+    {
+        if (_steamShutdown == null || !_steamShutdown.IsActive)
+        {
+            return;
+        }
+
+        try
+        {
+            CloseChannelSessions();
+            var since = _departedClosedAt == TimeSpan.MinValue ? TimeSpan.MaxValue : Clock.Elapsed - _departedClosedAt;
+            var delay = ShutdownDelay(since);
+            if (delay > TimeSpan.Zero)
+            {
+                _log.Info($"A player left {since.TotalSeconds:0.0} s ago, waiting {delay.TotalSeconds:0.0} s so Steam finishes closing the CatLib session with that player before it shuts down");
+                System.Threading.Thread.Sleep(delay);
+            }
+        }
+        catch (Exception exception)
+        {
+            _steamShutdown.Fault(nameof(BeforeSteamShutdown), exception);
+        }
+    }
+
+    internal static TimeSpan ShutdownDelay(TimeSpan sinceDepartedClose) =>
+        sinceDepartedClose < TimeSpan.Zero || sinceDepartedClose >= DepartedCloseSettle ? TimeSpan.Zero : DepartedCloseSettle - sinceDepartedClose;
+
     private static void CloseChannelSessions()
     {
         var transport = Transport;
@@ -296,28 +332,31 @@ internal static class SessionNetwork
 
     private static void AcceptPending()
     {
-        if (Host != null)
+        var peers = PeersToAccept(Host?.Peers, Client?.HostId ?? 0, Client != null && Client.Status == SessionStatus.Waiting, HostCandidates);
+        foreach (var peer in peers)
         {
-            foreach (var peer in Host.PendingPeers)
-            {
-                Transport.Accept(peer);
-            }
+            Transport.Accept(peer);
+        }
+    }
+
+    internal static IReadOnlyList<ulong> PeersToAccept(IEnumerable<ulong> hostPeers, ulong hostId, bool clientWaiting, IEnumerable<ulong> candidates)
+    {
+        var result = new List<ulong>();
+        if (hostPeers != null)
+        {
+            result.AddRange(hostPeers);
         }
 
-        if (Client != null && Client.Status == SessionStatus.Waiting)
+        if (hostId != 0)
         {
-            if (Client.HostId != 0)
-            {
-                Transport.Accept(Client.HostId);
-            }
-            else
-            {
-                foreach (var candidate in HostCandidates)
-                {
-                    Transport.Accept(candidate);
-                }
-            }
+            result.Add(hostId);
         }
+        else if (clientWaiting && candidates != null)
+        {
+            result.AddRange(candidates);
+        }
+
+        return result.Where(peer => peer != 0).Distinct().ToList();
     }
 
     private static void OnServerStarted() => MainThread.Post(StartHost);
@@ -386,7 +425,11 @@ internal static class SessionNetwork
             }
 
             PendingKicks.Remove(clientId);
-            Transport.Close(clientId);
+            if (Transport.Close(clientId))
+            {
+                _departedClosedAt = Clock.Elapsed;
+            }
+
             MenuNotices.ClearPlayerNotice(clientId);
             Host?.OnPeerDisconnected(clientId);
             Messenger.OnPeerLeft(clientId);

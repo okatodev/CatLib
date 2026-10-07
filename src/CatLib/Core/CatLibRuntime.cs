@@ -52,6 +52,7 @@ public static class CatLibRuntime
     internal static void Quit()
     {
         CrashWatch.MarkCleanExit();
+        SessionNetwork.OnQuitting();
         CatLib.Game.Fixes.UdpClientCloser.CloseAll("the game is quitting");
     }
 

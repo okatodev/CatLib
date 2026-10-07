@@ -40,8 +40,11 @@ public sealed class StackItPlugin : BasePlugin
         BootstrapEvents.GameRestartStarted += controller.Forget;
         BootstrapEvents.MainMenuLoaded += controller.Forget;
         GameplayEvents.GameStarted += controller.OnGameStarted;
+        BootstrapEvents.LevelLoadFinalized += () => patches.Run("LevelReady", controller.OnLevelReady);
 
         var survey = new StackSurvey(log);
+        DevMenu.Toggle(DevGroup, "Trace falls", () => controller.Trace.IsEnabled, controller.Trace.SetEnabled,
+            "Writes every fall of a parcel standing across a joint for 1.5 s: where it is, its parent, its body and who carries it. Turn it on on every game.");
         DevMenu.Command(DevGroup, "Bridges in the log", controller.Describe,
             "Writes every parcel that stands across a joint, the parcels under it and the cells it holds on them.");
         DevMenu.Command(DevGroup, "Parcel grids in the log", survey.ParcelGrids,

@@ -5,7 +5,7 @@
     <TargetFramework Condition="'$(CatLibWatcherCheck)' == 'true'">net8.0</TargetFramework>
     <AssemblyName>CatLib.CrashWatcher</AssemblyName>
     <RootNamespace>CatLib.CrashWatcher</RootNamespace>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <UseGameReferences>false</UseGameReferences>
     <CatLibDeployFolder>CatLib</CatLibDeployFolder>
     <ApplicationManifest>app.manifest</ApplicationManifest>

@@ -20,6 +20,10 @@ public sealed class SizeIconsTest : TestCase
         }
 
         Assert.True(resources.Contains(BoardView.IconPrefix + "sizes.png"), "The list of sizes has a header icon");
+        foreach (var file in BoardView.OwnListIcons)
+        {
+            Assert.True(resources.Contains(BoardView.IconPrefix + file), $"The list icon {file} is in the mod");
+        }
 
         Assert.Equal("2×2", new ParcelFootprint(2, 2).Text(), "A footprint reads as width times depth");
         Assert.Equal("5x4", new ParcelFootprint(5, 4).Text('x'), "The sign can be a plain x for fonts without the times sign");

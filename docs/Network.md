@@ -153,6 +153,10 @@ void OnPlayerClicked(string change) => channel.SendToHost("click", change);
 - Limits: a name of up to 64 bytes and up to 16 KiB of data. Larger values throw `ArgumentException`.
   The host accepts up to 60 messages per second from one player and drops the rest with a warning.
 - Messages are reliable and ordered per player. Handlers run on the main thread; an exception in one handler does not stop the others.
+- Steam closes a session that stays quiet for a few minutes and opens a new one with the next message, which the other side has to accept.
+  CatLib accepts the host and every player once a second for the whole session, so a message after a long pause still arrives.
+- Right before the game shuts Steam down, when returning to the menu or quitting, CatLib closes its sessions: Steam can crash when it shuts down with one open.
+- If a player left less than 5 seconds before that, Steam is still closing the session with that player, so CatLib waits for the rest of the 5 seconds.
 - The host is the authority: check every request before applying it, a player can send anything.
 
 ## Wire format

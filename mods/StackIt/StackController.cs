@@ -17,6 +17,9 @@ public sealed class StackController
     public const float SlideSpeed = 0.6f;
     public const float CellOverlap = StoreGrid.CellSize - 0.02f;
     public const float SlideSeconds = 0.25f;
+    public const float StayBehindDistance = 0.05f;
+    public const float PoseKeptSeconds = 1f;
+    public const int PlanEveryFrames = 10;
 
     private readonly CatLogger _log;
     private readonly BridgeRegistry _registry = new();
@@ -27,6 +30,7 @@ public sealed class StackController
     private readonly List<HeldCell> _lost = new();
     private readonly List<HeldState> _states = new();
     private readonly List<Slide> _slides = new();
+    private readonly Research.FallTrace _trace;
     private readonly Dictionary<(IntPtr Store, IntPtr Entity, long Anchor, int Yaw), BridgeVerdict> _verdicts = new();
     private readonly Dictionary<IntPtr, (MarkGraph Graph, Dictionary<IntPtr, int> Ids)> _graphs = new();
     private int _verdictFrame = -1;
@@ -35,6 +39,7 @@ public sealed class StackController
 
     public StackController(CatLogger log)
     {
+        _trace = new Research.FallTrace(log);
         _log = log;
         _finder = new SupportFinder(_grids, _registry);
         _registry.Rebuilt += () =>
@@ -70,6 +75,14 @@ public sealed class StackController
     }
 
     public void OnGameStarted() => _startedAt = Time.realtimeSinceStartup;
+
+    public void OnLevelReady()
+    {
+        if (_startedAt < 0f && !IsServer)
+        {
+            _startedAt = Time.realtimeSinceStartup;
+        }
+    }
 
     public void Forget()
     {
@@ -153,9 +166,12 @@ public sealed class StackController
             bridge.Hanging.Count == 0 ? string.Empty : Format(", {0} cell(s) wait for their parcel", bridge.Hanging.Count)));
     }
 
+    public Research.FallTrace Trace => _trace;
+
     public void OnRemoved(EntityInteractableStore store, Entity entity)
     {
         Invalidate();
+        TraceSupportTaken(entity);
         DropAround(StoreGrid.StoreOf(entity));
         var bridge = _registry.Find(entity);
         if (bridge == null || store == null || !StoreGrid.IsAlive(bridge.Main) || bridge.Main.Pointer != store.Pointer)
@@ -164,11 +180,22 @@ public sealed class StackController
         }
 
         var root = StoreGrid.Root(bridge.Main);
-        var falling = bridge.Waiting || root == null || root.Pointer != bridge.Root;
+        var falling = !IsServer || bridge.Waiting || root == null || root.Pointer != bridge.Root;
         _registry.Remove(bridge);
         if (falling && !IsCarried(entity))
         {
+            if (bridge.HasPose)
+            {
+                StayBehind(bridge, store.transform);
+            }
+            else
+            {
+                Detach(entity.transform, store.transform);
+            }
+
             Loosen(entity);
+            SettleGhost(entity);
+            _trace.Start(entity, "was let fall by the host");
             _log.Info($"{Name(entity)} was let fall by the host");
             return;
         }
@@ -221,6 +248,7 @@ public sealed class StackController
 
     public void Update()
     {
+        _trace.Update();
         if (_slides.Count > 0)
         {
             MoveSlides(Time.realtimeSinceStartup);
@@ -373,7 +401,7 @@ public sealed class StackController
             case LossAction.Drop:
                 _registry.Remove(bridge);
                 Drop(bridge, report.MainLost, null);
-                break;
+                return;
             case LossAction.Wait:
                 if (!bridge.Waiting)
                 {
@@ -385,6 +413,26 @@ public sealed class StackController
             default:
                 bridge.Waiting = false;
                 break;
+        }
+
+        if (!CarriedRoot(bridge.Main))
+        {
+            bridge.CarriedSince = -1f;
+            bridge.RememberPose(entity.transform);
+            if (Time.frameCount - bridge.PlannedAt >= PlanEveryFrames)
+            {
+                bridge.PlannedAt = Time.frameCount;
+                bridge.FallPlan = PlanSlide(bridge, true, null);
+                bridge.HasFallPlan = true;
+            }
+        }
+        else if (bridge.CarriedSince < 0f)
+        {
+            bridge.CarriedSince = now;
+        }
+        else if (now - bridge.CarriedSince > PoseKeptSeconds)
+        {
+            bridge.ForgetPose();
         }
     }
 
@@ -442,7 +490,9 @@ public sealed class StackController
     private void Drop(Bridge bridge, bool mainLost, EntityInteractableStore removed)
     {
         var entity = bridge.Entity;
-        var plan = PlanSlide(bridge, mainLost, removed);
+        var main = bridge.Main.transform;
+        var carriedAway = mainLost && bridge.HasPose;
+        var plan = carriedAway && bridge.HasFallPlan && CarriedRoot(bridge.Main) ? bridge.FallPlan : PlanSlide(bridge, mainLost, removed);
         try
         {
             bridge.Main.RemoveEntity(entity);
@@ -454,11 +504,112 @@ public sealed class StackController
             return;
         }
 
+        if (carriedAway)
+        {
+            StayBehind(bridge, main);
+        }
+
         Loosen(entity);
+        TakeAuthority(entity);
+        SettleGhost(entity);
         var how = StartSlide(entity, plan);
+        _trace.Start(entity, mainLost ? "falls, the parcel under its centre was taken" : "falls, part of it hangs over nothing");
         _log.Info(mainLost
             ? $"{Name(entity)} falls: {Name(bridge.Main.LinkedEntity)} under its centre was taken, {how}"
             : $"{Name(entity)} falls: part of it hangs over nothing, {how}");
+    }
+
+    private void TakeAuthority(Entity entity)
+    {
+        try
+        {
+            var network = entity.Network;
+            if (network == null || !Singleton<NetworkedEntityManager>.HasInstance())
+            {
+                return;
+            }
+
+            Singleton<NetworkedEntityManager>.Instance.SetLocalClientAuthoritative(network);
+        }
+        catch (Exception exception)
+        {
+            _log.Warning($"Taking {Name(entity)} over from the player who last held it failed: {exception.Message}");
+        }
+    }
+
+    private void TraceSupportTaken(Entity entity)
+    {
+        if (!_trace.IsEnabled || _registry.Count == 0)
+        {
+            return;
+        }
+
+        var taken = StoreGrid.StoreOf(entity);
+        if (taken == null)
+        {
+            return;
+        }
+
+        foreach (var bridge in _registry.All)
+        {
+            if (StoreGrid.IsAlive(bridge.Main) && bridge.Main.Pointer == taken.Pointer)
+            {
+                _trace.Start(bridge.Entity, $"stands on {Name(entity)}, which was taken from its storage{(IsCarried(entity) ? " and is carried already" : string.Empty)}");
+            }
+        }
+    }
+
+    private void StayBehind(Bridge bridge, Transform main)
+    {
+        try
+        {
+            var transform = bridge.Entity.transform;
+            Detach(transform, main);
+            if ((transform.position - bridge.Position).sqrMagnitude > StayBehindDistance * StayBehindDistance)
+            {
+                _log.Info($"{Name(bridge.Entity)} moved with {Name(bridge.Main.LinkedEntity)} as it was picked up, it falls from where it stood");
+            }
+
+            transform.SetPositionAndRotation(bridge.Position, bridge.Rotation);
+            var body = Body(bridge.Entity);
+            if (body != null)
+            {
+                body.position = bridge.Position;
+                body.rotation = bridge.Rotation;
+            }
+        }
+        catch (Exception exception)
+        {
+            _log.Warning($"Keeping {Name(bridge.Entity)} where it stood failed: {exception.Message}");
+        }
+    }
+
+    private static void Detach(Transform transform, Transform main)
+    {
+        if (main != null && transform.IsChildOf(main))
+        {
+            transform.SetParent(null, true);
+        }
+    }
+
+    private void SettleGhost(Entity entity)
+    {
+        try
+        {
+            var network = entity.Network;
+            if (network == null)
+            {
+                return;
+            }
+
+            network.ResetTransformAsGhost();
+            network._targetVelocityAsGhost = Vector3.zero;
+            network.SetMustUpdatePositionAndRotationAsGhost(false);
+        }
+        catch (Exception exception)
+        {
+            _log.Warning($"Clearing where {Name(entity)} last moved over the network failed: {exception.Message}");
+        }
     }
 
     private SlidePlan PlanSlide(Bridge bridge, bool mainLost, EntityInteractableStore removed)

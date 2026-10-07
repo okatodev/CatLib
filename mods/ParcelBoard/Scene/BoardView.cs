@@ -199,9 +199,9 @@ public sealed class BoardView
         BoardList.NeedsStamps => UiSprites.FromResource(typeof(BoardView).Assembly, IconPrefix + "stamps.png"),
         BoardList.Heavy => CatParcels.ConstraintIcon(BehaviorConstraint.Heavy),
         BoardList.Fragile => CatParcels.ConstraintIcon(BehaviorConstraint.Fragile),
-        BoardList.ContactForbidden => CatParcels.ConstraintIcon(BehaviorConstraint.ContactForbidden),
+        BoardList.ContactForbidden => GameOrOwn(CatParcels.ConstraintIcon(BehaviorConstraint.ContactForbidden), "nocontact.png"),
         BoardList.Lover => CatParcels.ConstraintIcon(BehaviorConstraint.Lover),
-        BoardList.Corrupted => CatParcels.ConstraintIcon(BehaviorConstraint.Corrupted),
+        BoardList.Corrupted => GameOrOwn(CatParcels.ConstraintIcon(BehaviorConstraint.Corrupted), "corrupted.png"),
         BoardList.Dark => CatParcels.ConstraintIcon(StorageConstraint.Dark),
         BoardList.Frozen => CatParcels.ConstraintIcon(StorageConstraint.Frozen),
         BoardList.Hot => CatParcels.ConstraintIcon(StorageConstraint.Hot),
@@ -209,6 +209,11 @@ public sealed class BoardView
         BoardList.Bright => CatParcels.ConstraintIcon(StorageConstraint.Bright),
         _ => null
     };
+
+    public static readonly string[] OwnListIcons = { "all.png", "damaged.png", "stamps.png", "corrupted.png", "nocontact.png" };
+
+    private static Sprite GameOrOwn(Sprite game, string file) =>
+        game != null ? game : UiSprites.FromResource(typeof(BoardView).Assembly, IconPrefix + file);
 
     private static string Number(int value) => value.ToString(CultureInfo.InvariantCulture);
 
