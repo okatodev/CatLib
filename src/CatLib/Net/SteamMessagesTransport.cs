@@ -11,6 +11,7 @@ internal sealed class SteamMessagesTransport : ISessionTransport
     public const int SendFlags = 8 | 32;
     public const int ResultOk = 1;
     public const string NativeCallEventName = "Net.NativeCall";
+    public const int StateUnknown = int.MinValue;
 
     private readonly ISteamChannelApi _api;
     private readonly CatLogger _log;
@@ -52,6 +53,37 @@ internal sealed class SteamMessagesTransport : ISessionTransport
     }
 
     public IReadOnlyCollection<ulong> Peers => _peers;
+
+    internal ISteamChannelApi Api => _api;
+
+    public static int State(ISteamChannelApi api, ulong peer)
+    {
+        try
+        {
+            return api == null ? StateUnknown : api.State(peer);
+        }
+        catch (Exception)
+        {
+            return StateUnknown;
+        }
+    }
+
+    public static bool IsGone(int state) => state is 0 or -3 or StateUnknown;
+
+    public static string StateName(int state) => state switch
+    {
+        0 => "none",
+        1 => "connecting",
+        2 => "finding a route",
+        3 => "connected",
+        4 => "closed by the other side",
+        5 => "problem detected",
+        -1 => "finishing",
+        -2 => "lingering",
+        -3 => "dead",
+        StateUnknown => "unknown",
+        _ => "state " + state
+    };
 
     public void Send(ulong peer, byte[] payload)
     {

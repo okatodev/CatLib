@@ -13,4 +13,6 @@ internal interface ISteamChannelApi
     bool Close(ulong peer);
 
     int Receive(int channel, Action<ulong, byte[]> received);
+
+    int State(ulong peer);
 }

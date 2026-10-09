@@ -27,6 +27,12 @@ public sealed class SessionAcceptTest : TestCase
         Assert.Equal(TimeSpan.Zero, SessionNetwork.ShutdownDelay(TimeSpan.FromSeconds(6)), "No wait when the player left long ago");
         Assert.Equal(TimeSpan.Zero, SessionNetwork.ShutdownDelay(TimeSpan.MaxValue), "No wait when nobody left");
         Assert.Equal(TimeSpan.Zero, SessionNetwork.ShutdownDelay(TimeSpan.FromSeconds(-1)), "No wait for a clock that went back");
+        Assert.True(SteamMessagesTransport.IsGone(0), "A session in state none is gone");
+        Assert.True(SteamMessagesTransport.IsGone(-3), "A dead session is gone");
+        Assert.False(SteamMessagesTransport.IsGone(-1), "A session that is still finishing is not gone");
+        Assert.False(SteamMessagesTransport.IsGone(-2), "A lingering session is not gone");
+        Assert.False(SteamMessagesTransport.IsGone(3), "A connected session is not gone");
+        Assert.Equal("lingering", SteamMessagesTransport.StateName(-2), "States are named in the log");
         yield break;
     }
 }

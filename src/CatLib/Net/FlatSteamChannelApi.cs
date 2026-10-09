@@ -26,9 +26,11 @@ internal sealed unsafe class FlatSteamChannelApi : ISteamChannelApi
     private readonly delegate* unmanaged[Cdecl]<IntPtr, byte*, byte> _accept;
     private readonly delegate* unmanaged[Cdecl]<IntPtr, void> _release;
     private readonly delegate* unmanaged[Cdecl]<IntPtr, byte*, byte> _close;
+    private readonly delegate* unmanaged[Cdecl]<IntPtr, byte*, IntPtr, IntPtr, int> _state;
 
-    private FlatSteamChannelApi(IntPtr self, IntPtr send, IntPtr receive, IntPtr accept, IntPtr release, IntPtr close, string accessor)
+    private FlatSteamChannelApi(IntPtr self, IntPtr send, IntPtr receive, IntPtr accept, IntPtr release, IntPtr close, IntPtr state, string accessor)
     {
+        _state = (delegate* unmanaged[Cdecl]<IntPtr, byte*, IntPtr, IntPtr, int>)state;
         _self = self;
         _send = (delegate* unmanaged[Cdecl]<IntPtr, byte*, byte*, uint, int, int, int>)send;
         _receive = (delegate* unmanaged[Cdecl]<IntPtr, int, IntPtr*, int, int>)receive;
@@ -77,6 +79,7 @@ internal sealed unsafe class FlatSteamChannelApi : ISteamChannelApi
             return null;
         }
 
+        NativeLibrary.TryGetExport(library, "SteamAPI_ISteamNetworkingMessages_GetSessionConnectionInfo", out var state);
         var self = ((delegate* unmanaged[Cdecl]<IntPtr>)accessor)();
         if (self == IntPtr.Zero)
         {
@@ -85,7 +88,7 @@ internal sealed unsafe class FlatSteamChannelApi : ISteamChannelApi
         }
 
         error = null;
-        return new FlatSteamChannelApi(self, send, receive, accept, release, close, accessorName);
+        return new FlatSteamChannelApi(self, send, receive, accept, release, close, state, accessorName);
     }
 
     public int Send(ulong peer, byte[] payload, int flags, int channel)
@@ -110,6 +113,18 @@ internal sealed unsafe class FlatSteamChannelApi : ISteamChannelApi
         var identity = stackalloc byte[IdentitySize];
         WriteIdentity(identity, peer);
         return _close(_self, identity) != 0;
+    }
+
+    public int State(ulong peer)
+    {
+        if (_state == null)
+        {
+            return SteamMessagesTransport.StateUnknown;
+        }
+
+        var identity = stackalloc byte[IdentitySize];
+        WriteIdentity(identity, peer);
+        return _state(_self, identity, IntPtr.Zero, IntPtr.Zero);
     }
 
     public int Receive(int channel, Action<ulong, byte[]> received)

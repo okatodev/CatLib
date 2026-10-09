@@ -2,6 +2,13 @@
 
 CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it! and Too Late, and CatLib Crash Watcher have their own versions and changelogs.
 
+## Not released yet
+
+### Changed
+
+- Before the game shuts Steam down, CatLib waits until the sessions it closed in the last minute are gone, at most 6 seconds,
+  instead of a fixed 5 seconds after a player left, and writes the state of each such session to the log before and after waiting.
+
 ## 0.7.0
 
 Released together with three new mods, Parcel Board 0.1.0, Stack it! 0.1.0 and Too Late 0.1.0,

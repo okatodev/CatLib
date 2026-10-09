@@ -18,6 +18,9 @@ internal static class SessionNetwork
     public const double HelloResendSeconds = 2;
     public const double AcceptRetrySeconds = 1;
     public static readonly TimeSpan DepartedCloseSettle = TimeSpan.FromSeconds(5);
+    public static readonly TimeSpan MaxShutdownWait = TimeSpan.FromSeconds(6);
+    public static readonly TimeSpan RecentClose = TimeSpan.FromSeconds(60);
+    public const int SettlePollMilliseconds = 50;
     public const string SteamShutdownPatchOwner = "catlib.core.steamshutdown";
     public const double KickGraceSeconds = 8;
     public const double ClientLeaveDelaySeconds = 4;
@@ -35,6 +38,8 @@ internal static class SessionNetwork
     private static readonly HashSet<ulong> HostCandidates = new();
     private static CatLib.Patching.CatPatches _steamShutdown;
     private static TimeSpan _departedClosedAt = TimeSpan.MinValue;
+    private static ISteamChannelApi _closingApi;
+    private static readonly Dictionary<ulong, TimeSpan> ClosedPeers = new();
     private static readonly Dictionary<ulong, double> PendingKicks = new();
     private static CatLogger _log;
     private static Setting<bool> _enabled;
@@ -275,17 +280,60 @@ internal static class SessionNetwork
         try
         {
             CloseChannelSessions();
-            var since = _departedClosedAt == TimeSpan.MinValue ? TimeSpan.MaxValue : Clock.Elapsed - _departedClosedAt;
-            var delay = ShutdownDelay(since);
-            if (delay > TimeSpan.Zero)
-            {
-                _log.Info($"A player left {since.TotalSeconds:0.0} s ago, waiting {delay.TotalSeconds:0.0} s so Steam finishes closing the CatLib session with that player before it shuts down");
-                System.Threading.Thread.Sleep(delay);
-            }
+            SettleClosedSessions();
         }
         catch (Exception exception)
         {
             _steamShutdown.Fault(nameof(BeforeSteamShutdown), exception);
+        }
+    }
+
+    private static void SettleClosedSessions()
+    {
+        var now = Clock.Elapsed;
+        var recent = ClosedPeers.Where(entry => now - entry.Value < RecentClose).Select(entry => entry.Key).ToList();
+        var since = _departedClosedAt == TimeSpan.MinValue ? TimeSpan.MaxValue : now - _departedClosedAt;
+        if (recent.Count == 0 && ShutdownDelay(since) <= TimeSpan.Zero)
+        {
+            return;
+        }
+
+        _log.Info($"Before Steam shuts down: {DescribeSessions(recent, now)}");
+        var start = Clock.Elapsed;
+        while (Clock.Elapsed - start < MaxShutdownWait)
+        {
+            var open = recent.Any(peer => !SteamMessagesTransport.IsGone(SteamMessagesTransport.State(_closingApi, peer)));
+            var delay = ShutdownDelay(_departedClosedAt == TimeSpan.MinValue ? TimeSpan.MaxValue : Clock.Elapsed - _departedClosedAt);
+            if (!open && delay <= TimeSpan.Zero)
+            {
+                break;
+            }
+
+            System.Threading.Thread.Sleep(SettlePollMilliseconds);
+        }
+
+        var waited = Clock.Elapsed - start;
+        _log.Info($"Steam shuts down after {waited.TotalSeconds:0.0} s of waiting: {DescribeSessions(recent, Clock.Elapsed)}");
+        ClosedPeers.Clear();
+    }
+
+    private static string DescribeSessions(IReadOnlyList<ulong> peers, TimeSpan now)
+    {
+        if (peers.Count == 0)
+        {
+            return "no CatLib session was closed lately";
+        }
+
+        return string.Join(", ", peers.Select(peer =>
+            $"session with {peer} closed {(now - ClosedPeers[peer]).TotalSeconds:0.0} s ago is {SteamMessagesTransport.StateName(SteamMessagesTransport.State(_closingApi, peer))}"));
+    }
+
+    private static void RememberClosed(SteamMessagesTransport transport, IEnumerable<ulong> peers)
+    {
+        _closingApi = transport.Api;
+        foreach (var peer in peers)
+        {
+            ClosedPeers[peer] = Clock.Elapsed;
         }
     }
 
@@ -300,6 +348,7 @@ internal static class SessionNetwork
             return;
         }
 
+        RememberClosed(transport, transport.Peers.ToList());
         var closed = transport.CloseAll();
         _log.Info($"Closed {closed} CatLib channel session(s) before the game shuts its network down");
     }
@@ -428,6 +477,7 @@ internal static class SessionNetwork
             if (Transport.Close(clientId))
             {
                 _departedClosedAt = Clock.Elapsed;
+                RememberClosed(Transport, new[] { clientId });
             }
 
             MenuNotices.ClearPlayerNotice(clientId);
