@@ -68,6 +68,10 @@ A mod without changes writes nothing, so mods that never store data leave no fil
 - **A new save does not inherit old data.** If the game starts a new save under a name that already has mod data,
   that data is not loaded, and on the first successful save its folder is renamed to `<save>.archived-<time>`.
 - **Only the host writes.** On a client the handle is detached; the host's data reaches clients through the mod's own messages.
+
+> [!IMPORTANT]
+> On a player in someone else's session `State` is `NoSave` and `Get` returns the fallback. Send what players need with
+> [mod messages](Network.md#mod-messages) or a hidden [session setting](Network.md#session-role).
 - **Mods are isolated.** An exception in one mod's handler or a failed write of one file does not affect other mods.
 
 ## States

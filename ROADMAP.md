@@ -31,9 +31,14 @@ Assets come up in many mods, so the API is for every mod author, not only for th
 - The host could crash in `steamclient64.dll` when it quit right after a player left, inside the Steam thread that keeps
   peer to peer connections. CatLib waits for its closed sessions; whether the game itself crashes the same way is still to check
   without mods.
-- Readable reports: at start CatLib writes a map of game method addresses from IL2CPP, so offsets in `GameAssembly.dll`
-  become method names; `UnityPlayer.dll` has public symbols. The report then names the top frames of every thread.
 - The last BepInEx log lines before a native crash on the game thread may not reach the log file.
+
+#### Crash watcher: method names in reports
+
+Reports name a crash as `GameAssembly.dll + 0x42e586`, which says nothing without a disassembler.
+At start CatLib writes a map of the game's method addresses from IL2CPP (every method of `GameAssembly.dll` with its address),
+and the watcher turns offsets in `GameAssembly.dll` into method names with it; `UnityPlayer.dll` has public symbols from Unity.
+The report then names the top frames of every thread, for example `EntityInteractableStore.StoreEntityLocal + 0x3a`.
 
 A handler inside the crashing process itself is not planned: .NET, Unity and the game compete for that place,
 and code running in a process with damaged memory is not reliable.
@@ -55,4 +60,3 @@ The game has neither a voice chat nor a text chat.
 
 - macOS support.
 - Reloading mod code without restarting the game. (Questioned.)
-- Too Late with 5 to 8 players, checked with five game copies.

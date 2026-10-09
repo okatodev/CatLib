@@ -1,4 +1,26 @@
-# Game events: observed behaviour
+# Game events
+
+`CatLib.Game.Events` exposes the game's own events as plain .NET events. They run on the main thread,
+and an exception in one handler does not stop the others.
+
+| Class | Events |
+|---|---|
+| `BootstrapEvents` | `MainMenuLoaded`, `LevelLoadStarted`, `LevelLoadFinalized`, `GameRestartStarted`, `GameStartedFromLobby` |
+| `PlayerEvents` | `LocalPlayerSpawned`, `PlayerGhostSpawned`, `PlayerDisconnected`, `PlayerAmountChanged`, `ClientNameChanged` |
+| `NetworkEvents` | `ServerStarted`, `ClientConnected`, `OtherClientConnected`, `ClientDisconnected`, `ClientReady`, `ClientConnectionAcknowledged`, `ReceivedEntitySynchronization`, `NetworkTick` |
+| `GameplayEvents` | `InitializingParcels`, `GameStarted`, `GameStartedPhase2` — host only |
+| `SaveEvents` | `SaveFileSelected`, `GameSavingStarted`, `SuccessfullySaved`, `UnsuccessfullySaved` |
+
+```csharp
+BootstrapEvents.LevelLoadFinalized += () => controller.FindTables();
+BootstrapEvents.GameRestartStarted += () => controller.Forget();
+PlayerEvents.PlayerDisconnected += clientId => controller.OnPlayerLeft(clientId);
+```
+
+> [!IMPORTANT]
+> The names come from the game and do not always mean what they suggest. The rest of this page is what the game really does.
+
+## Observed behaviour
 
 Everything below was recorded with `CatLib.Tests` timelines on game version `CMC 1.01.00.1763.9722.17497`
 in two two-player sessions (one host, one client, both on Windows). It describes what the game does, not what the event names suggest.
@@ -38,6 +60,19 @@ The host is also a regular client of its own server.
 
 Joining a lobby as a client:
 `Client` object appears → 1 to 2 s → `ClientReady(self)` → `ClientConnectionAcknowledged(self)` → `OtherClientConnected(host)`.
+
+```mermaid
+sequenceDiagram
+    participant H as Host
+    participant C as Player
+    Note over H,C: both press start in the lobby
+    H->>H: GameStartedFromLobby, LevelLoadStarted
+    C->>C: GameStartedFromLobby, LevelLoadStarted
+    H->>C: entity synchronization
+    C->>C: LevelLoadFinalized, LocalPlayerSpawned
+    H->>H: InitializingParcels, GameStarted, GameStartedPhase2 (host only)
+    H->>C: second entity synchronization
+```
 
 Starting a game from the lobby, both sides:
 `GameStartedFromLobby` → `LevelLoadStarted` → `GameManager` appears → `ReceivedEntitySynchronization` → `LevelLoadFinalized`
@@ -97,5 +132,6 @@ CatLib injects the Mods tab when a menu becomes ready and injects it again into 
 - `GameRestartStarted` can fire twice in a row. Handlers must be idempotent.
 - `Gameplay.*` events are host only. Use `Bootstrap.LevelLoadFinalized` or `Player.LocalPlayerSpawned` to detect entering a level on every machine.
 - `NetworkTick` does not mean a multiplayer session is active.
-- There is no late join. A client that connects while a game is running stays connected but never loads the level and never spawns.
-  Being connected is not the same as being in the session.
+- The game has no late join. A client that connects while a game is running stays connected but never loads the level and never spawns;
+  being connected is not the same as being in the session. [Too Late](../mods/TooLate/README.md) adds joining a game in progress,
+  and documents what such a player receives.

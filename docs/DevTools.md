@@ -25,6 +25,8 @@ The menu works without the mouse, so the camera keeps looking where it did: a du
 captures exactly that. Where the cursor is free, as in the menus, a click selects a group or runs a command.
 The menu stays open after a command so several can be run in a row.
 
+The commands of `CatLib.Tests` and of the mods in this repository are listed in [Tests and developer tools](../tests/CatLib.Tests/README.md#developer-menu).
+
 ## Adding commands
 
 ```csharp

@@ -6,6 +6,12 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
 
 ### Changed
 
+- Documentation for mod authors: a [documentation index](docs/README.md) with where to start, a new page [Core helpers](docs/Basics.md)
+  (logging, the frame loop, the main thread, safe events, game state, the game build, notifications, 2D arrays),
+  "I want to…" tables in [Writing a mod](docs/WritingMods.md), [Multiplayer compatibility](docs/Network.md) and [Core helpers](docs/Basics.md),
+  diagrams of the handshake and of starting a level, and out-of-date parts fixed: session settings, late join, keys of the developer tools.
+- The README lists the mods with their icons and who in a lobby needs them, and the documentation as a table.
+  The developer menu commands moved to [Tests and developer tools](tests/CatLib.Tests/README.md).
 - Before the game shuts Steam down, CatLib waits until the sessions it closed in the last minute are gone, at most 6 seconds,
   instead of a fixed 5 seconds after a player left, and writes the state of each such session to the log before and after waiting.
 

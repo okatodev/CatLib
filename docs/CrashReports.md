@@ -50,7 +50,8 @@ The last 10 reports are kept, memory dumps only in the last 3 of them. `BepInEx/
    Unity closes the game itself after a crash on the game thread, so such an exception never reaches the watcher as unhandled.
    That is why the watcher also keeps a dump of every access violation, bad instruction or stack overflow the moment it is raised
    in native code (not in .NET code, which turns them into ordinary exceptions): at most one every 5 seconds and 10 per session.
-   When the game then closes with that same code, this dump is the crash dump; otherwise it is deleted.
+   When the game then closes with that same code, with the .NET code of a stack overflow (`0x800703E9`) after a stack overflow,
+   or with any crash code within 10 seconds, this dump is the crash dump; otherwise the game recovered and it is deleted.
 4. On a normal quit CatLib marks the file. Exit code 0: the watcher removes the file and closes.
    Anything else: it adds the .NET message from the Windows event log (.NET Runtime 1026), and without its own record
    the crash record too (Application Error 1000), writes the report folder and shows the window.

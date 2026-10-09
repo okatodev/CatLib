@@ -1,7 +1,17 @@
 # Multiplayer compatibility
 
-`CatLib.Net` checks that the host and every client run compatible mods and shares session settings from the host.
-This document describes the protocol and the logic. The adapter to the game's network layer is added separately.
+`CatLib.Net` checks that the host and every player run compatible mods, shares session settings from the host,
+keeps a roster of the session, pauses mods not everyone has, and carries messages between the copies of a mod.
+
+| I want to… | Use |
+|---|---|
+| take part in the check | `CatNetwork.Declare(this, policy)` |
+| know whether I decide for everyone | `CatNetwork.Role`, `CatNetwork.IsAuthority` |
+| use the host's value of a setting | `settings.Session(...)` |
+| know whether my mod runs in this session | `CatNetwork.IsActive(this)`, `ActiveModsChanged` |
+| see who is in the session with which mods | `CatNetwork.Roster`, `RosterChanged` |
+| send something to the host or to everyone | `CatNetwork.Channel(this)` |
+| show a player's name | `CatNetwork.PlayerName(steamId)` |
 
 ## Declaring a mod
 
@@ -29,6 +39,18 @@ The host's declaration wins when both sides declare a mod differently.
 Versions that are not numeric are compared as exact strings.
 
 ## Handshake
+
+```mermaid
+sequenceDiagram
+    participant H as Host
+    participant C as Player
+    C->>H: connects through the game
+    H->>C: Announce, every second until answered
+    C->>H: Hello: protocol, game version, mods
+    H->>C: Verdict: accepted or not, problems, session settings
+    H-->>C: Roster with the active mods, on every change
+    H-->>C: SettingsUpdate, when a session setting changes
+```
 
 1. A client connects. It sends `Hello`: CatLib protocol version, the full game version and its declared mods.
 2. The host compares both sides and answers with `Verdict`: accepted or not, the list of problems and, when accepted, a snapshot of all session settings.
@@ -156,8 +178,10 @@ void OnPlayerClicked(string change) => channel.SendToHost("click", change);
 - Steam closes a session that stays quiet for a few minutes and opens a new one with the next message, which the other side has to accept.
   CatLib accepts the host and every player once a second for the whole session, so a message after a long pause still arrives.
 - Right before the game shuts Steam down, when returning to the menu or quitting, CatLib closes its sessions: Steam can crash when it shuts down with one open.
-- If a player left less than 5 seconds before that, Steam is still closing the session with that player, so CatLib waits for the rest of the 5 seconds.
-- The host is the authority: check every request before applying it, a player can send anything.
+  It then waits until the sessions it closed in the last minute are gone, at least 5 seconds after a player left and at most 6 seconds,
+  and writes their state to the log before and after waiting.
+> [!CAUTION]
+> The host is the authority: check every request before applying it, a player can send anything.
 
 ## Wire format
 

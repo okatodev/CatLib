@@ -1,7 +1,8 @@
 # Live settings
 
 `CatLib.Config` lets a mod declare settings that apply while the game is running.
-Players edit the mod's `.cfg` file in `BepInEx/config`, save it, and the change takes effect within a fraction of a second.
+Players change them on the Mods tab of the game's settings, or in the mod's `.cfg` file in `BepInEx/config`:
+the change takes effect within a fraction of a second, without a restart.
 
 ## Declaring settings
 
@@ -33,15 +34,16 @@ Settings are stored in the plugin's regular BepInEx config file, so the file for
 | Scope | Use for | Behaviour |
 |---|---|---|
 | `Local` | Graphics, audio, controls, UI | Always the player's own value. |
-| `Session` | Anything that affects gameplay for everyone | Currently behaves like `Local`. Once network sync lands, clients in someone else's session use the host's value. |
+| `Session` | Anything that affects gameplay for everyone | The player's own value in single player and as the host. A player in someone else's session uses the host's value, see [Session settings](Network.md#session-settings). |
 
-Declare gameplay settings as `Session` now. Mods will not need changes when synchronisation arrives.
+> [!TIP]
+> If two players with different values would see a different game, the setting is `Session`.
 
 ## Reading values
 
 - `Value` is the value in effect. Mod code should always read this one.
 - `LocalValue` is the value from the local file.
-- They differ for settings that require a restart after an edit, and later for session settings while playing as a client.
+- They differ for settings that require a restart after an edit, and for session settings while playing in someone else's session.
 
 ## Writing values from code
 
@@ -56,7 +58,8 @@ It always runs on the main thread, so it is safe to touch game objects inside it
 It returns an `IDisposable`; dispose it to stop receiving values.
 An exception thrown by one applier is logged and does not affect other appliers or other mods.
 
-Prefer `Apply` over caching `Value` in `Load`. A cached value never updates.
+> [!WARNING]
+> Prefer `Apply` over caching `Value` in `Load`. A cached value never updates, and in multiplayer it misses the host's value.
 
 ## Settings that need a restart
 
@@ -88,7 +91,7 @@ All matching settings return to their defaults, appliers run as usual and the fi
 
 Restart-only changes, rejected values and adjusted values are shown to the player:
 in the status line of the Mods tab while the settings menu is open, and as the game's own notifications during a level.
-Messages are available in English and Russian and follow the game language.
+Messages are in every language of the game and follow it.
 
 A mod shows its own messages the same way with `Notifications.Show(text, brief)` from `CatLib.UI`.
 `brief` is the short form for the game notification, two lines of at most 34 characters split after the first `": "`;

@@ -53,6 +53,9 @@ to work as without the mod until it restarts.
 
 ## Patches and multiplayer
 
+> [!IMPORTANT]
+> A patch runs on every machine that has the mod, but the game runs many methods only on the host.
+
 A patch that changes what the game allows (where a parcel may stand, what breaks) must run on every player the same way,
 so such a mod is `RequiredOnAll`. Methods the game runs only on the host, like the end-of-day damage checks or the tipping over of stacks,
 are only patched in effect on the host. See [Storages](Storages.md) for how the game stacks parcels.
