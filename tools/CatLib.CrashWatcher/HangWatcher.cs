@@ -1,6 +1,10 @@
 using System;
 using System.IO;
 using System.Threading;
+using System.Collections.Generic;
+using System.ComponentModel;
+using CatLib.CrashWatcher.Stacks;
+using CatLib.CrashWatcher.Symbols;
 using CatLib.Diagnostics;
 
 namespace CatLib.CrashWatcher;
@@ -14,12 +18,14 @@ internal sealed class HangWatcher
     private readonly string _sessionFile;
     private readonly string _dumpPath;
     private readonly WatcherLog _log;
+    private readonly CodeNames _names;
     private readonly ManualResetEvent _stop = new ManualResetEvent(false);
     private Thread _thread;
     private long _seenLength = -1;
 
-    public HangWatcher(int processId, string sessionFile, string dumpPath, WatcherLog log)
+    public HangWatcher(int processId, string sessionFile, string dumpPath, CodeNames names, WatcherLog log)
     {
+        _names = names;
         _processId = processId;
         _sessionFile = sessionFile;
         _dumpPath = dumpPath;
@@ -31,6 +37,8 @@ internal sealed class HangWatcher
     public bool Hung { get; private set; }
 
     public string DumpPath { get; private set; }
+
+    public List<CrashThreadStack> Stacks { get; private set; } = new List<CrashThreadStack>();
 
     public void Start()
     {
@@ -71,6 +79,7 @@ internal sealed class HangWatcher
 
                 Hung = true;
                 _log.Write($"The game (process {_processId}) still runs {Limit.TotalSeconds} s after it began to quit, it looks hung");
+                ReadStacks();
                 if (_dumpPath != null && GameDebugger.TryWriteSnapshot(_processId, _dumpPath, _log))
                 {
                     DumpPath = _dumpPath;
@@ -82,6 +91,25 @@ internal sealed class HangWatcher
         catch (Exception exception)
         {
             _log.Write($"Watching the game for a hang failed: {exception.Message}");
+        }
+    }
+
+    private void ReadStacks()
+    {
+        var process = NativeMethods.OpenProcess(NativeMethods.ProcessQueryInformation | NativeMethods.ProcessVmRead, false, _processId);
+        if (process == IntPtr.Zero)
+        {
+            _log.Write($"Could not open the game to read the stacks of the hang ({new Win32Exception().Message})");
+            return;
+        }
+
+        try
+        {
+            Stacks = ThreadStacks.Capture(process, _processId, _names, true, 0, _log);
+        }
+        finally
+        {
+            NativeMethods.CloseHandle(process);
         }
     }
 

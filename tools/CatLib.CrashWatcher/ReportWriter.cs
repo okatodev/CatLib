@@ -45,6 +45,18 @@ internal static class ReportWriter
         dump = dump ?? FindDump(session.ProcessId);
         var text = CrashText.Report(session, exit.ExitCode, info, exit.Exited, exit.Played, logTail, dump);
         File.WriteAllText(Path.Combine(folder, ReportFileName), text, Encoding.UTF8);
+        if (info.Threads.Count > 0)
+        {
+            try
+            {
+                File.WriteAllText(Path.Combine(folder, CrashText.StacksFileName), CrashText.AllStacks(session, info, exit.Exited), Encoding.UTF8);
+            }
+            catch (Exception exception)
+            {
+                log.Write($"Could not write {CrashText.StacksFileName}: {exception.Message}");
+            }
+        }
+
         Prune(reportsDirectory, folder, log);
 
         var strings = session.Strings;

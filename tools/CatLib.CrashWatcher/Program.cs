@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using CatLib.CrashWatcher.Symbols;
 using CatLib.Diagnostics;
 
 namespace CatLib.CrashWatcher;
@@ -12,6 +13,7 @@ internal static class Program
     public const string PreviewArgument = "--preview";
     public const string DumpArgument = "--dump";
     public const string LogFileName = "watcher.log";
+    public const string InteropFolder = "interop";
 
     public static string WatcherVersion
     {
@@ -69,11 +71,21 @@ internal static class Program
 
     private static int Watch(int processId, string sessionFile, string reportsDirectory, bool dump, WatcherLog log)
     {
+        using (var names = new CodeNames(InteropDirectory(reportsDirectory), log))
+        {
+            return Watch(processId, sessionFile, reportsDirectory, dump, names, log);
+        }
+    }
+
+    private static string InteropDirectory(string reportsDirectory) => Path.GetFullPath(Path.Combine(reportsDirectory, "..", "..", InteropFolder));
+
+    private static int Watch(int processId, string sessionFile, string reportsDirectory, bool dump, CodeNames names, WatcherLog log)
+    {
         var dumpPath = Path.Combine(reportsDirectory, "crash_" + processId.ToString(CultureInfo.InvariantCulture) + ".dmp");
         var hangDumpPath = Path.ChangeExtension(dumpPath, ".hang.dmp");
-        var hang = new HangWatcher(processId, sessionFile, dump ? hangDumpPath : null, log);
+        var hang = new HangWatcher(processId, sessionFile, dump ? hangDumpPath : null, names, log);
         hang.Start();
-        var outcome = dump ? GameDebugger.Watch(processId, dumpPath, log) : null;
+        var outcome = dump ? GameDebugger.Watch(processId, dumpPath, names, log) : null;
         var exit = outcome?.Exit ?? GameProcess.WaitForExit(processId);
         hang.Stop();
         var session = CrashSession.Parse(ReportWriter.ReadLines(sessionFile));
@@ -116,7 +128,14 @@ internal static class Program
         {
             info.HangSeconds = quitSeconds > 0 ? quitSeconds : hang.HungSeconds(exit.Exited);
             reportDump = reportDump ?? hang.DumpPath;
+            if (info.Threads.Count == 0)
+            {
+                info.Threads.AddRange(hang.Stacks);
+            }
         }
+
+        NameCrash(info, exit, names, log);
+        info.GameMethod = CrashText.NearestGameMethod(info);
 
         var report = ReportWriter.Write(reportsDirectory, sessionFile, session, exit, info, reportDump, log);
         TryDelete(sessionFile, log);
@@ -137,7 +156,7 @@ internal static class Program
         var session = CrashSession.Parse(ReportWriter.ReadLines(sessionFile));
         session.WatcherVersion = WatcherVersion;
         var exit = new GameExit { ExitCode = 0xC0000005, Started = DateTime.Now.AddMinutes(-42), Exited = DateTime.Now };
-        var info = new CrashEventInfo { Module = "example.dll", Offset = "0x0000000000001234", ExceptionCode = "0xc0000005" };
+        var info = new CrashEventInfo { Module = "example.dll", Offset = "0x0000000000001234", ExceptionCode = "0xc0000005", Method = "ExampleType.ExampleMethod(int) + 0x34" };
         var strings = session.Strings;
         info.ThreadId = session.MainThreadId;
         var report = new CrashReport
@@ -149,6 +168,42 @@ internal static class Program
         report.Text = CrashText.Report(session, exit.ExitCode, info, exit.Exited, exit.Played, new string[0]);
         new CrashWindow(report, strings, string.Empty, log).Show(strings.Phrase(new Random()));
         return 0;
+    }
+
+    private static void NameCrash(CrashEventInfo info, GameExit exit, CodeNames names, WatcherLog log)
+    {
+        if (!info.HasFault || info.Module == "?" || info.Method.Length > 0)
+        {
+            return;
+        }
+
+        var path = info.ModulePath;
+        if (string.IsNullOrEmpty(path) || !File.Exists(path))
+        {
+            var gameDirectory = string.IsNullOrEmpty(exit.ImagePath) ? null : Path.GetDirectoryName(exit.ImagePath);
+            path = gameDirectory == null ? null : Path.Combine(gameDirectory, info.Module);
+        }
+
+        var offset = info.Offset.StartsWith("0x", StringComparison.OrdinalIgnoreCase) ? info.Offset.Substring(2) : info.Offset;
+        if (path == null || !ulong.TryParse(offset, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var value))
+        {
+            return;
+        }
+
+        try
+        {
+            info.Method = names.Name(path, value) ?? string.Empty;
+        }
+        catch (Exception exception)
+        {
+            log.Write($"Naming the method of the crash failed: {exception.Message}");
+            return;
+        }
+
+        if (info.Method.Length > 0)
+        {
+            log.Write($"The crash in {info.Module} + {info.Offset} is in {info.Method}");
+        }
     }
 
     private static int QuitSeconds(CrashSession session, GameExit exit)

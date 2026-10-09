@@ -130,6 +130,8 @@
     "detailTime": "時刻",
     "detailExitCode": "終了コード",
     "detailModule": "モジュール",
+    "detailMethod": "メソッド",
+    "detailGameMethod": "ゲームのコード",
     "detailException": "例外",
     "detailThread": "スレッド",
     "gameThread": "ゲームのスレッド",

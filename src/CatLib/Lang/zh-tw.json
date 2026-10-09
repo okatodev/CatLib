@@ -130,6 +130,8 @@
     "detailTime": "時間",
     "detailExitCode": "結束代碼",
     "detailModule": "程式模組",
+    "detailMethod": "方法",
+    "detailGameMethod": "遊戲程式碼",
     "detailException": "例外狀況",
     "detailThread": "執行緒",
     "gameThread": "遊戲執行緒",

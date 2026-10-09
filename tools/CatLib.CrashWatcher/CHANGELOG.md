@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.1.0
+
+- Reports name the method of the game a crash happened in, for example `EntityInteractableStore.Start() + 0x60` instead of only
+  `GameAssembly.dll + 0x4d5f30`. The names come from `BepInEx/interop/MethodAddressToToken.db`, which BepInEx writes with the interop
+  assemblies; the watcher reads it only after a crash and checks that it belongs to the running game build.
+- Every report of a crash or a hang has the stacks of all game threads: the crashing thread and the game thread in `report.txt`,
+  every thread in `stacks.txt`, threads with the same stack grouped. The watcher walks them with the unwind data of the game's DLLs
+  while the game is stopped at the crash, or pauses it for a moment when it hangs.
+- Frames outside the game's methods say what they are: the IL2CPP runtime, generic code of IL2CPP, a function a DLL exports,
+  or .NET code compiled while the game runs. Frames found by searching the stack are marked with `?`.
+- When the crash is in Windows, Unity or another DLL, the report and the window also name the nearest method of the game
+  on the crashing thread, for example the method that called `RaiseException`.
+- A call through a bad pointer shows the bad address as "not code" and the frame that made the call below it.
+- C++ names of exported functions are shown readable, for example `il2cpp_baselib::Baselib_SystemFutex_Wait`.
+- The window shows the method next to the module in the details.
+
 ## 1.0.2
 
 - A stack overflow keeps its memory dump. .NET closes the game with 0x800703E9 after a stack overflow, the watcher took that for

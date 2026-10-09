@@ -27,19 +27,50 @@ CatLib looks for the program next to `CatLib.dll`, then in every folder of `BepI
 
 ## Parts
 
+### Watching
+
 | File | Does |
 |---|---|
 | `Program.cs` | reads the arguments, waits for the game, writes the report, shows the window |
-| `GameDebugger.cs` | follows the game like a debugger: lets handled exceptions through, writes the dump of an unhandled one, keeps an early dump of native faults, continues breakpoints |
-| `HangWatcher.cs` | notices a game that still runs 8 s after it began to quit and dumps every thread |
+| `GameDebugger.cs` | follows the game like a debugger: lets handled exceptions through, reads the stacks and writes the dump of an unhandled one, keeps an early dump of native faults, continues breakpoints |
+| `HangWatcher.cs` | notices a game that still runs 8 s after it began to quit, reads the stacks of every thread and dumps them |
 | `GameProcess.cs` | the exit code and times of the game process |
 | `CrashEvents.cs` | the Windows event log records of the crash and of .NET |
-| `ReportWriter.cs` | the report folder: `report.txt`, the logs, the session, the dump |
+| `ReportWriter.cs` | the report folder: `report.txt`, `stacks.txt`, the logs, the session, the dump |
 | `CrashWindow.cs`, `ClipboardText.cs` | the window and copying the report |
 | `WatcherLog.cs` | `BepInEx/CatLib/Crashes/watcher.log`, the watcher's own log |
 
-The texts of the session file, the report and the exit codes are shared with CatLib: `CrashText.cs`, `CrashSession.cs`
-and `CrashStrings.cs` in `src/CatLib/Diagnostics` are compiled into both.
+### Stacks and names
+
+```mermaid
+flowchart LR
+    A[Thread registers] --> B[StackUnwinder]
+    B -->|.pdata and unwind codes| C[PeImage of each DLL]
+    B -->|no unwind data| D[search for a return address after a call]
+    B --> E[frames]
+    E --> F[CodeNames]
+    F -->|GameAssembly.dll| G[GameMethodMap: MethodAddressToToken.db]
+    G --> H[ManagedMetadata: interop assembly]
+    F -->|other DLLs| I[exported names]
+```
+
+| File | Does |
+|---|---|
+| `Stacks/ThreadStacks.cs` | lists the threads of the game, reads their registers and names, pauses them for a hang, formats every frame |
+| `Stacks/StackUnwinder.cs` | x64 unwinding like `RtlVirtualUnwind`: prolog and epilog, frame pointer, chained parts, machine frames; a search of the stack where there is no unwind data, with a step back when the found address leads nowhere |
+| `Stacks/LiveProcessMemory.cs` | reads the game's memory and whether an address is executable code |
+| `Symbols/PeImage.cs` | reads a DLL from disk: sections, `.pdata`, exports, .NET metadata |
+| `Symbols/GameMethodMap.cs` | reads `BepInEx/interop/MethodAddressToToken.db` of BepInEx: addresses of the game's methods and their interop methods |
+| `Symbols/ManagedMetadata.cs` | reads names, generic parameters and parameter types of methods from an interop assembly, with the original names interop kept |
+| `Symbols/CodeNames.cs` | turns a module and an offset into a name, checks that the method map belongs to the running `GameAssembly.dll` |
+
+Nothing here runs while the game plays: the files are read after a crash or a hang. `StackUnwindTest` of `CatLib.Tests` checks
+the unwinding and the names on a small x64 image it builds itself, with the method map pointing at its own methods.
+
+### Shared with CatLib
+
+The texts of the session file, the report and the exit codes are shared with CatLib: `CrashText.cs`, `CrashSession.cs`,
+`CrashStrings.cs` and `CrashThreadStack.cs` in `src/CatLib/Diagnostics` are compiled into both.
 
 ## Building
 

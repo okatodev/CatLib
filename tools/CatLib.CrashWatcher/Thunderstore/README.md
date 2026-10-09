@@ -12,12 +12,14 @@ and keeps a report folder with everything a mod author needs to fix it. Send tha
 - Keeps the report in `BepInEx/CatLib/Crashes`: the report, both game logs and a memory dump of the moment of the crash.
   Only the last 10 reports are kept, dumps only in the last 3.
 - Notices when the game hangs while quitting and says so in the report.
+- Names the method of the game the crash happened in and writes down what every thread of the game was doing at that moment,
+  so a mod author sees where it broke without opening the memory dump.
 
 ## What it doesn't do
 
 - It sends nothing anywhere. The report stays on your computer until you attach it yourself.
 - It doesn't change the game. To write a memory dump it follows the game the way a debugger does,
-  which pauses the game only for the moment of writing.
+  which pauses the game only for the moment of writing and of reading the threads.
 
 It is a separate Windows program, `CatLib.CrashWatcher.exe`, because a program can't report its own crash reliably from the inside.
 Source code: [tools/CatLib.CrashWatcher](https://github.com/okatodev/CatLib/tree/main/tools/CatLib.CrashWatcher),

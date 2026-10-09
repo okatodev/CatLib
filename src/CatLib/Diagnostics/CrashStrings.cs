@@ -32,6 +32,8 @@ internal sealed class CrashStrings
         ["detailTime"] = "Time",
         ["detailExitCode"] = "Exit code",
         ["detailModule"] = "Module",
+        ["detailMethod"] = "Method",
+        ["detailGameMethod"] = "Game code",
         ["detailException"] = "exception",
         ["detailThread"] = "Thread",
         ["gameThread"] = "the game thread",

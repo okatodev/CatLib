@@ -130,6 +130,8 @@
     "detailTime": "시각",
     "detailExitCode": "종료 코드",
     "detailModule": "모듈",
+    "detailMethod": "메서드",
+    "detailGameMethod": "게임 코드",
     "detailException": "예외",
     "detailThread": "스레드",
     "gameThread": "게임 스레드",

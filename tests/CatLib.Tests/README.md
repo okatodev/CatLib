@@ -34,7 +34,7 @@ About 160 tests run inside the real game: settings, the Mods tab, translations, 
 | `Network` | the handshake, roster, session settings, mod messages, the Steam channel |
 | `Events`, `Bridge`, `Scheduling`, `Platform` | game events, singletons, the frame loop, game info |
 | `Patching`, `Interop`, `Native` | `CatPatches`, `CodePatch`, IL2CPP arrays and events |
-| `Crash` | crash texts, the session file, the watcher package |
+| `Crash` | crash texts, the session file, the watcher package, stack unwinding and method names of the watcher, stacks in the report |
 | `Inspection`, `DevTools`, `Runner` | the entity dump, the developer menu model, the test runner |
 | `BoatTweaks`, `ShelfLabels`, `BetterRepair`, `ParcelBoard`, `StackIt`, `TooLate` | the logic of every mod, and their scenes in a level |
 

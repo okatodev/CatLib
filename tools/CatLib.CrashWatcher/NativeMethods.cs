@@ -30,6 +30,17 @@ internal static class NativeMethods
     public const uint ProcessDuplicateHandle = 0x0040;
     public const uint ThreadGetContext = 0x0008;
     public const uint ThreadQueryInformation = 0x0040;
+    public const uint ThreadSuspendResume = 0x0002;
+    public const uint ThreadQueryLimitedInformation = 0x0800;
+    public const uint SnapThreads = 0x00000004;
+    public const int ThreadEntrySize = 28;
+    public const int ContextControlInteger = 0x100003;
+    public const int ContextIntegerOffset = 0x78;
+    public const int ContextRipOffset = 0xF8;
+    public const int MemoryInfoSize = 48;
+    public const uint MemoryCommit = 0x1000;
+    public const uint ExecutableProtection = 0xF0;
+    public const uint SuspendFailed = 0xFFFFFFFF;
     public const uint DebugContinue = 0x00010002;
     public const uint DebugExceptionNotHandled = 0x80010001;
     public const int ExceptionDebugEvent = 1;
@@ -92,6 +103,33 @@ internal static class NativeMethods
 
     [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode, EntryPoint = "K32GetModuleFileNameExW")]
     public static extern uint GetModuleFileNameEx(IntPtr process, IntPtr module, StringBuilder name, uint size);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern IntPtr CreateToolhelp32Snapshot(uint flags, int processId);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern bool Thread32First(IntPtr snapshot, IntPtr entry);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern bool Thread32Next(IntPtr snapshot, IntPtr entry);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern uint SuspendThread(IntPtr thread);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern uint ResumeThread(IntPtr thread);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern bool ReadProcessMemory(IntPtr process, IntPtr address, byte[] buffer, IntPtr size, out IntPtr read);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern IntPtr VirtualQueryEx(IntPtr process, IntPtr address, IntPtr buffer, IntPtr length);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern int GetThreadDescription(IntPtr thread, out IntPtr description);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern IntPtr LocalFree(IntPtr memory);
 
     [DllImport("dbghelp.dll", SetLastError = true)]
     public static extern bool MiniDumpWriteDump(IntPtr process, int processId, IntPtr file, uint type, IntPtr exceptionParam, IntPtr userStreamParam, IntPtr callbackParam);

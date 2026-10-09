@@ -17,4 +17,9 @@
     <ProjectReference Include="..\..\mods\StackIt\StackIt.csproj" Private="false" />
     <ProjectReference Include="..\..\mods\TooLate\TooLate.csproj" Private="false" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\tools\CatLib.CrashWatcher\Symbols\*.cs" Link="Watcher\Symbols\%(Filename)%(Extension)" />
+    <Compile Include="..\..\tools\CatLib.CrashWatcher\Stacks\IProcessMemory.cs;..\..\tools\CatLib.CrashWatcher\Stacks\ModuleSet.cs;..\..\tools\CatLib.CrashWatcher\Stacks\RegisterSet.cs;..\..\tools\CatLib.CrashWatcher\Stacks\StackUnwinder.cs;..\..\tools\CatLib.CrashWatcher\Stacks\UnwindInfo.cs;..\..\tools\CatLib.CrashWatcher\Stacks\UnwoundFrame.cs;..\..\tools\CatLib.CrashWatcher\WatcherLog.cs" Link="Watcher\%(Filename)%(Extension)" />
+  </ItemGroup>
 </Project>

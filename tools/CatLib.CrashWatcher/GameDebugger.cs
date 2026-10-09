@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using CatLib.CrashWatcher.Stacks;
+using CatLib.CrashWatcher.Symbols;
 using CatLib.Diagnostics;
 
 namespace CatLib.CrashWatcher;
@@ -33,7 +35,7 @@ internal static class GameDebugger
     public static readonly TimeSpan EarlyDumpPause = TimeSpan.FromSeconds(5);
     public static readonly uint[] FatalCodes = { 0xC0000005, 0xC000001D, 0xC0000096, 0xC00000FD, 0xC0000374, 0xC0000409, 0xC0000420 };
 
-    public static DebugOutcome Watch(int processId, string dumpPath, WatcherLog log)
+    public static DebugOutcome Watch(int processId, string dumpPath, CodeNames names, WatcherLog log)
     {
         var access = NativeMethods.Synchronize | NativeMethods.ProcessQueryLimitedInformation | NativeMethods.ProcessQueryInformation |
                      NativeMethods.ProcessVmRead | NativeMethods.ProcessDuplicateHandle;
@@ -109,6 +111,7 @@ internal static class GameDebugger
                                     early = candidate;
                                     early.Early = true;
                                     log.Write($"The game raised {CrashText.Hex(exceptionCode)} in {early.Module} + {early.Offset} on thread {thread}, keeping a dump in case it does not recover");
+                                    early.Threads.AddRange(ThreadStacks.Capture(process, processId, names, false, thread, log));
                                     if (!TryWriteDump(process, processId, thread, debugEvent, earlyPath, log))
                                     {
                                         early = null;
@@ -123,6 +126,7 @@ internal static class GameDebugger
                             {
                                 outcome.Crash = Describe(process, thread, exceptionCode, debugEvent, log);
                                 log.Write($"The game crashed with {CrashText.Hex(exceptionCode)} in {outcome.Crash.Module} + {outcome.Crash.Offset} on thread {thread}");
+                                outcome.Crash.Threads.AddRange(ThreadStacks.Capture(process, processId, names, false, thread, log));
                                 if (!string.IsNullOrEmpty(dumpPath) && TryWriteDump(process, processId, thread, debugEvent, dumpPath, log))
                                 {
                                     outcome.DumpPath = dumpPath;

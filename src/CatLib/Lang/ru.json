@@ -138,6 +138,8 @@
     "detailTime": "Время",
     "detailExitCode": "Код выхода",
     "detailModule": "Модуль",
+    "detailMethod": "Метод",
+    "detailGameMethod": "Код игры",
     "detailException": "исключение",
     "detailThread": "Поток",
     "gameThread": "поток игры",

@@ -130,6 +130,8 @@
     "detailTime": "时间",
     "detailExitCode": "退出代码",
     "detailModule": "模块",
+    "detailMethod": "方法",
+    "detailGameMethod": "游戏代码",
     "detailException": "异常",
     "detailThread": "线程",
     "gameThread": "游戏线程",

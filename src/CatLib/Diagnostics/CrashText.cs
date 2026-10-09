@@ -28,6 +28,12 @@ internal sealed class CrashEventInfo
 
     public int HangSeconds { get; set; }
 
+    public string Method { get; set; } = string.Empty;
+
+    public string GameMethod { get; set; } = string.Empty;
+
+    public List<CrashThreadStack> Threads { get; } = new List<CrashThreadStack>();
+
     public bool Hung => HangSeconds > 0;
 
     public bool HasFault => Module.Length > 0;
@@ -59,6 +65,10 @@ internal static class CrashText
     public const int HeadlineLength = 200;
     public const string ApplicationErrorProvider = "Application Error";
     public const string RuntimeProvider = ".NET Runtime";
+    public const string StacksFileName = "stacks.txt";
+    public const int ReportFrames = 24;
+    public const string ScannedMark = "? ";
+    public const int ListedGroupThreads = 10;
 
     public const string ExecuteAccess = "execute";
 
@@ -313,6 +323,16 @@ internal static class CrashText
         {
             var source = !info.FromDebugger ? ", from the Windows event log" : info.Early ? ", seen by the crash watcher when it was raised, the game closed right after" : ", seen by the crash watcher";
             builder.AppendLine("Module: " + info.Module + " + " + info.Offset + ", exception " + info.ExceptionCode + source);
+            if (info.Method.Length > 0)
+            {
+                builder.AppendLine("Method: " + info.Method);
+            }
+
+            if (info.GameMethod.Length > 0)
+            {
+                builder.AppendLine("Game code: " + info.GameMethod + ", the nearest game method on the crashing thread");
+            }
+
             if (info.Access.Length > 0)
             {
                 builder.AppendLine("Access: " + info.Access);
@@ -365,6 +385,8 @@ internal static class CrashText
             }
         }
 
+        AppendReportStacks(builder, session, info);
+
         builder.AppendLine();
         builder.AppendLine("Mods:");
         foreach (var mod in session.Mods)
@@ -398,6 +420,16 @@ internal static class CrashText
         if (info.HasFault)
         {
             builder.AppendLine(strings.Get("detailModule") + ": " + info.Module + " + " + info.Offset + ", " + strings.Get("detailException") + " " + info.ExceptionCode);
+            if (info.Method.Length > 0)
+            {
+                builder.AppendLine(strings.Get("detailMethod") + ": " + info.Method);
+            }
+
+            if (info.GameMethod.Length > 0)
+            {
+                builder.AppendLine(strings.Get("detailGameMethod") + ": " + info.GameMethod);
+            }
+
             var thread = ThreadText(session, info, strings);
             if (thread.Length > 0)
             {
@@ -428,6 +460,181 @@ internal static class CrashText
         }
 
         return builder.ToString().TrimEnd();
+    }
+
+    public static string NearestGameMethod(CrashEventInfo info)
+    {
+        var crashed = info.HasFault ? FindThread(info, info.ThreadId) : null;
+        if (crashed == null || crashed.GameMethod.Length == 0 || crashed.GameMethod == info.Method)
+        {
+            return string.Empty;
+        }
+
+        return crashed.GameMethod;
+    }
+
+    public static CrashThreadStack FindThread(CrashEventInfo info, int threadId)
+    {
+        if (threadId == 0)
+        {
+            return null;
+        }
+
+        foreach (var stack in info.Threads)
+        {
+            if (stack.ThreadId == threadId)
+            {
+                return stack;
+            }
+        }
+
+        return null;
+    }
+
+    public static string ThreadTitle(CrashSession session, CrashEventInfo info, CrashThreadStack stack, int count = 1)
+    {
+        var builder = new StringBuilder();
+        builder.Append(count > 1 ? "Threads " : "Thread ");
+        builder.Append(stack.ThreadId.ToString(CultureInfo.InvariantCulture));
+        if (stack.Name.Length > 0)
+        {
+            builder.Append(" \"").Append(stack.Name).Append('"');
+        }
+
+        if (info.ThreadId != 0 && stack.ThreadId == info.ThreadId && info.HasFault)
+        {
+            builder.Append(", the crashing thread");
+        }
+
+        if (session.MainThreadId != 0 && stack.ThreadId == session.MainThreadId)
+        {
+            builder.Append(", the game thread");
+        }
+
+        return builder.ToString();
+    }
+
+    public static void AppendStack(StringBuilder builder, CrashThreadStack stack, int maxFrames)
+    {
+        var shown = Math.Min(maxFrames, stack.Frames.Count);
+        for (var index = 0; index < shown; index++)
+        {
+            builder.AppendLine("  " + stack.Frames[index]);
+        }
+
+        if (stack.Frames.Count > shown)
+        {
+            builder.AppendLine("  ... " + (stack.Frames.Count - shown).ToString(CultureInfo.InvariantCulture) + " more in " + StacksFileName);
+        }
+        else if (stack.Note.Length > 0)
+        {
+            builder.AppendLine("  (" + stack.Note + ")");
+        }
+    }
+
+    public static string AllStacks(CrashSession session, CrashEventInfo info, DateTime time)
+    {
+        var builder = new StringBuilder();
+        var moment = info.HasFault ? "when it crashed" : "when it stopped responding while quitting";
+        builder.AppendLine("Stacks of " + info.Threads.Count.ToString(CultureInfo.InvariantCulture) + " threads of the game " + moment + ", " +
+                           time.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + ".");
+        builder.AppendLine("Game " + session.GameVersion + ", CatLib " + session.CatLibVersion +
+                           (string.IsNullOrEmpty(session.WatcherVersion) ? string.Empty : ", crash watcher " + session.WatcherVersion) + ".");
+        builder.AppendLine("The newest call is at the top. Frames marked \"" + ScannedMark.Trim() + "\" were found by searching the stack for return addresses and may be wrong.");
+
+        var ordered = new List<CrashThreadStack>();
+        var crashed = info.HasFault ? FindThread(info, info.ThreadId) : null;
+        var game = FindThread(info, session.MainThreadId);
+        if (crashed != null)
+        {
+            ordered.Add(crashed);
+        }
+
+        if (game != null && game != crashed)
+        {
+            ordered.Add(game);
+        }
+
+        var groups = new List<List<CrashThreadStack>>();
+        var byKey = new Dictionary<string, List<CrashThreadStack>>(StringComparer.Ordinal);
+        foreach (var stack in info.Threads)
+        {
+            if (ordered.Contains(stack))
+            {
+                continue;
+            }
+
+            if (!byKey.TryGetValue(stack.Key, out var group))
+            {
+                group = new List<CrashThreadStack>();
+                byKey[stack.Key] = group;
+                groups.Add(group);
+            }
+
+            group.Add(stack);
+        }
+
+        foreach (var stack in ordered)
+        {
+            builder.AppendLine();
+            builder.AppendLine(ThreadTitle(session, info, stack));
+            AppendStack(builder, stack, int.MaxValue);
+        }
+
+        foreach (var group in groups)
+        {
+            builder.AppendLine();
+            if (group.Count == 1)
+            {
+                builder.AppendLine(ThreadTitle(session, info, group[0]));
+            }
+            else
+            {
+                var titles = new List<string>();
+                foreach (var stack in group)
+                {
+                    if (titles.Count == ListedGroupThreads)
+                    {
+                        titles.Add("and " + (group.Count - ListedGroupThreads).ToString(CultureInfo.InvariantCulture) + " more");
+                        break;
+                    }
+
+                    titles.Add(stack.ThreadId.ToString(CultureInfo.InvariantCulture) + (stack.Name.Length > 0 ? " \"" + stack.Name + "\"" : string.Empty));
+                }
+
+                builder.AppendLine(group.Count.ToString(CultureInfo.InvariantCulture) + " threads with the same stack: " + string.Join(", ", titles));
+            }
+
+            AppendStack(builder, group[0], int.MaxValue);
+        }
+
+        return builder.ToString();
+    }
+
+    private static void AppendReportStacks(StringBuilder builder, CrashSession session, CrashEventInfo info)
+    {
+        if (info.Threads.Count == 0)
+        {
+            return;
+        }
+
+        var crashed = info.HasFault ? FindThread(info, info.ThreadId) : null;
+        var game = FindThread(info, session.MainThreadId);
+        foreach (var stack in new[] { crashed, game == crashed ? null : game })
+        {
+            if (stack == null)
+            {
+                continue;
+            }
+
+            builder.AppendLine();
+            builder.AppendLine("Stack of thread " + ThreadTitle(session, info, stack).Substring("Thread ".Length) + ":");
+            AppendStack(builder, stack, ReportFrames);
+        }
+
+        builder.AppendLine();
+        builder.AppendLine("Stacks of all " + info.Threads.Count.ToString(CultureInfo.InvariantCulture) + " threads: " + StacksFileName +
+                           ". Frames marked \"" + ScannedMark.Trim() + "\" were found by searching the stack and may be wrong.");
     }
 
     public static string RuntimeHeadline(string message)

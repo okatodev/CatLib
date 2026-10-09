@@ -4,6 +4,12 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
 
 ## Not released yet
 
+### Added
+
+- The crash window names the method a crash happened in and the nearest method of the game on that thread,
+  with "Method" and "Game code" lines in the details in every language.
+  The names and the stacks of every thread come from CatLib Crash Watcher 1.1.0, see [Crash reports](docs/CrashReports.md#method-names-and-stacks).
+
 ### Changed
 
 - Documentation for mod authors: a [documentation index](docs/README.md) with where to start, a new page [Core helpers](docs/Basics.md)

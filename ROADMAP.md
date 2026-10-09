@@ -4,7 +4,7 @@ What is planned, in rough order. Finished work is removed from here and describe
 
 ## Towards 0.8.0
 
-The way to 0.8.0 goes in small steps like the way to 0.7.0, in other directions: assets, documentation, stability,
+The way to 0.8.0 goes in small steps like the way to 0.7.0, in other directions: assets, stability,
 the mods that are out already and a first try at talking to each other in the game.
 
 ### Asset API
@@ -18,12 +18,6 @@ Assets come up in many mods, so the API is for every mod author, not only for th
   Stamps stay on parcels in saves and are seen by every player, so the API decides what others see when they do not have the pack.
 - More mods on the same API later.
 
-### Documentation
-
-- Fill the gaps: every public API of CatLib described with an example, in the same style as the existing pages.
-- One page that leads a new mod author from an empty folder to a published Thunderstore package.
-- Check the pages against the code and remove what is out of date.
-
 ### Stability
 
 - Exact crash checks: every crash and freeze while quitting with a known cause, a test that reproduces it where possible,
@@ -32,16 +26,8 @@ Assets come up in many mods, so the API is for every mod author, not only for th
   peer to peer connections. CatLib waits for its closed sessions; whether the game itself crashes the same way is still to check
   without mods.
 - The last BepInEx log lines before a native crash on the game thread may not reach the log file.
-
-#### Crash watcher: method names in reports
-
-Reports name a crash as `GameAssembly.dll + 0x42e586`, which says nothing without a disassembler.
-At start CatLib writes a map of the game's method addresses from IL2CPP (every method of `GameAssembly.dll` with its address),
-and the watcher turns offsets in `GameAssembly.dll` into method names with it; `UnityPlayer.dll` has public symbols from Unity.
-The report then names the top frames of every thread, for example `EntityInteractableStore.StoreEntityLocal + 0x3a`.
-
-A handler inside the crashing process itself is not planned: .NET, Unity and the game compete for that place,
-and code running in a process with damaged memory is not reliable.
+- More names in crash stacks: frames of `UnityPlayer.dll` from the public symbols on Unity's symbol server,
+  and generic methods of IL2CPP from `global-metadata.dat`, which the method map of BepInEx does not list.
 
 ### The mods that are out
 

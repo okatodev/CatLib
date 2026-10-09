@@ -138,6 +138,8 @@
     "detailTime": "Czas",
     "detailExitCode": "Kod wyjścia",
     "detailModule": "Moduł",
+    "detailMethod": "Metoda",
+    "detailGameMethod": "Kod gry",
     "detailException": "wyjątek",
     "detailThread": "Wątek",
     "gameThread": "wątek gry",
