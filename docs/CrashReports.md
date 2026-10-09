@@ -4,10 +4,11 @@ When the game closes unexpectedly, CatLib shows a small window with what happene
 This works for every kind of crash, native ones included, because the window comes from a separate program
 that waits for the game to close instead of code inside the crashing game.
 
-The program, `CatLib.CrashWatcher.exe`, is its own Thunderstore package, `CatLib-CrashWatcher`, with its own version,
+The program, `CatLib.CrashWatcher.exe`, is its own Thunderstore package, [`CatLib-CrashWatcher`](https://thunderstore.io/c/cat-mail-co/p/CatLib/CrashWatcher/), with its own version,
 so a release of CatLib does not change it. CatLib depends on it, so a mod manager installs it with CatLib.
 CatLib looks for it next to `CatLib.dll` first, then in every folder of `BepInEx/plugins` up to 4 levels deep,
 and takes the newest one when there are several. The log names the version and the path it started.
+How the watcher is built and what each of its parts does is in [its own README](../tools/CatLib.CrashWatcher/README.md).
 
 ## What the player sees
 

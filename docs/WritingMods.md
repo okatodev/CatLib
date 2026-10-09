@@ -21,14 +21,11 @@ Every mod in [`mods/`](../mods) follows it; [Better Repair](../mods/BetterRepair
 
 ```mermaid
 flowchart LR
-    A[BepInEx loads CatLib] --> B[Load of your plugin]
-    B --> C[Main menu]
-    C -->|single player or lobby| D[Level loads]
-    D --> E[Playing]
+    A["BepInEx loads CatLib"] --> B["<b>Load of your plugin</b><br/>settings, texts, declarations,<br/>events, developer commands"]
+    B --> C["<b>Main menu</b>"]
+    C -->|single player or lobby| D["<b>Level loads</b><br/>LevelLoadFinalized:<br/>find the game's objects"]
+    D --> E["<b>Playing</b><br/>FrameLoop.Update, events,<br/>mod messages"]
     E -->|back to the menu| C
-    B -. settings, texts, declarations, events, developer commands .-> B
-    D -. LevelLoadFinalized: find the game's objects .-> D
-    E -. FrameLoop.Update, events, mod messages .-> E
 ```
 
 - `Load` runs once per game start. Declare everything there; the game's objects do not exist yet.
@@ -292,10 +289,13 @@ into `BepInEx/plugins/<Team>-<name>/`, where CatLib finds the icon and the autho
   "website_url": "https://github.com/you/MyMod",
   "description": "What the mod does, 250 characters at most.",
   "dependencies": [
-    "Team-CatLib-{catlib_version}"
+    "CatLib-CatLib-{catlib_version}"
   ]
 }
 ```
+
+`CatLib-CatLib` is the team and the name of [CatLib on Thunderstore](https://thunderstore.io/c/cat-mail-co/p/CatLib/CatLib/).
+Depend on CatLib only: it depends on BepInEx and on the [crash watcher](https://thunderstore.io/c/cat-mail-co/p/CatLib/CrashWatcher/) itself.
 
 The build checks the package the way Thunderstore does:
 

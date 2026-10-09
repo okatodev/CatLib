@@ -38,7 +38,7 @@ flowchart LR
 | [Developer menu](DevTools.md) | One in-game panel for developer commands | `DevMenu` |
 | [Crash reports](CrashReports.md) | The crash window, reports, memory dumps, settings | — |
 
-More: [Tests and developer tools](../tests/CatLib.Tests/README.md) · [Changelog](../CHANGELOG.md) · [Roadmap](../ROADMAP.md)
+More: [Tests and developer tools](../tests/CatLib.Tests/README.md) · [Crash watcher insides](../tools/CatLib.CrashWatcher/README.md) · [Changelog](../CHANGELOG.md) · [Roadmap](../ROADMAP.md)
 
 ## How these pages are written
 

@@ -1,6 +1,10 @@
 # CatLib Tests
 
+[![Thunderstore](https://img.shields.io/thunderstore/v/CatLib/CatLibTests?label=Thunderstore&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CatLibTests/)
+
 In-game tests and developer tools for CatLib and the mods of this repository. For developers only: players do not need it.
+A build of the repository deploys it into `BepInEx/plugins/CatLib.Tests`; without the sources, install
+[CatLib Tests from Thunderstore](https://thunderstore.io/c/cat-mail-co/p/CatLib/CatLibTests/) with a mod manager.
 
 > [!WARNING]
 > `CatLib.Tests` declares a demo network mod. Players without it show up as missing a mod in your lobby,

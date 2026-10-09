@@ -12,6 +12,9 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
   diagrams of the handshake and of starting a level, and out-of-date parts fixed: session settings, late join, keys of the developer tools.
 - The README lists the mods with their icons and who in a lobby needs them, and the documentation as a table.
   The developer menu commands moved to [Tests and developer tools](tests/CatLib.Tests/README.md).
+  Every package links to its Thunderstore page, and the game badge to its Steam page.
+- The crash watcher has a README for developers: how CatLib starts it, its parts and how to build it.
+- The Thunderstore example in [Writing a mod](docs/WritingMods.md#thunderstore-package) depends on `CatLib-CatLib`, the real package name.
 - Before the game shuts Steam down, CatLib waits until the sessions it closed in the last minute are gone, at most 6 seconds,
   instead of a fixed 5 seconds after a player left, and writes the state of each such session to the log before and after waiting.
 
