@@ -1,6 +1,6 @@
 # CatLib Tests
 
-[![Thunderstore](https://img.shields.io/thunderstore/v/CatLib/CatLibTests?label=Thunderstore&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CatLibTests/)
+[![Thunderstore](https://img.shields.io/badge/Thunderstore-CatLib%20Tests-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CatLibTests/)
 
 In-game tests and developer tools for CatLib and the mods of this repository. For developers only: players do not need it.
 A build of the repository deploys it into `BepInEx/plugins/CatLib.Tests`; without the sources, install

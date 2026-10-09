@@ -1,6 +1,6 @@
 # CatLib Crash Watcher
 
-[![Thunderstore](https://img.shields.io/thunderstore/v/CatLib/CrashWatcher?label=Thunderstore)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CrashWatcher/)
+[![Thunderstore](https://img.shields.io/badge/Thunderstore-CatLib%20Crash%20Watcher-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CrashWatcher/)
 
 A small Windows program that waits for the game to close and, when it crashed or froze while quitting,
 shows a window with what happened and keeps a report. What players see and what the report holds is in [Crash reports](../../docs/CrashReports.md).

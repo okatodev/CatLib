@@ -3,8 +3,7 @@
 Foundation library for modding **Cat Mail Co.** with BepInEx 6 (Unity IL2CPP), and the gameplay mods built on it.
 
 [![Game](https://img.shields.io/badge/game-Cat%20Mail%20Co.-f2a65a?logo=steam)](https://store.steampowered.com/app/4380490/Cat_Mail_Co/)
-[![Thunderstore](https://img.shields.io/thunderstore/v/CatLib/CatLib?label=Thunderstore&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CatLib/)
-[![Downloads](https://img.shields.io/thunderstore/dt/CatLib/CatLib?label=downloads&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CatLib/)
+[![Thunderstore](https://img.shields.io/badge/Thunderstore-CatLib-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CatLib/)
 [![BepInEx](https://img.shields.io/badge/BepInEx-6%20IL2CPP-6b8cff)](https://github.com/BepInEx/BepInEx)
 [![Unity](https://img.shields.io/badge/Unity-6000.3-555)](https://unity.com)
 [![License](https://img.shields.io/badge/license-MIT-3da639)](LICENSE)
@@ -17,12 +16,12 @@ Foundation library for modding **Cat Mail Co.** with BepInEx 6 (Unity IL2CPP), a
 
 | | Mod | What it does | Who needs it | Thunderstore |
 |:-:|---|---|---|:-:|
-| <img src="mods/BoatTweaks/icon.png" width="40"> | [Boat Tweaks](mods/BoatTweaks/README.md) | Crates and baskets on the boat deck, stack height limits | everyone | [![BoatTweaks on Thunderstore](https://img.shields.io/thunderstore/dt/CatLib/BoatTweaks?label=downloads&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/BoatTweaks/) |
-| <img src="mods/ShelfLabels/icon.png" width="40"> | [Shelf Labels](mods/ShelfLabels/README.md) | Up to three extra labels next to every shelf label, stored per save | everyone | [![ShelfLabels on Thunderstore](https://img.shields.io/thunderstore/dt/CatLib/ShelfLabels?label=downloads&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/ShelfLabels/) |
-| <img src="mods/BetterRepair/icon.png" width="40"> | [Better Repair](mods/BetterRepair/README.md) | Cardboard of the repair table: unlimited, a larger stock, what a new day brings | everyone | [![BetterRepair on Thunderstore](https://img.shields.io/thunderstore/dt/CatLib/BetterRepair?label=downloads&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/BetterRepair/) |
-| <img src="mods/ParcelBoard/icon.png" width="40"> | [Parcel Board](mods/ParcelBoard/README.md) | Counts of the parcels in the level by destination, mark and size | only you | [![ParcelBoard on Thunderstore](https://img.shields.io/thunderstore/dt/CatLib/ParcelBoard?label=downloads&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/ParcelBoard/) |
-| <img src="mods/StackIt/icon.png" width="40"> | [Stack it!](mods/StackIt/README.md) | Parcels that stand across the joint of level parcels and fall when one is taken away | everyone | [![StackIt on Thunderstore](https://img.shields.io/thunderstore/dt/CatLib/StackIt?label=downloads&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/StackIt/) |
-| <img src="mods/TooLate/icon.png" width="40"> | [Too Late](mods/TooLate/README.md) | Joining a game in progress, up to 8 players | only the host | [![TooLate on Thunderstore](https://img.shields.io/thunderstore/dt/CatLib/TooLate?label=downloads&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/TooLate/) |
+| <img src="mods/BoatTweaks/icon.png" width="40"> | [Boat Tweaks](mods/BoatTweaks/README.md) | Crates and baskets on the boat deck, stack height limits | everyone | [![BoatTweaks on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/BoatTweaks/) |
+| <img src="mods/ShelfLabels/icon.png" width="40"> | [Shelf Labels](mods/ShelfLabels/README.md) | Up to three extra labels next to every shelf label, stored per save | everyone | [![ShelfLabels on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/ShelfLabels/) |
+| <img src="mods/BetterRepair/icon.png" width="40"> | [Better Repair](mods/BetterRepair/README.md) | Cardboard of the repair table: unlimited, a larger stock, what a new day brings | everyone | [![BetterRepair on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/BetterRepair/) |
+| <img src="mods/ParcelBoard/icon.png" width="40"> | [Parcel Board](mods/ParcelBoard/README.md) | Counts of the parcels in the level by destination, mark and size | only you | [![ParcelBoard on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/ParcelBoard/) |
+| <img src="mods/StackIt/icon.png" width="40"> | [Stack it!](mods/StackIt/README.md) | Parcels that stand across the joint of level parcels and fall when one is taken away | everyone | [![StackIt on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/StackIt/) |
+| <img src="mods/TooLate/icon.png" width="40"> | [Too Late](mods/TooLate/README.md) | Joining a game in progress, up to 8 players | only the host | [![TooLate on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/TooLate/) |
 
 "Everyone" mods are paused for the whole lobby while someone does not have them, instead of breaking the game.
 
@@ -30,9 +29,9 @@ The packages the mods stand on:
 
 | Package | What it is | Thunderstore |
 |---|---|:-:|
-| [CatLib](CHANGELOG.md) | The library itself: the Mods tab, translations, the lobby check and everything mods use | [![CatLib on Thunderstore](https://img.shields.io/thunderstore/dt/CatLib/CatLib?label=downloads&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CatLib/) |
-| [CatLib Crash Watcher](tools/CatLib.CrashWatcher/README.md) | The crash window and reports, installed together with CatLib | [![CrashWatcher on Thunderstore](https://img.shields.io/thunderstore/dt/CatLib/CrashWatcher?label=downloads&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CrashWatcher/) |
-| [CatLib Tests](tests/CatLib.Tests/README.md) | In-game tests and the developer menu, for mod authors only | [![CatLibTests on Thunderstore](https://img.shields.io/thunderstore/dt/CatLib/CatLibTests?label=downloads&color=23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CatLibTests/) |
+| [CatLib](CHANGELOG.md) | The library itself: the Mods tab, translations, the lobby check and everything mods use | [![CatLib on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CatLib/) |
+| [CatLib Crash Watcher](tools/CatLib.CrashWatcher/README.md) | The crash window and reports, installed together with CatLib | [![CrashWatcher on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CrashWatcher/) |
+| [CatLib Tests](tests/CatLib.Tests/README.md) | In-game tests and the developer menu, for mod authors only | [![CatLibTests on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CatLibTests/) |
 
 ## What CatLib gives
 
