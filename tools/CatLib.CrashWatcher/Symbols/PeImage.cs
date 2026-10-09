@@ -10,13 +10,16 @@ internal sealed class PeImage : IDisposable
     public const ushort Amd64 = 0x8664;
     public const int ExportDirectory = 0;
     public const int ExceptionDirectory = 3;
+    public const int DebugDirectory = 6;
     public const int ClrDirectory = 14;
+    public const uint CodeViewDebugType = 2;
+    public const uint CodeViewSignature = 0x53445352;
     public const int MaxChain = 32;
     public const byte ChainInfoFlag = 0x04;
     public const uint ExecutableSection = 0x20000000;
 
     private readonly FileStream _file;
-    private readonly List<Section> _sections = new List<Section>();
+    private readonly List<PeSection> _sections = new List<PeSection>();
     private readonly uint[] _directoryRva = new uint[16];
     private readonly uint[] _directorySize = new uint[16];
     private uint[] _begins;
@@ -38,6 +41,10 @@ internal sealed class PeImage : IDisposable
     public uint SizeOfImage { get; private set; }
 
     public uint TimeDateStamp { get; private set; }
+
+    public ulong ImageBase { get; private set; }
+
+    public IReadOnlyList<PeSection> Sections => _sections;
 
     public bool IsAmd64 => Machine == Amd64;
 
@@ -120,6 +127,58 @@ internal sealed class PeImage : IDisposable
             {
                 return (section.Characteristics & ExecutableSection) != 0;
             }
+        }
+
+        return false;
+    }
+
+    public byte[] ReadVirtual(ulong address, int count)
+    {
+        if (address < ImageBase || address - ImageBase >= SizeOfImage)
+        {
+            return null;
+        }
+
+        return Read((uint)(address - ImageBase), count);
+    }
+
+    public bool TryGetCodeView(out string pdbName, out string key)
+    {
+        pdbName = null;
+        key = null;
+        if (!TryGetDirectory(DebugDirectory, out var rva, out var size))
+        {
+            return false;
+        }
+
+        var entries = Read(rva, (int)Math.Min(size, 28 * 32));
+        if (entries == null)
+        {
+            return false;
+        }
+
+        for (var at = 0; at + 28 <= entries.Length; at += 28)
+        {
+            if (BitConverter.ToUInt32(entries, at + 12) != CodeViewDebugType)
+            {
+                continue;
+            }
+
+            var length = (int)Math.Min(BitConverter.ToUInt32(entries, at + 16), 1024);
+            var record = Read(BitConverter.ToUInt32(entries, at + 20), length);
+            if (record == null || length < 25 || BitConverter.ToUInt32(record, 0) != CodeViewSignature)
+            {
+                continue;
+            }
+
+            var guidBytes = new byte[16];
+            Array.Copy(record, 4, guidBytes, 0, 16);
+            var age = BitConverter.ToUInt32(record, 20);
+            var end = Array.IndexOf(record, (byte)0, 24);
+            var path = Encoding.UTF8.GetString(record, 24, (end < 0 ? record.Length : end) - 24);
+            pdbName = path.Substring(path.LastIndexOfAny(new[] { '\\', '/' }) + 1);
+            key = new Guid(guidBytes).ToString("N").ToUpperInvariant() + age.ToString("X", System.Globalization.CultureInfo.InvariantCulture);
+            return pdbName.Length > 0;
         }
 
         return false;
@@ -300,6 +359,7 @@ internal sealed class PeImage : IDisposable
         }
 
         SizeOfImage = BitConverter.ToUInt32(optional, 56);
+        ImageBase = magic == 0x20B ? BitConverter.ToUInt64(optional, 24) : BitConverter.ToUInt32(optional, 28);
         var directoryCount = Math.Min(16, Math.Min(BitConverter.ToInt32(optional, directoriesAt - 4), (optionalSize - directoriesAt) / 8));
         for (var index = 0; index < directoryCount; index++)
         {
@@ -318,7 +378,7 @@ internal sealed class PeImage : IDisposable
             var at = index * 40;
             var nameLength = Array.IndexOf(table, (byte)0, at, 8) - at;
             var name = Encoding.ASCII.GetString(table, at, nameLength < 0 ? 8 : nameLength);
-            _sections.Add(new Section(name, BitConverter.ToUInt32(table, at + 12), BitConverter.ToUInt32(table, at + 8),
+            _sections.Add(new PeSection(name, BitConverter.ToUInt32(table, at + 12), BitConverter.ToUInt32(table, at + 8),
                 BitConverter.ToUInt32(table, at + 20), BitConverter.ToUInt32(table, at + 16), BitConverter.ToUInt32(table, at + 36)));
         }
 
@@ -489,30 +549,5 @@ internal sealed class PeImage : IDisposable
 
             return total;
         }
-    }
-
-    private readonly struct Section
-    {
-        public Section(string name, uint virtualAddress, uint virtualSize, uint rawPointer, uint rawSize, uint characteristics)
-        {
-            Name = name;
-            Characteristics = characteristics;
-            VirtualAddress = virtualAddress;
-            VirtualSize = virtualSize;
-            RawPointer = rawPointer;
-            RawSize = rawSize;
-        }
-
-        public string Name { get; }
-
-        public uint Characteristics { get; }
-
-        public uint VirtualAddress { get; }
-
-        public uint VirtualSize { get; }
-
-        public uint RawPointer { get; }
-
-        public uint RawSize { get; }
     }
 }

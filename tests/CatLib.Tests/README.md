@@ -32,9 +32,9 @@ About 160 tests run inside the real game: settings, the Mods tab, translations, 
 | `Localization`, `Formatting` | catalogs of every mod, plural forms, the game build texts |
 | `Saves` | mod data in saves: atomic writes, backups, newer data |
 | `Network` | the handshake, roster, session settings, mod messages, the Steam channel |
-| `Events`, `Bridge`, `Scheduling`, `Platform` | game events, singletons, the frame loop, game info |
+| `Events`, `Bridge`, `Scheduling`, `Platform` | game events, singletons, the frame loop, game info, the IL2CPP metadata and symbols of the game for crash reports |
 | `Patching`, `Interop`, `Native` | `CatPatches`, `CodePatch`, IL2CPP arrays and events |
-| `Crash` | crash texts, the session file, the watcher package, stack unwinding and method names of the watcher, stacks in the report |
+| `Crash` | crash texts, the session file, the watcher package, stack unwinding, method names and PDB symbols of the watcher, stacks in the report |
 | `Inspection`, `DevTools`, `Runner` | the entity dump, the developer menu model, the test runner |
 | `BoatTweaks`, `ShelfLabels`, `BetterRepair`, `ParcelBoard`, `StackIt`, `TooLate` | the logic of every mod, and their scenes in a level |
 

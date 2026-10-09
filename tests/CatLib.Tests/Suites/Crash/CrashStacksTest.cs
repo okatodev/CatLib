@@ -61,6 +61,17 @@ public sealed class CrashStacksTest : TestCase
         same.Threads.Add(new CrashThreadStack { ThreadId = 1, GameMethod = "A.B() + 0x1" });
         Assert.Equal(string.Empty, CrashText.NearestGameMethod(same), "A crash inside a game method does not repeat it");
 
+        var raised = new CrashEventInfo { Module = "KERNELBASE.dll", Offset = "0xc41ca", ExceptionCode = "0xc0000005", ThreadId = GameThread, FromDebugger = true, Method = "RaiseException + 0x8a" };
+        raised.Threads.Add(new CrashThreadStack { ThreadId = GameThread, Caller = "UnityPlayer.dll + 0xdb437  Utils_CUSTOM_ForceCrash + 0x17" });
+        raised.CalledFrom = CrashText.CalledFrom(raised);
+        Assert.Equal("UnityPlayer.dll + 0xdb437  Utils_CUSTOM_ForceCrash + 0x17", raised.CalledFrom, "A crash in Windows names the code that called it");
+        Assert.True(CrashText.Report(session, 0xC0000005, raised, time, TimeSpan.FromMinutes(1), null).Contains("Called from: UnityPlayer.dll + 0xdb437  Utils_CUSTOM_ForceCrash + 0x17, the first frame outside Windows"), "In the report");
+        Assert.True(CrashText.Details(session, 0xC0000005, raised, time, russian).Contains("Вызвано из: UnityPlayer.dll"), "And in the window, in the language of the game");
+        info.Threads[0].Caller = "UnityPlayer.dll + 0x1";
+        Assert.Equal(string.Empty, CrashText.CalledFrom(info), "A crash outside Windows needs no caller line");
+        info.Threads[0].Caller = string.Empty;
+        Assert.True(CrashText.IsSystemModule("ntdll.dll") && CrashText.IsSystemModule("ucrtbase.DLL") && !CrashText.IsSystemModule("UnityPlayer.dll"), "Windows and the C runtime are told apart");
+
         var all = CrashText.AllStacks(session, info, time);
         var lines = all.Replace("\r\n", "\n").Split('\n');
         Assert.True(lines[0].StartsWith("Stacks of 6 threads of the game when it crashed, 2026-10-09 20:30:00"), "The file says what it shows");

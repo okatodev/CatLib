@@ -13,7 +13,7 @@ a release of CatLib does not change it, and CatLib depends on it, so a mod manag
 CatLib starts it once per game start from [`CrashWatch`](../../src/CatLib/Diagnostics/CrashWatch.cs):
 
 ```
-CatLib.CrashWatcher.exe --pid <game process id> --session "<BepInEx/CatLib/Crashes/session_<pid>.txt>" [--dump]
+CatLib.CrashWatcher.exe --pid <game process id> --session "<BepInEx/CatLib/Crashes/session_<pid>.txt>" [--dump] [--no-symbols]
 ```
 
 | Argument | Meaning |
@@ -22,6 +22,7 @@ CatLib.CrashWatcher.exe --pid <game process id> --session "<BepInEx/CatLib/Crash
 | `--session` | the session file CatLib writes while the game runs; the report folder is created next to it |
 | `--dump` | follow the game as a debugger and write memory dumps (`CrashDumps` in CatLib's config) |
 | `--preview` | show the window for a session file without a game, to check texts and layout |
+| `--no-symbols` | do not download symbols of Unity and Windows (`CrashSymbols` in CatLib's config is off) |
 
 CatLib looks for the program next to `CatLib.dll`, then in every folder of `BepInEx/plugins` up to 4 levels deep, and takes the newest.
 
@@ -51,7 +52,9 @@ flowchart LR
     E --> F[CodeNames]
     F -->|GameAssembly.dll| G[GameMethodMap: MethodAddressToToken.db]
     G --> H[ManagedMetadata: interop assembly]
-    F -->|other DLLs| I[exported names]
+    F -->|generic code| J[Il2CppCodeNames: global-metadata.dat and registrations]
+    F -->|other DLLs| K[PdbPublics: symbols from SymbolStore]
+    F -->|no symbols| I[exported names]
 ```
 
 | File | Does |
@@ -62,10 +65,15 @@ flowchart LR
 | `Symbols/PeImage.cs` | reads a DLL from disk: sections, `.pdata`, exports, .NET metadata |
 | `Symbols/GameMethodMap.cs` | reads `BepInEx/interop/MethodAddressToToken.db` of BepInEx: addresses of the game's methods and their interop methods |
 | `Symbols/ManagedMetadata.cs` | reads names, generic parameters and parameter types of methods from an interop assembly, with the original names interop kept |
-| `Symbols/CodeNames.cs` | turns a module and an offset into a name, checks that the method map belongs to the running `GameAssembly.dll` |
+| `Symbols/CodeNames.cs` | turns a module and an offset into a name, checks that the method map belongs to the running `GameAssembly.dll` and that the IL2CPP metadata agrees with it |
+| `Symbols/Il2CppMetadataFile.cs` | reads `global-metadata.dat` of versions 29 to 106, with the variable width indices of version 38 and later |
+| `Symbols/Il2CppCodeNames.cs` | finds the code and metadata registrations in `GameAssembly.dll` like LibCpp2IL does, and names generic method instances and plain methods |
+| `Symbols/PdbPublics.cs` | reads the public symbols of an MSF 7.00 PDB |
+| `Symbols/SymbolStore.cs` | downloads PDBs from the symbol servers of Unity and Microsoft into `BepInEx/CatLib/Symbols`, expands compressed ones with `expand.exe` |
+| `SymbolPrefetch.cs` | half a minute after the game starts, asks the store for the symbols of the loaded modules |
 
-Nothing here runs while the game plays: the files are read after a crash or a hang. `StackUnwindTest` of `CatLib.Tests` checks
-the unwinding and the names on a small x64 image it builds itself, with the method map pointing at its own methods.
+Nothing here touches the game while it plays: the files are read after a crash or a hang, and only the download of symbols runs earlier, in the watcher's own process. `StackUnwindTest` and `PdbPublicsTest` of `CatLib.Tests` check
+the unwinding and the names on a small x64 image and PDB they build themselves; `GameSymbolsTest` reads the real metadata of the game and checks it against the BepInEx method map.
 
 ### Shared with CatLib
 

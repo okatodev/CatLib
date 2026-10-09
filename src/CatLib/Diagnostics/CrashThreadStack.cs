@@ -14,5 +14,7 @@ internal sealed class CrashThreadStack
 
     public string GameMethod { get; set; } = string.Empty;
 
+    public string Caller { get; set; } = string.Empty;
+
     public string Key => string.Join("\n", Frames) + "\n" + Note;
 }

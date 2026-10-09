@@ -32,6 +32,8 @@ internal sealed class CrashEventInfo
 
     public string GameMethod { get; set; } = string.Empty;
 
+    public string CalledFrom { get; set; } = string.Empty;
+
     public List<CrashThreadStack> Threads { get; } = new List<CrashThreadStack>();
 
     public bool Hung => HangSeconds > 0;
@@ -69,6 +71,11 @@ internal static class CrashText
     public const int ReportFrames = 24;
     public const string ScannedMark = "? ";
     public const int ListedGroupThreads = 10;
+
+    public static readonly string[] SystemModules =
+    {
+        "ntdll.dll", "KERNELBASE.dll", "KERNEL32.DLL", "ucrtbase.dll", "vcruntime140.dll", "vcruntime140_1.dll", "msvcp140.dll"
+    };
 
     public const string ExecuteAccess = "execute";
 
@@ -328,6 +335,11 @@ internal static class CrashText
                 builder.AppendLine("Method: " + info.Method);
             }
 
+            if (info.CalledFrom.Length > 0)
+            {
+                builder.AppendLine("Called from: " + info.CalledFrom + ", the first frame outside Windows and the C runtime");
+            }
+
             if (info.GameMethod.Length > 0)
             {
                 builder.AppendLine("Game code: " + info.GameMethod + ", the nearest game method on the crashing thread");
@@ -425,6 +437,11 @@ internal static class CrashText
                 builder.AppendLine(strings.Get("detailMethod") + ": " + info.Method);
             }
 
+            if (info.CalledFrom.Length > 0)
+            {
+                builder.AppendLine(strings.Get("detailCaller") + ": " + info.CalledFrom);
+            }
+
             if (info.GameMethod.Length > 0)
             {
                 builder.AppendLine(strings.Get("detailGameMethod") + ": " + info.GameMethod);
@@ -471,6 +488,25 @@ internal static class CrashText
         }
 
         return crashed.GameMethod;
+    }
+
+    public static bool IsSystemModule(string module)
+    {
+        foreach (var name in SystemModules)
+        {
+            if (string.Equals(module, name, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static string CalledFrom(CrashEventInfo info)
+    {
+        var crashed = info.HasFault && IsSystemModule(info.Module) ? FindThread(info, info.ThreadId) : null;
+        return crashed == null ? string.Empty : crashed.Caller;
     }
 
     public static CrashThreadStack FindThread(CrashEventInfo info, int threadId)

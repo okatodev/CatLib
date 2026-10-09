@@ -75,25 +75,35 @@ of the game on that thread when the crash is in Windows, Unity or another DLL, a
 ```
 Module: KERNELBASE.dll + 0x00000000000c41ca, exception 0xc0000005, seen by the crash watcher
 Method: RaiseException + 0x8a
+Called from: UnityPlayer.dll + 0xdb437  Utils_CUSTOM_ForceCrash + 0x17, the first frame outside Windows and the C runtime
 Game code: EntityInteractableStore.Start() + 0x60, the nearest game method on the crashing thread
 
 Stack of thread 22412, the game thread:
+  KERNELBASE.dll + 0xc41ca            RaiseException + 0x8a
+  UnityPlayer.dll + 0xdb437           Utils_CUSTOM_ForceCrash + 0x17
   GameAssembly.dll + 0x4d5f30         EntityInteractableStore.Start() + 0x60
   GameAssembly.dll + 0x3d6146         IL2CPP runtime, in the function at 0x3d6100
-  UnityPlayer.dll + 0x6a1b2c
+  UnityPlayer.dll + 0x767f3a          ScriptingInvocation::Invoke + 0xaa
+  UnityPlayer.dll + 0x787e5b          MonoBehaviour::CallMethodIfAvailable + 0xab
   ...
 ```
 
 The newest call is at the top; `+ 0x60` is the distance from the start of the method in bytes.
+When the crash is inside Windows or the C runtime (`ntdll`, `KERNELBASE`, `kernel32`, `ucrtbase`, `vcruntime140`, `msvcp140`),
+that place only says how the crash was raised, so `Called from` names the first frame outside them: the code that asked for it.
 
 | What a frame says | Means |
 |---|---|
 | `Namespace.Type.Method(int, string[]) + 0x60` | A method of the game, of Unity or of another library compiled into `GameAssembly.dll` |
 | `…, 3 more methods have the same code` | The compiler kept one copy of identical methods, often small getters; any of them may be the one |
 | `IL2CPP runtime, in the function at 0x…` | The runtime that runs the game's code: the garbage collector, threads, reflection |
-| `IL2CPP code that is not a game method, such as a generic method` | Code generated for `List<T>`, `Dictionary<K, V>` and other generics, or a helper of IL2CPP |
-| `NtWaitForAlertByThreadId + 0x14` | A function a Windows or Steam DLL exports by name |
-| `UnityPlayer.dll + 0x6a1b2c` | Code without a name we can read; the offset still identifies it in that build |
+| `List<int>.Add(int) + 0x1c` | A generic method with the type arguments it was compiled for; `object` stands for any reference type, whose code IL2CPP shares |
+| `QuickSort<T>(Span<T>, int, int) + 0x40` | Code IL2CPP shares between all type arguments, so it shows the names of the generic parameters |
+| `Type.<Start>g__Wait\|12_0() + 0x1c, Method_Private_IEnumerator_PDM_0 in the interop assemblies` | The original name of a method interop gave a made-up name; the made-up one is what a Harmony patch uses |
+| `IL2CPP code that is not a game method` | A helper IL2CPP generated, such as an invoker or a thunk |
+| `ScriptingInvocation::Invoke + 0x4a` | A function of Unity, Windows or .NET named by their public symbols, see [Symbols](#symbols) |
+| `NtWaitForAlertByThreadId + 0x14` | A function a DLL exports by name |
+| `steamclient64.dll + 0xa86a9c` | Code without a name we can read, such as Steam or a driver; the offset still identifies it in that build |
 | `0x… not in a module` | Code compiled while the game runs: .NET code of BepInEx, Harmony patches and mods |
 | `0x… not code` | The thread called or jumped to an address without code, often a null pointer; the next frame made that call |
 | `? ` at the start | The frame was found by searching the stack for a return address after code without unwind data, or it depends on a register such a search could not restore; it may be a leftover of an earlier call |
@@ -110,12 +120,31 @@ How it works:
   from the interop assembly, nothing is written while the game runs. Before it trusts the file, it checks a sample of the addresses against the
   functions of `GameAssembly.dll`; a file left from another game build is not used and `watcher.log` says so.
 - **Original names.** Interop renames compiler-generated types such as `<Start>d__12` and keeps the original in an attribute, which the report shows.
-  Methods renamed by interop like `Method_Private_IEnumerator_PDM_0` have no original name there and stay as they are.
+  Methods interop renamed like `Method_Private_IEnumerator_PDM_0`, usually local functions, get their original name from the IL2CPP metadata,
+  such as `<PlayOneShot>g__ResetAfterAudioClipPlayed|14_0`, followed by the interop name.
+- **Generic methods.** BepInEx lists no generic code, so the watcher reads the IL2CPP metadata itself: `<Game>_Data/il2cpp_data/Metadata/global-metadata.dat`
+  for the names and the code and metadata registrations inside `GameAssembly.dll` for the addresses of every compiled instance, like `Dictionary<string, int>.TryInsert`.
+  It reads metadata versions 29 to 106 (Unity 2021.2 to Unity 6) and trusts what it reads only when the plain methods it finds agree with the BepInEx method map.
+
+### Symbols
+
+Unity and Microsoft publish symbols for their DLLs on symbol servers: files that name the functions without giving away the source code.
+About half a minute after the game starts, the watcher looks at the modules the game loaded and downloads the symbols it does not have yet,
+once per version of each DLL, into `BepInEx/CatLib/Symbols`:
+
+| DLL | Server |
+|---|---|
+| `UnityPlayer.dll`, `baselib.dll`, the game's `.exe` | `symbolserver.unity3d.com` |
+| `ntdll.dll`, `KERNELBASE.dll`, `kernel32.dll`, `user32.dll`, `win32u.dll`, `d3d11.dll`, `dxgi.dll`, the C runtime (`ucrtbase.dll`, `vcruntime140.dll`, `msvcp140.dll`), `coreclr.dll`, `clrjit.dll` | `msdl.microsoft.com` |
+
+- The folder has the layout of a symbol server, so Visual Studio and WinDbg can use it too: add `BepInEx/CatLib/Symbols` as a symbol path.
+- Symbols the server does not have are tried again after 7 days; each DLL keeps the symbols of its last 2 versions.
+- A `.pdb` next to a DLL wins over the downloaded one, so a mod author with private symbols gets their names.
+- `watcher.log` names every download and which symbols named which DLL.
+- The setting `CrashSymbols` turns the downloads off; symbols already downloaded are still used. Nothing else is sent: a download asks the server for a file by its name and version.
 
 > [!NOTE]
-> `UnityPlayer.dll`, `steamclient64.dll` and the drivers have no names in the report beyond their exported functions.
-> Unity publishes symbols for `UnityPlayer.dll` on its symbol server, so a mod author can still resolve such a frame
-> in Visual Studio or WinDbg with the memory dump.
+> Steam (`steamclient64.dll`, `steamwebrtc64.dll`) and the graphics drivers publish no symbols, so their frames keep the module and the offset.
 
 ## Settings
 
@@ -123,6 +152,7 @@ In section `[Diagnostics]` of CatLib's config, both on the Mods tab and taking e
 
 - `CrashWindow` turns the watcher off.
 - `CrashDumps` turns the memory dumps off; the watcher then only waits for the game to close, and a crash report has no stacks.
+- `CrashSymbols` turns the downloads of [symbols](#symbols) off.
 
 ## Checking it
 

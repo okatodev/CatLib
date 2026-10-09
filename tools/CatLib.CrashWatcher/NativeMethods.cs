@@ -41,6 +41,7 @@ internal static class NativeMethods
     public const uint MemoryCommit = 0x1000;
     public const uint ExecutableProtection = 0xF0;
     public const uint SuspendFailed = 0xFFFFFFFF;
+    public const uint UndecorateNameOnly = 0x1000;
     public const uint DebugContinue = 0x00010002;
     public const uint DebugExceptionNotHandled = 0x80010001;
     public const int ExceptionDebugEvent = 1;
@@ -130,6 +131,9 @@ internal static class NativeMethods
 
     [DllImport("kernel32.dll", SetLastError = true)]
     public static extern IntPtr LocalFree(IntPtr memory);
+
+    [DllImport("dbghelp.dll", CharSet = CharSet.Ansi, SetLastError = true)]
+    public static extern uint UnDecorateSymbolName(string name, StringBuilder output, uint length, uint flags);
 
     [DllImport("dbghelp.dll", SetLastError = true)]
     public static extern bool MiniDumpWriteDump(IntPtr process, int processId, IntPtr file, uint type, IntPtr exceptionParam, IntPtr userStreamParam, IntPtr callbackParam);

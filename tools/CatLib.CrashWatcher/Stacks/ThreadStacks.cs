@@ -13,6 +13,7 @@ internal static class ThreadStacks
     public const int MaxThreads = 512;
     public const int MaxFrames = 48;
     public const int MaxNameLength = 64;
+    public static readonly TimeSpan SymbolWait = TimeSpan.FromSeconds(15);
 
     public static List<CrashThreadStack> Capture(IntPtr process, int processId, CodeNames names, bool suspend, int firstThread, WatcherLog log)
     {
@@ -98,16 +99,23 @@ internal static class ThreadStacks
             }
         }
 
+        names.WaitForSymbols(SymbolWait);
         for (var index = 0; index < walked.Count; index++)
         {
             var stack = walked[index].Key;
             stack.Name = Name(threads[index].Value);
             foreach (var frame in walked[index].Value)
             {
-                stack.Frames.Add(FrameText(modules, names, frame, out var gameMethod));
+                var text = FrameText(modules, names, frame, out var gameMethod);
+                stack.Frames.Add(text);
                 if (stack.GameMethod.Length == 0 && gameMethod != null)
                 {
                     stack.GameMethod = gameMethod;
+                }
+
+                if (stack.Caller.Length == 0 && stack.Frames.Count > 1 && !frame.Scanned && !InSystemModule(modules, frame))
+                {
+                    stack.Caller = Collapse(text);
                 }
             }
 
@@ -123,6 +131,28 @@ internal static class ThreadStacks
                   (suspend ? $", the game was paused for {suspended.Count} threads" : string.Empty) +
                   (names.HasGameMethods ? ", with game method names" : string.Empty));
         return stacks;
+    }
+
+    public static bool InSystemModule(ModuleSet modules, UnwoundFrame frame)
+    {
+        var module = modules.Find(frame.Address);
+        return module != null && CrashText.IsSystemModule(module.Name);
+    }
+
+    public static string Collapse(string frameText)
+    {
+        var builder = new System.Text.StringBuilder(frameText.Length);
+        foreach (var character in frameText.Trim())
+        {
+            if (character == ' ' && builder.Length > 1 && builder[builder.Length - 1] == ' ' && builder[builder.Length - 2] == ' ')
+            {
+                continue;
+            }
+
+            builder.Append(character);
+        }
+
+        return builder.ToString();
     }
 
     public static string FrameText(ModuleSet modules, CodeNames names, UnwoundFrame frame, out string gameMethod)

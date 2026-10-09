@@ -14,6 +14,8 @@ internal static class Program
     public const string DumpArgument = "--dump";
     public const string LogFileName = "watcher.log";
     public const string InteropFolder = "interop";
+    public const string SymbolsFolder = "Symbols";
+    public const string NoSymbolsArgument = "--no-symbols";
 
     public static string WatcherVersion
     {
@@ -31,6 +33,7 @@ internal static class Program
         string sessionFile = null;
         var preview = false;
         var dump = false;
+        var symbols = true;
         for (var index = 0; index < args.Length; index++)
         {
             if (args[index] == ProcessArgument && index + 1 < args.Length)
@@ -49,6 +52,10 @@ internal static class Program
             {
                 dump = true;
             }
+            else if (args[index] == NoSymbolsArgument)
+            {
+                symbols = false;
+            }
         }
 
         if (string.IsNullOrEmpty(sessionFile) || (processId <= 0 && !preview))
@@ -60,7 +67,7 @@ internal static class Program
         var log = new WatcherLog(Path.Combine(reportsDirectory, LogFileName));
         try
         {
-            return preview ? Preview(sessionFile, reportsDirectory, log) : Watch(processId, sessionFile, reportsDirectory, dump, log);
+            return preview ? Preview(sessionFile, reportsDirectory, log) : Watch(processId, sessionFile, reportsDirectory, dump, symbols, log);
         }
         catch (Exception exception)
         {
@@ -69,11 +76,35 @@ internal static class Program
         }
     }
 
-    private static int Watch(int processId, string sessionFile, string reportsDirectory, bool dump, WatcherLog log)
+    private static int Watch(int processId, string sessionFile, string reportsDirectory, bool dump, bool downloadSymbols, WatcherLog log)
     {
-        using (var names = new CodeNames(InteropDirectory(reportsDirectory), log))
+        var store = new SymbolStore(Path.GetFullPath(Path.Combine(reportsDirectory, "..", SymbolsFolder)), log);
+        using (var names = new CodeNames(InteropDirectory(reportsDirectory), log, store) { Undecorate = Undecorate })
         {
+            if (downloadSymbols)
+            {
+                SymbolPrefetch.Start(processId, store, names, log);
+            }
+
             return Watch(processId, sessionFile, reportsDirectory, dump, names, log);
+        }
+    }
+
+    private static string Undecorate(string name)
+    {
+        if (string.IsNullOrEmpty(name) || name[0] != '?')
+        {
+            return name;
+        }
+
+        try
+        {
+            var output = new System.Text.StringBuilder(1024);
+            return NativeMethods.UnDecorateSymbolName(name, output, (uint)output.Capacity, NativeMethods.UndecorateNameOnly) > 0 ? output.ToString() : CodeNames.Readable(name);
+        }
+        catch (Exception exception) when (exception is DllNotFoundException || exception is EntryPointNotFoundException)
+        {
+            return CodeNames.Readable(name);
         }
     }
 
@@ -136,6 +167,11 @@ internal static class Program
 
         NameCrash(info, exit, names, log);
         info.GameMethod = CrashText.NearestGameMethod(info);
+        info.CalledFrom = CrashText.CalledFrom(info);
+        if (info.CalledFrom.Length > 0)
+        {
+            log.Write($"The crash in {info.Module} was called from {info.CalledFrom}");
+        }
 
         var report = ReportWriter.Write(reportsDirectory, sessionFile, session, exit, info, reportDump, log);
         TryDelete(sessionFile, log);

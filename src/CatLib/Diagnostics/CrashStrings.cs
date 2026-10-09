@@ -34,6 +34,7 @@ internal sealed class CrashStrings
         ["detailModule"] = "Module",
         ["detailMethod"] = "Method",
         ["detailGameMethod"] = "Game code",
+        ["detailCaller"] = "Called from",
         ["detailException"] = "exception",
         ["detailThread"] = "Thread",
         ["gameThread"] = "the game thread",

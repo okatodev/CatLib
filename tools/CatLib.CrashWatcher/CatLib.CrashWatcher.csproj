@@ -21,6 +21,10 @@
     <Compile Include="..\..\src\CatLib\Diagnostics\CrashThreadStack.cs" Link="Shared\CrashThreadStack.cs" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(CatLibWatcherCheck)' != 'true'">
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
   <ItemGroup Condition="'$(CatLibWatcherCheck)' == 'true' and '$(CatLibWatcherEventLogReference)' != ''">
     <Reference Include="System.Diagnostics.EventLog" HintPath="$(CatLibWatcherEventLogReference)" />
   </ItemGroup>

@@ -26,8 +26,6 @@ Assets come up in many mods, so the API is for every mod author, not only for th
   peer to peer connections. CatLib waits for its closed sessions; whether the game itself crashes the same way is still to check
   without mods.
 - The last BepInEx log lines before a native crash on the game thread may not reach the log file.
-- More names in crash stacks: frames of `UnityPlayer.dll` from the public symbols on Unity's symbol server,
-  and generic methods of IL2CPP from `global-metadata.dat`, which the method map of BepInEx does not list.
 
 ### The mods that are out
 

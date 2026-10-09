@@ -21,6 +21,7 @@ internal static class CrashWatch
     public const string WatcherFileName = "CatLib.CrashWatcher.exe";
     public const string SessionFilePrefix = "session_";
     public const string DumpArgument = "--dump";
+    public const string NoSymbolsArgument = "--no-symbols";
     public const int KeptEvents = 200;
     public const int MaxExceptionLines = 40;
     public const int EventsBeforeTrim = 2000;
@@ -36,6 +37,7 @@ internal static class CrashWatch
     private static bool _modsWritten;
     private static bool _closed;
     private static bool _dumps;
+    private static bool _symbols;
 
     public static string ReportsDirectory => Path.Combine(Paths.BepInExRootPath, "CatLib", "Crashes");
 
@@ -49,6 +51,9 @@ internal static class CrashWatch
             .RequiresRestart();
         _dumps = settings.Local("Diagnostics", "CrashDumps", true,
             "Together with the crash window, keeps a memory dump of the moment of the crash in the report folder, for the mod authors. The crash watcher follows the game like a debugger for this.")
+            .RequiresRestart().Value;
+        _symbols = settings.Local("Diagnostics", "CrashSymbols", true,
+            "Lets the crash watcher download the public symbols of Unity and Windows once per version, so crash reports name the functions of UnityPlayer.dll and other modules. They are kept in BepInEx/CatLib/Symbols.")
             .RequiresRestart().Value;
         if (!enabled.Value)
         {
@@ -110,7 +115,7 @@ internal static class CrashWatch
 
         var start = new ProcessStartInfo(watcher)
         {
-            Arguments = $"--pid {process.Id.ToString(CultureInfo.InvariantCulture)} --session \"{_sessionFile}\"" + (_dumps ? " " + DumpArgument : string.Empty),
+            Arguments = $"--pid {process.Id.ToString(CultureInfo.InvariantCulture)} --session \"{_sessionFile}\"" + (_dumps ? " " + DumpArgument : string.Empty) + (_symbols ? string.Empty : " " + NoSymbolsArgument),
             UseShellExecute = false,
             CreateNoWindow = true,
             WorkingDirectory = ReportsDirectory

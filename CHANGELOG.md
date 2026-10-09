@@ -6,8 +6,11 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
 
 ### Added
 
+- The setting `CrashSymbols` in `[Diagnostics]` lets the crash watcher download the public symbols of Unity and Windows,
+  so crash reports name the functions of `UnityPlayer.dll` and other modules; on by default, in every language.
 - The crash window names the method a crash happened in and the nearest method of the game on that thread,
-  with "Method" and "Game code" lines in the details in every language.
+  with "Method" and "Game code" lines in the details in every language. When the crash is inside Windows or the C runtime,
+  for example in `RaiseException`, a "Called from" line names the code that called it.
   The names and the stacks of every thread come from CatLib Crash Watcher 1.1.0, see [Crash reports](docs/CrashReports.md#method-names-and-stacks).
 
 ### Changed
