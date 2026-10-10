@@ -128,7 +128,7 @@ public sealed class JoinCoordinator
             return;
         }
 
-        if (GameProtocol.IsHosting && clientId != GameProtocol.LocalClientId && !_tickets.ContainsKey(clientId))
+        if (GameProtocol.IsHosting && CatNetwork.IsRemotePlayer(clientId) && !_tickets.ContainsKey(clientId))
         {
             _log.Info($"Player {clientId} connected and joins the usual way: {(_inLevel ? "joining a game in progress is off in the settings" : "you are in the lobby")}");
         }
@@ -259,7 +259,9 @@ public sealed class JoinCoordinator
             ClearState();
             if (GameProtocol.IsHosting)
             {
-                _log.Info("Your game started, players who connect from now on join the game in progress");
+                _log.Info(CatNetwork.IsWithoutSteamNetwork
+                    ? "Your game started without the Steam network, it runs on this computer only and nobody can join it"
+                    : "Your game started, players who connect from now on join the game in progress");
             }
         }
     }
@@ -319,7 +321,7 @@ public sealed class JoinCoordinator
     }
 
     private bool ShouldTakeOver(ulong clientId) =>
-        _inLevel && Settings != null && Settings.Enabled.Value && GameProtocol.IsHosting && clientId != GameProtocol.LocalClientId;
+        _inLevel && Settings != null && Settings.Enabled.Value && GameProtocol.IsHosting && CatNetwork.IsRemotePlayer(clientId);
 
     private void Ensure(ulong clientId)
     {

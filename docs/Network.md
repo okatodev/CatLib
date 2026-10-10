@@ -12,6 +12,7 @@ keeps a roster of the session, pauses mods not everyone has, and carries message
 | see who is in the session with which mods | `CatNetwork.Roster`, `RosterChanged` |
 | send something to the host or to everyone | `CatNetwork.Channel(this)` |
 | show a player's name | `CatNetwork.PlayerName(steamId)` |
+| know whether a connected client is another player | `CatNetwork.IsRemotePlayer(clientId)`, see [Without the Steam network](#without-the-steam-network) |
 
 ## Declaring a mod
 
@@ -86,6 +87,27 @@ if (CatNetwork.IsAuthority)
 
 A client reads `plan.Value`, which is the host's value once the handshake is accepted.
 Until then, and when the host rejected the client, `plan.IsOverridden` is false and the client should not act on its own old value.
+
+### Without the Steam network
+
+When Steam cannot reach its relay network, for example with a bad connection, the game still starts a level:
+it runs its server and its own client over a UDP socket on the computer, and that client gets the id `1` instead of a Steam id.
+Nobody else can join such a session. The role is still `Host`, every mod stays active, and the log says
+"The game hosts this session without the Steam network".
+
+The host's own client also connects to the server like any player, so a mod that reacts to connecting clients
+must not take it for someone else. `CatNetwork.IsRemotePlayer(clientId)` is true only for another player's Steam id,
+never for the host's own client and never without the Steam network; `CatNetwork.IsWithoutSteamNetwork` tells about the session itself.
+
+```csharp
+NetworkEvents.ClientConnected += clientId =>
+{
+    if (CatNetwork.IsRemotePlayer(clientId))
+    {
+        Greet(clientId);
+    }
+};
+```
 
 ## Session settings
 

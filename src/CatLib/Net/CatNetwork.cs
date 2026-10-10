@@ -39,6 +39,10 @@ public static class CatNetwork
 
     public static string PlayerName(ulong steamId) => SessionNetwork.PlayerName(steamId);
 
+    public static bool IsWithoutSteamNetwork => SessionNetwork.IsWithoutSteamNetwork();
+
+    public static bool IsRemotePlayer(ulong clientId) => SessionNetwork.IsRemotePlayer(clientId);
+
     public static bool IsActive(BasePlugin plugin)
     {
         var metadata = plugin == null ? null : MetadataHelper.GetMetadata(plugin);

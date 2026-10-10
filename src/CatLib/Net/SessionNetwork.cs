@@ -32,6 +32,7 @@ internal static class SessionNetwork
     public const string StoppedEventName = "Net.Stopped";
     public const string RosterEventName = "Net.Roster";
     public const string ActiveModsEventName = "Net.ActiveMods";
+    public const string WithoutSteamEventName = "Net.WithoutSteam";
     public const double RosterIntervalSeconds = 0.5;
 
     private static readonly Stopwatch Clock = new();
@@ -437,16 +438,29 @@ internal static class SessionNetwork
         _lastRosterBytes = null;
         _log.Info($"Hosting as {localId} through the {Transport.ApiName} Steam API, declared mods: {CatNetwork.DeclaredMods.Count}");
         GameEventStream.Publish(HostStartedEventName, $"id={localId} api={Transport.ApiName}");
+        if (IsWithoutSteamNetwork())
+        {
+            _log.Info("The game hosts this session without the Steam network: Steam could not reach its relay network, so the game runs on this computer only and nobody can join");
+            GameEventStream.Publish(WithoutSteamEventName, "role=host");
+        }
     }
 
     private static void OnClientConnected(ulong clientId)
     {
         MainThread.Post(() =>
         {
-            if (Host != null && Transport != null && clientId != Transport.LocalId)
+            if (Host == null || Transport == null || clientId == Transport.LocalId)
             {
-                Host.OnPeerConnected(clientId);
+                return;
             }
+
+            if (!SteamIds.IsIndividual(clientId))
+            {
+                _log.Info($"Client {clientId} connected without a Steam id, as the game does when it plays without the Steam network; CatLib has no channel to it and does not check it");
+                return;
+            }
+
+            Host.OnPeerConnected(clientId);
         });
     }
 
@@ -775,19 +789,70 @@ internal static class SessionNetwork
 
     private static string ModName(string id) => CatNetwork.DeclaredMods.FirstOrDefault(mod => mod.Id == id)?.Name;
 
-    internal static string PlayerName(ulong steamId)
+    internal static bool IsWithoutSteamNetwork()
     {
         try
         {
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
-            if (!string.IsNullOrWhiteSpace(name) && name != "[unknown]")
+            if (!Singleton<NetworkManager>.HasInstance())
             {
-                return name;
+                return false;
             }
+
+            var network = Singleton<NetworkManager>.Instance;
+            var server = network.IsServer ? network._server : null;
+            if (server != null)
+            {
+                return server._udpClient != null;
+            }
+
+            var client = network._client;
+            return client != null && client._udpClient != null;
         }
-        catch (Exception exception)
+        catch (Exception)
         {
-            _log.Debug($"Reading the Steam name of {steamId} failed: {exception.Message}");
+            return false;
+        }
+    }
+
+    internal static bool IsRemotePlayer(ulong clientId)
+    {
+        if (!SteamIds.IsIndividual(clientId) || IsWithoutSteamNetwork())
+        {
+            return false;
+        }
+
+        var own = Transport?.LocalId ?? 0;
+        return clientId != (own != 0 ? own : LocalId()) && clientId != GameClientId();
+    }
+
+    private static ulong GameClientId()
+    {
+        try
+        {
+            return Singleton<NetworkManager>.HasInstance() ? Singleton<NetworkManager>.Instance.ClientId : 0;
+        }
+        catch (Exception)
+        {
+            return 0;
+        }
+    }
+
+    internal static string PlayerName(ulong steamId)
+    {
+        if (SteamIds.IsIndividual(steamId))
+        {
+            try
+            {
+                var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+                if (!string.IsNullOrWhiteSpace(name) && name != "[unknown]")
+                {
+                    return name;
+                }
+            }
+            catch (Exception exception)
+            {
+                _log.Debug($"Reading the Steam name of {steamId} failed: {exception.Message}");
+            }
         }
 
         var lobbyName = MenuNotices.LobbyName(steamId);

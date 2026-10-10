@@ -29,15 +29,6 @@ public static class GameProtocol
 
     public static bool IsHosting => Server != null;
 
-    public static ulong LocalClientId
-    {
-        get
-        {
-            var network = Network;
-            return network == null ? 0 : network.ClientId;
-        }
-    }
-
     public static Il2CppReferenceArray<Object> Empty() => new(0);
 
     public static bool Send(int code, ulong target, Il2CppReferenceArray<Object> payload, bool reliable = true)

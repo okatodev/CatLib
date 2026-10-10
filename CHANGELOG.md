@@ -8,6 +8,8 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
 
 - The setting `CrashSymbols` in `[Diagnostics]` lets the crash watcher download the public symbols of Unity and Windows,
   so crash reports name the functions of `UnityPlayer.dll` and other modules; on by default, in every language.
+- `CatNetwork.IsRemotePlayer(clientId)` tells whether a connected client is another player, and `CatNetwork.IsWithoutSteamNetwork`
+  whether the game runs its session without the Steam network. See [Without the Steam network](docs/Network.md#without-the-steam-network).
 - The crash window names the method a crash happened in and the nearest method of the game on that thread,
   with "Method" and "Game code" lines in the details in every language. When the crash is inside Windows or the C runtime,
   for example in `RaiseException`, a "Called from" line names the code that called it.
@@ -26,6 +28,12 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
 - The Thunderstore example in [Writing a mod](docs/WritingMods.md#thunderstore-package) depends on `CatLib-CatLib`, the real package name.
 - Before the game shuts Steam down, CatLib waits until the sessions it closed in the last minute are gone, at most 6 seconds,
   instead of a fixed 5 seconds after a player left, and writes the state of each such session to the log before and after waiting.
+
+### Fixed
+
+- When Steam cannot reach its relay network, the game plays over a socket on the computer and gives its own client the id 1.
+  CatLib took that client for a player without CatLib, paused every mod that all players need and asked Steam for its name twice a second,
+  which filled the log with `Null`. Now it leaves such a client alone and writes once that the game runs without the Steam network.
 
 ## 0.7.0
 

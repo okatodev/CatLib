@@ -1,5 +1,11 @@
 # Changelog
 
+## Not released yet
+
+- A single player game no longer loads forever when Steam cannot reach its relay network. The game then gives your own client
+  the id 1, and Too Late took it for a player who joins late and kept it in the lobby. Now only other Steam players join late,
+  and without the Steam network the log says that nobody can join. Needs CatLib 0.8.0.
+
 ## 0.1.0
 
 - Players can join a game in progress. They get a snapshot of the warehouse as it is at that moment, written into a separate file;

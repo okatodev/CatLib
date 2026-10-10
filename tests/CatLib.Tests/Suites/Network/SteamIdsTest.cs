@@ -16,6 +16,9 @@ public sealed class SteamIdsTest : TestCase
         Assert.False(SteamIds.IsIndividual(ulong.MaxValue), "The game's placeholder while not connected");
         Assert.False(SteamIds.IsIndividual(SteamIds.IndividualBase), "The base itself is account zero");
         Assert.False(SteamIds.IsIndividual(12345UL), "A small number such as a network identifier");
+        Assert.False(SteamIds.IsIndividual(1UL), "The id the game gives its own client when it plays without the Steam network");
+        Assert.False(CatNetwork.IsRemotePlayer(1UL), "That client is never a remote player");
+        Assert.False(CatNetwork.IsRemotePlayer(0UL), "Nor is an unknown client");
         yield break;
     }
 }
