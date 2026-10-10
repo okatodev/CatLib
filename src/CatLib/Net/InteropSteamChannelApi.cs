@@ -34,11 +34,7 @@ internal sealed class InteropSteamChannelApi : ISteamChannelApi
         return SteamNetworkingMessages.CloseSessionWithUser(ref identity);
     }
 
-    public int State(ulong peer)
-    {
-        var identity = Identity(peer);
-        return (int)SteamNetworkingMessages.GetSessionConnectionInfo(ref identity, out _, out _);
-    }
+    public int State(ulong peer) => FlatSteamChannelApi.SessionState(peer);
 
     public int Receive(int channel, Action<ulong, byte[]> received)
     {

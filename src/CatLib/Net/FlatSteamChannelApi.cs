@@ -91,6 +91,12 @@ internal sealed unsafe class FlatSteamChannelApi : ISteamChannelApi
         return new FlatSteamChannelApi(self, send, receive, accept, release, close, state, accessorName);
     }
 
+    public static int SessionState(ulong peer)
+    {
+        var api = TryCreate(out _);
+        return api == null ? SteamMessagesTransport.StateUnknown : api.State(peer);
+    }
+
     public int Send(ulong peer, byte[] payload, int flags, int channel)
     {
         var identity = stackalloc byte[IdentitySize];

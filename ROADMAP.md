@@ -26,9 +26,6 @@ Assets come up in many mods, so the API is for every mod author, not only for th
 
 - Exact crash checks: every crash and freeze while quitting with a known cause, a test that reproduces it where possible,
   and a line in the report that names the cause.
-- The host could crash in `steamclient64.dll` when it quit right after a player left, inside the Steam thread that keeps
-  peer to peer connections. CatLib waits for its closed sessions; whether the game itself crashes the same way is still to check
-  without mods.
 - The last BepInEx log lines before a native crash on the game thread may not reach the log file.
 
 ### The mods that are out

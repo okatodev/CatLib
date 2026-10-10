@@ -223,6 +223,12 @@ Lessons from the mods so far:
 > Keep the pointer of the instance you worked with and redo the work when `Singleton<T>.Instance` changes; never keep game objects across levels.
 
 > [!CAUTION]
+> **Never call a game method with an `out` parameter of a game struct.** Interop turns structs such as `SteamNetConnectionInfo_t`
+> into classes and gives the game an 8-byte slot for an `out` struct; the game writes the whole struct into it and overwrites the stack
+> of your method. The game crashes later, often far away and without a .NET exception. Call the native function yourself
+> with your own buffer or `IntPtr.Zero`, as `FlatSteamChannelApi.SessionState` does with `GetSessionConnectionInfo`.
+
+> [!CAUTION]
 > **Create objects only inside the object that owns them.** Objects created in one scene and left alive while that scene unloads
 > corrupt Unity's scene lists and crash the game later. Destroy temporary objects right away.
 

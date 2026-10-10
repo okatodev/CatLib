@@ -43,6 +43,11 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
 
 ### Fixed
 
+- A player who left a game with others crashed on the way to the menu, and the host crashed when quitting soon after a player left.
+  Before Steam shuts down, CatLib asks Steam about its recently closed sessions, and it did it through the game's own
+  `GetSessionConnectionInfo`. Interop gives that method 8 bytes for each struct it returns, Steam wrote several hundred,
+  and the stack of the call was overwritten. CatLib now calls the Steam function itself and does not ask for those structs.
+  [Writing a mod](docs/WritingMods.md#working-with-game-objects) warns about such methods.
 - When Steam cannot reach its relay network, the game plays over a socket on the computer and gives its own client the id 1.
   CatLib took that client for a player without CatLib, paused every mod that all players need and asked Steam for its name twice a second,
   which filled the log with `Null`. Now it leaves such a client alone and writes once that the game runs without the Steam network.
