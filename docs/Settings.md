@@ -132,3 +132,6 @@ The "Revert settings to default" button resets the selected mod after the game's
 `Label` replaces the label generated from the key (`ExtraFov` becomes "Extra Fov").
 `HiddenInMenu` keeps a setting out of the menu; it still lives in the file and reloads live.
 Settings that require a restart are marked with "(restart)".
+
+A card can also show galleries of images and buttons, a summary instead of the number of settings, and follow another card:
+see [Mods tab items](Assets.md#mods-tab-items).

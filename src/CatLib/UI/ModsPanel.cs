@@ -32,6 +32,8 @@ internal sealed class ModsPanel
     private readonly SelectableInputField[] _gameInputFields;
     private readonly List<ModListItem> _items = new();
     private readonly List<SettingRow> _rows = new();
+    private readonly List<MenuItemRow> _itemRows = new();
+    private readonly List<Selectable> _orderedControls = new();
     private readonly List<GameObject> _sectionHeaders = new();
     private string _listSignature = string.Empty;
     private string _selectedOwnerId;
@@ -39,6 +41,8 @@ internal sealed class ModsPanel
     private int _cardCountdown;
     private int _contextCountdown;
     private SettingRow _contextRow;
+    private MenuItemRow _contextItem;
+    private MenuItemRow _focusedItem;
     private bool _contextShown;
     private bool _pointerMode;
     private Vector3 _lastMouse;
@@ -103,6 +107,8 @@ internal sealed class ModsPanel
 
     public IReadOnlyList<SettingRow> Rows => _rows;
 
+    public IReadOnlyList<MenuItemRow> ItemRows => _itemRows;
+
     public IReadOnlyList<GameObject> SectionHeaders => _sectionHeaders;
 
     public SettingRow ContextRow => _contextRow;
@@ -111,6 +117,30 @@ internal sealed class ModsPanel
 
     public static IReadOnlyList<ISetting> VisibleSettings(CatSettings settings) =>
         settings.Settings.Where(setting => !setting.IsHiddenInMenu).ToList();
+
+    public static IReadOnlyList<MenuItem> VisibleItems(CatSettings settings) =>
+        settings.MenuItems.Where(item => !item.IsHidden).ToList();
+
+    public static string ListSignature(IEnumerable<CatSettings> mods) =>
+        string.Join("|", mods.Select(settings => settings.OwnerId + ":" + settings.Serial + ":" + VisibleSettings(settings).Count + ":" + settings.MenuItems.Count));
+
+    public static bool IsListed(CatSettings settings) => VisibleSettings(settings).Count > 0 || settings.MenuItems.Count > 0;
+
+    public static IReadOnlyList<CatSettings> Ordered(IEnumerable<CatSettings> all)
+    {
+        var list = all.ToList();
+        var byId = list.GroupBy(settings => settings.OwnerId).ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
+        CatSettings Parent(CatSettings settings) =>
+            settings.ParentId != null && byId.TryGetValue(settings.ParentId, out var parent) && !ReferenceEquals(parent, settings) ? parent : null;
+        return list
+            .OrderBy(settings => (Parent(settings) ?? settings).OwnerId == PluginMeta.Guid ? 0 : 1)
+            .ThenBy(settings => (Parent(settings) ?? settings).DisplayName, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(settings => (Parent(settings) ?? settings).OwnerId, StringComparer.Ordinal)
+            .ThenBy(settings => Parent(settings) == null ? 0 : 1)
+            .ThenBy(settings => settings.DisplayName, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(settings => settings.OwnerId, StringComparer.Ordinal)
+            .ToList();
+    }
 
     public static string RowLabel(ISetting setting, string languageCode)
     {
@@ -125,7 +155,7 @@ internal sealed class ModsPanel
 
     public void Update()
     {
-        if (--_listCountdown <= 0)
+        if (--_listCountdown <= 0 || Selected is { IsDisposed: true })
         {
             _listCountdown = ListRefreshIntervalFrames;
             RefreshList(false);
@@ -142,6 +172,18 @@ internal sealed class ModsPanel
             catch (Exception exception)
             {
                 _log.Error($"Updating the row of {_rows[index].Setting.Id} failed", exception);
+            }
+        }
+
+        for (var index = 0; index < _itemRows.Count; index++)
+        {
+            try
+            {
+                _itemRows[index].Update(languageCode ?? UiText.LanguageCode);
+            }
+            catch (Exception exception)
+            {
+                _log.Error($"Updating the menu item {_itemRows[index].Item.Id} failed", exception);
             }
         }
 
@@ -162,14 +204,9 @@ internal sealed class ModsPanel
 
     public void RefreshList(bool force)
     {
-        var mods = CatConfig.All
-            .Where(settings => !settings.IsDisposed && VisibleSettings(settings).Count > 0)
-            .OrderBy(settings => settings.OwnerId == PluginMeta.Guid ? 0 : 1)
-            .ThenBy(settings => settings.DisplayName, StringComparer.OrdinalIgnoreCase)
-            .ThenBy(settings => settings.OwnerId, StringComparer.Ordinal)
-            .ToList();
+        var mods = Ordered(CatConfig.All.Where(settings => !settings.IsDisposed && IsListed(settings)));
 
-        var signature = string.Join("|", mods.Select(settings => settings.OwnerId + ":" + VisibleSettings(settings).Count));
+        var signature = ListSignature(mods);
         if (!force && signature == _listSignature)
         {
             UpdateBadges();
@@ -316,7 +353,14 @@ internal sealed class ModsPanel
             UnityEngine.Object.DestroyImmediate(header);
         }
 
+        foreach (var itemRow in _itemRows)
+        {
+            UnityEngine.Object.DestroyImmediate(itemRow.Root);
+        }
+
         _rows.Clear();
+        _itemRows.Clear();
+        _orderedControls.Clear();
         _sectionHeaders.Clear();
         _contextRow = null;
         _contextCountdown = 0;
@@ -326,21 +370,52 @@ internal sealed class ModsPanel
 
         if (settings != null)
         {
-            foreach (var section in VisibleSettings(settings).GroupBy(setting => setting.Section))
+            var visible = VisibleSettings(settings);
+            var items = settings.MenuItems;
+            var sections = visible.Select(setting => setting.Section).Concat(items.Select(item => item.Section)).Distinct(StringComparer.Ordinal).ToList();
+            foreach (var section in sections)
             {
-                var header = RowTemplates.Create(_templates.Header, _settingsContent, "group_SettingsHeader " + section.Key);
-                SetHeaderText(header, CatLib.Localization.SettingTexts.Section(settings, section.Key, languageCode), _settingsWidth);
+                var header = RowTemplates.Create(_templates.Header, _settingsContent, "group_SettingsHeader " + section);
+                SetHeaderText(header, CatLib.Localization.SettingTexts.Section(settings, section, languageCode), _settingsWidth);
                 _sectionHeaders.Add(header);
 
-                foreach (var setting in section)
+                foreach (var setting in visible.Where(setting => setting.Section == section))
                 {
                     try
                     {
-                        _rows.Add(CreateRow(setting, languageCode));
+                        var row = CreateRow(setting, languageCode);
+                        _rows.Add(row);
+                        if (row.Control != null)
+                        {
+                            _orderedControls.Add(row.Control);
+                        }
                     }
                     catch (Exception exception)
                     {
                         _log.Error($"Could not create a menu row for {setting.Id}", exception);
+                    }
+                }
+
+                foreach (var item in items.Where(item => item.Section == section))
+                {
+                    try
+                    {
+                        var row = CreateItemRow(item);
+                        if (row == null)
+                        {
+                            continue;
+                        }
+
+                        row.Update(languageCode);
+                        _itemRows.Add(row);
+                        if (row.Control != null)
+                        {
+                            _orderedControls.Add(row.Control);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        _log.Error($"Could not create a menu row for {item.Id}", exception);
                     }
                 }
             }
@@ -353,7 +428,7 @@ internal sealed class ModsPanel
     private void WireNavigation()
     {
         var items = _items.Select(item => (Selectable)item.Toggle).Where(UiClone.IsAlive).ToList();
-        var controls = _rows.Select(row => row.Control).Where(control => control != null && UiClone.IsAlive(control)).ToList();
+        var controls = _orderedControls.Where(control => control != null && UiClone.IsAlive(control)).ToList();
         var selectedItem = _items.FirstOrDefault(item => item.IsSelected)?.Toggle ?? items.FirstOrDefault();
         var reset = ResetButton != null && UiClone.IsAlive(ResetButton) ? ResetButton : null;
         var firstControl = controls.FirstOrDefault() ?? (Selectable)reset;
@@ -389,6 +464,13 @@ internal sealed class ModsPanel
         navigation.selectOnRight = right;
         selectable.navigation = navigation;
     }
+
+    private MenuItemRow CreateItemRow(MenuItem item) => item switch
+    {
+        MenuGallery gallery => new GalleryRow(gallery, _templates, _settingsContent, _settingsWidth, _log),
+        MenuButton button when _templates.Button != null || (ResetButton != null && UiClone.IsAlive(ResetButton)) => new ButtonRow(button, _templates, ResetButton, _settingsContent, _settingsWidth, _log),
+        _ => null
+    };
 
     private SettingRow CreateRow(ISetting setting, string languageCode)
     {
@@ -459,7 +541,8 @@ internal sealed class ModsPanel
         }
 
         var row = FindFocusedRow();
-        var changed = !ReferenceEquals(row, _contextRow) || !_contextShown;
+        var item = row == null ? _focusedItem : null;
+        var changed = !ReferenceEquals(row, _contextRow) || !ReferenceEquals(item, _contextItem) || !_contextShown;
         if (!changed && --_contextCountdown > 0)
         {
             return;
@@ -467,9 +550,12 @@ internal sealed class ModsPanel
 
         _contextCountdown = ContextRefreshIntervalFrames;
         _contextRow = row;
+        _contextItem = item;
         _contextShown = true;
         var languageCode = UiText.LanguageCode;
-        var text = row == null ? UiText.Get(UiText.HoverHint, languageCode) : ContextText.For(row.Setting, languageCode);
+        var text = row != null ? ContextText.For(row.Setting, languageCode)
+            : item != null ? ContextText.For(item.Item, languageCode)
+            : UiText.Get(UiText.HoverHint, languageCode);
         if (ContextLabel.text != text)
         {
             ContextLabel.text = text;
@@ -537,12 +623,17 @@ internal sealed class ModsPanel
         }
 
         var hovered = hasPointer ? HoveredRow(mouse) : null;
+        var hoveredItem = hasPointer ? HoveredItem(mouse) : null;
         if (_pointerMode)
         {
+            _focusedItem = hovered == null ? hoveredItem : null;
             return hovered;
         }
 
-        return SelectedRow(selected) ?? hovered;
+        var selectedRow = SelectedRow(selected);
+        var selectedItem = selectedRow == null ? SelectedItem(selected) : null;
+        _focusedItem = selectedRow != null ? null : selectedItem ?? (hovered == null ? hoveredItem : null);
+        return selectedRow ?? (selectedItem != null ? null : hovered);
     }
 
     private SettingRow HoveredRow(Vector3 mouse)
@@ -558,6 +649,45 @@ internal sealed class ModsPanel
         {
             var rect = row.Root.transform.TryCast<RectTransform>();
             if (rect != null && RectTransformUtility.RectangleContainsScreenPoint(rect, point, camera))
+            {
+                return row;
+            }
+        }
+
+        return null;
+    }
+
+    private MenuItemRow HoveredItem(Vector3 mouse)
+    {
+        var camera = _canvas == null || _canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : _canvas.worldCamera;
+        var point = new Vector2(mouse.x, mouse.y);
+        if (!RectTransformUtility.RectangleContainsScreenPoint(_settingsViewport, point, camera))
+        {
+            return null;
+        }
+
+        foreach (var row in _itemRows)
+        {
+            var rect = row.Root.transform.TryCast<RectTransform>();
+            if (rect != null && row.Root.activeInHierarchy && RectTransformUtility.RectangleContainsScreenPoint(rect, point, camera))
+            {
+                return row;
+            }
+        }
+
+        return null;
+    }
+
+    private MenuItemRow SelectedItem(GameObject selected)
+    {
+        if (selected == null)
+        {
+            return null;
+        }
+
+        foreach (var row in _itemRows)
+        {
+            if (selected.transform.IsChildOf(row.Root.transform))
             {
                 return row;
             }

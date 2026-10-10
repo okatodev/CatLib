@@ -42,6 +42,7 @@ public static class CatLibRuntime
         CrashWatch.Initialize(Log.Scope("Crash"), Settings);
         SessionNetwork.Initialize(Log.Scope("Net"), Settings);
         CatSaves.Initialize(Log.Scope("Saves"));
+        CatLib.Assets.ContentPacks.Log = Log.Scope("Assets");
         CatLib.Game.Fixes.UdpClientCloser.Initialize(Log.Scope("Fixes"));
         DevMenu.Initialize(Log.Scope("DevTools"), Settings);
         plugin.AddComponent<CatLibBehaviour>();

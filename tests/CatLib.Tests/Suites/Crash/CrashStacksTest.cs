@@ -15,7 +15,7 @@ public sealed class CrashStacksTest : TestCase
 
     public override IEnumerable<TestStep> Run(TestContext context)
     {
-        var session = CrashSession.Parse(new[] { "catlib=0.8.0", "game=1.0.4", "started=2026-10-09 20:00:00", "pid=43356", "language=ru" });
+        var session = CrashSession.Parse(new[] { "catlib=0.7.1", "game=1.0.4", "started=2026-10-09 20:00:00", "pid=43356", "language=ru" });
         session.MainThreadId = GameThread;
         var info = new CrashEventInfo
         {

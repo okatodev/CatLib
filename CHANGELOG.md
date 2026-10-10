@@ -1,11 +1,23 @@
 # Changelog
 
-CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it! and Too Late, and CatLib Crash Watcher have their own versions and changelogs.
+CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late and Custom Stamps, and CatLib Crash Watcher have their own versions and changelogs.
 
 ## Not released yet
 
 ### Added
 
+- Assets, the first part: see [Assets](docs/Assets.md).
+  - `ImageData` in `CatLib.Assets` reads PNG and JPG files on any thread, trims, scales, pads and outlines images, makes collages,
+    writes PNG and makes textures and sprites. JPG files are read by CatLib's own decoder: baseline and progressive, gray, color and CMYK,
+    turned by their EXIF orientation. Interlaced PNG files are read too, also by `UiSprites.FromPng`.
+  - `GameImages` finds a sprite or a texture the game has loaded by its name and copies the pixels of a sprite, a texture or a part of it into an `ImageData`.
+  - Content packs: folders in `BepInEx/plugins` with a small text file that a mod reads. Every pack gets its own card on the Mods tab
+    right below its mod, with its icon, a toggle, a button that opens its folder and one that builds a Thunderstore package
+    into `BepInEx/CatLib/Packages`. Packs take part in the session check like mods, so a pack that not every player has can be paused.
+  - `ThunderstorePackage` checks names, versions and descriptions the way Thunderstore does and writes a package of any folder.
+- Cards on the Mods tab can show galleries of images and buttons like the game's key binding buttons next to settings, a summary like "12 stamps" instead of the number of settings,
+  and follow another card with `ParentId`. See [Mods tab items](docs/Assets.md#mods-tab-items).
+- New mod: Custom Stamps 0.1.0, packs of your own decorative and weight stamps made from PNG or JPG images. Every player needs the same packs.
 - The setting `CrashSymbols` in `[Diagnostics]` lets the crash watcher download the public symbols of Unity and Windows,
   so crash reports name the functions of `UnityPlayer.dll` and other modules; on by default, in every language.
 - `CatNetwork.IsRemotePlayer(clientId)` tells whether a connected client is another player, and `CatNetwork.IsWithoutSteamNetwork`

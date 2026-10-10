@@ -49,6 +49,12 @@ internal static class ContextText
         return first + "\n" + string.Join(" · ", details);
     }
 
+    public static string For(MenuItem item, string languageCode)
+    {
+        var description = CatLib.Localization.SettingTexts.ItemDescription(item, languageCode);
+        return string.IsNullOrWhiteSpace(description) ? UiText.Get(UiText.NoDescription, languageCode) : description.Trim();
+    }
+
     public static string FormatValue(ISetting setting, SettingPresentation presentation, object value, string languageCode)
     {
         if (value == null)
@@ -79,7 +85,7 @@ internal static class ContextText
     {
         var visible = ModsPanel.VisibleSettings(settings);
         var pending = visible.Count(setting => setting.IsRestartPending);
-        var status = UiText.Plural(UiText.SettingsCount, visible.Count, languageCode);
+        var status = settings.Summary?.Invoke(languageCode) ?? UiText.Plural(UiText.SettingsCount, visible.Count, languageCode);
         return pending > 0 ? status + " · " + UiText.Plural(UiText.PendingRestart, pending, languageCode) : status;
     }
 }

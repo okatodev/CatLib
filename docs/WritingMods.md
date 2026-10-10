@@ -189,6 +189,9 @@ Key rules, plural forms, translation files of players and the checks are in [Loc
 | log, run code every frame, get to the main thread | `CatLogger`, `FrameLoop`, `MainThread` | [Core helpers](Basics.md) |
 | react to the menu, levels, players, saves | `BootstrapEvents`, `PlayerEvents`, `NetworkEvents`, `SaveEvents` | [Game events](GameEvents.md) |
 | keep data per save | `CatSaves` | [Mod data in game saves](Saves.md) |
+| load PNG or JPG images as textures or sprites | `ImageData` | [Assets](Assets.md#images) |
+| let players add their own content in folders | `ContentPackKind`, `ContentPacks` | [Assets](Assets.md#content-packs) |
+| show images or a button on the mod's card | `CatSettings.Gallery`, `CatSettings.Button` | [Mods tab items](Assets.md#mods-tab-items) |
 | make the same decision on every player | `CatNetwork.IsAuthority`, a hidden session setting | [Session role](Network.md#session-role) |
 | let a player ask the host for something | `CatNetwork.Channel` | [Mod messages](Network.md#mod-messages) |
 | list the parcels of the level | `CatParcels` | [HUD and parcels](Hud.md) |

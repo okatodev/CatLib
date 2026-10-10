@@ -2,20 +2,24 @@
 
 What is planned, in rough order. Finished work is removed from here and described in [CHANGELOG.md](CHANGELOG.md) or in the mod's CHANGELOG.md.
 
-## Towards 0.8.0
+## 0.7.1
 
-The way to 0.8.0 goes in small steps like the way to 0.7.0, in other directions: assets, stability,
+Everything under "Not released yet" in the [changelog](CHANGELOG.md): the crash watcher with names of methods, the game without the Steam network,
+the first part of the asset API and Custom Stamps 0.1.0. Before it goes out: the checks in [Deferred tests](tests/DeferredTests.md).
+
+## After 0.7.1
+
+The next steps go in small steps like the way to 0.7.0, in other directions: assets, stability,
 the mods that are out already and a first try at talking to each other in the game.
 
 ### Asset API
 
-CatLib has no way to load assets yet: models, textures, sounds and other files from a mod's folder.
+CatLib reads PNG and JPG images, pictures of the game and content packs of players, see [Assets](docs/Assets.md). Models, sounds and other files are next.
 Assets come up in many mods, so the API is for every mod author, not only for the mods below.
 
 - Portable Magnifying Glass, harder than Too Late: the mod works with 3D models.
-- Custom stamps: an API for packs of stamp images that players put on parcels, and a mod that loads such packs.
-  A pack is a folder of images with a small description; the images are added to the game's stamps.
-  Stamps stay on parcels in saves and are seen by every player, so the API decides what others see when they do not have the pack.
+- Custom Stamps: stamps that open with the progress of the game, like some of the game's own, as a setting of the pack.
+- Content packs: sounds and models next to images.
 - More mods on the same API later.
 
 ### Stability
@@ -29,7 +33,7 @@ Assets come up in many mods, so the API is for every mod author, not only for th
 
 ### The mods that are out
 
-- More content for Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it! and Too Late, each released as a minor version of its own.
+- More content for Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late and Custom Stamps, each released as a minor version of its own.
 - Every README with the Discord server, screenshots and short GIFs of what the mod does, on GitHub and on Thunderstore.
 
 ### Chat between players

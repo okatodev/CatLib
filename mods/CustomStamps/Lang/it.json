@@ -1,0 +1,51 @@
+{
+  "mod": {
+    "name": "Francobolli tuoi",
+    "description": "I tuoi francobolli per i pacchi: metti immagini PNG o JPG in una cartella e si aggiungono ai francobolli decorativi e di peso del gioco. In una partita con altri, tutti hanno bisogno degli stessi pack."
+  },
+  "section": {
+    "Packs": "Pack"
+  },
+  "setting": {
+    "Packs.Create": "Nuovo pack di francobolli",
+    "Packs.Create.description": "Crea in BepInEx/plugins una cartella con stamps.txt, le cartelle decorative e weight e due francobolli di esempio, e la apre. Mettici le tue immagini PNG o JPG e premi Ricarica.",
+    "Packs.Create.button": "Crea",
+    "Packs.Reload": "Ricarica i pack",
+    "Packs.Reload.description": "Rilegge tutti i pack dopo che hai aggiunto immagini o cambiato stamps.txt.",
+    "Packs.Reload.button": "Ricarica",
+    "Packs.Folder": "Cartella dei plugin",
+    "Packs.Folder.description": "Apre BepInEx/plugins, dove si trovano i pack.",
+    "Packs.Folder.button": "Apri"
+  },
+  "pack": {
+    "section": {
+      "Stamps": "Francobolli"
+    },
+    "setting": {
+      "Stamps.Decorative": "Francobolli decorativi",
+      "Stamps.Decorative.description": "Immagini della cartella decorative. Sono decorative e non cambiano nulla nel gioco.",
+      "Stamps.Decorative.empty": "Nessuna immagine PNG o JPG nella cartella decorative",
+      "Stamps.Weight": "Francobolli di peso",
+      "Stamps.Weight.description": "Immagini della cartella weight. Ognuna conta come un'unità di peso, come i francobolli di peso del gioco.",
+      "Stamps.Weight.empty": "Nessuna immagine PNG o JPG nella cartella weight"
+    }
+  },
+  "stamps": {
+    "Summary": {
+      "one": "{0} francobollo",
+      "other": "{0} francobolli"
+    },
+    "Created": "{0}: un nuovo pack di francobolli. Metti immagini PNG o JPG nelle sue cartelle e premi Ricarica i pack",
+    "Reloaded": {
+      "one": "Letto {0} pack di francobolli",
+      "other": "Letti {0} pack di francobolli"
+    },
+    "NotSupported": "{0}: si leggono solo immagini PNG e JPG",
+    "TooMany": "{0}: un pack contiene al massimo {1} francobolli di un tipo",
+    "Duplicate": "{0}: nel pack c'è già un'immagine con lo stesso nome",
+    "Unreadable": "{0}: {1}",
+    "NewPackName": "I miei francobolli",
+    "NewPackDescription": "I miei francobolli per Cat Mail Co.",
+    "Template": "# Pack per Francobolli tuoi (Custom Stamps).\n# Metti immagini PNG o JPG nella cartella \"decorative\" per i francobolli decorativi\n# e nella cartella \"weight\" per i francobolli di peso: ognuna conta come un'unità di peso.\n# I bordi trasparenti vengono tagliati e il francobollo mantiene la forma dell'immagine.\n# Le immagini JPG non hanno trasparenza, quindi diventano francobolli rettangolari.\n# Poi premi \"Ricarica i pack\" sulla scheda della mod: Impostazioni, Mod.\n# \"outline: yes\" disegna un bordo bianco intorno a ogni francobollo, come gli adesivi del gioco; scrivi no per toglierlo.\n#\n# Qui sotto c'è la descrizione del pack. Per Thunderstore la versione deve essere come 1.0.0.\nname: {0}\nversion: 1.0.0\nauthor:\ndescription: {1}\noutline: yes\n"
+  }
+}

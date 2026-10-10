@@ -21,9 +21,10 @@ Foundation library for modding **Cat Mail Co.** with BepInEx 6 (Unity IL2CPP), a
 | <img src="mods/BetterRepair/icon.png" width="40"> | [Better Repair](mods/BetterRepair/README.md) | Cardboard of the repair table: unlimited, a larger stock, what a new day brings | everyone | [![BetterRepair on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/BetterRepair/) |
 | <img src="mods/ParcelBoard/icon.png" width="40"> | [Parcel Board](mods/ParcelBoard/README.md) | Counts of the parcels in the level by destination, mark and size | only you | [![ParcelBoard on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/ParcelBoard/) |
 | <img src="mods/StackIt/icon.png" width="40"> | [Stack it!](mods/StackIt/README.md) | Parcels that stand across the joint of level parcels and fall when one is taken away | everyone | [![StackIt on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/StackIt/) |
+| <img src="mods/CustomStamps/icon.png" width="40"> | [Custom Stamps](mods/CustomStamps/README.md) | Your own decorative and weight stamps from folders of PNG or JPG images, packs shared on Thunderstore | everyone | [![CustomStamps on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/CustomStamps/) |
 | <img src="mods/TooLate/icon.png" width="40"> | [Too Late](mods/TooLate/README.md) | Joining a game in progress, up to 8 players | only the host | [![TooLate on Thunderstore](https://img.shields.io/badge/Thunderstore-open-23a6d5)](https://thunderstore.io/c/cat-mail-co/p/CatLib/TooLate/) |
 
-"Everyone" mods are paused for the whole lobby while someone does not have them, instead of breaking the game.
+"Everyone" mods are paused for the whole lobby while someone does not have them, instead of breaking the game. The same goes for every stamp pack of Custom Stamps.
 
 The packages the mods stand on:
 
@@ -46,6 +47,7 @@ The packages the mods stand on:
 - the **players' mods in the lobby**, with paused mods instead of disconnects
 - a **crash window** with a report to send, also for freezes while quitting
 - mod data kept **next to your saves**, never inside them
+- **packs of your own content**, like stamps, with a card each and a button that makes a Thunderstore package
 
 </td>
 <td width="50%" valign="top">
@@ -58,6 +60,7 @@ The packages the mods stand on:
 - **game data**: events, parcels, storage grids, the game build
 - **patching** that is all or nothing, **HUD** tables, a **developer menu**
 - **Thunderstore packages** from one build command
+- **assets**: PNG and JPG images, pictures of the game, textures and sprites, content packs that players make
 
 </td>
 </tr>
@@ -79,6 +82,7 @@ Start with **[Writing a mod](docs/WritingMods.md)**, then pick what your mod nee
 | | [HUD and parcels](docs/Hud.md) | `CatParcels`, `HudLayer`, `CountTable`, `CountList` |
 | | [Patching the game](docs/Patching.md) | `CatPatches` and `CodePatch` |
 | Data | [Mod data in game saves](docs/Saves.md) | `CatSaves`: data per save, written with the game's save |
+| | [Assets](docs/Assets.md) | `ImageData`, content packs of players with a card each, Thunderstore packages from the Mods tab |
 | UI | [Folding lists](docs/Foldout.md) | `FoldoutList`, a list built from the game's own UI |
 | Tools | [Developer menu](docs/DevTools.md) | One in-game panel for developer commands |
 | | [Crash reports](docs/CrashReports.md) | The crash watcher, reports and memory dumps; its insides in [its own README](tools/CatLib.CrashWatcher/README.md) |
@@ -155,10 +159,11 @@ docs/                        documentation
 | `CatLib.Game.Bridge` | Tracks game singletons and binds their events |
 | `CatLib.Config` | Live settings: `CatSettings`, `Setting<T>`, `CatConfig` |
 | `CatLib.Saves` | `CatSaves`, mod data per game save |
+| `CatLib.Assets` | `ImageData`, `GameImages`, `ContentPacks`, `ThunderstorePackage` |
 | `CatLib.Localization` | Translation catalogs, `CatLanguage` follows the game language |
 | `CatLib.Diagnostics` | The crash watcher's session file and reports |
 | `CatLib.DevTools` | Developer menu, `DevMenu.Command` and `DevMenu.Toggle` |
-| `CatLib.UI` | Mods tab, `Notifications`, `HudLayer`, `CountTable`, `CountList`, `FoldoutList`, the lobby list, the version label |
+| `CatLib.UI` | Mods tab with galleries and buttons, `Notifications`, `HudLayer`, `CountTable`, `CountList`, `FoldoutList`, the lobby list, the version label |
 | `CatLib.Net` | `CatNetwork`: compatibility check, session settings, roster, `Channel` for messages between mods |
 
 </details>

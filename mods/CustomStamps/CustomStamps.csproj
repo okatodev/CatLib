@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>CustomStamps</AssemblyName>
+    <RootNamespace>CustomStamps</RootNamespace>
+    <Version>0.1.0</Version>
+    <PluginGuid>catlib.customstamps</PluginGuid>
+    <PluginMetaName>Custom Stamps</PluginMetaName>
+    <CatLibDeployFolder>CustomStamps</CatLibDeployFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Template\*.png" LogicalName="CustomStamps.Template.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CatLib\CatLib.csproj" Private="false" />
+  </ItemGroup>
+</Project>

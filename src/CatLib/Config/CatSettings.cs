@@ -11,7 +11,10 @@ namespace CatLib.Config;
 
 public sealed class CatSettings : IDisposable
 {
+    private static int _nextSerial;
+
     private readonly List<ISettingNode> _settings = new();
+    private readonly List<MenuItem> _menuItems = new();
     private readonly CatLogger _log;
 
     internal CatSettings(ConfigFile configFile, string ownerId, string displayName, string version, CatLogger log)
@@ -38,6 +41,71 @@ public sealed class CatSettings : IDisposable
 
     internal string PluginDirectory { get; set; }
 
+    public string ParentId { get; set; }
+
+    public Func<string, string> Summary { get; set; }
+
+    public IReadOnlyList<MenuItem> MenuItems
+    {
+        get
+        {
+            lock (_menuItems)
+            {
+                return _menuItems.ToList();
+            }
+        }
+    }
+
+    public MenuGallery Gallery(string section, string key, string description = null)
+    {
+        Check(section, key);
+        var gallery = new MenuGallery(this, section, key, description);
+        lock (_menuItems)
+        {
+            _menuItems.Add(gallery);
+        }
+
+        return gallery;
+    }
+
+    public MenuButton Button(string section, string key, Action clicked, string description = null)
+    {
+        Check(section, key);
+        if (clicked == null)
+        {
+            throw new ArgumentNullException(nameof(clicked));
+        }
+
+        var button = new MenuButton(this, section, key, clicked, description);
+        lock (_menuItems)
+        {
+            _menuItems.Add(button);
+        }
+
+        return button;
+    }
+
+    public bool RemoveMenuItem(MenuItem item)
+    {
+        lock (_menuItems)
+        {
+            return _menuItems.Remove(item);
+        }
+    }
+
+    private static void Check(string section, string key)
+    {
+        if (string.IsNullOrWhiteSpace(section))
+        {
+            throw new ArgumentException("Section must not be empty.", nameof(section));
+        }
+
+        if (string.IsNullOrWhiteSpace(key))
+        {
+            throw new ArgumentException("Key must not be empty.", nameof(key));
+        }
+    }
+
     public TextCatalog Texts => CatLocalization.For(OwnerId);
 
     public ConfigFile ConfigFile { get; }
@@ -45,6 +113,8 @@ public sealed class CatSettings : IDisposable
     public string FilePath => ConfigFile.ConfigFilePath;
 
     public bool IsDisposed { get; private set; }
+
+    internal int Serial { get; } = System.Threading.Interlocked.Increment(ref _nextSerial);
 
     public IReadOnlyList<ISetting> Settings
     {
@@ -177,6 +247,11 @@ public sealed class CatSettings : IDisposable
             }
 
             _settings.Clear();
+        }
+
+        lock (_menuItems)
+        {
+            _menuItems.Clear();
         }
 
         CatConfig.Unregister(this);

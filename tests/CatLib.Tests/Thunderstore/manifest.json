@@ -10,6 +10,7 @@
     "CatLib-BetterRepair-{version:BetterRepair}",
     "CatLib-ParcelBoard-{version:ParcelBoard}",
     "CatLib-StackIt-{version:StackIt}",
-    "CatLib-TooLate-{version:TooLate}"
+    "CatLib-TooLate-{version:TooLate}",
+    "CatLib-CustomStamps-{version:CustomStamps}"
   ]
 }

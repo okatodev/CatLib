@@ -77,7 +77,7 @@ public static class PngDecoder
             position = start + length + 4;
         }
 
-        if (width <= 0 || height <= 0 || width > MaxSide || height > MaxSide || interlace != 0)
+        if (width <= 0 || height <= 0 || width > MaxSide || height > MaxSide || interlace > 1)
         {
             return false;
         }
@@ -89,10 +89,21 @@ public static class PngDecoder
         }
 
         var bitsPerPixel = channels * bitDepth;
-        var stride = (width * bitsPerPixel + 7) / 8;
         var bytesPerPixel = Math.Max(1, bitsPerPixel / 8);
+        var passes = interlace == 1 ? Adam7 : SinglePass;
+        long total = 0;
+        foreach (var pass in passes)
+        {
+            var passWidth = PassSize(width, pass[0], pass[2]);
+            var passHeight = PassSize(height, pass[1], pass[3]);
+            if (passWidth > 0 && passHeight > 0)
+            {
+                total += ((passWidth * (long)bitsPerPixel + 7) / 8 + 1) * passHeight;
+            }
+        }
+
         compressed.Position = 0;
-        var raw = new byte[(stride + 1) * height];
+        var raw = new byte[total];
         using (var zlib = new ZLibStream(compressed, CompressionMode.Decompress))
         {
             var read = 0;
@@ -108,26 +119,49 @@ public static class PngDecoder
             }
         }
 
-        var previous = new byte[stride];
-        var line = new byte[stride];
         rgba = new byte[width * height * 4];
-        for (var y = 0; y < height; y++)
+        var offset = 0;
+        foreach (var pass in passes)
         {
-            var offset = y * (stride + 1);
-            var filter = raw[offset];
-            Array.Copy(raw, offset + 1, line, 0, stride);
-            Unfilter(filter, line, previous, bytesPerPixel);
-            for (var x = 0; x < width; x++)
+            var passWidth = PassSize(width, pass[0], pass[2]);
+            var passHeight = PassSize(height, pass[1], pass[3]);
+            if (passWidth <= 0 || passHeight <= 0)
             {
-                var target = (y * width + x) * 4;
-                Pixel(line, x, colorType, bitDepth, palette, transparency, rgba, target);
+                continue;
             }
 
-            (previous, line) = (line, previous);
+            var stride = (passWidth * bitsPerPixel + 7) / 8;
+            var previous = new byte[stride];
+            var line = new byte[stride];
+            for (var row = 0; row < passHeight; row++)
+            {
+                var filter = raw[offset];
+                Array.Copy(raw, offset + 1, line, 0, stride);
+                offset += stride + 1;
+                Unfilter(filter, line, previous, bytesPerPixel);
+                var y = pass[1] + row * pass[3];
+                for (var column = 0; column < passWidth; column++)
+                {
+                    var x = pass[0] + column * pass[2];
+                    Pixel(line, column, colorType, bitDepth, palette, transparency, rgba, (y * width + x) * 4);
+                }
+
+                (previous, line) = (line, previous);
+            }
         }
 
         return true;
     }
+
+    private static readonly int[][] SinglePass = { new[] { 0, 0, 1, 1 } };
+
+    private static readonly int[][] Adam7 =
+    {
+        new[] { 0, 0, 8, 8 }, new[] { 4, 0, 8, 8 }, new[] { 0, 4, 4, 8 }, new[] { 2, 0, 4, 4 },
+        new[] { 0, 2, 2, 4 }, new[] { 1, 0, 2, 2 }, new[] { 0, 1, 1, 2 }
+    };
+
+    private static int PassSize(int size, int start, int step) => size <= start ? 0 : (size - start + step - 1) / step;
 
     private static void Unfilter(byte filter, byte[] line, byte[] previous, int bpp)
     {

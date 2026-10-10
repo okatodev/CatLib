@@ -1,0 +1,49 @@
+{
+  "mod": {
+    "name": "나만의 스탬프",
+    "description": "소포에 붙이는 나만의 스탬프. PNG 또는 JPG 이미지를 폴더에 넣으면 게임의 장식 스탬프와 무게 스탬프에 더해집니다. 함께 플레이할 때는 모두 같은 팩이 있어야 합니다."
+  },
+  "section": {
+    "Packs": "팩"
+  },
+  "setting": {
+    "Packs.Create": "새 스탬프 팩",
+    "Packs.Create.description": "BepInEx/plugins에 stamps.txt, decorative와 weight 폴더, 예시 스탬프 2개가 든 폴더를 만들고 엽니다. 그곳에 PNG 또는 JPG 이미지를 넣고 다시 읽기를 누르세요.",
+    "Packs.Create.button": "만들기",
+    "Packs.Reload": "팩 다시 읽기",
+    "Packs.Reload.description": "이미지를 추가하거나 stamps.txt를 바꾼 뒤 모든 팩을 다시 읽습니다.",
+    "Packs.Reload.button": "다시 읽기",
+    "Packs.Folder": "플러그인 폴더",
+    "Packs.Folder.description": "팩이 있는 BepInEx/plugins를 엽니다.",
+    "Packs.Folder.button": "열기"
+  },
+  "pack": {
+    "section": {
+      "Stamps": "스탬프"
+    },
+    "setting": {
+      "Stamps.Decorative": "장식 스탬프",
+      "Stamps.Decorative.description": "decorative 폴더의 이미지입니다. 꾸미기용이며 게임에는 아무 영향이 없습니다.",
+      "Stamps.Decorative.empty": "decorative 폴더에 PNG 또는 JPG 이미지가 없습니다",
+      "Stamps.Weight": "무게 스탬프",
+      "Stamps.Weight.description": "weight 폴더의 이미지입니다. 게임의 무게 스탬프처럼 한 장이 무게 1단위입니다.",
+      "Stamps.Weight.empty": "weight 폴더에 PNG 또는 JPG 이미지가 없습니다"
+    }
+  },
+  "stamps": {
+    "Summary": {
+      "other": "스탬프 {0}개"
+    },
+    "Created": "{0}: 새 스탬프 팩입니다. 폴더에 PNG 또는 JPG 이미지를 넣고 팩 다시 읽기를 누르세요",
+    "Reloaded": {
+      "other": "스탬프 팩 {0}개를 읽었습니다"
+    },
+    "NotSupported": "{0}: PNG와 JPG 이미지만 읽습니다",
+    "TooMany": "{0}: 한 팩에는 같은 종류의 스탬프를 최대 {1}개까지 넣을 수 있습니다",
+    "Duplicate": "{0}: 같은 이름의 이미지가 이미 팩에 있습니다",
+    "Unreadable": "{0}: {1}",
+    "NewPackName": "내 스탬프",
+    "NewPackDescription": "Cat Mail Co.용 내 스탬프",
+    "Template": "# 나만의 스탬프 (Custom Stamps) 팩입니다.\n# 장식 스탬프는 \"decorative\" 폴더에 PNG 또는 JPG 이미지를 넣으세요\n# 무게 스탬프는 \"weight\" 폴더에 넣으세요. 한 장이 무게 1단위입니다.\n# 투명한 가장자리는 잘리고, 스탬프는 그림의 모양을 그대로 유지합니다.\n# JPG에는 투명한 부분이 없어서 네모난 스탬프가 됩니다.\n# 그다음 설정 → 모드에서 이 모드의 \"팩 다시 읽기\"를 누르세요.\n# \"outline: yes\"는 게임의 스티커처럼 스탬프마다 흰 테두리를 그립니다. 끄려면 no라고 쓰세요.\n#\n# 아래는 팩 설명입니다. Thunderstore에서는 버전이 1.0.0 형식이어야 합니다.\nname: {0}\nversion: 1.0.0\nauthor:\ndescription: {1}\noutline: yes\n"
+  }
+}

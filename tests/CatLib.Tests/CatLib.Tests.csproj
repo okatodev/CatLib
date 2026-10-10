@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\mods\ParcelBoard\ParcelBoard.csproj" Private="false" />
     <ProjectReference Include="..\..\mods\StackIt\StackIt.csproj" Private="false" />
     <ProjectReference Include="..\..\mods\TooLate\TooLate.csproj" Private="false" />
+    <ProjectReference Include="..\..\mods\CustomStamps\CustomStamps.csproj" Private="false" />
   </ItemGroup>
 
   <ItemGroup>

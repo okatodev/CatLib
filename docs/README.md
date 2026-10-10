@@ -30,6 +30,7 @@ flowchart LR
 | [Localization](Localization.md) | `Lang/*.json`, plural forms, the game language, translation files of players, checks | `CatLocalization`, `CatLanguage`, `TranslationCheck` |
 | [Multiplayer compatibility](Network.md) | Policies, the handshake, session role and settings, the roster, paused mods, mod messages, the Steam channel | `CatNetwork`, `ModChannel`, `SessionRoster` |
 | [Mod data in game saves](Saves.md) | Data per save, when it is written, safety rules | `CatSaves` |
+| [Assets](Assets.md) | PNG and JPG images, pictures of the game, textures and sprites, content packs of players, Thunderstore packages, galleries and buttons on the Mods tab | `ImageData`, `GameImages`, `ContentPackKind`, `ContentPacks`, `ThunderstorePackage`, `MenuGallery`, `MenuButton` |
 | [Game events](GameEvents.md) | The game's events as .NET events, who receives what, the real order | `BootstrapEvents`, `PlayerEvents`, `NetworkEvents`, `SaveEvents`, `GameEventStream` |
 | [Storages](Storages.md) | How the game stacks parcels, grids, placing, marks | `StoreGrid`, `GridView` |
 | [HUD and parcels](Hud.md) | The parcels of the level, drawing on the screen during a level | `CatParcels`, `ParcelInfo`, `HudLayer`, `CountTable`, `CountList` |

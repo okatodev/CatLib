@@ -16,7 +16,7 @@ public abstract class TestCase
 
     public static readonly ISet<string> ModSuites = new HashSet<string>(StringComparer.Ordinal)
     {
-        "BetterRepair", "BoatTweaks", "ParcelBoard", "ShelfLabels", "StackIt", "TooLate"
+        "BetterRepair", "BoatTweaks", "ParcelBoard", "ShelfLabels", "StackIt", "TooLate", "CustomStamps"
     };
 
     public virtual string RequiredMod => ModSuites.Contains(Suite) ? Suite : null;

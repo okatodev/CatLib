@@ -1,0 +1,9 @@
+{
+  "name": "CustomStamps",
+  "version_number": "{version}",
+  "website_url": "https://github.com/okatodev/CatLib/tree/main/mods/CustomStamps",
+  "description": "Your own stamps for parcels: put PNG or JPG images into a folder and they join the game's decorative and weight stamps. Build a Thunderstore package of your pack in one click.",
+  "dependencies": [
+    "CatLib-CatLib-{catlib_version}"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "mod": {
+    "name": "Eigene Marken",
+    "description": "Deine eigenen Marken für Pakete: Leg PNG- oder JPG-Bilder in einen Ordner, und sie erscheinen bei den Deko- und Gewichtsmarken des Spiels. Im gemeinsamen Spiel brauchen alle die gleichen Sammlungen."
+  },
+  "section": {
+    "Packs": "Sammlungen"
+  },
+  "setting": {
+    "Packs.Create": "Neue Markensammlung",
+    "Packs.Create.description": "Legt in BepInEx/plugins einen Ordner mit stamps.txt, den Ordnern decorative und weight und zwei Beispielmarken an und öffnet ihn. Leg deine PNG- oder JPG-Bilder hinein und drück Neu laden.",
+    "Packs.Create.button": "Anlegen",
+    "Packs.Reload": "Sammlungen neu laden",
+    "Packs.Reload.description": "Liest alle Sammlungen neu, nachdem du Bilder hinzugefügt oder stamps.txt geändert hast.",
+    "Packs.Reload.button": "Neu laden",
+    "Packs.Folder": "Plugin-Ordner",
+    "Packs.Folder.description": "Öffnet BepInEx/plugins, wo die Sammlungen liegen.",
+    "Packs.Folder.button": "Öffnen"
+  },
+  "pack": {
+    "section": {
+      "Stamps": "Marken"
+    },
+    "setting": {
+      "Stamps.Decorative": "Dekomarken",
+      "Stamps.Decorative.description": "Bilder aus dem Ordner decorative. Sie sind nur zur Zierde und ändern nichts im Spiel.",
+      "Stamps.Decorative.empty": "Keine PNG- oder JPG-Bilder im Ordner decorative",
+      "Stamps.Weight": "Gewichtsmarken",
+      "Stamps.Weight.description": "Bilder aus dem Ordner weight. Jede zählt als eine Gewichtseinheit, wie die Gewichtsmarken des Spiels.",
+      "Stamps.Weight.empty": "Keine PNG- oder JPG-Bilder im Ordner weight"
+    }
+  },
+  "stamps": {
+    "Summary": {
+      "one": "{0} Marke",
+      "other": "{0} Marken"
+    },
+    "Created": "{0}: eine neue Markensammlung. Leg PNG- oder JPG-Bilder in ihre Ordner und drück Sammlungen neu laden",
+    "Reloaded": {
+      "one": "{0} Markensammlung gelesen",
+      "other": "{0} Markensammlungen gelesen"
+    },
+    "NotSupported": "{0}: nur PNG- und JPG-Bilder werden gelesen",
+    "TooMany": "{0}: eine Sammlung fasst höchstens {1} Marken einer Art",
+    "Duplicate": "{0}: ein Bild mit demselben Namen ist schon in der Sammlung",
+    "Unreadable": "{0}: {1}",
+    "NewPackName": "Meine Marken",
+    "NewPackDescription": "Meine Marken für Cat Mail Co.",
+    "Template": "# Sammlung für Eigene Marken (Custom Stamps).\n# Leg PNG- oder JPG-Bilder in den Ordner \"decorative\" für Dekomarken\n# und in den Ordner \"weight\" für Gewichtsmarken: jede zählt als eine Gewichtseinheit.\n# Durchsichtige Ränder werden abgeschnitten, die Marke behält die Form des Bildes.\n# JPG-Bilder haben keine Transparenz, daraus werden rechteckige Marken.\n# Dann drück \"Sammlungen neu laden\" auf der Karte der Mod: Einstellungen, Mods.\n# \"outline: yes\" zeichnet einen weißen Rand um jede Marke wie bei den Stickern des Spiels; schreib no, um ihn wegzulassen.\n#\n# Darunter steht die Beschreibung der Sammlung. Für Thunderstore muss die Version wie 1.0.0 aussehen.\nname: {0}\nversion: 1.0.0\nauthor:\ndescription: {1}\noutline: yes\n"
+  }
+}

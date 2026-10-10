@@ -1,0 +1,49 @@
+{
+  "mod": {
+    "name": "自定义邮票",
+    "description": "为包裹准备你自己的邮票：把 PNG 或 JPG 图片放进文件夹，它们就会加入游戏的装饰邮票和重量邮票。与他人一起游戏时，所有人都需要相同的资源包。"
+  },
+  "section": {
+    "Packs": "资源包"
+  },
+  "setting": {
+    "Packs.Create": "新建邮票资源包",
+    "Packs.Create.description": "在 BepInEx/plugins 中创建一个文件夹，内含 stamps.txt、decorative 和 weight 文件夹以及两枚示例邮票，并打开它。把你的 PNG 或 JPG 图片放进去，然后点“重新读取”。",
+    "Packs.Create.button": "创建",
+    "Packs.Reload": "重新读取资源包",
+    "Packs.Reload.description": "在你添加图片或修改 stamps.txt 后重新读取所有资源包。",
+    "Packs.Reload.button": "重新读取",
+    "Packs.Folder": "插件文件夹",
+    "Packs.Folder.description": "打开存放资源包的 BepInEx/plugins。",
+    "Packs.Folder.button": "打开"
+  },
+  "pack": {
+    "section": {
+      "Stamps": "邮票"
+    },
+    "setting": {
+      "Stamps.Decorative": "装饰邮票",
+      "Stamps.Decorative.description": "decorative 文件夹中的图片。仅作装饰，不会改变游戏。",
+      "Stamps.Decorative.empty": "decorative 文件夹中没有 PNG 或 JPG 图片",
+      "Stamps.Weight": "重量邮票",
+      "Stamps.Weight.description": "weight 文件夹中的图片。和游戏自带的重量邮票一样，每枚算作一个重量单位。",
+      "Stamps.Weight.empty": "weight 文件夹中没有 PNG 或 JPG 图片"
+    }
+  },
+  "stamps": {
+    "Summary": {
+      "other": "{0} 枚邮票"
+    },
+    "Created": "{0}：新的邮票资源包。把 PNG 或 JPG 图片放进它的文件夹，然后点“重新读取资源包”",
+    "Reloaded": {
+      "other": "已读取 {0} 个邮票资源包"
+    },
+    "NotSupported": "{0}：只读取 PNG 和 JPG 图片",
+    "TooMany": "{0}：一个资源包中同一种邮票最多 {1} 枚",
+    "Duplicate": "{0}：资源包中已有同名图片",
+    "Unreadable": "{0}：{1}",
+    "NewPackName": "我的邮票",
+    "NewPackDescription": "我为 Cat Mail Co. 做的邮票",
+    "Template": "# 自定义邮票 (Custom Stamps) 的资源包。\n# 装饰邮票请把 PNG 或 JPG 图片放进 \"decorative\" 文件夹，\n# 重量邮票请放进 \"weight\" 文件夹：每枚算作一个重量单位。\n# 透明边缘会被裁掉，邮票保持图片的形状。\n# JPG 图片没有透明部分，因此会成为方形邮票。\n# 然后在 设置 → 模组 中，点此模组卡片上的“重新读取资源包”。\n# \"outline: yes\" 会像游戏里的贴纸一样给每枚邮票加上白边；写 no 可去掉白边。\n#\n# 下面是资源包的说明。Thunderstore 要求版本号形如 1.0.0。\nname: {0}\nversion: 1.0.0\nauthor:\ndescription: {1}\noutline: yes\n"
+  }
+}

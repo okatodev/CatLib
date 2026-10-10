@@ -1,0 +1,51 @@
+{
+  "mod": {
+    "name": "Custom Stamps",
+    "description": "Your own stamps for parcels: put PNG or JPG images into a folder, and they join the game's decorative and weight stamps. Every player in a game needs the same packs."
+  },
+  "section": {
+    "Packs": "Packs"
+  },
+  "setting": {
+    "Packs.Create": "New stamp pack",
+    "Packs.Create.description": "Makes a folder in BepInEx/plugins with stamps.txt, the folders decorative and weight and two sample stamps, and opens it. Put your PNG or JPG images there and press Reload.",
+    "Packs.Create.button": "Create",
+    "Packs.Reload": "Reload packs",
+    "Packs.Reload.description": "Reads every pack again after you added images or changed stamps.txt.",
+    "Packs.Reload.button": "Reload",
+    "Packs.Folder": "Plugins folder",
+    "Packs.Folder.description": "Opens BepInEx/plugins, where the packs are.",
+    "Packs.Folder.button": "Open"
+  },
+  "pack": {
+    "section": {
+      "Stamps": "Stamps"
+    },
+    "setting": {
+      "Stamps.Decorative": "Decorative stamps",
+      "Stamps.Decorative.description": "Images from the folder decorative. They are for beauty and change nothing in the game.",
+      "Stamps.Decorative.empty": "No PNG or JPG images in the folder decorative",
+      "Stamps.Weight": "Weight stamps",
+      "Stamps.Weight.description": "Images from the folder weight. Each one counts as one unit of weight, like the game's own weight stamps.",
+      "Stamps.Weight.empty": "No PNG or JPG images in the folder weight"
+    }
+  },
+  "stamps": {
+    "Summary": {
+      "one": "{0} stamp",
+      "other": "{0} stamps"
+    },
+    "Created": "{0}: a new stamp pack. Put PNG or JPG images into its folders and press Reload packs",
+    "Reloaded": {
+      "one": "Read {0} stamp pack",
+      "other": "Read {0} stamp packs"
+    },
+    "NotSupported": "{0}: only PNG and JPG images are read",
+    "TooMany": "{0}: a pack takes at most {1} stamps of one kind",
+    "Duplicate": "{0}: an image with the same name is already in the pack",
+    "Unreadable": "{0}: {1}",
+    "NewPackName": "My Stamps",
+    "NewPackDescription": "My stamps for Cat Mail Co.",
+    "Template": "# Custom Stamps pack.\n# Put PNG or JPG images into the folder \"decorative\" for decorative stamps\n# and into the folder \"weight\" for weight stamps: each one counts as one unit of weight.\n# Transparent edges are cut off, and the stamp keeps the shape of the picture.\n# JPG images have no transparency, so they become rectangular stamps.\n# Then press \"Reload packs\" on the Custom Stamps card in Settings, Mods.\n# \"outline: yes\" draws a white border around each stamp, like the game's stickers; write no to turn it off.\n#\n# Below is the description of the pack. Thunderstore needs the version like 1.0.0.\nname: {0}\nversion: 1.0.0\nauthor:\ndescription: {1}\noutline: yes\n"
+  }
+}

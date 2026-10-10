@@ -1,0 +1,51 @@
+{
+  "mod": {
+    "name": "Timbres perso",
+    "description": "Vos propres timbres pour les colis : mettez des images PNG ou JPG dans un dossier, et elles rejoignent les timbres décoratifs et de poids du jeu. En partie à plusieurs, tous les joueurs ont besoin des mêmes packs."
+  },
+  "section": {
+    "Packs": "Packs"
+  },
+  "setting": {
+    "Packs.Create": "Nouveau pack de timbres",
+    "Packs.Create.description": "Crée dans BepInEx/plugins un dossier avec stamps.txt, les dossiers decorative et weight et deux timbres d'exemple, puis l'ouvre. Mettez-y vos images PNG ou JPG et appuyez sur Recharger.",
+    "Packs.Create.button": "Créer",
+    "Packs.Reload": "Recharger les packs",
+    "Packs.Reload.description": "Relit tous les packs après l'ajout d'images ou une modification de stamps.txt.",
+    "Packs.Reload.button": "Recharger",
+    "Packs.Folder": "Dossier des plugins",
+    "Packs.Folder.description": "Ouvre BepInEx/plugins, où se trouvent les packs.",
+    "Packs.Folder.button": "Ouvrir"
+  },
+  "pack": {
+    "section": {
+      "Stamps": "Timbres"
+    },
+    "setting": {
+      "Stamps.Decorative": "Timbres décoratifs",
+      "Stamps.Decorative.description": "Images du dossier decorative. Elles servent à décorer et ne changent rien au jeu.",
+      "Stamps.Decorative.empty": "Aucune image PNG ou JPG dans le dossier decorative",
+      "Stamps.Weight": "Timbres de poids",
+      "Stamps.Weight.description": "Images du dossier weight. Chacune compte pour une unité de poids, comme les timbres de poids du jeu.",
+      "Stamps.Weight.empty": "Aucune image PNG ou JPG dans le dossier weight"
+    }
+  },
+  "stamps": {
+    "Summary": {
+      "one": "{0} timbre",
+      "other": "{0} timbres"
+    },
+    "Created": "{0} : un nouveau pack de timbres. Mettez des images PNG ou JPG dans ses dossiers et appuyez sur Recharger les packs",
+    "Reloaded": {
+      "one": "{0} pack de timbres lu",
+      "other": "{0} packs de timbres lus"
+    },
+    "NotSupported": "{0} : seules les images PNG et JPG sont lues",
+    "TooMany": "{0} : un pack contient au plus {1} timbres d'un même type",
+    "Duplicate": "{0} : une image du même nom est déjà dans le pack",
+    "Unreadable": "{0} : {1}",
+    "NewPackName": "Mes timbres",
+    "NewPackDescription": "Mes timbres pour Cat Mail Co.",
+    "Template": "# Pack pour Timbres perso (Custom Stamps).\n# Mettez des images PNG ou JPG dans le dossier \"decorative\" pour les timbres décoratifs\n# et dans le dossier \"weight\" pour les timbres de poids : chacune compte pour une unité de poids.\n# Les bords transparents sont coupés, et le timbre garde la forme de l'image.\n# Les images JPG n'ont pas de transparence : elles donnent des timbres rectangulaires.\n# Appuyez ensuite sur \"Recharger les packs\" sur la carte du mod : Paramètres, Mods.\n# \"outline: yes\" dessine un bord blanc autour de chaque timbre, comme les autocollants du jeu ; écrivez no pour l'enlever.\n#\n# Plus bas, la description du pack. Pour Thunderstore, la version doit ressembler à 1.0.0.\nname: {0}\nversion: 1.0.0\nauthor:\ndescription: {1}\noutline: yes\n"
+  }
+}

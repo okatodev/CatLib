@@ -5,12 +5,12 @@ internal static class ModListMeta
     public const string Separator = " · ";
     public const string MarkColor = "AD6E1A";
 
-    public static string Text(string version, int settingsCount, ModBadgeKind kind, string language, bool colored = true)
+    public static string Text(string version, int settingsCount, ModBadgeKind kind, string language, bool colored = true, string summary = null)
     {
         var head = string.IsNullOrWhiteSpace(version) ? string.Empty : UiText.Format(UiText.Version, language, version) + Separator;
         if (kind == ModBadgeKind.None)
         {
-            return head + UiText.Plural(UiText.SettingsCount, settingsCount, language);
+            return head + (string.IsNullOrEmpty(summary) ? UiText.Plural(UiText.SettingsCount, settingsCount, language) : summary);
         }
 
         var mark = ModBadge.Text(kind, language);

@@ -10,7 +10,10 @@ internal sealed class RowTemplates
     public const float RowHeight = 50f;
     public const float ListItemHeight = 78f;
 
-    private RowTemplates(GameObject header, GameObject toggle, GameObject slider, GameObject dropdown, GameObject text, GameObject listItem, float templateRowWidth)
+    public const string ButtonCaptionName = "txt_InputKey";
+    public const string ButtonIconName = "img_InputKey";
+
+    private RowTemplates(GameObject header, GameObject toggle, GameObject slider, GameObject dropdown, GameObject text, GameObject listItem, GameObject button, float templateRowWidth)
     {
         TemplateRowWidth = templateRowWidth;
         Label = toggle.transform.Find("panel_Label")?.GetComponentInChildren<TMP_Text>(true)?.gameObject
@@ -22,6 +25,7 @@ internal sealed class RowTemplates
         Dropdown = dropdown;
         Text = text;
         ListItem = listItem;
+        Button = button;
     }
 
     public float TemplateRowWidth { get; }
@@ -42,6 +46,10 @@ internal sealed class RowTemplates
 
     public GameObject ListItem { get; }
 
+    public GameObject Button { get; }
+
+    public Vector2 ButtonSize { get; private set; }
+
     public static RowTemplates Capture(OptionsInterface options, GameObject header, Transform holder)
     {
         var gameplay = FindGameplay(options) ?? throw new InvalidOperationException("The gameplay settings panel was not found");
@@ -58,7 +66,65 @@ internal sealed class RowTemplates
         UiClone.StripLocalization(listItem);
 
         var templateRowWidth = ContainerWidth(gameplay.FieldOfViewSlider.transform);
-        return new RowTemplates(header, toggle, slider, dropdown, text, listItem, templateRowWidth);
+        var button = CaptureButton(options, holder, out var buttonSize);
+        return new RowTemplates(header, toggle, slider, dropdown, text, listItem, button, templateRowWidth) { ButtonSize = buttonSize };
+    }
+
+    private static GameObject CaptureButton(OptionsInterface options, Transform holder, out Vector2 size)
+    {
+        size = Vector2.zero;
+        RebindButton source = null;
+        var tabs = options._tabs;
+        for (var index = 0; index < tabs.Count && source == null; index++)
+        {
+            var panel = tabs[index].AssociatedPanel;
+            if (panel == null || panel.GetComponentInChildren<InputsSettingsInterface>(true) == null)
+            {
+                continue;
+            }
+
+            var buttons = panel.GetComponentsInChildren<RebindButton>(true);
+            foreach (var candidate in buttons)
+            {
+                if (candidate._IsKeyboardMouse_k__BackingField && candidate.transform.Find(ButtonCaptionName) != null)
+                {
+                    source = candidate;
+                    break;
+                }
+
+                source ??= candidate;
+            }
+        }
+
+        if (source == null)
+        {
+            return null;
+        }
+
+        var template = UnityEngine.Object.Instantiate(source.gameObject, holder, false);
+        template.name = "template_Button";
+        UnityEngine.Object.DestroyImmediate(template.GetComponent<RebindButton>());
+        UiClone.StripLocalization(template);
+        var icon = template.transform.Find(ButtonIconName);
+        if (icon != null)
+        {
+            icon.gameObject.SetActive(false);
+        }
+
+        var caption = template.transform.Find(ButtonCaptionName);
+        if (caption != null)
+        {
+            caption.gameObject.SetActive(true);
+            var text = caption.GetComponent<TMP_Text>();
+            if (text != null)
+            {
+                text.enabled = true;
+            }
+        }
+
+        var rect = source.transform.TryCast<RectTransform>();
+        size = rect == null ? Vector2.zero : rect.rect.size;
+        return template;
     }
 
     private static float ContainerWidth(Transform control)

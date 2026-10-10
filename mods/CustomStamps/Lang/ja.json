@@ -1,0 +1,49 @@
+{
+  "mod": {
+    "name": "オリジナルスタンプ",
+    "description": "荷物に貼る自分だけのスタンプ。PNG か JPG の画像をフォルダーに入れると、ゲームの飾りスタンプと重さスタンプに加わります。一緒に遊ぶときは全員が同じパックを入れておく必要があります。"
+  },
+  "section": {
+    "Packs": "パック"
+  },
+  "setting": {
+    "Packs.Create": "新しいスタンプパック",
+    "Packs.Create.description": "BepInEx/plugins に stamps.txt、decorative と weight のフォルダー、見本のスタンプ2つを入れたフォルダーを作って開きます。そこに PNG か JPG の画像を入れて「読み直す」を押してください。",
+    "Packs.Create.button": "作成",
+    "Packs.Reload": "パックを読み直す",
+    "Packs.Reload.description": "画像を足したり stamps.txt を変えたりしたあと、すべてのパックを読み直します。",
+    "Packs.Reload.button": "読み直す",
+    "Packs.Folder": "プラグインのフォルダー",
+    "Packs.Folder.description": "パックが入っている BepInEx/plugins を開きます。",
+    "Packs.Folder.button": "開く"
+  },
+  "pack": {
+    "section": {
+      "Stamps": "スタンプ"
+    },
+    "setting": {
+      "Stamps.Decorative": "飾りスタンプ",
+      "Stamps.Decorative.description": "decorative フォルダーの画像です。見た目だけで、ゲームには影響しません。",
+      "Stamps.Decorative.empty": "decorative フォルダーに PNG か JPG の画像がありません",
+      "Stamps.Weight": "重さスタンプ",
+      "Stamps.Weight.description": "weight フォルダーの画像です。ゲームの重さスタンプと同じく、1枚で重さ1つ分になります。",
+      "Stamps.Weight.empty": "weight フォルダーに PNG か JPG の画像がありません"
+    }
+  },
+  "stamps": {
+    "Summary": {
+      "other": "スタンプ {0} 枚"
+    },
+    "Created": "{0}: 新しいスタンプパックです。フォルダーに PNG か JPG の画像を入れて「パックを読み直す」を押してください",
+    "Reloaded": {
+      "other": "スタンプパックを {0} 個読み込みました"
+    },
+    "NotSupported": "{0}: 読み込めるのは PNG と JPG の画像だけです",
+    "TooMany": "{0}: 1つのパックに入れられるのは同じ種類のスタンプ {1} 枚までです",
+    "Duplicate": "{0}: 同じ名前の画像がすでにパックにあります",
+    "Unreadable": "{0}: {1}",
+    "NewPackName": "マイスタンプ",
+    "NewPackDescription": "Cat Mail Co. 用の自分のスタンプ",
+    "Template": "# オリジナルスタンプ (Custom Stamps) のパックです。\n# 飾りスタンプは \"decorative\" フォルダーに PNG か JPG の画像を入れてください\n# 重さスタンプは \"weight\" フォルダーへ。1枚で重さ1つ分になります。\n# 透明な縁は切り取られ、スタンプは画像の形のままになります。\n# JPG には透明な部分がないため、四角いスタンプになります。\n# そのあと 設定 → Mods で、このモッドの「パックを読み直す」を押してください。\n# \"outline: yes\" はゲームのシールのように各スタンプに白いふちを付けます。付けない場合は no と書いてください。\n#\n# 下はパックの説明です。Thunderstore ではバージョンを 1.0.0 のような形にしてください。\nname: {0}\nversion: 1.0.0\nauthor:\ndescription: {1}\noutline: yes\n"
+  }
+}

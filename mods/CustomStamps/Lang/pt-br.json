@@ -1,0 +1,51 @@
+{
+  "mod": {
+    "name": "Selos próprios",
+    "description": "Seus próprios selos para os pacotes: coloque imagens PNG ou JPG numa pasta e elas se juntam aos selos decorativos e de peso do jogo. Numa partida com outros, todos precisam dos mesmos packs."
+  },
+  "section": {
+    "Packs": "Packs"
+  },
+  "setting": {
+    "Packs.Create": "Novo pack de selos",
+    "Packs.Create.description": "Cria em BepInEx/plugins uma pasta com stamps.txt, as pastas decorative e weight e dois selos de exemplo, e a abre. Coloque lá suas imagens PNG ou JPG e aperte Recarregar.",
+    "Packs.Create.button": "Criar",
+    "Packs.Reload": "Recarregar packs",
+    "Packs.Reload.description": "Lê todos os packs de novo depois que você adicionou imagens ou mudou o stamps.txt.",
+    "Packs.Reload.button": "Recarregar",
+    "Packs.Folder": "Pasta de plugins",
+    "Packs.Folder.description": "Abre BepInEx/plugins, onde ficam os packs.",
+    "Packs.Folder.button": "Abrir"
+  },
+  "pack": {
+    "section": {
+      "Stamps": "Selos"
+    },
+    "setting": {
+      "Stamps.Decorative": "Selos decorativos",
+      "Stamps.Decorative.description": "Imagens da pasta decorative. São só enfeite e não mudam nada no jogo.",
+      "Stamps.Decorative.empty": "Nenhuma imagem PNG ou JPG na pasta decorative",
+      "Stamps.Weight": "Selos de peso",
+      "Stamps.Weight.description": "Imagens da pasta weight. Cada uma conta como uma unidade de peso, como os selos de peso do jogo.",
+      "Stamps.Weight.empty": "Nenhuma imagem PNG ou JPG na pasta weight"
+    }
+  },
+  "stamps": {
+    "Summary": {
+      "one": "{0} selo",
+      "other": "{0} selos"
+    },
+    "Created": "{0}: um novo pack de selos. Coloque imagens PNG ou JPG nas pastas dele e aperte Recarregar packs",
+    "Reloaded": {
+      "one": "{0} pack de selos lido",
+      "other": "{0} packs de selos lidos"
+    },
+    "NotSupported": "{0}: só imagens PNG e JPG são lidas",
+    "TooMany": "{0}: um pack aceita no máximo {1} selos de um tipo",
+    "Duplicate": "{0}: já existe uma imagem com o mesmo nome no pack",
+    "Unreadable": "{0}: {1}",
+    "NewPackName": "Meus selos",
+    "NewPackDescription": "Meus selos para Cat Mail Co.",
+    "Template": "# Pack para Selos próprios (Custom Stamps).\n# Coloque imagens PNG ou JPG na pasta \"decorative\" para selos decorativos\n# e na pasta \"weight\" para selos de peso: cada uma conta como uma unidade de peso.\n# As bordas transparentes são cortadas, e o selo mantém a forma da imagem.\n# Imagens JPG não têm transparência, então viram selos retangulares.\n# Depois aperte \"Recarregar packs\" no cartão do mod: Configurações, Mods.\n# \"outline: yes\" desenha uma borda branca em volta de cada selo, como os adesivos do jogo; escreva no para tirá-la.\n#\n# Abaixo fica a descrição do pack. Para o Thunderstore a versão deve ser como 1.0.0.\nname: {0}\nversion: 1.0.0\nauthor:\ndescription: {1}\noutline: yes\n"
+  }
+}

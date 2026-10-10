@@ -34,5 +34,19 @@ public static class SettingTexts
     public static string EnumValue(ISetting setting, object value, string language) =>
         Catalog(setting)?.Find(EnumKey(value), language) ?? LabelFormatter.Prettify(value.ToString());
 
+    public static string ItemKey(MenuItem item) => "setting." + item.Section + "." + item.Key;
+
+    public static string ItemLabel(MenuItem item, string language) =>
+        CatLocalization.Find(item.Owner?.OwnerId)?.Find(ItemKey(item), language) ?? item.Label?.Invoke(language) ?? LabelFormatter.Prettify(item.Key);
+
+    public static string ItemDescription(MenuItem item, string language) =>
+        CatLocalization.Find(item.Owner?.OwnerId)?.Find(ItemKey(item) + ".description", language) ?? item.Hint?.Invoke(language) ?? item.Description;
+
+    public static string GalleryEmpty(MenuGallery gallery, string language) =>
+        CatLocalization.Find(gallery.Owner?.OwnerId)?.Find(ItemKey(gallery) + ".empty", language) ?? gallery.EmptyText ?? string.Empty;
+
+    public static string ButtonCaption(MenuButton button, string language) =>
+        CatLocalization.Find(button.Owner?.OwnerId)?.Find(ItemKey(button) + ".button", language) ?? button.Caption?.Invoke(language) ?? UiText.Get(UiText.ButtonRun, language);
+
     private static TextCatalog Catalog(ISetting setting) => CatLocalization.Find(setting.Owner?.OwnerId);
 }

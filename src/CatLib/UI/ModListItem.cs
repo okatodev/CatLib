@@ -15,6 +15,7 @@ internal sealed class ModListItem
         Toggle = root.GetComponent<Toggle>();
         Toggle.SetIsOnWithoutNotify(false);
         UiClone.SetText(root, CatLib.Localization.SettingTexts.ModName(settings, UiText.LanguageCode));
+        _iconPath = settings.IconPath;
         var sprite = ModIcons.Trimmed(settings, out var scale);
         AddIcon(root, sprite, scale);
         UiEvents.Listen<bool>(Toggle.onValueChanged, isOn =>
@@ -41,6 +42,8 @@ internal sealed class ModListItem
     public const float MetaAlpha = 0.6f;
     public const float PlaceholderSize = 40f;
 
+    private string _iconPath;
+
     public CatSettings Settings { get; }
 
     public Image Icon { get; private set; }
@@ -55,13 +58,14 @@ internal sealed class ModListItem
 
     public void UpdateBadge(string language)
     {
+        RefreshIcon();
         BadgeKind = ModBadge.For(Settings);
         if (Meta == null)
         {
             return;
         }
 
-        var text = ModListMeta.Text(Settings.Version, ModsPanel.VisibleSettings(Settings).Count, BadgeKind, language);
+        var text = ModListMeta.Text(Settings.Version, ModsPanel.VisibleSettings(Settings).Count, BadgeKind, language, true, Settings.Summary?.Invoke(language));
         if (Meta.text != text)
         {
             Meta.text = text;
@@ -73,6 +77,26 @@ internal sealed class ModListItem
     public Toggle Toggle { get; }
 
     public bool IsSelected { get; private set; }
+
+    private void RefreshIcon()
+    {
+        var path = Settings.IconPath;
+        if (string.Equals(path, _iconPath, StringComparison.OrdinalIgnoreCase) || Icon == null)
+        {
+            return;
+        }
+
+        _iconPath = path;
+        var sprite = ModIcons.Trimmed(Settings, out var scale);
+        IconScale = sprite == null ? 1f : scale;
+        Icon.sprite = sprite;
+        Icon.enabled = sprite != null;
+        Icon.rectTransform.sizeDelta = new Vector2(IconSize * IconScale, IconSize * IconScale);
+        if (Placeholder != null)
+        {
+            Placeholder.gameObject.SetActive(sprite == null);
+        }
+    }
 
     private void AddIcon(GameObject root, Sprite sprite, float scale)
     {

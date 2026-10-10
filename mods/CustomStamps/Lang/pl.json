@@ -1,0 +1,53 @@
+{
+  "mod": {
+    "name": "Własne znaczki",
+    "description": "Twoje własne znaczki na paczki: wrzuć obrazki PNG lub JPG do folderu, a dołączą do ozdobnych znaczków i znaczków wagi z gry. W grze z innymi wszyscy potrzebują tych samych zestawów."
+  },
+  "section": {
+    "Packs": "Zestawy"
+  },
+  "setting": {
+    "Packs.Create": "Nowy zestaw znaczków",
+    "Packs.Create.description": "Tworzy w BepInEx/plugins folder ze stamps.txt, folderami decorative i weight oraz dwoma przykładowymi znaczkami i go otwiera. Wrzuć tam swoje obrazki PNG lub JPG i naciśnij Wczytaj ponownie.",
+    "Packs.Create.button": "Utwórz",
+    "Packs.Reload": "Wczytaj zestawy ponownie",
+    "Packs.Reload.description": "Ponownie czyta wszystkie zestawy po dodaniu obrazków lub zmianie stamps.txt.",
+    "Packs.Reload.button": "Wczytaj",
+    "Packs.Folder": "Folder pluginów",
+    "Packs.Folder.description": "Otwiera BepInEx/plugins, gdzie są zestawy.",
+    "Packs.Folder.button": "Otwórz"
+  },
+  "pack": {
+    "section": {
+      "Stamps": "Znaczki"
+    },
+    "setting": {
+      "Stamps.Decorative": "Znaczki ozdobne",
+      "Stamps.Decorative.description": "Obrazki z folderu decorative. Są dla ozdoby i niczego nie zmieniają w grze.",
+      "Stamps.Decorative.empty": "Brak obrazków PNG lub JPG w folderze decorative",
+      "Stamps.Weight": "Znaczki wagi",
+      "Stamps.Weight.description": "Obrazki z folderu weight. Każdy liczy się jako jedna jednostka wagi, jak znaczki wagi w grze.",
+      "Stamps.Weight.empty": "Brak obrazków PNG lub JPG w folderze weight"
+    }
+  },
+  "stamps": {
+    "Summary": {
+      "one": "{0} znaczek",
+      "few": "{0} znaczki",
+      "many": "{0} znaczków"
+    },
+    "Created": "{0}: nowy zestaw znaczków. Wrzuć obrazki PNG lub JPG do jego folderów i naciśnij Wczytaj zestawy ponownie",
+    "Reloaded": {
+      "one": "Wczytano {0} zestaw znaczków",
+      "few": "Wczytano {0} zestawy znaczków",
+      "many": "Wczytano {0} zestawów znaczków"
+    },
+    "NotSupported": "{0}: czytane są tylko obrazki PNG i JPG",
+    "TooMany": "{0}: zestaw mieści najwyżej {1} znaczków jednego rodzaju",
+    "Duplicate": "{0}: obrazek o tej samej nazwie już jest w zestawie",
+    "Unreadable": "{0}: {1}",
+    "NewPackName": "Moje znaczki",
+    "NewPackDescription": "Moje znaczki do Cat Mail Co.",
+    "Template": "# Zestaw dla Własnych znaczków (Custom Stamps).\n# Wrzuć obrazki PNG lub JPG do folderu \"decorative\" jako znaczki ozdobne\n# i do folderu \"weight\" jako znaczki wagi: każdy liczy się jako jedna jednostka wagi.\n# Przezroczyste brzegi są obcinane, a znaczek zachowuje kształt obrazka.\n# Obrazki JPG nie mają przezroczystości, więc dają prostokątne znaczki.\n# Potem naciśnij \"Wczytaj zestawy ponownie\" na karcie moda: Ustawienia, Mody.\n# \"outline: yes\" rysuje białą obwódkę wokół każdego znaczka, jak przy naklejkach z gry; wpisz no, aby ją wyłączyć.\n#\n# Poniżej jest opis zestawu. Dla Thunderstore wersja musi wyglądać jak 1.0.0.\nname: {0}\nversion: 1.0.0\nauthor:\ndescription: {1}\noutline: yes\n"
+  }
+}
