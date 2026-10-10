@@ -7,7 +7,7 @@ and its demo mod takes part in the lobby check, so friends without it would show
 
 ## What's inside
 
-- **Tests.** About 160 checks that run inside the real game: settings, the Mods tab, translations, saves, multiplayer and every mod.
+- **Tests.** About 170 checks that run inside the real game: settings, the Mods tab, translations, saves, multiplayer and every mod.
   They run when the main menu first loads and again from the developer menu. Tests of a mod that is not installed are skipped.
   Results go to `BepInEx/CatLib.Tests/Reports`, a timeline of game events to `BepInEx/CatLib.Tests/Timelines`.
 - **Developer menu** on the `` ` `` key, the one left of 1:

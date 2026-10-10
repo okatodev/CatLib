@@ -1,22 +1,5 @@
 # Changelog
 
-## Not released yet
-
-- Generic methods have names: the watcher reads the IL2CPP metadata (`global-metadata.dat`) and the registrations in `GameAssembly.dll` itself,
-  so a frame shows `Dictionary<string, int>.TryInsert(string, int, InsertionBehavior)` instead of "IL2CPP code that is not a game method".
-  It reads metadata versions 29 to 106 and uses them only when they agree with the BepInEx method map.
-- Functions of `UnityPlayer.dll`, `baselib.dll`, the game's `.exe`, `ntdll.dll`, `KERNELBASE.dll`, `kernel32.dll` and `coreclr.dll` have names
-  from their public symbols. The watcher downloads them from the symbol servers of Unity and Microsoft once per version, half a minute
-  after the game starts, into `BepInEx/CatLib/Symbols`; `--no-symbols` turns the downloads off. A `.pdb` next to a DLL is used first.
-- C++ names are shown the way Windows undecorates them, for example `ScriptingInvocation::Invoke`.
-- Symbols are also downloaded for `user32.dll`, `win32u.dll`, `d3d11.dll`, `dxgi.dll`, the C runtime and `clrjit.dll`.
-- When a crash is inside Windows or the C runtime, such as `RaiseException`, the report, the window and `watcher.log` name the first frame
-  outside them in a "Called from" line.
-- Methods interop gave a made-up name, like `Method_Private_IEnumerator_PDM_0`, show their original name from the IL2CPP metadata
-  with the interop name after it.
-- Code IL2CPP shares between all type arguments shows the generic parameter names, `QuickSort<T>(Span<T>, …)`,
-  and nested types of generic types read like C#, `Dictionary<int, string>.Enumerator`.
-
 ## 1.1.0
 
 - Reports name the method of the game a crash happened in, for example `EntityInteractableStore.Start() + 0x60` instead of only
@@ -32,6 +15,20 @@
 - A call through a bad pointer shows the bad address as "not code" and the frame that made the call below it.
 - C++ names of exported functions are shown readable, for example `il2cpp_baselib::Baselib_SystemFutex_Wait`.
 - The window shows the method next to the module in the details.
+- Generic methods have names: the watcher reads the IL2CPP metadata (`global-metadata.dat`) and the registrations in `GameAssembly.dll` itself,
+  so a frame shows `Dictionary<string, int>.TryInsert(string, int, InsertionBehavior)` instead of "IL2CPP code that is not a game method".
+  It reads metadata versions 29 to 106 and uses them only when they agree with the BepInEx method map.
+- Functions of `UnityPlayer.dll`, `baselib.dll`, the game's `.exe`, `ntdll.dll`, `KERNELBASE.dll`, `kernel32.dll` and `coreclr.dll` have names
+  from their public symbols. The watcher downloads them from the symbol servers of Unity and Microsoft once per version, half a minute
+  after the game starts, into `BepInEx/CatLib/Symbols`; `--no-symbols` turns the downloads off. A `.pdb` next to a DLL is used first.
+- C++ names are shown the way Windows undecorates them, for example `ScriptingInvocation::Invoke`.
+- Symbols are also downloaded for `user32.dll`, `win32u.dll`, `d3d11.dll`, `dxgi.dll`, the C runtime and `clrjit.dll`.
+- When a crash is inside Windows or the C runtime, such as `RaiseException`, the report, the window and `watcher.log` name the first frame
+  outside them in a "Called from" line.
+- Methods interop gave a made-up name, like `Method_Private_IEnumerator_PDM_0`, show their original name from the IL2CPP metadata
+  with the interop name after it.
+- Code IL2CPP shares between all type arguments shows the generic parameter names, `QuickSort<T>(Span<T>, …)`,
+  and nested types of generic types read like C#, `Dictionary<int, string>.Enumerator`.
 
 ## 1.0.2
 

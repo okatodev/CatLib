@@ -17,6 +17,9 @@ CatLib does nothing to the game by itself. Mods are built on top of it, so when 
   so removing a mod leaves it exactly as it was.
 - **When the game crashes.** A small window tells you what happened and keeps a report you can send to the mod's author.
   It also notices when the game freezes while quitting. This part is the CatLib Crash Watcher package, installed together with CatLib.
+- **Your own content.** Some mods read packs you make yourself, like the stamp packs of Custom Stamps: a folder with pictures
+  and a small text file. Every pack gets its own card on the Mods tab with its pictures, can be turned off,
+  and one button builds a Thunderstore package of it to share.
 - **After a game update.** A small paper label in the corner of the main menu shows the CatLib version; point at it to see your mods.
   If the game has been updated and CatLib hasn't caught up yet, or your game is older than CatLib expects, it says so there.
 
@@ -42,8 +45,12 @@ Everything below is documented in the repository.
 - **Patching.** `CatPatches` installs Harmony patches all or nothing and turns them off after repeated errors;
   `CodePatch` changes a few bytes of the game's code, found by a pattern and checked before every change.
 - **Game build.** `GameCompatibility.Status` tells whether the running game is the build CatLib was made for.
+- **Assets.** `ImageData` reads PNG and JPG images, trims, scales and outlines them and makes textures and sprites;
+  `GameImages` copies pictures of the game. Content packs: folders of files that players make for your mod,
+  each with a card on the Mods tab, previews, a toggle and a Thunderstore package from one button.
 - **Developer menu.** `DevMenu.Command` adds your tools to one in-game panel on the `` ` `` key.
-- **Crash reports.** Crashes in your mod come with a report, both logs and a memory dump.
+- **Crash reports.** Crashes in your mod come with a report, both logs, a memory dump and the stacks of all threads
+  with the names of the game's methods.
 
 Depend on `CatLib-CatLib-<version>` in your manifest. Start with [Writing a mod](https://github.com/okatodev/CatLib/blob/main/docs/WritingMods.md).
 

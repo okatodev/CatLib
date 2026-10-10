@@ -2,11 +2,6 @@
 
 What is planned, in rough order. Finished work is removed from here and described in [CHANGELOG.md](CHANGELOG.md) or in the mod's CHANGELOG.md.
 
-## 0.7.1
-
-Everything under "Not released yet" in the [changelog](CHANGELOG.md): the crash watcher with names of methods, the game without the Steam network,
-the first part of the asset API and Custom Stamps 0.1.0. Before it goes out: the checks in [Deferred tests](tests/DeferredTests.md).
-
 ## After 0.7.1
 
 The next steps go in small steps like the way to 0.7.0, in other directions: assets, stability,
@@ -26,6 +21,13 @@ Assets come up in many mods, so the API is for every mod author, not only for th
 
 - Exact crash checks: every crash and freeze while quitting with a known cause, a test that reproduces it where possible,
   and a line in the report that names the cause.
+- Crashes in .NET code named in the report. The crash when Steam shut down soon after a player left (fixed in 0.7.1) showed only
+  "JIT-compiled .NET code" in the report and was found by hand: the dump had the text `"Before Steam shuts down: "` on the stack.
+  - The crash watcher reads the .NET strings on the stack of the crashing thread and writes the first few into the report
+    and the window, with a translated label in all 13 languages, and a developer menu command that crashes inside .NET code to check it.
+  - CatLib writes what it is doing into the session file before risky calls into Steam and the game, like `Net.NativeCall` does now,
+    so the report names the operation even without a dump.
+  - A game closed through its console window keeps its report but does not take one of the three places for memory dumps.
 - The last BepInEx log lines before a native crash on the game thread may not reach the log file.
 
 ### The mods that are out

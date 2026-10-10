@@ -2,7 +2,13 @@
 
 CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late and Custom Stamps, and CatLib Crash Watcher have their own versions and changelogs.
 
-## Not released yet
+## 0.7.1
+
+Released together with a new mod, Custom Stamps 0.1.0, with Too Late 0.1.1, CatLib Crash Watcher 1.1.0 and CatLib Tests 0.7.1.
+For players: your own stamps from folders of pictures, crash reports that name the method a crash happened in,
+a single player game that loads without the Steam network, and no more crash when Steam shuts down soon after a player left.
+For mod authors: the first part of the asset API with PNG and JPG images, pictures of the game and content packs of players,
+galleries and buttons on the Mods tab. Checked with two game copies on one computer.
 
 ### Added
 

@@ -1,10 +1,14 @@
 # Changelog
 
-## Not released yet
+## 0.1.1
+
+Needs CatLib 0.7.1.
 
 - A single player game no longer loads forever when Steam cannot reach its relay network. The game then gives your own client
   the id 1, and Too Late took it for a player who joins late and kept it in the lobby. Now only other Steam players join late,
-  and without the Steam network the log says that nobody can join. Needs CatLib 0.7.1.
+  and without the Steam network the log says that nobody can join.
+- The log says when your game started as soon as the game has its server, also without the Steam network,
+  where it used to say that players can join although nobody can reach the game.
 
 ## 0.1.0
 

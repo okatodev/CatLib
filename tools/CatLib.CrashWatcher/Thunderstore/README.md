@@ -18,6 +18,8 @@ and keeps a report folder with everything a mod author needs to fix it. Send tha
 ## What it doesn't do
 
 - It sends nothing anywhere. The report stays on your computer until you attach it yourself.
+- The only thing it downloads: the public symbols of Unity and Windows, once per version, from the symbol servers of Unity and Microsoft.
+  They let reports name the functions inside `UnityPlayer.dll` and Windows. They are kept in `BepInEx/CatLib/Symbols`.
 - It doesn't change the game. To write a memory dump it follows the game the way a debugger does,
   which pauses the game only for the moment of writing and of reading the threads.
 
@@ -31,6 +33,7 @@ Settings → Mods → CatLib:
 
 - **Crash window:** turn the whole thing off.
 - **Crash dump:** keep the window and the report, but without the memory dump.
+- **Crash symbols:** don't download the symbols of Unity and Windows.
 
 ## Found a bug?
 

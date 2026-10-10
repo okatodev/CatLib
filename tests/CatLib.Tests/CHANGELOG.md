@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.7.1
+
+- Tests of Custom Stamps and of the asset API: PNG and JPG images, pack files, content packs and their cards, Thunderstore packages.
+- Tests of the crash watcher's method names, symbols and stacks, and of the game without the Steam network.
+- Depends on Custom Stamps too.
+
 ## 0.7.0
 
 - Tests of Parcel Board, Stack it! and Too Late, and of the new parts of CatLib: parcels, storages, patches, the HUD and the version label.
