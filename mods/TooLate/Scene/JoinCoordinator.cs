@@ -33,6 +33,7 @@ public sealed class JoinCoordinator
     private CodePatch _loading;
     private CodePatch _limit;
     private bool _loadingOpen;
+    private bool _startWritten;
     private bool _inLevel;
     private int _limitWritten = PlayerLimit.GamePlayers;
 
@@ -256,14 +257,23 @@ public sealed class JoinCoordinator
         if (!_inLevel)
         {
             _inLevel = true;
+            _startWritten = false;
             ClearState();
-            if (GameProtocol.IsHosting)
-            {
-                _log.Info(CatNetwork.IsWithoutSteamNetwork
-                    ? "Your game started without the Steam network, it runs on this computer only and nobody can join it"
-                    : "Your game started, players who connect from now on join the game in progress");
-            }
+            WriteStarted();
         }
+    }
+
+    private void WriteStarted()
+    {
+        if (_startWritten || !_inLevel || !GameProtocol.IsHosting)
+        {
+            return;
+        }
+
+        _startWritten = true;
+        _log.Info(CatNetwork.IsWithoutSteamNetwork
+            ? "Your game started without the Steam network, it runs on this computer only and nobody can join it"
+            : "Your game started, players who connect from now on join the game in progress");
     }
 
     public void LeaveLevel(bool disconnectWaiting)
@@ -508,6 +518,7 @@ public sealed class JoinCoordinator
 
     private void UpdateCodePatches(HostState state)
     {
+        WriteStarted();
         var enabled = Settings != null && Settings.Enabled.Value;
         var open = enabled && JoinGate.CanAccept(state);
         if (_loading is { IsFound: true } && open != _loadingOpen)
@@ -515,7 +526,9 @@ public sealed class JoinCoordinator
             if (open ? _loading.Write(PlayerLimit.SkipJump) : _loading.Restore())
             {
                 _loadingOpen = open;
-                _log.Info(open ? "Players can join your level now" : "Joining your level is closed, like in the game");
+                _log.Info(!open ? "Joining your level is closed, like in the game"
+                    : CatNetwork.IsWithoutSteamNetwork ? "Joining your level is open, but without the Steam network nobody can reach it"
+                    : "Players can join your level now");
             }
         }
 
