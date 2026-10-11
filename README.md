@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/images/banner.png" alt="CatLib"></p>
+
 # CatLib
 
 Foundation library for modding **Cat Mail Co.** with BepInEx 6 (Unity IL2CPP), and the gameplay mods built on it.

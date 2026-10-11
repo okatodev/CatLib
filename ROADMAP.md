@@ -32,6 +32,8 @@ Assets come up in many mods, so the API is for every mod author, not only for th
 
 ### The mods that are out
 
+- Parcel Board: new icons for the cursed parcels (`BehaviorConstraint.Corrupted`, "Broken" in the mod's texts),
+  the icon of their list and the mod's own `Icons/corrupted.png` used when the game's icon is not loaded. The other icons stay as they are.
 - More content for Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late and Custom Stamps, each released as a minor version of its own.
 - Every README with the Discord server, screenshots and short GIFs of what the mod does, on GitHub and on Thunderstore.
 
