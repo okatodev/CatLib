@@ -2,6 +2,10 @@
 
 CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late and Custom Stamps, and CatLib Crash Watcher have their own versions and changelogs.
 
+## 0.7.2
+
+- Updated BepInEx dependency version.
+
 ## 0.7.1
 
 Released together with a new mod, Custom Stamps 0.1.0, with Too Late 0.1.1, CatLib Crash Watcher 1.1.0 and CatLib Tests 0.7.1.

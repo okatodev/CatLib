@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.2
+
+- Updated BepInEx dependency version.
+
 ## 0.7.1
 
 - Tests of Custom Stamps and of the asset API: PNG and JPG images, pack files, content packs and their cards, Thunderstore packages.
