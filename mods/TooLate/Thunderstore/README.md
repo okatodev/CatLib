@@ -7,6 +7,8 @@ With Too Late they can join whenever they want.
 
 - **Join any time.** A friend joins through Steam, the same way as into a lobby, and loads into the warehouse as it is right now:
   the parcels on the shelves, the stamps, the time of day and your progress.
+- **Customers stay.** Customers already waiting at a counter are there for the friend too, with their request
+  and the parcels they brought.
 - **Their counter opens.** The game opens a counter for each player, the third one for the third player and so on.
   A friend who joins late gets theirs too.
 - **The game goes on.** Nobody waits while a friend loads. If they come during the day's results, they wait in the lobby and come in right after.
@@ -31,10 +33,6 @@ If a friend has mods that every player needs and you don't, those mods are pause
 
 Your save is not changed. For a friend who joins late, the warehouse is copied into a separate file,
 and their game keeps a copy of your save like it always does in multiplayer.
-
-## Not yet
-
-- Customers already standing at a counter appear for the friend with the next customer.
 
 ## Found a bug?
 

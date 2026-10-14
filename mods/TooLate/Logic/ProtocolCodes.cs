@@ -10,6 +10,7 @@ public static class ProtocolCodes
     public const int ServerGameStart = 10;
     public const int ServerFinalizeLoad = 11;
     public const int GrantPlayerSpawn = 13;
+    public const int EntitySpawn = 17;
     public const int EntityDisposed = 18;
     public const int PlayerSpawnedBroadcast = 20;
     public const int IdentifiersSynchronization = 21;
@@ -20,6 +21,8 @@ public static class ProtocolCodes
     public const int PlayerName = 28;
     public const int PlayerNameBroadcast = 29;
     public const int GenericMessage = 38;
+    public const int EntityStored = 40;
+    public const int EntityProperties = 43;
     public const int GameTimeSynchronization = 44;
     public const int GameTimePeriod = 45;
     public const int SetInteractionsLocked = 48;

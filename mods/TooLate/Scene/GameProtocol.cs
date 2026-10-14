@@ -129,6 +129,36 @@ public static class GameProtocol
         return text != null;
     }
 
+    public static bool TryReadSpawn(Il2CppReferenceArray<Object> payload, out uint entityId, out string key)
+    {
+        entityId = 0;
+        key = null;
+        if (payload == null || payload.Length < 8 || !Is(payload[2], "String") || !Is(payload[7], "UInt32"))
+        {
+            return false;
+        }
+
+        key = IL2CPP.Il2CppStringToManaged(payload[2].Pointer);
+        entityId = payload[7].Unbox<uint>();
+        return true;
+    }
+
+    public static bool TryReadStored(Il2CppReferenceArray<Object> payload, out uint storeId, out uint entityId)
+    {
+        storeId = 0;
+        entityId = 0;
+        if (payload == null || payload.Length < 2 || !Is(payload[0], "UInt32") || !Is(payload[1], "UInt32"))
+        {
+            return false;
+        }
+
+        storeId = payload[0].Unbox<uint>();
+        entityId = payload[1].Unbox<uint>();
+        return true;
+    }
+
+    private static bool Is(Object value, string type) => value != null && value.GetIl2CppType()?.Name == type;
+
     public static bool TryReadId(Il2CppReferenceArray<Object> payload, out uint entityId)
     {
         entityId = 0;
@@ -169,7 +199,7 @@ public static class GameProtocol
         return type != IntPtr.Zero ? type : Il2CppClassPointerStore<TGame>.NativeClassPtr;
     }
 
-    public static string Describe(Il2CppReferenceArray<Object> payload, int most = 6)
+    public static string Describe(Il2CppReferenceArray<Object> payload, int most = 12)
     {
         if (payload == null || payload.Length == 0)
         {
@@ -205,7 +235,7 @@ public static class GameProtocol
             {
                 case "String":
                     var text = IL2CPP.Il2CppStringToManaged(value.Pointer) ?? string.Empty;
-                    return text.Length > 40 ? $"\"{text.Substring(0, 40)}...\"" : $"\"{text}\"";
+                    return text.Length > 160 ? $"\"{text.Substring(0, 160)}...\"" : $"\"{text}\"";
                 case "Boolean":
                     return value.Unbox<bool>() ? "true" : "false";
                 case "Int32":
@@ -216,6 +246,18 @@ public static class GameProtocol
                     return value.Unbox<ulong>().ToString();
                 case "Single":
                     return value.Unbox<float>().ToString("0.###");
+                case "UInt16":
+                    return value.Unbox<ushort>().ToString();
+                case "Byte":
+                    return value.Unbox<byte>().ToString();
+                case "Char":
+                    return "'" + value.Unbox<char>() + "'";
+                case "Quaternion":
+                    var rotation = value.Unbox<Quaternion>().eulerAngles;
+                    return $"rotation({rotation.x:0.#}, {rotation.y:0.#}, {rotation.z:0.#})";
+                case "Vector2Int":
+                    var cell = value.Unbox<Vector2Int>();
+                    return $"[{cell.x}, {cell.y}]";
                 case "Vector3":
                     var vector = value.Unbox<Vector3>();
                     return $"({vector.x:0.##}, {vector.y:0.##}, {vector.z:0.##})";

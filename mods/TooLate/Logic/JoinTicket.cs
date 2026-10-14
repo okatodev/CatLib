@@ -56,6 +56,12 @@ public sealed class JoinTicket<T>
 
     public bool StateSent { get; set; }
 
+    public long SpawnMark { get; set; }
+
+    public long StateMark { get; set; }
+
+    public HashSet<uint> Replayed { get; } = new();
+
     public IReadOnlyList<EntityPlace> ScenePlaces { get; set; }
 
     public string FailReason { get; set; }

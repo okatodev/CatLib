@@ -4,6 +4,8 @@
 
 - Players 5 to 8 start at spots of their own, between the game's four and half a step past the last one.
   Their own game picks the spot, so a player needs Too Late for it; the host still is the only one who must have it.
+- Customers already waiting at a counter are there for a friend who joins, with their looks, their request and the parcels they brought.
+  Before, the friend saw an empty counter until the next customer came.
 
 ## 0.1.1
 

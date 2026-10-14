@@ -30,6 +30,7 @@ public sealed class JoinCoordinator
     private readonly HashSet<ulong> _warned = new();
     private readonly StateLedger _state = new();
     private readonly LastingMessages<Il2CppReferenceArray<Object>> _lasting = new();
+    private readonly CustomerLedger<Il2CppReferenceArray<Object>> _customers = new();
     private CodePatch _loading;
     private CodePatch _limit;
     private bool _loadingOpen;
@@ -158,19 +159,43 @@ public sealed class JoinCoordinator
 
     public void Observe(int code, Il2CppReferenceArray<Object> payload)
     {
-        if (!_inLevel || !(code is ProtocolCodes.GenericMessage or ProtocolCodes.EntityDisposed || LastingMessages<Object>.IsLasting(code)) || !GameProtocol.IsHosting)
+        if (!_inLevel || !(code is ProtocolCodes.GenericMessage or ProtocolCodes.EntityDisposed or ProtocolCodes.EntitySpawn or ProtocolCodes.EntityStored
+                or ProtocolCodes.EntityProperties || LastingMessages<Object>.IsLasting(code)) || !GameProtocol.IsHosting)
         {
             return;
         }
 
-        if (code == ProtocolCodes.GenericMessage)
+        switch (code)
         {
-            if (GameProtocol.TryReadGeneric(payload, out var entityId, out var text))
-            {
-                _state.Record(entityId, text);
-            }
+            case ProtocolCodes.GenericMessage:
+                if (GameProtocol.TryReadGeneric(payload, out var entityId, out var text))
+                {
+                    _state.Record(entityId, text);
+                    _customers.RecordLine(entityId, text);
+                }
 
-            return;
+                return;
+            case ProtocolCodes.EntitySpawn:
+                if (GameProtocol.TryReadSpawn(payload, out var spawned, out var key))
+                {
+                    _customers.RecordSpawn(spawned, key, GameProtocol.Copy(payload));
+                }
+
+                return;
+            case ProtocolCodes.EntityStored:
+                if (GameProtocol.TryReadStored(payload, out var store, out var stored))
+                {
+                    _customers.RecordStored(store, stored, GameProtocol.Copy(payload));
+                }
+
+                return;
+            case ProtocolCodes.EntityProperties:
+                if (GameProtocol.TryReadId(payload, out var described))
+                {
+                    _customers.RecordProperties(described, GameProtocol.Copy(payload));
+                }
+
+                return;
         }
 
         if (code != ProtocolCodes.EntityDisposed)
@@ -191,6 +216,7 @@ public sealed class JoinCoordinator
         {
             _state.Forget(disposed);
             _lasting.Forget(disposed);
+            _customers.Forget(disposed);
         }
     }
 
@@ -304,7 +330,7 @@ public sealed class JoinCoordinator
         var state = ReadHost();
         var lines = new List<string>
         {
-            $"Hosting {state.Hosting}, in a level {_inLevel}, state messages {_state.Count} + {_lasting.Count}, level ready {state.LevelReady}, restarting {state.Restarting}, time period {(GameTimePeriod)state.TimePeriod}, " +
+            $"Hosting {state.Hosting}, in a level {_inLevel}, state messages {_state.Count} + {_lasting.Count}, customers {_customers.CustomerCount} with {_customers.Count} entities, level ready {state.LevelReady}, restarting {state.Restarting}, time period {(GameTimePeriod)state.TimePeriod}, " +
             $"joining in a level {(_loadingOpen && _loading is { IsFound: true } ? "open" : "closed")}, player limit {_limitWritten}"
         };
         lines.AddRange(_tickets.Values.Select(ticket =>
@@ -353,6 +379,7 @@ public sealed class JoinCoordinator
         {
             var snapshot = SaveSnapshot.Write();
             ticket.Places = snapshot.Places;
+            ticket.SpawnMark = _customers.Mark;
             ticket.MoveTo(JoinStage.Loading, FrameLoop.Realtime);
             GameProtocol.SendSave(ticket.ClientId, snapshot.SaveName, snapshot.Data);
             GameProtocol.Send(ProtocolCodes.ServerGameStart, ticket.ClientId, GameProtocol.Empty());
@@ -427,6 +454,25 @@ public sealed class JoinCoordinator
         }
 
         var known = new HashSet<uint>((ticket.Places ?? Array.Empty<EntityPlace>()).Select(place => place.Id));
+        var replay = _customers.Before(ticket.SpawnMark, known.Contains, ProtocolCodes.EntitySpawn, ProtocolCodes.EntityStored, ProtocolCodes.EntityProperties);
+        foreach (var message in replay)
+        {
+            GameProtocol.Send(message.Code, ticket.ClientId, message.Payload);
+            if (message.Code == ProtocolCodes.EntitySpawn)
+            {
+                ticket.Replayed.Add(message.EntityId);
+            }
+        }
+
+        known.UnionWith(ticket.Replayed);
+        var customers = _customers.Customers().Where(ticket.Replayed.Contains).ToList();
+        var lines = customers.SelectMany(customer => _customers.LinesOf(customer, 0)).OrderBy(line => line.Order).ToList();
+        foreach (var line in lines)
+        {
+            GameProtocol.Send(ProtocolCodes.GenericMessage, ticket.ClientId, GameProtocol.Generic(line.CustomerId, line.Text));
+        }
+
+        ticket.StateMark = _customers.Mark;
         var lasting = _lasting.For(known.Contains);
         foreach (var message in lasting)
         {
@@ -447,6 +493,37 @@ public sealed class JoinCoordinator
                   $"{lasting.Count} of {_lasting.Count} recorded game message(s){(lastingKinds.Length == 0 ? string.Empty : $" ({lastingKinds})")}, " +
                   $"{messages.Count} of {_state.Count} entity message(s)" +
                   (kinds.Length == 0 ? string.Empty : $" ({kinds})"));
+        if (ticket.Replayed.Count > 0 || _customers.CustomerCount > 0)
+        {
+            _log.Info($"Sent {ticket.Name} {customers.Count} customer(s) waiting at a counter: {ticket.Replayed.Count} entities in {replay.Count} game message(s) and {lines.Count} customer line(s)" +
+                      $"{(_customers.CustomerCount > customers.Count ? $", {_customers.CustomerCount - customers.Count} customer(s) came while they were loading and follow with the held messages" : string.Empty)}");
+        }
+    }
+
+    private void SendLateCustomers(JoinTicket<Il2CppReferenceArray<Object>> ticket)
+    {
+        var lines = new List<CustomerLine>();
+        foreach (var customer in _customers.Customers())
+        {
+            lines.AddRange(_customers.LinesOf(customer, ticket.Replayed.Contains(customer) ? ticket.StateMark : 0));
+        }
+
+        foreach (var line in lines.OrderBy(line => line.Order))
+        {
+            GameProtocol.Send(ProtocolCodes.GenericMessage, ticket.ClientId, GameProtocol.Generic(line.CustomerId, line.Text));
+        }
+
+        var arrived = new HashSet<uint>(_customers.MembersSince(ticket.SpawnMark));
+        var messages = arrived.Count == 0 ? new List<StateMessage>() : _state.For(arrived.Contains).ToList();
+        foreach (var message in messages)
+        {
+            GameProtocol.Send(ProtocolCodes.GenericMessage, ticket.ClientId, GameProtocol.Generic(message.EntityId, message.Text));
+        }
+
+        if (lines.Count > 0 || messages.Count > 0)
+        {
+            _log.Info($"Sent {ticket.Name} {lines.Count} customer line(s) and {messages.Count} entity message(s) of customers and parcels that changed while they were loading");
+        }
     }
 
     private void Flush(JoinTicket<Il2CppReferenceArray<Object>> ticket)
@@ -462,6 +539,7 @@ public sealed class JoinCoordinator
         }
 
         ticket.Flushing = false;
+        SendLateCustomers(ticket);
         ticket.MoveTo(JoinStage.Synced, FrameLoop.Realtime);
         Publish("Synced", ticket, $"places={ticket.Places.Count} dropped={ticket.Dropped}");
         _log.Info($"{ticket.Name} got every held message, the game goes on for them as for everyone");
@@ -471,6 +549,7 @@ public sealed class JoinCoordinator
     {
         _state.Clear();
         _lasting.Clear();
+        _customers.Clear();
     }
 
     private static List<EntityPlace> SceneEntities()
