@@ -143,6 +143,41 @@ public static class GameProtocol
         return true;
     }
 
+    public static bool TryReadClientEntity(Il2CppReferenceArray<Object> payload, out ulong clientId, out uint entityId)
+    {
+        clientId = 0;
+        entityId = 0;
+        if (payload == null || payload.Length < 2 || !Is(payload[0], "UInt64") || !Is(payload[1], "UInt32"))
+        {
+            return false;
+        }
+
+        clientId = payload[0].Unbox<ulong>();
+        entityId = payload[1].Unbox<uint>();
+        return true;
+    }
+
+    public static Il2CppReferenceArray<Object> ClientEntity(ulong clientId, uint entityId)
+    {
+        var payload = new Il2CppReferenceArray<Object>(2);
+        payload[0] = Box(clientId);
+        payload[1] = Box(entityId);
+        return payload;
+    }
+
+    public static ulong OwnClientId => Network?.ClientId ?? 0;
+
+    public static bool IsPresent(ulong clientId)
+    {
+        var server = Server;
+        if (server == null)
+        {
+            return false;
+        }
+
+        return clientId == OwnClientId || (server._clients != null && server._clients.ContainsKey(clientId));
+    }
+
     public static bool TryReadStored(Il2CppReferenceArray<Object> payload, out uint storeId, out uint entityId)
     {
         storeId = 0;
@@ -179,6 +214,8 @@ public static class GameProtocol
     }
 
     public static Object Box(uint value) => Box(value, ClassOf<uint, Il2CppSystem.UInt32>());
+
+    public static Object Box(ulong value) => Box(value, ClassOf<ulong, Il2CppSystem.UInt64>());
 
     public static Object Box(Vector3 value) => Box(value, ClassOf<Vector3, Vector3>());
 

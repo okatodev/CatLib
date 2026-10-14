@@ -57,8 +57,16 @@ In the lobby the host does all of this for everyone at the same time, so nobody 
    for everything that came before the snapshot and that the player does not have; the voices and a wrong parcel are of the moment and left out.
    Customers who come while the player loads reach them with the held messages, their looks and lines follow when those are through.
    The counters of the other players never link a customer, so the host's counter still decides what the customer accepts.
-10. The player limit is the constant 5 in `Server.HandleClientConnect`, changed to the setting plus one.
-11. Every game picks its own player's spawn point as `PlayerManager._spawnPoints[(network identifier - 11) % count]`, in `SpawnLocalPlayer`,
+10. A parcel in a player's hands is in the snapshot where the hands are: picking it up makes it savable, also a parcel a customer brought
+    (`EntityInteractablePickable.HandlePickUp`). Without more the late player would see it hang in the air there.
+    The mod keeps who holds what (`PlayerItemPickUp` of the host's own client, `PlayerItemPickUpBroadcast`, the drops) and who moves which entity
+    (`EntityAuthority`, `EntityAuthorityBroadcast`) in `Logic/HoldLedger.cs`. Two seconds after the state of the warehouse it sends what is still
+    held and moved since before the snapshot: who moves an entity first, then what each player holds, only for entities the player has
+    and players who are still there. Whatever changed after the snapshot came with the held messages already.
+    The wait is needed: the other players are created in the late player's game a little after `PlayerSpawnedBroadcast`, and a pickup
+    sent at once finds no one ("Could not find ghost for client"); the parcel then only follows the holder by its movement messages and shakes.
+11. The player limit is the constant 5 in `Server.HandleClientConnect`, changed to the setting plus one.
+12. Every game picks its own player's spawn point as `PlayerManager._spawnPoints[(network identifier - 11) % count]`, in `SpawnLocalPlayer`,
     and the level has 4 points, so players 5 to 8 would start inside players 1 to 4. Before the first spawn the mod adds 4 points
     between the game's ones, which stand in a line 2.5 m apart: between 1 and 2, 2 and 3, 3 and 4, and half a step past 4.
     The host cannot move another player's own player, so a player without the mod still starts at a point of players 1 to 4.
@@ -82,7 +90,6 @@ Protocol codes and the flow are listed in `Logic/ProtocolCodes.cs` and `Logic/Me
 ## Not covered yet
 
 - Players 5 to 8 without the mod start at the spawn points of players 1 to 4.
-- A parcel a customer brought that is still in a player's hands when a friend joins is not sent again.
 
 ## Developer menu
 

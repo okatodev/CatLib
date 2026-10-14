@@ -16,10 +16,16 @@ public static class ProtocolCodes
     public const int IdentifiersSynchronization = 21;
     public const int MovementAndRotation = 22;
     public const int MovementAndRotationBroadcast = 23;
+    public const int EntityAuthority = 24;
+    public const int EntityAuthorityBroadcast = 25;
     public const int AnimationParameter = 26;
     public const int AnimationParameterBroadcast = 27;
     public const int PlayerName = 28;
     public const int PlayerNameBroadcast = 29;
+    public const int PlayerItemPickUp = 32;
+    public const int PlayerItemPickUpBroadcast = 33;
+    public const int PlayerItemDropped = 34;
+    public const int PlayerItemDroppedBroadcast = 35;
     public const int GenericMessage = 38;
     public const int EntityStored = 40;
     public const int EntityProperties = 43;

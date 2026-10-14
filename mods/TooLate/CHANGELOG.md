@@ -6,6 +6,8 @@
   Their own game picks the spot, so a player needs Too Late for it; the host still is the only one who must have it.
 - Customers already waiting at a counter are there for a friend who joins, with their looks, their request and the parcels they brought.
   Before, the friend saw an empty counter until the next customer came.
+- What players carry when a friend joins is in their hands for the friend too, also a parcel just taken from a customer.
+  Before, the friend got the parcel where it was when they started loading, but in nobody's hands.
 
 ## 0.1.1
 

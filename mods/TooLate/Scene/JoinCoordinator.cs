@@ -22,6 +22,7 @@ public sealed class JoinCoordinator
     public const double LoadingGiveUpSeconds = 360;
     public const int FlushPerFrame = 200;
     public const double AppearingGraceSeconds = 3;
+    public const double HoldDelaySeconds = 2;
     public const string EventPrefix = "TooLate.";
 
     private readonly CatLogger _log;
@@ -31,6 +32,7 @@ public sealed class JoinCoordinator
     private readonly StateLedger _state = new();
     private readonly LastingMessages<Il2CppReferenceArray<Object>> _lasting = new();
     private readonly CustomerLedger<Il2CppReferenceArray<Object>> _customers = new();
+    private readonly HoldLedger _holds = new();
     private CodePatch _loading;
     private CodePatch _limit;
     private bool _loadingOpen;
@@ -86,6 +88,11 @@ public sealed class JoinCoordinator
                 continue;
             }
 
+            if (ticket.StateSent && !ticket.HoldsSent && FrameLoop.Realtime >= ticket.HoldsDueAt)
+            {
+                SendHolds(ticket);
+            }
+
             switch (ticket.Stage)
             {
                 case JoinStage.Waiting when JoinGate.ReadyToStart(state, FrameLoop.Realtime - ticket.ConnectedAt):
@@ -139,6 +146,7 @@ public sealed class JoinCoordinator
     public void OnClientDisconnected(ulong clientId)
     {
         _warned.Remove(clientId);
+        _holds.ForgetClient(clientId);
         if (_tickets.Remove(clientId, out var ticket))
         {
             Publish("Left", ticket);
@@ -160,7 +168,7 @@ public sealed class JoinCoordinator
     public void Observe(int code, Il2CppReferenceArray<Object> payload)
     {
         if (!_inLevel || !(code is ProtocolCodes.GenericMessage or ProtocolCodes.EntityDisposed or ProtocolCodes.EntitySpawn or ProtocolCodes.EntityStored
-                or ProtocolCodes.EntityProperties || LastingMessages<Object>.IsLasting(code)) || !GameProtocol.IsHosting)
+                or ProtocolCodes.EntityProperties || IsHoldCode(code) || LastingMessages<Object>.IsLasting(code)) || !GameProtocol.IsHosting)
         {
             return;
         }
@@ -196,6 +204,20 @@ public sealed class JoinCoordinator
                 }
 
                 return;
+            case ProtocolCodes.EntityAuthority or ProtocolCodes.PlayerItemPickUp or ProtocolCodes.PlayerItemDropped:
+                if (GameProtocol.TryReadId(payload, out var own))
+                {
+                    RecordHold(code, GameProtocol.OwnClientId, own);
+                }
+
+                return;
+            case ProtocolCodes.EntityAuthorityBroadcast or ProtocolCodes.PlayerItemPickUpBroadcast or ProtocolCodes.PlayerItemDroppedBroadcast:
+                if (GameProtocol.TryReadClientEntity(payload, out var holder, out var held))
+                {
+                    RecordHold(code, holder, held);
+                }
+
+                return;
         }
 
         if (code != ProtocolCodes.EntityDisposed)
@@ -217,6 +239,26 @@ public sealed class JoinCoordinator
             _state.Forget(disposed);
             _lasting.Forget(disposed);
             _customers.Forget(disposed);
+            _holds.Forget(disposed);
+        }
+    }
+
+    private static bool IsHoldCode(int code) => code is ProtocolCodes.EntityAuthority or ProtocolCodes.EntityAuthorityBroadcast or ProtocolCodes.PlayerItemPickUp
+        or ProtocolCodes.PlayerItemPickUpBroadcast or ProtocolCodes.PlayerItemDropped or ProtocolCodes.PlayerItemDroppedBroadcast;
+
+    private void RecordHold(int code, ulong clientId, uint entityId)
+    {
+        switch (code)
+        {
+            case ProtocolCodes.EntityAuthority or ProtocolCodes.EntityAuthorityBroadcast:
+                _holds.RecordAuthority(clientId, entityId);
+                break;
+            case ProtocolCodes.PlayerItemPickUp or ProtocolCodes.PlayerItemPickUpBroadcast:
+                _holds.RecordPickUp(clientId, entityId);
+                break;
+            default:
+                _holds.RecordDrop(clientId, entityId);
+                break;
         }
     }
 
@@ -330,7 +372,7 @@ public sealed class JoinCoordinator
         var state = ReadHost();
         var lines = new List<string>
         {
-            $"Hosting {state.Hosting}, in a level {_inLevel}, state messages {_state.Count} + {_lasting.Count}, customers {_customers.CustomerCount} with {_customers.Count} entities, level ready {state.LevelReady}, restarting {state.Restarting}, time period {(GameTimePeriod)state.TimePeriod}, " +
+            $"Hosting {state.Hosting}, in a level {_inLevel}, state messages {_state.Count} + {_lasting.Count}, customers {_customers.CustomerCount} with {_customers.Count} entities, held {_holds.HeldCount}, level ready {state.LevelReady}, restarting {state.Restarting}, time period {(GameTimePeriod)state.TimePeriod}, " +
             $"joining in a level {(_loadingOpen && _loading is { IsFound: true } ? "open" : "closed")}, player limit {_limitWritten}"
         };
         lines.AddRange(_tickets.Values.Select(ticket =>
@@ -380,6 +422,7 @@ public sealed class JoinCoordinator
             var snapshot = SaveSnapshot.Write();
             ticket.Places = snapshot.Places;
             ticket.SpawnMark = _customers.Mark;
+            ticket.HoldMark = _holds.Mark;
             ticket.MoveTo(JoinStage.Loading, FrameLoop.Realtime);
             GameProtocol.SendSave(ticket.ClientId, snapshot.SaveName, snapshot.Data);
             GameProtocol.Send(ProtocolCodes.ServerGameStart, ticket.ClientId, GameProtocol.Empty());
@@ -473,6 +516,7 @@ public sealed class JoinCoordinator
         }
 
         ticket.StateMark = _customers.Mark;
+        ticket.HoldsDueAt = FrameLoop.Realtime + HoldDelaySeconds;
         var lasting = _lasting.For(known.Contains);
         foreach (var message in lasting)
         {
@@ -497,6 +541,25 @@ public sealed class JoinCoordinator
         {
             _log.Info($"Sent {ticket.Name} {customers.Count} customer(s) waiting at a counter: {ticket.Replayed.Count} entities in {replay.Count} game message(s) and {lines.Count} customer line(s)" +
                       $"{(_customers.CustomerCount > customers.Count ? $", {_customers.CustomerCount - customers.Count} customer(s) came while they were loading and follow with the held messages" : string.Empty)}");
+        }
+    }
+
+    private void SendHolds(JoinTicket<Il2CppReferenceArray<Object>> ticket)
+    {
+        ticket.HoldsSent = true;
+        var known = new HashSet<uint>((ticket.Places ?? Array.Empty<EntityPlace>()).Select(place => place.Id));
+        known.UnionWith(ticket.Replayed);
+        var holds = _holds.Before(ticket.HoldMark, known.Contains, client => client != ticket.ClientId && GameProtocol.IsPresent(client));
+        foreach (var hold in holds)
+        {
+            GameProtocol.Send(hold.Kind == HoldKind.Authority ? ProtocolCodes.EntityAuthorityBroadcast : ProtocolCodes.PlayerItemPickUpBroadcast, ticket.ClientId,
+                GameProtocol.ClientEntity(hold.ClientId, hold.EntityId));
+        }
+
+        var carried = holds.Count(hold => hold.Kind == HoldKind.PickUp);
+        if (holds.Count > 0)
+        {
+            _log.Info($"Sent {ticket.Name} what {carried} player(s) still hold since before the snapshot and who moves {holds.Count - carried} entities, now that the other players stand in their game");
         }
     }
 
@@ -550,6 +613,7 @@ public sealed class JoinCoordinator
         _state.Clear();
         _lasting.Clear();
         _customers.Clear();
+        _holds.Clear();
     }
 
     private static List<EntityPlace> SceneEntities()

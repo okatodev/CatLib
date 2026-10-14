@@ -8,7 +8,7 @@ With Too Late they can join whenever they want.
 - **Join any time.** A friend joins through Steam, the same way as into a lobby, and loads into the warehouse as it is right now:
   the parcels on the shelves, the stamps, the time of day and your progress.
 - **Customers stay.** Customers already waiting at a counter are there for the friend too, with their request
-  and the parcels they brought.
+  and the parcels they brought. What you carry is in your hands for the friend too.
 - **Their counter opens.** The game opens a counter for each player, the third one for the third player and so on.
   A friend who joins late gets theirs too.
 - **The game goes on.** Nobody waits while a friend loads. If they come during the day's results, they wait in the lobby and come in right after.

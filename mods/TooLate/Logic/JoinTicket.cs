@@ -62,6 +62,12 @@ public sealed class JoinTicket<T>
 
     public HashSet<uint> Replayed { get; } = new();
 
+    public long HoldMark { get; set; }
+
+    public double HoldsDueAt { get; set; } = double.PositiveInfinity;
+
+    public bool HoldsSent { get; set; }
+
     public IReadOnlyList<EntityPlace> ScenePlaces { get; set; }
 
     public string FailReason { get; set; }
