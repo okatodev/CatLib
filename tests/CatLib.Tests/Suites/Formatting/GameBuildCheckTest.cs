@@ -69,7 +69,7 @@ public sealed class GameBuildCheckTest : TestCase
         Assert.Equal("The game build is unknown · 1 mod", VersionBadgeText.Detail(unknown, 1, "en"), "Detail of an unknown game");
         Assert.Equal("Сделан для 2026-10-01 (билд 25651540) · у вас: 2026-08-14", VersionBadgeText.Detail(older, 3, "ru"), "Russian detail");
         Assert.Equal("Игра обновилась, поищите обновление CatLib", VersionBadgeText.Warning(newer, "ru"), "Russian warning");
-        Assert.Equal("CatLib " + PluginMeta.Version, VersionBadgeText.Title, "Badge title");
+        Assert.Equal("CatLib " + CatLib.PluginMeta.Version, VersionBadgeText.Title, "Badge title");
 
         var calm = VersionBadgeText.Compose(same, false, 3, "en");
         Assert.Equal(VersionBadgeText.Title, calm, "A supported game shows only the CatLib version");

@@ -1,9 +1,16 @@
 # Changelog
 
+## 0.7.3
+
+- Developer menu group Spawn: a new parcel of any of the twelve sizes in front of you, its destination and marks chosen by the game.
+  Works for the host and for the players in a level.
+- Developer menu group Game, for the host: the next step of every pile of parcels, or every pile cleared step by step.
+  The parcels still lying on a step are removed, the doors behind the piles open at their steps like in the game.
+- Developer menu group UI: hide the game's interface for screenshots and videos, with the pause menu, settings, results and stamp choice still shown.
+  While it is hidden, a second toggle decides whether the notifications are hidden too.
+
 ## 0.7.2
-
 - Updated BepInEx dependency version.
-
 ## 0.7.1
 
 - Tests of Custom Stamps and of the asset API: PNG and JPG images, pack files, content packs and their cards, Thunderstore packages.

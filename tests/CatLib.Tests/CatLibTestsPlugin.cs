@@ -31,6 +31,9 @@ public sealed class CatLibTestsPlugin : BasePlugin
     private CatLib.Tests.Diagnostics.LocalJoin _localJoin;
     private CrashTrigger _crashes;
     private GameCheats _cheats;
+    private ParcelSpawner _spawner;
+    private PileClearer _piles;
+    private UiHider _uiHider;
     private MessageProbe _probes;
     private SaveProbe _saveProbe;
     private UiHierarchyDumper _uiDumper;
@@ -71,6 +74,10 @@ public sealed class CatLibTestsPlugin : BasePlugin
         _localJoin = new CatLib.Tests.Diagnostics.LocalJoin(_log.Scope("LocalJoin"));
         _crashes = new CrashTrigger(_log.Scope("Crash"));
         _cheats = new GameCheats(_log.Scope("Cheats"));
+        _spawner = new ParcelSpawner(_log.Scope("Spawn"));
+        _piles = new PileClearer(_log.Scope("Piles"));
+        _uiHider = new UiHider(_log.Scope("UiHide"), DevMenu.Model);
+        _uiHider.Attach();
         _entityInspector = new CatLib.Tests.Diagnostics.Inspection.EntityInspector(Path.Combine(outputDirectory, "Dumps"), () => _entityDumpTypes.Value, _log.Scope("Inspect"));
         _reportWriter = new TestReportWriter(Path.Combine(outputDirectory, "Reports"));
         _runner = new TestRunner(TestRegistry.Discover(typeof(CatLibTestsPlugin).Assembly), _log.Scope("Runner"));
@@ -100,6 +107,15 @@ public sealed class CatLibTestsPlugin : BasePlugin
             "Host only. The game's own cheat: day, evening, results, night, dawn, results, day. Every player follows.");
         DevMenu.Command("Game", "Skip to the day's results", _cheats.SkipToResults,
             "Host only. Moves on one part of the day per frame until the results of the evening or the dawn are shown.");
+        DevMenu.Command("Game", "Next step of the piles", _piles.NextStep,
+            "Host only. Every started pile of parcels goes to its next, smaller step, the parcels still lying on it are removed. A door behind a pile opens at its step, like in the game.");
+        DevMenu.Command("Game", "Clear the piles", _piles.Clear,
+            "Host only. Every started pile goes through all its steps until it is gone, a step when the parcels of the last one have arrived. The doors behind the piles open on the way.");
+        foreach (var (size, label) in ParcelSpawner.Sizes)
+        {
+            DevMenu.Command("Spawn", label + " parcel", () => _spawner.Spawn(size),
+                $"Puts a new {label.ToLowerInvariant()} parcel in front of you, its destination and marks chosen by the game like for any new parcel. In a level, for the host and the players.");
+        }
         DevMenu.Command("Inspect", "Entity dump", () =>
         {
             _entityInspector.Dump();
@@ -181,6 +197,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
             _stressMods.Toggle();
             return "see the Mods tab";
         }, "Creates or removes a set of mods with many settings to check the Mods tab layout.");
+        DevMenu.Model.Add(_uiHider.Item);
         DevMenu.Command("Crash", "Native crash, game thread", _crashes.NativeOnGameThread,
             "Crashes the game with a native access violation on the game thread to check the CatLib crash window. Press twice.");
         DevMenu.Command("Crash", "Native crash, worker thread", _crashes.NativeOnWorkerThread,

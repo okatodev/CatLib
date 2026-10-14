@@ -55,6 +55,9 @@ Groups come from `CatLib.Tests`, from CatLib itself and from the mods; a group a
 | Game | Serve the waiting customers | Host only. Every customer at a counter gets their request as if given the right parcel |
 | | Next part of the day | Host only. The game's own cheat: day, evening, results, night, dawn, results; every player follows |
 | | Skip to the day's results | Host only. One part of the day per frame until the evening or dawn results show |
+| | Next step of the piles | Host only. Every started pile of parcels goes to its next, smaller step; the parcels still on it are removed, a door behind it opens at its step |
+| | Clear the piles | Host only. Every started pile goes through all its steps until it is gone, one step when the parcels of the last one have arrived |
+| Spawn | Small parcel … Giant plus parcel | A new parcel of that size in front of you, its destination and marks chosen by the game; twelve sizes, for the host and the players |
 | Inspect | Entity dump | What the camera looks at: components, fields, object tree, entity counts, storages and the nearest objects of the types in `EntityDumpTypes` |
 | | Settings menu dump | The tree of the game's settings menu |
 | | Lobby dump | The tree of the multiplayer lobby |
@@ -69,6 +72,8 @@ Groups come from `CatLib.Tests`, from CatLib itself and from the mods; a group a
 | UI | Notification preview | A sample message as a game notification |
 | | Version badge preview | The version label as if the game were newer, then older, then the real check |
 | | Stress mods on or off | Adds many fake mods to the Mods tab |
+| | Hide the game's UI | Toggle: hides the game's interface for screenshots and videos; the pause menu, settings, results and stamp choice still show. Turns off in the main menu |
+| | Hide notifications too | Toggle, shown while the interface is hidden: whether the game's notifications are hidden with it |
 | Crash | Native crash, game thread | Access violation on the game thread. Press twice within 3 s |
 | | Native crash, worker thread | Access violation on a new native thread. Press twice |
 | | Managed crash | Unhandled .NET exception on a new thread. Press twice |

@@ -12,10 +12,12 @@ and its demo mod takes part in the lobby check, so friends without it would show
   Results go to `BepInEx/CatLib.Tests/Reports`, a timeline of game events to `BepInEx/CatLib.Tests/Timelines`.
 - **Developer menu** on the `` ` `` key, the one left of 1:
   - Tests: run them all, turn the automatic run on or off.
-  - Game, for the host in a level: serve the waiting customers, the next part of the day, skip to the day's results.
+  - Game, for the host in a level: serve the waiting customers, the next part of the day, skip to the day's results,
+    the next step of the piles of parcels or all of them cleared.
+  - Spawn: a new parcel of any size in front of you.
   - Inspect: dump what the camera is looking at, dump the settings menu.
   - Network: send a test message, list the players Steam sees, join the first open game, check the Steam channel.
-  - UI: preview a notification, the version badge in the main menu, a Mods tab full of mods.
+  - UI: preview a notification, the version badge in the main menu, a Mods tab full of mods, hide the game's interface with or without its notifications.
   - Crash: crash or hang the game on purpose to check the crash window. Each needs a second press.
   - A group for each mod with its own tools, for example the falls of Stack it! or the joins of Too Late.
 - **Demo settings.** A Demo section on the Mods tab to try live settings, plus a demo network mod
