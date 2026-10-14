@@ -31,12 +31,10 @@ Assets come up in many mods, so the API is for every mod author, not only for th
 
 ### The mods that are out
 
-- Parcel Board 0.2.0:
-  - More fields, the list comes later. Each of them can be turned off on its own, apart from the main table.
 - Too Late 0.2.0: what was planned for joining a game in progress done in full, see "Not covered yet" in its README,
   with tests for all of it.
 - Stack it! 0.2.0: the backtrack fixed, and the tests that were not done yet.
-- More content for Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it! and Too Late, each released as a minor version of its own.
+- More content for Boat Tweaks, Shelf Labels, Better Repair, Stack it! and Too Late, each released as a minor version of its own.
 - Every README with the Discord server, screenshots and short GIFs of what the mod does, on GitHub and on Thunderstore.
 
 ### Chat between players

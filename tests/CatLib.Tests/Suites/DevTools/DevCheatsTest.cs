@@ -48,6 +48,13 @@ public sealed class DevCheatsTest : TestCase
         Assert.Equal("no storage condition, fragile", new SpawnConditions(StorageConstraint.None, BehaviorConstraint.Fragile, null).ToString(), "None is named");
         Assert.Equal(Enum.GetValues(typeof(ParcelRegion)).Length, ParcelSpawner.RegionChoices.Count, "Every destination can be chosen, None stands for random");
 
+        Assert.Equal(11u, PlayerStubs.NetworkIdentifierOf(1), "Player 1 is the game's network identifier 11");
+        Assert.Equal(5, PlayerStubs.PlayerOf(15), "and identifier 15 is player 5");
+        Assert.True(PlayerStubs.IsStubClient(PlayerStubs.StubClientOf(8)), "A stub has a client id of its own");
+        Assert.False(PlayerStubs.IsStubClient(76561199689020186UL), "a Steam id is never a stub");
+        Assert.False(PlayerStubs.IsStubClient(1), "nor a client of a game without the Steam network");
+        Assert.Equal(7, new PlayerStubs(context.Log).Items().Count(), "Players 2 to 8 can be stubs, player 1 is the host");
+
         Assert.Equal("step 1 of 4", PileClearer.StepText(0, 4), "Pile steps count from one");
         Assert.Equal("cleared", PileClearer.StepText(-1, 4), "A pile at -1 is cleared");
         Assert.Equal("cleared", PileClearer.StepText(3, 3), "A pile past its last step is cleared too, the game shows it so");

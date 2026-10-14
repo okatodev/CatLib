@@ -9,6 +9,8 @@
   The parcels still lying on a step are removed, the doors behind the piles open at their steps like in the game.
 - Developer menu group UI: hide the game's interface for screenshots and videos, with the pause menu, settings, results and stamp choice still shown.
   While it is hidden, a second toggle decides whether the notifications are hidden too.
+- Developer menu group Players, for the host: a standing stub of player 2 to 8 where the game spawns that player, seen by every player,
+  so spawning and counting players can be tried without starting more copies of the game.
 - Developer menu command Inspect → Constraint stamps export: the stamps of every parcel condition and of the curse, locked or not,
   with their preview pictures, materials and textures.
 

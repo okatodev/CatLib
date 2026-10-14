@@ -33,9 +33,30 @@ public static class TooLatePatches
             .Postfix(typeof(MultiplayerLobbyInterface), nameof(MultiplayerLobbyInterface.ProcessClientJoin),
                 new[] { typeof(ulong) }, typeof(TooLatePatches), nameof(LobbyJoinPostfix))
             .Postfix(typeof(MultiplayerLobbyInterface), nameof(MultiplayerLobbyInterface.NetworkManager_OnClientDisconnected),
-                new[] { typeof(ulong) }, typeof(TooLatePatches), nameof(LobbyLeavePostfix));
+                new[] { typeof(ulong) }, typeof(TooLatePatches), nameof(LobbyLeavePostfix))
+            .Prefix(typeof(PlayerManager), nameof(PlayerManager.SpawnLocalPlayer),
+                Type.EmptyTypes, typeof(TooLatePatches), nameof(SpawnPointsPrefix))
+            .Prefix(typeof(PlayerManager), nameof(PlayerManager.GetPlayerSpawnPoint),
+                new[] { typeof(uint) }, typeof(TooLatePatches), nameof(SpawnPointsPrefix));
         Group.Apply();
         return Group;
+    }
+
+    private static void SpawnPointsPrefix(PlayerManager __instance)
+    {
+        if (Group == null || !Group.IsActive)
+        {
+            return;
+        }
+
+        try
+        {
+            SpawnPoints.Ensure(__instance);
+        }
+        catch (Exception exception)
+        {
+            Group.Fault(nameof(SpawnPointsPrefix), exception);
+        }
     }
 
     private static bool ServerSendPrefix(ProtocolCode __0, bool __1, ulong __2, Il2CppReferenceArray<Object> __3)

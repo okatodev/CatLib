@@ -33,6 +33,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
     private GameCheats _cheats;
     private ParcelSpawner _spawner;
     private PileClearer _piles;
+    private PlayerStubs _stubs;
     private UiHider _uiHider;
     private MessageProbe _probes;
     private SaveProbe _saveProbe;
@@ -78,6 +79,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
         _cheats = new GameCheats(_log.Scope("Cheats"));
         _spawner = new ParcelSpawner(_log.Scope("Spawn"));
         _piles = new PileClearer(_log.Scope("Piles"));
+        _stubs = new PlayerStubs(_log.Scope("Stubs"));
         _uiHider = new UiHider(_log.Scope("UiHide"), DevMenu.Model);
         _uiHider.Attach();
         _entityInspector = new CatLib.Tests.Diagnostics.Inspection.EntityInspector(Path.Combine(outputDirectory, "Dumps"), () => _entityDumpTypes.Value, _log.Scope("Inspect"));
@@ -180,6 +182,11 @@ public sealed class CatLibTestsPlugin : BasePlugin
             "Lists the players Steam sees, with their rich presence. On one computer these are the other game copies.");
         DevMenu.Command("Network", "Join the first host", _localJoin.JoinFirst,
             "Joins the first visible player that offers a game, the same way accepting a Steam invite does.");
+        foreach (var item in _stubs.Items())
+        {
+            DevMenu.Model.Add(item);
+        }
+
         DevMenu.Command("Network", "Steam self check", () =>
         {
             SessionNetwork.RunSelfCheck();

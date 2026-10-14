@@ -44,6 +44,7 @@ public sealed class TooLatePlugin : BasePlugin
 
         var lobby = new LobbyOverflow(log, settings.Texts);
         var recorder = new MessageRecorder(log);
+        SpawnPoints.Initialize(log);
         var patches = TooLatePatches.Install(PluginMeta.Guid, joins, lobby, recorder, log);
         patches.TurnedOff += () => MainThread.Post(joins.ShutDown);
 

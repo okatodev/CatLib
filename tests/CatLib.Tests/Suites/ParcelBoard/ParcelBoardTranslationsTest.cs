@@ -76,7 +76,7 @@ public sealed class ParcelBoardTranslationsTest : TestCase
         Assert.AtLeast(1, changes, "Changing a setting tells the mod");
         Assert.Equal("Табло посылок", SettingTexts.ModName(sandbox.Settings, "ru"), "Russian mod name");
         Assert.Equal("Ночное", catalog.Find("list.Dark", "ru"), "Dark is the night list in Russian");
-        Assert.Equal("Сломанное", catalog.Find("list.Corrupted", "ru"), "Corrupted parcels are broken ones");
+        Assert.Equal("Проклятое", catalog.Find("list.Corrupted", "ru"), "Corrupted parcels are cursed ones");
 
         context.Note("Network policy of the mod: " + SessionPolicy.ClientOnly);
         yield break;

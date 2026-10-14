@@ -50,6 +50,10 @@ In the lobby the host does all of this for everyone at the same time, so nobody 
      `CustomerCounter;OpenState;True` for an open counter, without what is of the moment (the captain's lines, customers, the counter's number wheel).
    Disposed entities are forgotten.
 9. The player limit is the constant 5 in `Server.HandleClientConnect`, changed to the setting plus one.
+10. Every game picks its own player's spawn point as `PlayerManager._spawnPoints[(network identifier - 11) % count]`, in `SpawnLocalPlayer`,
+    and the level has 4 points, so players 5 to 8 would start inside players 1 to 4. Before the first spawn the mod adds 4 points
+    between the game's ones, which stand in a line 2.5 m apart: between 1 and 2, 2 and 3, 3 and 4, and half a step past 4.
+    The host cannot move another player's own player, so a player without the mod still starts at a point of players 1 to 4.
 
 ## What a player from the lobby gets
 
@@ -70,7 +74,7 @@ Protocol codes and the flow are listed in `Logic/ProtocolCodes.cs` and `Logic/Me
 ## Not covered yet
 
 - Entities the game does not save, like customers standing at a counter, appear for the late player with the next customer.
-- Players 5 to 8 appear at the spawn points of players 1 to 4.
+- Players 5 to 8 without the mod start at the spawn points of players 1 to 4.
 
 ## Developer menu
 

@@ -24,6 +24,7 @@ Settings → Mods → Too Late. These are the host's settings.
 ## Playing with friends
 
 Only the host needs it. Friends can join without any mods.
+Friends who have it too start at their own spot when there are more than 4 players; without it, players 5 to 8 start where players 1 to 4 do and can walk away from there.
 If a friend has mods that every player needs and you don't, those mods are paused for the game, like for any player.
 
 ## Saves
@@ -34,7 +35,6 @@ and their game keeps a copy of your save like it always does in multiplayer.
 ## Not yet
 
 - Customers already standing at a counter appear for the friend with the next customer.
-- Players 5 to 8 start at the same spots as players 1 to 4.
 
 ## Found a bug?
 

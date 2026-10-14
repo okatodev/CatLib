@@ -74,6 +74,7 @@ Groups come from `CatLib.Tests`, from CatLib itself and from the mods; a group a
 | | Visible players | The players Steam sees, with their rich presence; on one computer these are the other game copies |
 | | Join the first host | Joins the first visible player that offers a game, like accepting a Steam invite |
 | | Steam self check | Checks the CatLib channel of Steam on this computer |
+| Players | Player 2 … Player 8 | Host only. A standing stub of that player where the game spawns them, for every player of the session and for players who appear later, or takes it away; REAL when a real player has the slot |
 | UI | Notification preview | A sample message as a game notification |
 | | Version badge preview | The version label as if the game were newer, then older, then the real check |
 | | Stress mods on or off | Adds many fake mods to the Mods tab |
