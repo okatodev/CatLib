@@ -2,7 +2,16 @@
 
 CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late and Custom Stamps, and CatLib Crash Watcher have their own versions and changelogs.
 
-## Unreleased
+## 0.7.3
+
+Released together with Too Late 0.2.0, Stack it! 0.1.1, Parcel Board 0.1.1 and CatLib Tests 0.7.3.
+For players: no more crash when the game quits, also with friends still in the game, a friend who joins late sees the customers
+at the counters and what everyone carries, players 5 to 8 with Too Late start at spots of their own, a falling parcel of Stack it!
+no longer jumps back on the other players' games, and the cursed parcels of Parcel Board have the curse's own look.
+For mod authors: choice items in the developer menu and an icon for cursed parcels. Checked with two game copies on one computer.
+
+### Added
+
 - Developer menu: `DevMenu.Choice`, an item that shows its value and moves to the next one when run.
 - `CatParcels.ConstraintIcon(BehaviorConstraint.Corrupted)` gives an icon for the curse. The game has no stamp picture for it,
   so CatLib draws the glowing purple swirl the game shows on a cursed parcel at night on a round sticker.

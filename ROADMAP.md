@@ -2,7 +2,7 @@
 
 What is planned, in rough order. Finished work is removed from here and described in [CHANGELOG.md](CHANGELOG.md) or in the mod's CHANGELOG.md.
 
-## After 0.7.2
+## After 0.7.3
 
 The next steps go in small steps like the way to 0.7.0, in other directions: assets, stability,
 the mods that are out already and a first try at talking to each other in the game.

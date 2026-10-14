@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.1
 
 - A parcel across a joint that falls no longer jumps back a little on the other players' games before it falls.
   Their game let it fall on its own until the host's movement arrived and then pulled it back to where the host's movement started.

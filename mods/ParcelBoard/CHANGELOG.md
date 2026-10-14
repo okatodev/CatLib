@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.1.1
+
+Needs CatLib 0.7.3.
 
 - The list of cursed parcels has the curse's own look: the glowing purple swirl the game shows on them at night, drawn by CatLib from the game's picture.
   The board's own icon for it, used before a level is loaded, is the same swirl instead of a broken box.

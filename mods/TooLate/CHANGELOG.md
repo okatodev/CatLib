@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.0
 
 - Players 5 to 8 start at spots of their own, between the game's four and half a step past the last one.
   Their own game picks the spot, so a player needs Too Late for it; the host still is the only one who must have it.
