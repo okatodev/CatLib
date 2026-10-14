@@ -51,6 +51,7 @@ internal static class SessionNetwork
     private static ulong _identifiedHost;
     private static double _leaveAt = double.PositiveInfinity;
     private static bool _restarting;
+    private static bool _quitting;
     private static ClientSession _heldSettings;
     private static double _nextRoster;
     private static byte[] _lastRosterBytes;
@@ -271,64 +272,37 @@ internal static class SessionNetwork
 
     internal static void OnQuitting()
     {
+        _quitting = true;
         CloseChannelSessions();
-        var others = OtherPlayersAtQuit();
-        if (others > 0)
-        {
-            _departedClosedAt = Clock.Elapsed;
-            _log.Info($"The game quits with {others} other player(s) connected and closes those connections now, Steam shuts down when they had time to close");
-        }
     }
 
-    internal static int OtherPlayersAtQuit(bool hosting, IEnumerable<ulong> serverClients, Func<ulong, bool> isRemote, bool joinedRemoteHost) =>
-        hosting ? (serverClients ?? Array.Empty<ulong>()).Count(client => isRemote == null || isRemote(client)) : joinedRemoteHost ? 1 : 0;
+    internal static bool RunsSteamShutdown(bool quitting) => !quitting;
 
-    private static int OtherPlayersAtQuit()
-    {
-        try
-        {
-            if (IsWithoutSteamNetwork() || !Singleton<NetworkManager>.HasInstance())
-            {
-                return 0;
-            }
-
-            var network = Singleton<NetworkManager>.Instance;
-            var clients = new List<ulong>();
-            var server = network.IsServer ? network._server : null;
-            if (server?._clients != null)
-            {
-                foreach (var pair in server._clients)
-                {
-                    clients.Add(pair.Key);
-                }
-            }
-
-            var client = network._client;
-            return OtherPlayersAtQuit(server != null, clients, IsRemotePlayer, client != null && !client._isLocal);
-        }
-        catch (Exception exception)
-        {
-            _log.Warning("Counting the other players while quitting failed: " + exception.Message);
-            return 0;
-        }
-    }
-
-    private static void BeforeSteamShutdown()
+    private static bool BeforeSteamShutdown()
     {
         if (_steamShutdown == null || !_steamShutdown.IsActive)
         {
-            return;
+            return true;
         }
 
         try
         {
             CloseChannelSessions();
+            if (!RunsSteamShutdown(_quitting))
+            {
+                _log.Info("The game quits: Steam is not shut down by the game, the Steam client cleans up when the game's process ends. " +
+                          "Steam crashed in its own threads while the game shut it down");
+                return false;
+            }
+
             SettleClosedSessions();
         }
         catch (Exception exception)
         {
             _steamShutdown.Fault(nameof(BeforeSteamShutdown), exception);
         }
+
+        return true;
     }
 
     private static void SettleClosedSessions()

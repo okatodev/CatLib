@@ -267,13 +267,13 @@ public sealed class ParcelSpawner
         }
 
         var boot = Singleton<BootstrapManager>.HasInstance() ? Singleton<BootstrapManager>.Instance : null;
-        if (boot == null || !boot.LoadFinalized || !Singleton<GameManager>.HasInstance() || !Singleton<GameManager>.Instance.IsGameInitialized)
-        {
-            return "only in a level";
-        }
-
-        return null;
+        var players = Singleton<PlayerManager>.HasInstance() ? Singleton<PlayerManager>.Instance : null;
+        var started = Singleton<GameManager>.HasInstance() && Singleton<GameManager>.Instance.IsGameInitialized;
+        return IsInLevel(boot != null && boot.LoadFinalized, players != null && players.LocalPlayerEntity != null,
+            Singleton<NetworkManager>.Instance.IsServer, started) ? null : "only in a level";
     }
+
+    public static bool IsInLevel(bool loaded, bool spawned, bool host, bool gameStarted) => loaded && spawned && (!host || gameStarted);
 
     private static List<EntityParcel> PrefabsOf(PackageSize size)
     {

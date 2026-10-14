@@ -43,6 +43,9 @@ public sealed class DevCheatsTest : TestCase
         behavior = (BehaviorConstraint)3;
         Assert.Equal("?", choice.State, "A value outside the list shows as unknown");
 
+        Assert.True(ParcelSpawner.IsInLevel(true, true, false, false), "A player spawns parcels once they stand in the level, the game starts its day only on the host");
+        Assert.False(ParcelSpawner.IsInLevel(true, true, true, false), "The host waits until its game has started the day");
+        Assert.False(ParcelSpawner.IsInLevel(true, false, false, false), "Nobody spawns before standing in the level");
         Assert.False(new SpawnConditions(null, null, null).IsSet, "All random: the game chooses");
         Assert.Equal("cursed, to Hazelton", new SpawnConditions(null, BehaviorConstraint.Corrupted, ParcelRegion.Hazelton).ToString(), "Conditions read as text");
         Assert.Equal("no storage condition, fragile", new SpawnConditions(StorageConstraint.None, BehaviorConstraint.Fragile, null).ToString(), "None is named");

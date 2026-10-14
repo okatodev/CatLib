@@ -27,11 +27,8 @@ public sealed class SessionAcceptTest : TestCase
         Assert.Equal(TimeSpan.Zero, SessionNetwork.ShutdownDelay(TimeSpan.FromSeconds(6)), "No wait when the player left long ago");
         Assert.Equal(TimeSpan.Zero, SessionNetwork.ShutdownDelay(TimeSpan.MaxValue), "No wait when nobody left");
         Assert.Equal(TimeSpan.Zero, SessionNetwork.ShutdownDelay(TimeSpan.FromSeconds(-1)), "No wait for a clock that went back");
-        Assert.Equal(2, SessionNetwork.OtherPlayersAtQuit(true, new[] { 76561199689020186UL, 76561199676542364UL, 76561199600000000UL }, client => client != 76561199689020186UL, false),
-            "A host that quits counts the other players still connected, not its own client");
-        Assert.Equal(0, SessionNetwork.OtherPlayersAtQuit(true, new[] { 76561199689020186UL }, client => client != 76561199689020186UL, false), "A host alone waits for nobody");
-        Assert.Equal(1, SessionNetwork.OtherPlayersAtQuit(false, null, null, true), "A player who quits a game of another host has the host's connection to close");
-        Assert.Equal(0, SessionNetwork.OtherPlayersAtQuit(false, null, null, false), "A single player game has none");
+        Assert.False(SessionNetwork.RunsSteamShutdown(true), "A game that quits leaves Steam to the Steam client");
+        Assert.True(SessionNetwork.RunsSteamShutdown(false), "Any other shutdown of Steam runs as in the game");
         Assert.True(SteamMessagesTransport.IsGone(0), "A session in state none is gone");
         Assert.True(SteamMessagesTransport.IsGone(-3), "A dead session is gone");
         Assert.False(SteamMessagesTransport.IsGone(-1), "A session that is still finishing is not gone");

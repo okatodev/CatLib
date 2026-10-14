@@ -9,9 +9,10 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
 
 ### Fixed
 
-- The game could crash when it quit with other players still connected, the host as well as a player: Steam stopped at an assert
-  on its own thread and aborted the game (`0xC0000409` in `steamclient64.dll`). The game closes the connections with the other players
-  right before it shuts Steam down, like when a player had just left. CatLib now waits 5 seconds before Steam shuts down then too.
+- The game could crash when it quit, most of all with other players still connected, the host as well as a player:
+  while the game shut Steam down, a thread of Steam stopped at an assert and aborted the game (`0xC0000409` in `steamclient64.dll`)
+  or read a wrong address. Waiting before the shutdown did not help. When the game quits, CatLib now skips `SteamAPI.Shutdown`,
+  the Steam client cleans up when the game's process ends.
 
 ## 0.7.2
 - Updated BepInEx dependency version.
