@@ -37,12 +37,15 @@ DevMenu.Command("Boat", "Save the deck", () =>
 }, "Saves the deck of the boat at the dock as an own layout.");
 
 DevMenu.Toggle("Boat", "Show deck grid", () => showGrid, value => showGrid = value);
+
+DevMenu.Choice("Boat", "Deck size", new[] { (1, "small"), (2, "large") }, () => deckSize, value => deckSize = value);
 ```
 
 - The first argument is the group; groups appear in the order they were first used.
 - A command may return a short text that is shown as its result; returning nothing shows "done".
 - An exception in a command is caught, logged and shown as the result; the menu keeps working.
 - A toggle shows its state next to its label and flips it when run.
+- A choice shows its current value next to its label and moves to the next one when run, after the last back to the first.
 - `DevMenu.Remove(item)` removes a command, for example when a tool is turned off.
 
 Commands run on the main thread, in the frame the key was pressed. Long work should write its result to a file

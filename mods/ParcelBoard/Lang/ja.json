@@ -50,7 +50,7 @@
     "Lists.ContactForbidden.description": "このマークの荷物を行き先別に。",
     "Lists.Lover": "ペア",
     "Lists.Lover.description": "このマークの荷物を行き先別に。",
-    "Lists.Corrupted": "故障",
+    "Lists.Corrupted": "呪い",
     "Lists.Corrupted.description": "このマークの荷物を行き先別に。",
     "Lists.Damaged": "破損",
     "Lists.Damaged.description": "壊れた荷物を行き先別に。",
@@ -83,7 +83,7 @@
     "Bright": "明所",
     "ContactForbidden": "接触禁止",
     "Lover": "ペア",
-    "Corrupted": "故障",
+    "Corrupted": "呪い",
     "Damaged": "破損",
     "NeedsStamps": "スタンプ未完",
     "Sizes": "サイズ"

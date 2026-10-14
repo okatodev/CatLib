@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CatLib.Il2Cpp;
 using CatLib.Logging;
 using Il2CppInterop.Runtime;
 using UnityEngine;
@@ -29,12 +30,70 @@ public sealed class ParcelSpawner
         (PackageSize.GiantPlus, "Giant plus")
     };
 
+    public static readonly IReadOnlyList<(StorageConstraint? Value, string Text)> StorageChoices = new (StorageConstraint?, string)[]
+    {
+        (null, "random"),
+        (StorageConstraint.None, "none"),
+        (StorageConstraint.Cold, "cold"),
+        (StorageConstraint.Hot, "hot"),
+        (StorageConstraint.Dark, "dark"),
+        (StorageConstraint.Bright, "bright"),
+        (StorageConstraint.Frozen, "frozen")
+    };
+
+    public static readonly IReadOnlyList<(BehaviorConstraint? Value, string Text)> BehaviorChoices = new (BehaviorConstraint?, string)[]
+    {
+        (null, "random"),
+        (BehaviorConstraint.None, "none"),
+        (BehaviorConstraint.Fragile, "fragile"),
+        (BehaviorConstraint.Heavy, "heavy"),
+        (BehaviorConstraint.ContactForbidden, "no contact"),
+        (BehaviorConstraint.Lover, "lover"),
+        (BehaviorConstraint.Corrupted, "cursed")
+    };
+
+    public static readonly IReadOnlyList<(ParcelRegion? Value, string Text)> RegionChoices = new (ParcelRegion?, string)[]
+    {
+        (null, "random"),
+        (ParcelRegion.CatsIsland, "Cats Island"),
+        (ParcelRegion.FoggyMountains, "Foggy Mountains"),
+        (ParcelRegion.SunnyShores, "Sunny Shores"),
+        (ParcelRegion.PortWindy, "Port Windy"),
+        (ParcelRegion.Hazelton, "Hazelton"),
+        (ParcelRegion.CrescentBay, "Crescent Bay"),
+        (ParcelRegion.TropicalDunes, "Tropical Dunes")
+    };
+
     private readonly CatLogger _log;
     private readonly System.Random _random = new();
+    private readonly Dictionary<uint, SpawnConditions> _pending = new();
+    private Il2CppEventBindings _bindings;
+    private IntPtr _boundManager;
 
     public ParcelSpawner(CatLogger log)
     {
         _log = log;
+    }
+
+    public StorageConstraint? Storage { get; set; }
+
+    public BehaviorConstraint? Behavior { get; set; }
+
+    public ParcelRegion? Region { get; set; }
+
+    public SpawnConditions Conditions => new(Storage, Behavior, Region);
+
+    public static string TextOf<T>(IReadOnlyList<(T Value, string Text)> choices, T value)
+    {
+        foreach (var (known, text) in choices)
+        {
+            if (EqualityComparer<T>.Default.Equals(known, value))
+            {
+                return text;
+            }
+        }
+
+        return value?.ToString() ?? "random";
     }
 
     public static string LabelOf(PackageSize size)
@@ -82,15 +141,122 @@ public sealed class ParcelSpawner
             return "no camera to spawn in front of";
         }
 
+        var conditions = Conditions;
+        var isHost = Singleton<NetworkManager>.Instance.IsServer;
+        if (conditions.IsSet && !isHost)
+        {
+            return "only the host can choose the conditions, set them back to random";
+        }
+
         var prefab = prefabs[_random.Next(prefabs.Count)];
         var view = camera.transform;
         var forward = view.forward;
         var position = view.position + forward * SpawnDistance(WallDistance(view.position, forward));
         var flat = new Vector3(forward.x, 0f, forward.z);
         var rotation = flat.sqrMagnitude < 0.0001f ? Quaternion.identity : Quaternion.LookRotation(flat.normalized, Vector3.up);
-        var request = Singleton<NetworkSpawnerManager>.Instance.RequestSpawn(prefab, position, rotation, Vector3.zero, string.Empty);
-        _log.Info($"Requested a {label} parcel {prefab.name} ({prefab.AddressableKey}) at {position}, request {request}, {prefabs.Count} prefab(s) of this size");
-        return $"{prefab.name} in front of you";
+        var spawner = Singleton<NetworkSpawnerManager>.Instance;
+        if (conditions.IsSet && !Bind(spawner))
+        {
+            return "the game's spawn event could not be followed, see the log";
+        }
+
+        var request = spawner.RequestSpawn(prefab, position, rotation, Vector3.zero, string.Empty);
+        if (conditions.IsSet)
+        {
+            _pending[request] = conditions;
+        }
+
+        _log.Info($"Requested a {label} parcel {prefab.name} ({prefab.AddressableKey}) at {position}, request {request}, {prefabs.Count} prefab(s) of this size, conditions: {conditions}");
+        return conditions.IsSet ? $"{prefab.name} in front of you, {conditions}" : $"{prefab.name} in front of you";
+    }
+
+    public string OpenGameSpawner()
+    {
+        var problem = LevelProblem();
+        if (problem != null)
+        {
+            return problem;
+        }
+
+        var spawner = Singleton<InterfaceManager>.HasInstance() ? Singleton<InterfaceManager>.Instance.SpawnerInterface : null;
+        if (spawner == null)
+        {
+            return "this build of the game has no spawner window";
+        }
+
+        if (Singleton<PauseManager>.HasInstance())
+        {
+            Singleton<PauseManager>.Instance.PauseGame();
+        }
+
+        spawner.Show();
+        _log.Info("Opened the game's own spawner window");
+        return "opened, close the developer menu to use it; Esc closes it";
+    }
+
+    private bool Bind(NetworkSpawnerManager spawner)
+    {
+        if (_bindings != null && _boundManager == spawner.Pointer)
+        {
+            return true;
+        }
+
+        _bindings?.Clear(_log);
+        _pending.Clear();
+        _bindings = new Il2CppEventBindings();
+        _boundManager = spawner.Pointer;
+        if (_bindings.Add<NetworkSpawnerManager.EntitySpawnedHandler>("NetworkSpawnerManager.EntitySpawned",
+                new Action<ulong, uint, Entity, string>(OnEntitySpawned), spawner.add_EntitySpawned, spawner.remove_EntitySpawned))
+        {
+            return true;
+        }
+
+        _log.Warning("Following the game's spawn event failed: " + string.Join("; ", _bindings.Failures));
+        _bindings = null;
+        _boundManager = IntPtr.Zero;
+        return false;
+    }
+
+    private void OnEntitySpawned(ulong client, uint request, Entity entity, string arguments)
+    {
+        try
+        {
+            if (!_pending.TryGetValue(request, out var conditions) || !Singleton<NetworkManager>.HasInstance() || client != Singleton<NetworkManager>.Instance.ClientId)
+            {
+                return;
+            }
+
+            _pending.Remove(request);
+            var properties = entity == null ? null : entity.Properties;
+            if (properties == null && entity != null)
+            {
+                properties = entity.GetComponent<EntityProperties>();
+            }
+
+            if (properties == null)
+            {
+                _log.Warning($"Spawn request {request} gave no parcel, its conditions were not set");
+                return;
+            }
+
+            properties.InitializeFromStorage(conditions.Storage ?? StorageConstraint.None, conditions.Behavior ?? BehaviorConstraint.None,
+                StorageType.Other, conditions.Region ?? ParcelRegion.None, true);
+            if (conditions.Storage == null)
+            {
+                properties._isStorageConstraintSet = false;
+            }
+
+            if (conditions.Behavior == null)
+            {
+                properties._isBehaviorConstraintSet = false;
+            }
+
+            _log.Info($"Spawn request {request}: {entity.name} gets {conditions}");
+        }
+        catch (Exception exception)
+        {
+            _log.Error($"Setting the conditions of spawn request {request} failed", exception);
+        }
     }
 
     private static string LevelProblem()
@@ -215,5 +381,49 @@ public sealed class ParcelSpawner
         }
 
         return best;
+    }
+}
+
+public readonly struct SpawnConditions
+{
+    public SpawnConditions(StorageConstraint? storage, BehaviorConstraint? behavior, ParcelRegion? region)
+    {
+        Storage = storage;
+        Behavior = behavior;
+        Region = region;
+    }
+
+    public StorageConstraint? Storage { get; }
+
+    public BehaviorConstraint? Behavior { get; }
+
+    public ParcelRegion? Region { get; }
+
+    public bool IsSet => Storage != null || Behavior != null || Region != null;
+
+    public override string ToString()
+    {
+        if (!IsSet)
+        {
+            return "chosen by the game";
+        }
+
+        var parts = new List<string>();
+        if (Storage != null)
+        {
+            parts.Add(Storage == StorageConstraint.None ? "no storage condition" : ParcelSpawner.TextOf(ParcelSpawner.StorageChoices, Storage));
+        }
+
+        if (Behavior != null)
+        {
+            parts.Add(Behavior == BehaviorConstraint.None ? "no behavior condition" : ParcelSpawner.TextOf(ParcelSpawner.BehaviorChoices, Behavior));
+        }
+
+        if (Region != null)
+        {
+            parts.Add("to " + ParcelSpawner.TextOf(ParcelSpawner.RegionChoices, Region));
+        }
+
+        return string.Join(", ", parts);
     }
 }

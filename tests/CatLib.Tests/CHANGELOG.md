@@ -2,12 +2,15 @@
 
 ## 0.7.3
 
-- Developer menu group Spawn: a new parcel of any of the twelve sizes in front of you, its destination and marks chosen by the game.
-  Works for the host and for the players in a level.
+- Developer menu group Spawn: a new parcel of any of the twelve sizes in front of you. Its storage condition, behavior condition
+  and destination can be chosen above the sizes, locked ones and the curse included, or left to the game; choosing them is for the host.
+  The spawner window the game's developers left in it opens from there too.
 - Developer menu group Game, for the host: the next step of every pile of parcels, or every pile cleared step by step.
   The parcels still lying on a step are removed, the doors behind the piles open at their steps like in the game.
 - Developer menu group UI: hide the game's interface for screenshots and videos, with the pause menu, settings, results and stamp choice still shown.
   While it is hidden, a second toggle decides whether the notifications are hidden too.
+- Developer menu command Inspect → Constraint stamps export: the stamps of every parcel condition and of the curse, locked or not,
+  with their preview pictures, materials and textures.
 
 ## 0.7.2
 - Updated BepInEx dependency version.

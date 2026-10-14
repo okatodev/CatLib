@@ -50,7 +50,7 @@
     "Lists.ContactForbidden.description": "Посылки с этой меткой по назначениям.",
     "Lists.Lover": "Пары",
     "Lists.Lover.description": "Посылки с этой меткой по назначениям.",
-    "Lists.Corrupted": "Сломанное",
+    "Lists.Corrupted": "Проклятое",
     "Lists.Corrupted.description": "Посылки с этой меткой по назначениям.",
     "Lists.Damaged": "Повреждённые",
     "Lists.Damaged.description": "Повреждённые посылки по назначениям.",
@@ -83,7 +83,7 @@
     "Bright": "Светлое",
     "ContactForbidden": "Без контакта",
     "Lover": "Пары",
-    "Corrupted": "Сломанное",
+    "Corrupted": "Проклятое",
     "Damaged": "Повреждённые",
     "NeedsStamps": "Без штампов",
     "Sizes": "Размеры"

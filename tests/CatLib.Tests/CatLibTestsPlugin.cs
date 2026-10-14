@@ -38,6 +38,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
     private SaveProbe _saveProbe;
     private UiHierarchyDumper _uiDumper;
     private SpriteExporter _sprites;
+    private ConstraintStampExporter _constraintStamps;
     private StressMods _stressMods;
     private CatLogger _log;
     private TestRunner _runner;
@@ -67,6 +68,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
 
         _uiDumper = new UiHierarchyDumper(Path.Combine(outputDirectory, "Dumps"), _log.Scope("UiDump"));
         _sprites = new SpriteExporter(Path.Combine(outputDirectory, "Dumps"), _log.Scope("Sprites"));
+        _constraintStamps = new ConstraintStampExporter(Path.Combine(outputDirectory, "Dumps"), _log.Scope("ConstraintStamps"));
         _stressMods = new StressMods(Path.Combine(outputDirectory, "Stress"), _log.Scope("Stress"));
         _probes = new MessageProbe(_log.Scope("Probe"));
         _saveProbe = new SaveProbe(PluginMeta.Version, _log.Scope("SaveProbe"));
@@ -111,11 +113,20 @@ public sealed class CatLibTestsPlugin : BasePlugin
             "Host only. Every started pile of parcels goes to its next, smaller step, the parcels still lying on it are removed. A door behind a pile opens at its step, like in the game.");
         DevMenu.Command("Game", "Clear the piles", _piles.Clear,
             "Host only. Every started pile goes through all its steps until it is gone, a step when the parcels of the last one have arrived. The doors behind the piles open on the way.");
+        DevMenu.Choice("Spawn", "Storage condition", ParcelSpawner.StorageChoices, () => _spawner.Storage, value => _spawner.Storage = value,
+            "Cold, hot, dark, bright or frozen for the parcels spawned below, locked conditions included. Random leaves it to the game. Host only when not random.");
+        DevMenu.Choice("Spawn", "Behavior condition", ParcelSpawner.BehaviorChoices, () => _spawner.Behavior, value => _spawner.Behavior = value,
+            "Fragile, heavy, no contact, lover or cursed for the parcels spawned below, locked ones included. The curse shows at night. Random leaves it to the game. Host only when not random.");
+        DevMenu.Choice("Spawn", "Destination", ParcelSpawner.RegionChoices, () => _spawner.Region, value => _spawner.Region = value,
+            "The destination of the parcels spawned below. Random leaves it to the game. Host only when not random.");
         foreach (var (size, label) in ParcelSpawner.Sizes)
         {
             DevMenu.Command("Spawn", label + " parcel", () => _spawner.Spawn(size),
-                $"Puts a new {label.ToLowerInvariant()} parcel in front of you, its destination and marks chosen by the game like for any new parcel. In a level, for the host and the players.");
+                $"Puts a new {label.ToLowerInvariant()} parcel in front of you with the conditions chosen above; random ones are chosen by the game like for any new parcel.");
         }
+
+        DevMenu.Command("Spawn", "Open the game's spawner", _spawner.OpenGameSpawner,
+            "Opens the spawner window the game's developers left in it: every spawnable thing with lists of conditions and destinations, used with the mouse. Its conditions work for the host.");
         DevMenu.Command("Inspect", "Entity dump", () =>
         {
             _entityInspector.Dump();
@@ -135,6 +146,8 @@ public sealed class CatLibTestsPlugin : BasePlugin
             "Writes every texture that holds loaded UI sprites as PNG, with index.txt naming each sprite and its place. Run it in the menu and in a level.");
         DevMenu.Command("Inspect", "Texture export", () => "written to " + _sprites.ExportTextures(_textureNames.Value.Split(',')),
             "Writes the textures named in TextureExportNames of catlib.tests.cfg as PNG. Run it in a level, where they are loaded.");
+        DevMenu.Command("Inspect", "Constraint stamps export", _constraintStamps.Export,
+            "Writes the stamp of every parcel condition and curse as the game keeps it, locked or not: preview picture, materials and textures, with index.txt describing them. Run it in a level.");
         DevMenu.Command("Network", "Session roster", () =>
         {
             var roster = CatNetwork.Roster;

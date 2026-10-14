@@ -50,7 +50,7 @@
     "Lists.ContactForbidden.description": "Посилки з цією позначкою за призначеннями.",
     "Lists.Lover": "Пари",
     "Lists.Lover.description": "Посилки з цією позначкою за призначеннями.",
-    "Lists.Corrupted": "Зламане",
+    "Lists.Corrupted": "Прокляте",
     "Lists.Corrupted.description": "Посилки з цією позначкою за призначеннями.",
     "Lists.Damaged": "Пошкоджені",
     "Lists.Damaged.description": "Пошкоджені посилки за призначеннями.",
@@ -83,7 +83,7 @@
     "Bright": "Світле",
     "ContactForbidden": "Без контакту",
     "Lover": "Пари",
-    "Corrupted": "Зламане",
+    "Corrupted": "Прокляте",
     "Damaged": "Пошкоджені",
     "NeedsStamps": "Без штампів",
     "Sizes": "Розміри"

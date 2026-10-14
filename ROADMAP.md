@@ -32,8 +32,6 @@ Assets come up in many mods, so the API is for every mod author, not only for th
 ### The mods that are out
 
 - Parcel Board 0.2.0:
-  - New icons for the cursed parcels (`BehaviorConstraint.Corrupted`, "Broken" in the mod's texts),
-    the icon of their list and the mod's own `Icons/corrupted.png` used when the game's icon is not loaded. The other icons stay as they are.
   - More fields, the list comes later. Each of them can be turned off on its own, apart from the main table.
 - Too Late 0.2.0: what was planned for joining a game in progress done in full, see "Not covered yet" in its README,
   with tests for all of it.

@@ -50,7 +50,7 @@
     "Lists.ContactForbidden.description": "带有此标记的包裹，按目的地。",
     "Lists.Lover": "成对",
     "Lists.Lover.description": "带有此标记的包裹，按目的地。",
-    "Lists.Corrupted": "破碎",
+    "Lists.Corrupted": "诅咒",
     "Lists.Corrupted.description": "带有此标记的包裹，按目的地。",
     "Lists.Damaged": "损坏",
     "Lists.Damaged.description": "损坏的包裹，按目的地。",
@@ -83,7 +83,7 @@
     "Bright": "明亮",
     "ContactForbidden": "禁止接触",
     "Lover": "成对",
-    "Corrupted": "破碎",
+    "Corrupted": "诅咒",
     "Damaged": "损坏",
     "NeedsStamps": "缺印章",
     "Sizes": "尺寸"

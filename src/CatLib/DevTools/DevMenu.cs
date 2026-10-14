@@ -39,6 +39,9 @@ public static class DevMenu
 
     public static DevItem Toggle(string group, string label, Func<bool> get, Action<bool> set, string hint = null) => Model.Add(DevItem.Toggle(group, label, get, set, hint));
 
+    public static DevItem Choice<T>(string group, string label, IReadOnlyList<(T Value, string Text)> options, Func<T> get, Action<T> set, string hint = null) =>
+        Model.Add(DevItem.Choice(group, label, options, get, set, hint));
+
     public static bool Remove(DevItem item) => Model.Remove(item);
 
     internal static void Initialize(CatLogger log, CatSettings settings)

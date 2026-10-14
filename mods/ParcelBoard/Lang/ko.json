@@ -50,7 +50,7 @@
     "Lists.ContactForbidden.description": "이 표시가 있는 소포를 목적지별로.",
     "Lists.Lover": "짝",
     "Lists.Lover.description": "이 표시가 있는 소포를 목적지별로.",
-    "Lists.Corrupted": "고장",
+    "Lists.Corrupted": "저주",
     "Lists.Corrupted.description": "이 표시가 있는 소포를 목적지별로.",
     "Lists.Damaged": "파손",
     "Lists.Damaged.description": "파손된 소포를 목적지별로.",
@@ -83,7 +83,7 @@
     "Bright": "밝은 곳",
     "ContactForbidden": "접촉 금지",
     "Lover": "짝",
-    "Corrupted": "고장",
+    "Corrupted": "저주",
     "Damaged": "파손",
     "NeedsStamps": "도장 필요",
     "Sizes": "크기"

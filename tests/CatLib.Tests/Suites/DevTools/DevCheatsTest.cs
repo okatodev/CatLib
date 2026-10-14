@@ -24,6 +24,30 @@ public sealed class DevCheatsTest : TestCase
         Assert.True(Math.Abs(ParcelSpawner.SpawnDistance(1.2f) - (1.2f - ParcelSpawner.WallGap)) < 0.0001f, "A near wall: the parcel appears before it");
         Assert.Equal(ParcelSpawner.NearestDistance, ParcelSpawner.SpawnDistance(0.1f), "but never inside the player");
 
+        BehaviorConstraint? behavior = null;
+        var choice = DevItem.Choice("Spawn", "Behavior condition", ParcelSpawner.BehaviorChoices, () => behavior, value => behavior = value);
+        Assert.Equal("random", choice.State, "A choice shows its value");
+        var choices = new DevMenuModel();
+        choices.Add(choice);
+        choices.Press(DevKey.Enter);
+        Assert.Equal(BehaviorConstraint.None, behavior, "Enter moves to the next value");
+        for (var step = 0; step < 5; step++)
+        {
+            choices.Press(DevKey.Enter);
+        }
+
+        Assert.Equal(BehaviorConstraint.Corrupted, behavior, "the curse is the last one");
+        Assert.Equal("Behavior condition: cursed", choices.Status, "and the status names it");
+        choices.Press(DevKey.Enter);
+        Assert.Null(behavior, "After the last value it starts again");
+        behavior = (BehaviorConstraint)3;
+        Assert.Equal("?", choice.State, "A value outside the list shows as unknown");
+
+        Assert.False(new SpawnConditions(null, null, null).IsSet, "All random: the game chooses");
+        Assert.Equal("cursed, to Hazelton", new SpawnConditions(null, BehaviorConstraint.Corrupted, ParcelRegion.Hazelton).ToString(), "Conditions read as text");
+        Assert.Equal("no storage condition, fragile", new SpawnConditions(StorageConstraint.None, BehaviorConstraint.Fragile, null).ToString(), "None is named");
+        Assert.Equal(Enum.GetValues(typeof(ParcelRegion)).Length, ParcelSpawner.RegionChoices.Count, "Every destination can be chosen, None stands for random");
+
         Assert.Equal("step 1 of 4", PileClearer.StepText(0, 4), "Pile steps count from one");
         Assert.Equal("cleared", PileClearer.StepText(-1, 4), "A pile at -1 is cleared");
         Assert.Equal("cleared", PileClearer.StepText(3, 3), "A pile past its last step is cleared too, the game shows it so");

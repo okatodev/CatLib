@@ -50,7 +50,7 @@
     "Lists.ContactForbidden.description": "Encomendas com esta marca, por destino.",
     "Lists.Lover": "Pares",
     "Lists.Lover.description": "Encomendas com esta marca, por destino.",
-    "Lists.Corrupted": "Quebrado",
+    "Lists.Corrupted": "Amaldiçoado",
     "Lists.Corrupted.description": "Encomendas com esta marca, por destino.",
     "Lists.Damaged": "Danificadas",
     "Lists.Damaged.description": "Encomendas danificadas, por destino.",
@@ -83,7 +83,7 @@
     "Bright": "Claro",
     "ContactForbidden": "Sem contato",
     "Lover": "Pares",
-    "Corrupted": "Quebrado",
+    "Corrupted": "Amaldiçoado",
     "Damaged": "Danificadas",
     "NeedsStamps": "Sem carimbo",
     "Sizes": "Tamanhos"

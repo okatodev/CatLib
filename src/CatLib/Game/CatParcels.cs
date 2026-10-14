@@ -130,8 +130,24 @@ public static class CatParcels
     public static Sprite ConstraintIcon(StorageConstraint constraint) =>
         CachedSprite("storage." + constraint, manager => manager.GetStorageConstraintSettings(constraint)?.Stamp);
 
-    public static Sprite ConstraintIcon(BehaviorConstraint constraint) =>
-        CachedSprite("behavior." + constraint, manager => manager.GetBehaviorConstraintSettings(constraint)?.Stamp);
+    public static Sprite ConstraintIcon(BehaviorConstraint constraint)
+    {
+        var sprite = CachedSprite("behavior." + constraint, manager => manager.GetBehaviorConstraintSettings(constraint)?.Stamp);
+        if (sprite != null || constraint != BehaviorConstraint.Corrupted)
+        {
+            return sprite;
+        }
+
+        try
+        {
+            return CurseIcon.Sprite(Core.FrameLoop.Realtime);
+        }
+        catch (Exception exception)
+        {
+            _log?.Debug($"No curse icon: {exception.Message}");
+            return null;
+        }
+    }
 
     private static ParcelInfo Describe(Entity parcel, EntityPropertiesManager stamps)
     {

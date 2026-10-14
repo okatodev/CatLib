@@ -50,7 +50,7 @@
     "Lists.ContactForbidden.description": "Parcels with this mark, by destination.",
     "Lists.Lover": "Lovers",
     "Lists.Lover.description": "Parcels with this mark, by destination.",
-    "Lists.Corrupted": "Broken",
+    "Lists.Corrupted": "Cursed",
     "Lists.Corrupted.description": "Parcels with this mark, by destination.",
     "Lists.Damaged": "Damaged",
     "Lists.Damaged.description": "Damaged parcels, by destination.",
@@ -83,7 +83,7 @@
     "Bright": "Bright",
     "ContactForbidden": "No contact",
     "Lover": "Lovers",
-    "Corrupted": "Broken",
+    "Corrupted": "Cursed",
     "Damaged": "Damaged",
     "NeedsStamps": "To stamp",
     "Sizes": "Sizes"

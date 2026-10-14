@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace CatLib.DevTools;
 
@@ -69,5 +70,43 @@ public sealed class DevItem
             set(!get());
             return get() ? "on" : "off";
         }, () => get() ? "on" : "off");
+    }
+
+    public static DevItem Choice<T>(string group, string label, IReadOnlyList<(T Value, string Text)> options, Func<T> get, Action<T> set, string hint = null)
+    {
+        if (get == null || set == null)
+        {
+            throw new ArgumentNullException(get == null ? nameof(get) : nameof(set));
+        }
+
+        if (options == null || options.Count == 0)
+        {
+            throw new ArgumentException("A choice needs at least one option.", nameof(options));
+        }
+
+        int Current()
+        {
+            var value = get();
+            for (var index = 0; index < options.Count; index++)
+            {
+                if (EqualityComparer<T>.Default.Equals(options[index].Value, value))
+                {
+                    return index;
+                }
+            }
+
+            return -1;
+        }
+
+        return new DevItem(group, label, hint, () =>
+        {
+            var next = options[(Current() + 1) % options.Count];
+            set(next.Value);
+            return next.Text;
+        }, () =>
+        {
+            var index = Current();
+            return index < 0 ? "?" : options[index].Text;
+        });
     }
 }

@@ -2,10 +2,13 @@
 
 CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late and Custom Stamps, and CatLib Crash Watcher have their own versions and changelogs.
 
+## Unreleased
+- Developer menu: `DevMenu.Choice`, an item that shows its value and moves to the next one when run.
+- `CatParcels.ConstraintIcon(BehaviorConstraint.Corrupted)` gives an icon for the curse. The game has no stamp picture for it,
+  so CatLib draws the glowing purple swirl the game shows on a cursed parcel at night on a round sticker.
+
 ## 0.7.2
-
 - Updated BepInEx dependency version.
-
 ## 0.7.1
 
 Released together with a new mod, Custom Stamps 0.1.0, with Too Late 0.1.1, CatLib Crash Watcher 1.1.0 and CatLib Tests 0.7.1.

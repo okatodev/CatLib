@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- The list of cursed parcels has the curse's own look: the glowing purple swirl the game shows on them at night, drawn by CatLib from the game's picture.
+  The board's own icon for it, used before a level is loaded, is the same swirl instead of a broken box.
+- The list is called Cursed in every language, it was Broken.
+
 ## 0.1.0
 
 - A table of parcel counts in a corner of the screen: a column for all parcels and for every mark, a row per destination,

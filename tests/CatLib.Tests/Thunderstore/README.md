@@ -14,8 +14,8 @@ and its demo mod takes part in the lobby check, so friends without it would show
   - Tests: run them all, turn the automatic run on or off.
   - Game, for the host in a level: serve the waiting customers, the next part of the day, skip to the day's results,
     the next step of the piles of parcels or all of them cleared.
-  - Spawn: a new parcel of any size in front of you.
-  - Inspect: dump what the camera is looking at, dump the settings menu.
+  - Spawn: a new parcel of any size in front of you, with the conditions and destination you choose, the curse included.
+  - Inspect: dump what the camera is looking at, dump the settings menu, export the stamps of every parcel condition.
   - Network: send a test message, list the players Steam sees, join the first open game, check the Steam channel.
   - UI: preview a notification, the version badge in the main menu, a Mods tab full of mods, hide the game's interface with or without its notifications.
   - Crash: crash or hang the game on purpose to check the crash window. Each needs a second press.

@@ -50,7 +50,7 @@
     "Lists.ContactForbidden.description": "Pakete mit diesem Kennzeichen nach Ziel.",
     "Lists.Lover": "Paare",
     "Lists.Lover.description": "Pakete mit diesem Kennzeichen nach Ziel.",
-    "Lists.Corrupted": "Kaputt",
+    "Lists.Corrupted": "Verflucht",
     "Lists.Corrupted.description": "Pakete mit diesem Kennzeichen nach Ziel.",
     "Lists.Damaged": "Beschädigt",
     "Lists.Damaged.description": "Beschädigte Pakete nach Ziel.",
@@ -83,7 +83,7 @@
     "Bright": "Hell",
     "ContactForbidden": "Ohne Kontakt",
     "Lover": "Paare",
-    "Corrupted": "Kaputt",
+    "Corrupted": "Verflucht",
     "Damaged": "Beschädigt",
     "NeedsStamps": "Ohne Stempel",
     "Sizes": "Größen"

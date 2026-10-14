@@ -57,12 +57,17 @@ Groups come from `CatLib.Tests`, from CatLib itself and from the mods; a group a
 | | Skip to the day's results | Host only. One part of the day per frame until the evening or dawn results show |
 | | Next step of the piles | Host only. Every started pile of parcels goes to its next, smaller step; the parcels still on it are removed, a door behind it opens at its step |
 | | Clear the piles | Host only. Every started pile goes through all its steps until it is gone, one step when the parcels of the last one have arrived |
-| Spawn | Small parcel … Giant plus parcel | A new parcel of that size in front of you, its destination and marks chosen by the game; twelve sizes, for the host and the players |
+| Spawn | Storage condition | Choice: random, none, cold, hot, dark, bright or frozen for the parcels spawned below; locked ones too. Host only when not random |
+| | Behavior condition | Choice: random, none, fragile, heavy, no contact, lover or cursed; the curse shows at night. Host only when not random |
+| | Destination | Choice: random or one of the seven destinations. Host only when not random |
+| | Small parcel … Giant plus parcel | A new parcel of that size in front of you with the conditions above; twelve sizes, for the host and the players |
+| | Open the game's spawner | The spawner window the game's developers left in it, used with the mouse; its conditions work for the host |
 | Inspect | Entity dump | What the camera looks at: components, fields, object tree, entity counts, storages and the nearest objects of the types in `EntityDumpTypes` |
 | | Settings menu dump | The tree of the game's settings menu |
 | | Lobby dump | The tree of the multiplayer lobby |
 | | Sprite export | Every texture with loaded UI sprites as PNG, with `index.txt` naming each sprite; run it in the menu and in a level |
 | | Texture export | The textures named in `TextureExportNames` as PNG; run it in a level |
+| | Constraint stamps export | The stamp of every parcel condition and curse as the game keeps it, locked or not: preview picture, materials and textures as PNG with `index.txt`; run it in a level |
 | | Label clone experiment | Toggle: the experiment with copied shelf labels that Shelf Labels grew from; results in the log |
 | Network | Session roster | The roster of the session in the log |
 | | Mod message probe | A ping to the host, which answers every player |

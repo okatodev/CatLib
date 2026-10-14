@@ -18,6 +18,7 @@ internal static class DevMenuView
     public const float Padding = 6f;
     public const float NumberWidth = 20f;
     public const float StateWidth = 40f;
+    public const float ChoiceWidth = 120f;
     public const float HintHeight = 34f;
     public const float LineHeight = 18f;
     public const int VisibleGroups = 12;
@@ -166,15 +167,16 @@ internal static class DevMenuView
             var number = index < DevMenuModel.DigitItems ? (index + 1).ToString(CultureInfo.InvariantCulture) : string.Empty;
             Label(new Rect(row.x + Padding, row.y, NumberWidth, row.height), number, _label, selected ? Accent : Faint);
             var state = item.State;
-            var labelWidth = row.width - Padding * 2f - NumberWidth - (state == null ? 0f : StateWidth + 8f);
+            var on = string.Equals(state, "on", StringComparison.OrdinalIgnoreCase);
+            var off = string.Equals(state, "off", StringComparison.OrdinalIgnoreCase);
+            var stateWidth = on || off ? StateWidth : ChoiceWidth;
+            var labelWidth = row.width - Padding * 2f - NumberWidth - (state == null ? 0f : stateWidth + 8f);
             Label(new Rect(row.x + Padding + NumberWidth, row.y, labelWidth, row.height), item.Label, _label, selected ? Text : Dim);
             if (state != null)
             {
-                var on = string.Equals(state, "on", StringComparison.OrdinalIgnoreCase);
-                var off = string.Equals(state, "off", StringComparison.OrdinalIgnoreCase);
-                var pill = new Rect(row.xMax - Padding - StateWidth, row.y + 4f, StateWidth, row.height - 8f);
-                Fill(pill, on ? OnBack : off ? OffBack : HeaderBack);
-                Label(pill, state.ToUpperInvariant(), _center, on || off ? Text : Accent);
+                var place = new Rect(row.xMax - Padding - stateWidth, row.y, stateWidth, row.height);
+                Fill(new Rect(place.x, row.y + 2f, place.width, row.height - 4f), on ? OnBack : off ? OffBack : HeaderBack);
+                Label(place, on || off ? state.ToUpperInvariant() : state, _center, on || off ? Text : Accent);
             }
 
             if (Clicked(row))

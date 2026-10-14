@@ -16,7 +16,7 @@ Cat's Island comes first, a line parts it from the destinations to send. Sizes a
 | List | Counts |
 |---|---|
 | All | every parcel |
-| Heavy, Fragile, No contact, Lovers, Broken | parcels with that behaviour mark |
+| Heavy, Fragile, No contact, Lovers, Cursed | parcels with that behaviour mark; the curse shows on a parcel only at night |
 | Dark, Frozen, Hot, Cold, Bright | parcels with that storage mark |
 | Damaged | damaged parcels |
 | To stamp | parcels for other destinations that still miss a stamp: destination, weight or a mark |

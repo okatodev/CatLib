@@ -21,6 +21,8 @@ Parcel Board is built on both.
 the game sends every parcel's destination, marks and size to every player. Only the host's `ParcelManager` lists the parcels
 (`EntityParcel.Start` registers them on the server only), so on the other players `Read()` finds the parcels in the scene.
 `RegionIcon`, `ConstraintIcon` and `RegionName` give the game's own stamp sprites and the translated region names.
+The curse (`BehaviorConstraint.Corrupted`) has no stamp sprite in the game: it shows on a parcel at night as a glowing purple swirl,
+so `ConstraintIcon` draws that swirl (`t_VFX_Cursed`) on a dark round sticker in its colour, once the texture is loaded in a level.
 
 Missing stamps are read from the stamps on the parcel, not from the game's own checks: `IsDestinationValid` shows the wrong-stamp feedback
 on the parcel, and the mark and weight checks only decide the bonus of the day's recap.

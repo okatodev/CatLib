@@ -50,7 +50,7 @@
     "Lists.ContactForbidden.description": "Paquetes con esta marca, por destino.",
     "Lists.Lover": "Parejas",
     "Lists.Lover.description": "Paquetes con esta marca, por destino.",
-    "Lists.Corrupted": "Roto",
+    "Lists.Corrupted": "Maldito",
     "Lists.Corrupted.description": "Paquetes con esta marca, por destino.",
     "Lists.Damaged": "Dañados",
     "Lists.Damaged.description": "Paquetes dañados, por destino.",
@@ -83,7 +83,7 @@
     "Bright": "Luminoso",
     "ContactForbidden": "Sin contacto",
     "Lover": "Parejas",
-    "Corrupted": "Roto",
+    "Corrupted": "Maldito",
     "Damaged": "Dañados",
     "NeedsStamps": "Sin sello",
     "Sizes": "Tamaños"

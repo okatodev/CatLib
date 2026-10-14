@@ -50,7 +50,7 @@
     "Lists.ContactForbidden.description": "Colis avec cette marque, par destination.",
     "Lists.Lover": "Couples",
     "Lists.Lover.description": "Colis avec cette marque, par destination.",
-    "Lists.Corrupted": "Cassé",
+    "Lists.Corrupted": "Maudit",
     "Lists.Corrupted.description": "Colis avec cette marque, par destination.",
     "Lists.Damaged": "Abîmés",
     "Lists.Damaged.description": "Colis abîmés, par destination.",
@@ -83,7 +83,7 @@
     "Bright": "Lumineux",
     "ContactForbidden": "Sans contact",
     "Lover": "Couples",
-    "Corrupted": "Cassé",
+    "Corrupted": "Maudit",
     "Damaged": "Abîmés",
     "NeedsStamps": "Sans tampon",
     "Sizes": "Tailles"
