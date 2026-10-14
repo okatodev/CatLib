@@ -63,7 +63,9 @@ The mod patches four methods of the game with `CatPatches` from CatLib, see [Pat
 | `EntityProperties.CheckBehaviorConstraint` | fragile and heavy marks see bridges, on the host, where the game checks them |
 
 Every frame the mod checks the parcels under every bridge. Only the host lets bridges fall, with the game's own `RemoveEntity`,
-which tells every player. How the game stacks parcels is described in [Storages](../../docs/Storages.md).
+which tells every player. On the other players' games the falling parcel stays still until the first movement of the host arrives,
+at most 2 s: the game smooths a moved parcel from the last position it got from the network, and a parcel that fell
+on its own before that was pulled back a little. How the game stacks parcels is described in [Storages](../../docs/Storages.md).
 
 The developer menu has the group **Stack it!**:
 

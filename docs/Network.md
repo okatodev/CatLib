@@ -201,7 +201,8 @@ void OnPlayerClicked(string change) => channel.SendToHost("click", change);
   CatLib accepts the host and every player once a second for the whole session, so a message after a long pause still arrives.
 - Right before the game shuts Steam down, when returning to the menu or quitting, CatLib closes its sessions: Steam can crash when it shuts down with one open.
   It then waits until the sessions it closed in the last minute are gone, at least 5 seconds after a player left and at most 6 seconds,
-  and writes their state to the log before and after waiting.
+  and writes their state to the log before and after waiting. A game that quits with other players still connected closes their
+  connections only then, so it waits the same 5 seconds: Steam stopped at an assert on its own thread and aborted the game otherwise.
 > [!CAUTION]
 > The host is the authority: check every request before applying it, a player can send anything.
 

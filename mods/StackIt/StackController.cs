@@ -30,6 +30,7 @@ public sealed class StackController
     private readonly List<HeldCell> _lost = new();
     private readonly List<HeldState> _states = new();
     private readonly List<Slide> _slides = new();
+    private readonly List<HostWait> _waiting = new();
     private readonly Research.FallTrace _trace;
     private readonly Dictionary<(IntPtr Store, IntPtr Entity, long Anchor, int Yaw), BridgeVerdict> _verdicts = new();
     private readonly Dictionary<IntPtr, (MarkGraph Graph, Dictionary<IntPtr, int> Ids)> _graphs = new();
@@ -88,6 +89,7 @@ public sealed class StackController
     {
         _startedAt = -1f;
         _slides.Clear();
+        _waiting.Clear();
         _registry.Clear();
         Invalidate();
     }
@@ -195,6 +197,7 @@ public sealed class StackController
 
             Loosen(entity);
             SettleGhost(entity);
+            WaitForHost(entity);
             _trace.Start(entity, "was let fall by the host");
             _log.Info($"{Name(entity)} was let fall by the host");
             return;
@@ -252,6 +255,11 @@ public sealed class StackController
         if (_slides.Count > 0)
         {
             MoveSlides(Time.realtimeSinceStartup);
+        }
+
+        if (_waiting.Count > 0)
+        {
+            ReleaseWaiting(Time.realtimeSinceStartup);
         }
 
         if (_registry.Count == 0 || !IsLevelStarted)
@@ -609,6 +617,69 @@ public sealed class StackController
         catch (Exception exception)
         {
             _log.Warning($"Clearing where {Name(entity)} last moved over the network failed: {exception.Message}");
+        }
+    }
+
+    private void WaitForHost(Entity entity)
+    {
+        if (IsServer)
+        {
+            return;
+        }
+
+        try
+        {
+            var body = Body(entity);
+            if (body == null)
+            {
+                return;
+            }
+
+            _waiting.RemoveAll(wait => wait.Entity == null || wait.Entity.WasCollected || wait.Entity.Pointer == entity.Pointer);
+            body.isKinematic = true;
+            _waiting.Add(new HostWait(entity, body, Time.realtimeSinceStartup));
+        }
+        catch (Exception exception)
+        {
+            _log.Warning($"Holding {Name(entity)} until the host moves it failed: {exception.Message}");
+        }
+    }
+
+    private void ReleaseWaiting(float now)
+    {
+        for (var index = _waiting.Count - 1; index >= 0; index--)
+        {
+            var wait = _waiting[index];
+            try
+            {
+                var entity = wait.Entity;
+                var gone = entity == null || entity.WasCollected || entity.IsDisposed || wait.Body == null || wait.Body.WasCollected || IsCarried(entity)
+                           || StoreGrid.IsAlive(StoreGrid.StoreOf(entity)?.ParentStore);
+                var network = gone ? null : entity.Network;
+                var hostMoved = network != null && network._mustUpdatePositionAndRotationAsGhost;
+                var heldFor = now - wait.Since;
+                if (!GhostHold.IsOver(gone, hostMoved, heldFor))
+                {
+                    continue;
+                }
+
+                _waiting.RemoveAt(index);
+                if (gone)
+                {
+                    continue;
+                }
+
+                wait.Body.isKinematic = false;
+                if (!hostMoved)
+                {
+                    _log.Info(Format("{0} got no movement from the host in {1:0.0} s, it falls on its own", Name(entity), heldFor));
+                }
+            }
+            catch (Exception exception)
+            {
+                _waiting.RemoveAt(index);
+                _log.Warning($"Letting {Name(wait.Entity)} move again failed: {exception.Message}");
+            }
         }
     }
 

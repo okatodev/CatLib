@@ -7,6 +7,12 @@ CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Lab
 - `CatParcels.ConstraintIcon(BehaviorConstraint.Corrupted)` gives an icon for the curse. The game has no stamp picture for it,
   so CatLib draws the glowing purple swirl the game shows on a cursed parcel at night on a round sticker.
 
+### Fixed
+
+- The game could crash when it quit with other players still connected, the host as well as a player: Steam stopped at an assert
+  on its own thread and aborted the game (`0xC0000409` in `steamclient64.dll`). The game closes the connections with the other players
+  right before it shuts Steam down, like when a player had just left. CatLib now waits 5 seconds before Steam shuts down then too.
+
 ## 0.7.2
 - Updated BepInEx dependency version.
 ## 0.7.1

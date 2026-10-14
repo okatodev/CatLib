@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- A parcel across a joint that falls no longer jumps back a little on the other players' games before it falls.
+  Their game let it fall on its own until the host's movement arrived and then pulled it back to where the host's movement started.
+  Now it stays where it stood until the host moves it, at most 2 s.
+
 ## 0.1.0
 
 - A parcel can stand across the joint of two or more parcels below it when their tops are level, within 2 cm,

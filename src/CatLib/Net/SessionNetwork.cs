@@ -269,7 +269,49 @@ internal static class SessionNetwork
         GameEventStream.Publish(StoppedEventName);
     }
 
-    internal static void OnQuitting() => CloseChannelSessions();
+    internal static void OnQuitting()
+    {
+        CloseChannelSessions();
+        var others = OtherPlayersAtQuit();
+        if (others > 0)
+        {
+            _departedClosedAt = Clock.Elapsed;
+            _log.Info($"The game quits with {others} other player(s) connected and closes those connections now, Steam shuts down when they had time to close");
+        }
+    }
+
+    internal static int OtherPlayersAtQuit(bool hosting, IEnumerable<ulong> serverClients, Func<ulong, bool> isRemote, bool joinedRemoteHost) =>
+        hosting ? (serverClients ?? Array.Empty<ulong>()).Count(client => isRemote == null || isRemote(client)) : joinedRemoteHost ? 1 : 0;
+
+    private static int OtherPlayersAtQuit()
+    {
+        try
+        {
+            if (IsWithoutSteamNetwork() || !Singleton<NetworkManager>.HasInstance())
+            {
+                return 0;
+            }
+
+            var network = Singleton<NetworkManager>.Instance;
+            var clients = new List<ulong>();
+            var server = network.IsServer ? network._server : null;
+            if (server?._clients != null)
+            {
+                foreach (var pair in server._clients)
+                {
+                    clients.Add(pair.Key);
+                }
+            }
+
+            var client = network._client;
+            return OtherPlayersAtQuit(server != null, clients, IsRemotePlayer, client != null && !client._isLocal);
+        }
+        catch (Exception exception)
+        {
+            _log.Warning("Counting the other players while quitting failed: " + exception.Message);
+            return 0;
+        }
+    }
 
     private static void BeforeSteamShutdown()
     {
