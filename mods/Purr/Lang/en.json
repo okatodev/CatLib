@@ -1,0 +1,65 @@
+{
+  "mod": {
+    "name": "Purr!",
+    "description": "Talk to the other players through Steam voice: a voice comes from the player's cat and fades with distance, with push to talk or an open microphone."
+  },
+  "section": {
+    "Voice": "Voice",
+    "Microphone": "Microphone",
+    "Headphones": "Headphones",
+    "Sound": "Sound",
+    "Screen": "Screen"
+  },
+  "setting": {
+    "Voice.Enabled": "Voice chat",
+    "Voice.Enabled.description": "Voice chat with the players who have this mod too. Off, you neither talk nor hear anyone.",
+    "Voice.Volume": "Volume of others",
+    "Voice.Volume.description": "How loud the other players are: 1 is as Steam gives them, 2 is twice as loud.",
+    "Microphone.Mode": "Mode",
+    "Microphone.Mode.description": "Push to talk sends your voice only while you hold the key below. Open microphone sends it whenever Steam hears you. The microphone itself is the one chosen in Steam: Settings, Voice.",
+    "Microphone.PushToTalkKey": "Push to talk key",
+    "Microphone.PushToTalkKey.description": "Hold it to talk in push to talk mode.",
+    "Microphone.Muted": "Microphone off",
+    "Microphone.Muted.description": "Turns your microphone off: nobody hears you, you still hear everyone.",
+    "Microphone.MuteKey": "Microphone key",
+    "Microphone.MuteKey.description": "Turns the microphone off or on.",
+    "Headphones.Deafened": "Headphones off",
+    "Headphones.Deafened.description": "Turns the other players off: you hear nobody, and your microphone is off too until you turn them back on.",
+    "Headphones.DeafenKey": "Headphones key",
+    "Headphones.DeafenKey.description": "Turns the other players off or on.",
+    "Sound.Sound": "Voices",
+    "Sound.Sound.description": "In space, a voice comes from the player's cat and gets quieter with distance. Flat, everyone sounds the same wherever they are. In the lobby voices are always flat.",
+    "Sound.HearDistance": "Hearing distance",
+    "Sound.HearDistance.description": "In space, how far away a voice is still heard, in metres.",
+    "Sound.FullVolumeDistance": "Full volume up to",
+    "Sound.FullVolumeDistance.description": "In space, up to this distance a voice is at full volume, in metres.",
+    "Screen.ShowSpeakers": "Who is talking",
+    "Screen.ShowSpeakers.description": "Lists who is talking right now in a corner of the screen during a level.",
+    "Screen.Corner": "Corner",
+    "Screen.Corner.description": "The corner of the screen for the list of who is talking.",
+    "Screen.NameTags": "Coloured names",
+    "Screen.NameTags.description": "Colours the name over a cat while that player is talking.",
+    "Screen.Notices": "Notices",
+    "Screen.Notices.description": "Says on the screen when the microphone or the headphones are turned off or on with the keys."
+  },
+  "enum": {
+    "MicMode.PushToTalk": "Push to talk",
+    "MicMode.OpenMic": "Open microphone",
+    "VoiceSound.Spatial": "In space",
+    "VoiceSound.Flat": "Flat",
+    "SpeakersCorner.TopLeft": "Top left",
+    "SpeakersCorner.TopRight": "Top right",
+    "SpeakersCorner.BottomLeft": "Bottom left",
+    "SpeakersCorner.BottomRight": "Bottom right"
+  },
+  "speakers": {
+    "title": "Talking",
+    "you": "You"
+  },
+  "notice": {
+    "MicrophoneOff": "Microphone off",
+    "MicrophoneOn": "Microphone on",
+    "HeadphonesOff": "Headphones off: you hear nobody",
+    "HeadphonesOn": "Headphones on"
+  }
+}

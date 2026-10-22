@@ -11,6 +11,7 @@
     "CatLib-ParcelBoard-{version:ParcelBoard}",
     "CatLib-StackIt-{version:StackIt}",
     "CatLib-TooLate-{version:TooLate}",
-    "CatLib-CustomStamps-{version:CustomStamps}"
+    "CatLib-CustomStamps-{version:CustomStamps}",
+    "CatLib-Purr-{version:Purr}"
   ]
 }

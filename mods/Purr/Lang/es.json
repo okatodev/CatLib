@@ -1,0 +1,65 @@
+{
+  "mod": {
+    "name": "Purr!",
+    "description": "Habla con los demás jugadores con la voz de Steam: la voz sale del gato del jugador y se apaga con la distancia, pulsando para hablar o con el micrófono abierto."
+  },
+  "section": {
+    "Voice": "Voz",
+    "Microphone": "Micrófono",
+    "Headphones": "Auriculares",
+    "Sound": "Sonido",
+    "Screen": "Pantalla"
+  },
+  "setting": {
+    "Voice.Enabled": "Chat de voz",
+    "Voice.Enabled.description": "Chat de voz con los jugadores que también tienen este mod. Desactivado, ni hablas ni oyes a nadie.",
+    "Voice.Volume": "Volumen de los demás",
+    "Voice.Volume.description": "Lo fuerte que suenan los demás jugadores: 1 es tal como los da Steam, 2 es el doble de fuerte.",
+    "Microphone.Mode": "Modo",
+    "Microphone.Mode.description": "Pulsar para hablar envía tu voz solo mientras mantienes la tecla de abajo. El micrófono abierto la envía siempre que Steam te oye. El micrófono se elige en Steam: Parámetros, Voz.",
+    "Microphone.PushToTalkKey": "Tecla para hablar",
+    "Microphone.PushToTalkKey.description": "Mantenla pulsada para hablar en el modo pulsar para hablar.",
+    "Microphone.Muted": "Micrófono apagado",
+    "Microphone.Muted.description": "Apaga tu micrófono: nadie te oye, tú sigues oyendo a todos.",
+    "Microphone.MuteKey": "Tecla del micrófono",
+    "Microphone.MuteKey.description": "Apaga o enciende el micrófono.",
+    "Headphones.Deafened": "Auriculares apagados",
+    "Headphones.Deafened.description": "Apaga a los demás jugadores: no oyes a nadie, y tu micrófono también queda apagado hasta que los vuelvas a encender.",
+    "Headphones.DeafenKey": "Tecla de los auriculares",
+    "Headphones.DeafenKey.description": "Apaga o enciende a los demás jugadores.",
+    "Sound.Sound": "Voces",
+    "Sound.Sound.description": "En el espacio, la voz sale del gato del jugador y baja con la distancia. Plano, todos suenan igual estén donde estén. En la sala las voces siempre son planas.",
+    "Sound.HearDistance": "Distancia de escucha",
+    "Sound.HearDistance.description": "En el espacio, hasta qué distancia se oye todavía una voz, en metros.",
+    "Sound.FullVolumeDistance": "Volumen completo hasta",
+    "Sound.FullVolumeDistance.description": "En el espacio, hasta esta distancia una voz suena a todo volumen, en metros.",
+    "Screen.ShowSpeakers": "Quién habla",
+    "Screen.ShowSpeakers.description": "Muestra en una esquina de la pantalla quién está hablando, durante un nivel.",
+    "Screen.Corner": "Esquina",
+    "Screen.Corner.description": "La esquina de la pantalla para la lista de quién habla.",
+    "Screen.NameTags": "Nombres de color",
+    "Screen.NameTags.description": "Colorea el nombre sobre un gato mientras ese jugador habla.",
+    "Screen.Notices": "Avisos",
+    "Screen.Notices.description": "Avisa en pantalla cuando el micrófono o los auriculares se apagan o encienden con las teclas."
+  },
+  "enum": {
+    "MicMode.PushToTalk": "Pulsar para hablar",
+    "MicMode.OpenMic": "Micrófono abierto",
+    "VoiceSound.Spatial": "En el espacio",
+    "VoiceSound.Flat": "Plano",
+    "SpeakersCorner.TopLeft": "Arriba a la izquierda",
+    "SpeakersCorner.TopRight": "Arriba a la derecha",
+    "SpeakersCorner.BottomLeft": "Abajo a la izquierda",
+    "SpeakersCorner.BottomRight": "Abajo a la derecha"
+  },
+  "speakers": {
+    "title": "Hablando",
+    "you": "Tú"
+  },
+  "notice": {
+    "MicrophoneOff": "Micrófono apagado",
+    "MicrophoneOn": "Micrófono encendido",
+    "HeadphonesOff": "Auriculares apagados: no oyes a nadie",
+    "HeadphonesOn": "Auriculares encendidos"
+  }
+}

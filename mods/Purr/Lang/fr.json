@@ -1,0 +1,65 @@
+{
+  "mod": {
+    "name": "Purr!",
+    "description": "Parlez aux autres joueurs avec la voix de Steam : une voix vient du chat du joueur et s'atténue avec la distance, en appuyant pour parler ou micro ouvert."
+  },
+  "section": {
+    "Voice": "Voix",
+    "Microphone": "Micro",
+    "Headphones": "Casque",
+    "Sound": "Son",
+    "Screen": "Écran"
+  },
+  "setting": {
+    "Voice.Enabled": "Chat vocal",
+    "Voice.Enabled.description": "Chat vocal avec les joueurs qui ont aussi ce mod. Désactivé, vous ne parlez pas et n'entendez personne.",
+    "Voice.Volume": "Volume des autres",
+    "Voice.Volume.description": "Le volume des autres joueurs : 1 tel que Steam le donne, 2 deux fois plus fort.",
+    "Microphone.Mode": "Mode",
+    "Microphone.Mode.description": "Appuyer pour parler n'envoie votre voix que tant que vous tenez la touche ci-dessous. Le micro ouvert l'envoie dès que Steam vous entend. Le micro lui-même se choisit dans Steam : Paramètres, Voix.",
+    "Microphone.PushToTalkKey": "Touche pour parler",
+    "Microphone.PushToTalkKey.description": "Maintenez-la pour parler en mode appuyer pour parler.",
+    "Microphone.Muted": "Micro coupé",
+    "Microphone.Muted.description": "Coupe votre micro : personne ne vous entend, vous entendez toujours tout le monde.",
+    "Microphone.MuteKey": "Touche du micro",
+    "Microphone.MuteKey.description": "Coupe ou rétablit le micro.",
+    "Headphones.Deafened": "Casque coupé",
+    "Headphones.Deafened.description": "Coupe les autres joueurs : vous n'entendez personne, et votre micro est coupé aussi jusqu'à ce que vous les rétablissiez.",
+    "Headphones.DeafenKey": "Touche du casque",
+    "Headphones.DeafenKey.description": "Coupe ou rétablit les autres joueurs.",
+    "Sound.Sound": "Voix",
+    "Sound.Sound.description": "Dans l'espace, une voix vient du chat du joueur et baisse avec la distance. À plat, tout le monde s'entend pareil, où qu'il soit. Dans le salon, les voix sont toujours à plat.",
+    "Sound.HearDistance": "Portée de la voix",
+    "Sound.HearDistance.description": "Dans l'espace, jusqu'à quelle distance une voix s'entend encore, en mètres.",
+    "Sound.FullVolumeDistance": "Plein volume jusqu'à",
+    "Sound.FullVolumeDistance.description": "Dans l'espace, jusqu'à cette distance une voix est à plein volume, en mètres.",
+    "Screen.ShowSpeakers": "Qui parle",
+    "Screen.ShowSpeakers.description": "Affiche dans un coin de l'écran qui parle en ce moment, pendant un niveau.",
+    "Screen.Corner": "Coin",
+    "Screen.Corner.description": "Le coin de l'écran pour la liste de ceux qui parlent.",
+    "Screen.NameTags": "Noms en couleur",
+    "Screen.NameTags.description": "Colore le nom au-dessus d'un chat pendant que ce joueur parle.",
+    "Screen.Notices": "Messages",
+    "Screen.Notices.description": "Indique à l'écran quand le micro ou le casque est coupé ou rétabli avec les touches."
+  },
+  "enum": {
+    "MicMode.PushToTalk": "Appuyer pour parler",
+    "MicMode.OpenMic": "Micro ouvert",
+    "VoiceSound.Spatial": "Dans l'espace",
+    "VoiceSound.Flat": "À plat",
+    "SpeakersCorner.TopLeft": "En haut à gauche",
+    "SpeakersCorner.TopRight": "En haut à droite",
+    "SpeakersCorner.BottomLeft": "En bas à gauche",
+    "SpeakersCorner.BottomRight": "En bas à droite"
+  },
+  "speakers": {
+    "title": "Parlent",
+    "you": "Vous"
+  },
+  "notice": {
+    "MicrophoneOff": "Micro coupé",
+    "MicrophoneOn": "Micro activé",
+    "HeadphonesOff": "Casque coupé : vous n'entendez personne",
+    "HeadphonesOn": "Casque activé"
+  }
+}

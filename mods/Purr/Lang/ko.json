@@ -1,0 +1,65 @@
+{
+  "mod": {
+    "name": "Purr!",
+    "description": "Steam 음성으로 다른 플레이어와 대화합니다. 목소리는 그 플레이어의 고양이에게서 들리고 멀어질수록 작아지며, 눌러서 말하기나 열린 마이크로 쓸 수 있습니다."
+  },
+  "section": {
+    "Voice": "음성",
+    "Microphone": "마이크",
+    "Headphones": "헤드폰",
+    "Sound": "소리",
+    "Screen": "화면"
+  },
+  "setting": {
+    "Voice.Enabled": "음성 채팅",
+    "Voice.Enabled.description": "이 모드를 가진 플레이어와 음성 채팅을 합니다. 끄면 말할 수도 들을 수도 없습니다.",
+    "Voice.Volume": "다른 사람 음량",
+    "Voice.Volume.description": "다른 플레이어 목소리의 크기입니다. 1은 Steam이 주는 그대로, 2는 두 배입니다.",
+    "Microphone.Mode": "모드",
+    "Microphone.Mode.description": "눌러서 말하기는 아래 키를 누르고 있는 동안에만 목소리를 보냅니다. 열린 마이크는 Steam이 목소리를 들을 때마다 보냅니다. 마이크 자체는 Steam의 설정 → 음성에서 고릅니다.",
+    "Microphone.PushToTalkKey": "말하기 키",
+    "Microphone.PushToTalkKey.description": "눌러서 말하기 모드에서 누르고 있으면 말할 수 있습니다.",
+    "Microphone.Muted": "마이크 끄기",
+    "Microphone.Muted.description": "마이크를 끕니다. 아무도 당신의 목소리를 듣지 못하지만, 당신은 모두의 목소리를 듣습니다.",
+    "Microphone.MuteKey": "마이크 키",
+    "Microphone.MuteKey.description": "마이크를 끄거나 켭니다.",
+    "Headphones.Deafened": "헤드폰 끄기",
+    "Headphones.Deafened.description": "다른 플레이어의 목소리를 끕니다. 아무 소리도 들리지 않고, 다시 켤 때까지 마이크도 꺼집니다.",
+    "Headphones.DeafenKey": "헤드폰 키",
+    "Headphones.DeafenKey.description": "다른 플레이어의 목소리를 끄거나 켭니다.",
+    "Sound.Sound": "목소리",
+    "Sound.Sound.description": "공간 모드에서는 목소리가 플레이어의 고양이에게서 들리고 멀어질수록 작아집니다. 평면 모드에서는 어디에 있든 똑같이 들립니다. 로비에서는 항상 평면입니다.",
+    "Sound.HearDistance": "들리는 거리",
+    "Sound.HearDistance.description": "공간 모드에서 목소리가 들리는 최대 거리(미터)입니다.",
+    "Sound.FullVolumeDistance": "최대 음량 거리",
+    "Sound.FullVolumeDistance.description": "공간 모드에서 이 거리(미터)까지는 목소리가 최대 음량으로 들립니다.",
+    "Screen.ShowSpeakers": "말하는 사람",
+    "Screen.ShowSpeakers.description": "레벨 중에 지금 말하는 사람을 화면 구석에 보여 줍니다.",
+    "Screen.Corner": "위치",
+    "Screen.Corner.description": "말하는 사람 목록을 보여 줄 화면 구석입니다.",
+    "Screen.NameTags": "이름 색",
+    "Screen.NameTags.description": "그 플레이어가 말하는 동안 고양이 위 이름에 색을 입힙니다.",
+    "Screen.Notices": "알림",
+    "Screen.Notices.description": "키로 마이크나 헤드폰을 끄거나 켜면 화면에 알려 줍니다."
+  },
+  "enum": {
+    "MicMode.PushToTalk": "눌러서 말하기",
+    "MicMode.OpenMic": "열린 마이크",
+    "VoiceSound.Spatial": "공간",
+    "VoiceSound.Flat": "평면",
+    "SpeakersCorner.TopLeft": "왼쪽 위",
+    "SpeakersCorner.TopRight": "오른쪽 위",
+    "SpeakersCorner.BottomLeft": "왼쪽 아래",
+    "SpeakersCorner.BottomRight": "오른쪽 아래"
+  },
+  "speakers": {
+    "title": "말하는 중",
+    "you": "나"
+  },
+  "notice": {
+    "MicrophoneOff": "마이크 꺼짐",
+    "MicrophoneOn": "마이크 켜짐",
+    "HeadphonesOff": "헤드폰 꺼짐: 아무 소리도 들리지 않습니다",
+    "HeadphonesOn": "헤드폰 켜짐"
+  }
+}

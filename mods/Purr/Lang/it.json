@@ -1,0 +1,65 @@
+{
+  "mod": {
+    "name": "Purr!",
+    "description": "Parla con gli altri giocatori con la voce di Steam: la voce arriva dal gatto del giocatore e si affievolisce con la distanza, premendo per parlare o con il microfono aperto."
+  },
+  "section": {
+    "Voice": "Voce",
+    "Microphone": "Microfono",
+    "Headphones": "Cuffie",
+    "Sound": "Suono",
+    "Screen": "Schermo"
+  },
+  "setting": {
+    "Voice.Enabled": "Chat vocale",
+    "Voice.Enabled.description": "Chat vocale con i giocatori che hanno anche loro questa mod. Disattivata, non parli e non senti nessuno.",
+    "Voice.Volume": "Volume degli altri",
+    "Voice.Volume.description": "Quanto sono forti gli altri giocatori: 1 è come li dà Steam, 2 è il doppio.",
+    "Microphone.Mode": "Modalità",
+    "Microphone.Mode.description": "Premi per parlare invia la tua voce solo mentre tieni premuto il tasto qui sotto. Il microfono aperto la invia ogni volta che Steam ti sente. Il microfono si sceglie in Steam: Impostazioni, Voce.",
+    "Microphone.PushToTalkKey": "Tasto per parlare",
+    "Microphone.PushToTalkKey.description": "Tienilo premuto per parlare in modalità premi per parlare.",
+    "Microphone.Muted": "Microfono spento",
+    "Microphone.Muted.description": "Spegne il tuo microfono: nessuno ti sente, tu senti ancora tutti.",
+    "Microphone.MuteKey": "Tasto del microfono",
+    "Microphone.MuteKey.description": "Spegne o accende il microfono.",
+    "Headphones.Deafened": "Cuffie spente",
+    "Headphones.Deafened.description": "Spegne gli altri giocatori: non senti nessuno, e anche il tuo microfono resta spento finché non li riaccendi.",
+    "Headphones.DeafenKey": "Tasto delle cuffie",
+    "Headphones.DeafenKey.description": "Spegne o accende gli altri giocatori.",
+    "Sound.Sound": "Voci",
+    "Sound.Sound.description": "Nello spazio la voce arriva dal gatto del giocatore e cala con la distanza. Piatta, tutti suonano uguali ovunque siano. Nella lobby le voci sono sempre piatte.",
+    "Sound.HearDistance": "Distanza d'ascolto",
+    "Sound.HearDistance.description": "Nello spazio, fino a che distanza si sente ancora una voce, in metri.",
+    "Sound.FullVolumeDistance": "Volume pieno fino a",
+    "Sound.FullVolumeDistance.description": "Nello spazio, fino a questa distanza una voce è a volume pieno, in metri.",
+    "Screen.ShowSpeakers": "Chi parla",
+    "Screen.ShowSpeakers.description": "Mostra in un angolo dello schermo chi sta parlando, durante un livello.",
+    "Screen.Corner": "Angolo",
+    "Screen.Corner.description": "L'angolo dello schermo per l'elenco di chi parla.",
+    "Screen.NameTags": "Nomi colorati",
+    "Screen.NameTags.description": "Colora il nome sopra un gatto mentre quel giocatore parla.",
+    "Screen.Notices": "Avvisi",
+    "Screen.Notices.description": "Avvisa sullo schermo quando microfono o cuffie vengono spenti o accesi con i tasti."
+  },
+  "enum": {
+    "MicMode.PushToTalk": "Premi per parlare",
+    "MicMode.OpenMic": "Microfono aperto",
+    "VoiceSound.Spatial": "Nello spazio",
+    "VoiceSound.Flat": "Piatta",
+    "SpeakersCorner.TopLeft": "In alto a sinistra",
+    "SpeakersCorner.TopRight": "In alto a destra",
+    "SpeakersCorner.BottomLeft": "In basso a sinistra",
+    "SpeakersCorner.BottomRight": "In basso a destra"
+  },
+  "speakers": {
+    "title": "Parlano",
+    "you": "Tu"
+  },
+  "notice": {
+    "MicrophoneOff": "Microfono spento",
+    "MicrophoneOn": "Microfono acceso",
+    "HeadphonesOff": "Cuffie spente: non senti nessuno",
+    "HeadphonesOn": "Cuffie accese"
+  }
+}

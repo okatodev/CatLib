@@ -32,6 +32,7 @@ public static class FrameLoop
         CatConfig.Update();
         ModsMenu.Update();
         SessionNetwork.Update();
+        CatLib.Voice.CatVoice.Update();
         SafeInvoker.Invoke(Update, "FrameLoop.Update", CatLibRuntime.Log);
     }
 }

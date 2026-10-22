@@ -1,0 +1,65 @@
+{
+  "mod": {
+    "name": "Purr!",
+    "description": "Розмова з іншими гравцями через голос Steam: голос лунає від кота гравця і стихає з відстанню, за кнопкою або з відкритим мікрофоном."
+  },
+  "section": {
+    "Voice": "Голос",
+    "Microphone": "Мікрофон",
+    "Headphones": "Навушники",
+    "Sound": "Звук",
+    "Screen": "Екран"
+  },
+  "setting": {
+    "Voice.Enabled": "Голосовий чат",
+    "Voice.Enabled.description": "Голосовий чат із гравцями, у яких теж є цей мод. Якщо вимкнено, ви не говорите й нікого не чуєте.",
+    "Voice.Volume": "Гучність інших",
+    "Voice.Volume.description": "Наскільки гучно звучать інші гравці: 1 — як їх віддає Steam, 2 — удвічі гучніше.",
+    "Microphone.Mode": "Режим",
+    "Microphone.Mode.description": "За кнопкою голос іде, лише поки ви тримаєте клавішу нижче. Відкритий мікрофон передає його завжди, коли Steam вас чує. Сам мікрофон обирається в Steam: Налаштування, Голос.",
+    "Microphone.PushToTalkKey": "Клавіша розмови",
+    "Microphone.PushToTalkKey.description": "Тримайте її, щоб говорити в режимі за кнопкою.",
+    "Microphone.Muted": "Мікрофон вимкнено",
+    "Microphone.Muted.description": "Вимикає ваш мікрофон: вас ніхто не чує, а ви чуєте всіх.",
+    "Microphone.MuteKey": "Клавіша мікрофона",
+    "Microphone.MuteKey.description": "Вимикає або вмикає мікрофон.",
+    "Headphones.Deafened": "Навушники вимкнено",
+    "Headphones.Deafened.description": "Вимикає інших гравців: ви нікого не чуєте, і ваш мікрофон теж вимкнено, доки ви їх не ввімкнете.",
+    "Headphones.DeafenKey": "Клавіша навушників",
+    "Headphones.DeafenKey.description": "Вимикає або вмикає інших гравців.",
+    "Sound.Sound": "Голоси",
+    "Sound.Sound.description": "У просторі голос лунає від кота гравця і стихає з відстанню. Пласко — усі звучать однаково, де б не були. У лобі голоси завжди пласкі.",
+    "Sound.HearDistance": "Дальність чутності",
+    "Sound.HearDistance.description": "У просторі — на якій відстані голос ще чути, у метрах.",
+    "Sound.FullVolumeDistance": "Повна гучність до",
+    "Sound.FullVolumeDistance.description": "У просторі — до цієї відстані голос звучить на повну гучність, у метрах.",
+    "Screen.ShowSpeakers": "Хто говорить",
+    "Screen.ShowSpeakers.description": "Показує в куті екрана, хто зараз говорить, під час рівня.",
+    "Screen.Corner": "Кут",
+    "Screen.Corner.description": "Кут екрана для списку тих, хто говорить.",
+    "Screen.NameTags": "Кольорові імена",
+    "Screen.NameTags.description": "Підсвічує ім'я над котом, поки цей гравець говорить.",
+    "Screen.Notices": "Повідомлення",
+    "Screen.Notices.description": "Пише на екрані, коли мікрофон або навушники вимкнено чи ввімкнено клавішами."
+  },
+  "enum": {
+    "MicMode.PushToTalk": "За кнопкою",
+    "MicMode.OpenMic": "Відкритий мікрофон",
+    "VoiceSound.Spatial": "У просторі",
+    "VoiceSound.Flat": "Пласко",
+    "SpeakersCorner.TopLeft": "Угорі ліворуч",
+    "SpeakersCorner.TopRight": "Угорі праворуч",
+    "SpeakersCorner.BottomLeft": "Унизу ліворуч",
+    "SpeakersCorner.BottomRight": "Унизу праворуч"
+  },
+  "speakers": {
+    "title": "Говорять",
+    "you": "Ви"
+  },
+  "notice": {
+    "MicrophoneOff": "Мікрофон вимкнено",
+    "MicrophoneOn": "Мікрофон увімкнено",
+    "HeadphonesOff": "Навушники вимкнено: ви нікого не чуєте",
+    "HeadphonesOn": "Навушники ввімкнено"
+  }
+}

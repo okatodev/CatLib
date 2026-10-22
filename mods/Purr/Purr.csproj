@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Purr</AssemblyName>
+    <RootNamespace>Purr</RootNamespace>
+    <Version>0.1.0</Version>
+    <PluginGuid>catlib.purr</PluginGuid>
+    <PluginMetaName>Purr!</PluginMetaName>
+    <CatLibDeployFolder>Purr</CatLibDeployFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Icons\*.png" LogicalName="Purr.Icons.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CatLib\CatLib.csproj" Private="false" />
+  </ItemGroup>
+</Project>

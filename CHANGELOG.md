@@ -1,11 +1,16 @@
 # Changelog
 
-CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late and Custom Stamps, and CatLib Crash Watcher have their own versions and changelogs.
+CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late, Custom Stamps and Purr!, and CatLib Crash Watcher have their own versions and changelogs.
 
 ## Unreleased
 
 ### Added
 
+- Voice: `CatVoice` in `CatLib.Voice` records with Steam voice, sends the voice to the players who share the mod that turned it on,
+  through the host, and plays every player from their cat, quieter with distance, or flat. Who is talking, a volume and mute per player,
+  and developer menu items to hear yourself and to send a recorded voice sample from a game copy without a microphone. The game has no voice library of its own any more, only traces of one. See [Voice](docs/Voice.md).
+- `GamePlayers.TryGetGhost` in `CatLib.Game`: another player's cat by client id, without the error the game's own lookup writes
+  to the log while the cat does not exist yet, in the lobby and while a level loads.
 - `CrashTrail.During` and `CrashTrail.Run` in `CatLib.Diagnostics`: a mod notes a rare call that may crash the game natively,
   and a crash report names it when the game closes in the middle of it. CatLib notes closing its Steam channel sessions,
   the game shutting Steam down, changing the game's code and closing the game's UDP sockets. See [Crash reports](docs/CrashReports.md#for-mod-authors).

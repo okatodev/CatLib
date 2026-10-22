@@ -36,6 +36,7 @@ flowchart LR
 | [HUD and parcels](Hud.md) | The parcels of the level, drawing on the screen during a level | `CatParcels`, `ParcelInfo`, `HudLayer`, `CountTable`, `CountList` |
 | [Patching the game](Patching.md) | Harmony patches all or nothing, errors in handlers, changing bytes of game code | `CatPatches`, `CodePatch`, `BytePattern` |
 | [Folding lists](Foldout.md) | A list built from the game's own UI pieces | `FoldoutList`, `FoldoutStyle` |
+| [Voice](Voice.md) | Talking to other players through Steam voice, from their cats or flat, who is talking | `CatVoice`, `VoiceSound` |
 | [Developer menu](DevTools.md) | One in-game panel for developer commands | `DevMenu` |
 | [Crash reports](CrashReports.md) | The crash window, reports, memory dumps, settings | — |
 

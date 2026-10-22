@@ -45,6 +45,7 @@ public static class CatLibRuntime
         CatLib.Assets.ContentPacks.Log = Log.Scope("Assets");
         CatLib.Game.Fixes.UdpClientCloser.Initialize(Log.Scope("Fixes"));
         DevMenu.Initialize(Log.Scope("DevTools"), Settings);
+        CatLib.Voice.CatVoice.Initialize(Log.Scope("Voice"));
         plugin.AddComponent<CatLibBehaviour>();
         IsInitialized = true;
         Log.Info($"CatLib {PluginMeta.Version} initialized on managed thread {MainThread.ManagedThreadId}");
@@ -53,6 +54,7 @@ public static class CatLibRuntime
     internal static void Quit()
     {
         CrashWatch.MarkCleanExit();
+        CatLib.Voice.CatVoice.Quit();
         SessionNetwork.OnQuitting();
         CatLib.Game.Fixes.UdpClientCloser.CloseAll("the game is quitting");
     }

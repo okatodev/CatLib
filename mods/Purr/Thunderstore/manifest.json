@@ -1,0 +1,9 @@
+{
+  "name": "Purr",
+  "version_number": "{version}",
+  "website_url": "https://github.com/okatodev/CatLib/tree/main/mods/Purr",
+  "description": "Talk to the other players through Steam voice: a voice comes from the player's cat and fades with distance, with push to talk or an open microphone.",
+  "dependencies": [
+    "CatLib-CatLib-{catlib_version}"
+  ]
+}

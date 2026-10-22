@@ -1,0 +1,65 @@
+{
+  "mod": {
+    "name": "Purr!",
+    "description": "Converse com os outros jogadores pela voz da Steam: a voz sai do gato do jogador e diminui com a distância, apertando para falar ou com o microfone aberto."
+  },
+  "section": {
+    "Voice": "Voz",
+    "Microphone": "Microfone",
+    "Headphones": "Fones",
+    "Sound": "Som",
+    "Screen": "Tela"
+  },
+  "setting": {
+    "Voice.Enabled": "Chat de voz",
+    "Voice.Enabled.description": "Chat de voz com os jogadores que também têm este mod. Desligado, você não fala nem ouve ninguém.",
+    "Voice.Volume": "Volume dos outros",
+    "Voice.Volume.description": "O quão alto os outros jogadores soam: 1 é como a Steam entrega, 2 é o dobro.",
+    "Microphone.Mode": "Modo",
+    "Microphone.Mode.description": "Apertar para falar envia sua voz só enquanto você segura a tecla abaixo. O microfone aberto envia sempre que a Steam ouve você. O microfone é escolhido na Steam: Configurações, Voz.",
+    "Microphone.PushToTalkKey": "Tecla para falar",
+    "Microphone.PushToTalkKey.description": "Segure para falar no modo apertar para falar.",
+    "Microphone.Muted": "Microfone desligado",
+    "Microphone.Muted.description": "Desliga seu microfone: ninguém ouve você, e você continua ouvindo todos.",
+    "Microphone.MuteKey": "Tecla do microfone",
+    "Microphone.MuteKey.description": "Desliga ou liga o microfone.",
+    "Headphones.Deafened": "Fones desligados",
+    "Headphones.Deafened.description": "Desliga os outros jogadores: você não ouve ninguém, e seu microfone também fica desligado até você ligá-los de novo.",
+    "Headphones.DeafenKey": "Tecla dos fones",
+    "Headphones.DeafenKey.description": "Desliga ou liga os outros jogadores.",
+    "Sound.Sound": "Vozes",
+    "Sound.Sound.description": "No espaço, a voz sai do gato do jogador e fica mais baixa com a distância. Plano, todos soam iguais onde quer que estejam. No lobby as vozes são sempre planas.",
+    "Sound.HearDistance": "Alcance da voz",
+    "Sound.HearDistance.description": "No espaço, até que distância uma voz ainda é ouvida, em metros.",
+    "Sound.FullVolumeDistance": "Volume total até",
+    "Sound.FullVolumeDistance.description": "No espaço, até esta distância a voz fica no volume total, em metros.",
+    "Screen.ShowSpeakers": "Quem está falando",
+    "Screen.ShowSpeakers.description": "Mostra num canto da tela quem está falando agora, durante uma fase.",
+    "Screen.Corner": "Canto",
+    "Screen.Corner.description": "O canto da tela para a lista de quem está falando.",
+    "Screen.NameTags": "Nomes coloridos",
+    "Screen.NameTags.description": "Colore o nome sobre um gato enquanto esse jogador fala.",
+    "Screen.Notices": "Avisos",
+    "Screen.Notices.description": "Avisa na tela quando o microfone ou os fones são desligados ou ligados pelas teclas."
+  },
+  "enum": {
+    "MicMode.PushToTalk": "Apertar para falar",
+    "MicMode.OpenMic": "Microfone aberto",
+    "VoiceSound.Spatial": "No espaço",
+    "VoiceSound.Flat": "Plano",
+    "SpeakersCorner.TopLeft": "Em cima à esquerda",
+    "SpeakersCorner.TopRight": "Em cima à direita",
+    "SpeakersCorner.BottomLeft": "Embaixo à esquerda",
+    "SpeakersCorner.BottomRight": "Embaixo à direita"
+  },
+  "speakers": {
+    "title": "Falando",
+    "you": "Você"
+  },
+  "notice": {
+    "MicrophoneOff": "Microfone desligado",
+    "MicrophoneOn": "Microfone ligado",
+    "HeadphonesOff": "Fones desligados: você não ouve ninguém",
+    "HeadphonesOn": "Fones ligados"
+  }
+}

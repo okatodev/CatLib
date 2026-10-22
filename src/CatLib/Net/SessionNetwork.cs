@@ -939,7 +939,7 @@ internal static class SessionNetwork
         return SteamIds.IsIndividual(steamId) ? steamId : 0;
     }
 
-    private static ulong SteamUserId()
+    internal static ulong SteamUserId()
     {
         try
         {

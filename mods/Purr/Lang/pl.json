@@ -1,0 +1,65 @@
+{
+  "mod": {
+    "name": "Purr!",
+    "description": "Rozmawiaj z innymi graczami przez głos Steam: głos dochodzi od kota gracza i cichnie z odległością, po wciśnięciu klawisza lub z otwartym mikrofonem."
+  },
+  "section": {
+    "Voice": "Głos",
+    "Microphone": "Mikrofon",
+    "Headphones": "Słuchawki",
+    "Sound": "Dźwięk",
+    "Screen": "Ekran"
+  },
+  "setting": {
+    "Voice.Enabled": "Czat głosowy",
+    "Voice.Enabled.description": "Czat głosowy z graczami, którzy też mają ten mod. Wyłączony: nie mówisz i nikogo nie słyszysz.",
+    "Voice.Volume": "Głośność innych",
+    "Voice.Volume.description": "Jak głośno słychać innych graczy: 1 to tak, jak podaje ich Steam, 2 to dwa razy głośniej.",
+    "Microphone.Mode": "Tryb",
+    "Microphone.Mode.description": "Naciśnij, aby mówić — głos idzie tylko wtedy, gdy trzymasz klawisz poniżej. Otwarty mikrofon wysyła go zawsze, gdy Steam cię słyszy. Sam mikrofon wybiera się w Steam: Ustawienia, Głos.",
+    "Microphone.PushToTalkKey": "Klawisz mówienia",
+    "Microphone.PushToTalkKey.description": "Przytrzymaj, aby mówić w trybie naciśnij, aby mówić.",
+    "Microphone.Muted": "Mikrofon wyłączony",
+    "Microphone.Muted.description": "Wyłącza twój mikrofon: nikt cię nie słyszy, a ty dalej słyszysz wszystkich.",
+    "Microphone.MuteKey": "Klawisz mikrofonu",
+    "Microphone.MuteKey.description": "Wyłącza lub włącza mikrofon.",
+    "Headphones.Deafened": "Słuchawki wyłączone",
+    "Headphones.Deafened.description": "Wyłącza innych graczy: nikogo nie słyszysz, a twój mikrofon też jest wyłączony, dopóki ich znów nie włączysz.",
+    "Headphones.DeafenKey": "Klawisz słuchawek",
+    "Headphones.DeafenKey.description": "Wyłącza lub włącza innych graczy.",
+    "Sound.Sound": "Głosy",
+    "Sound.Sound.description": "W przestrzeni głos dochodzi od kota gracza i cichnie z odległością. Płasko wszyscy brzmią tak samo, gdziekolwiek są. W lobby głosy są zawsze płaskie.",
+    "Sound.HearDistance": "Zasięg słyszenia",
+    "Sound.HearDistance.description": "W przestrzeni: z jakiej odległości głos jest jeszcze słyszalny, w metrach.",
+    "Sound.FullVolumeDistance": "Pełna głośność do",
+    "Sound.FullVolumeDistance.description": "W przestrzeni: do tej odległości głos brzmi z pełną głośnością, w metrach.",
+    "Screen.ShowSpeakers": "Kto mówi",
+    "Screen.ShowSpeakers.description": "Pokazuje w rogu ekranu, kto właśnie mówi, podczas poziomu.",
+    "Screen.Corner": "Róg",
+    "Screen.Corner.description": "Róg ekranu dla listy mówiących.",
+    "Screen.NameTags": "Kolorowe imiona",
+    "Screen.NameTags.description": "Koloruje imię nad kotem, gdy ten gracz mówi.",
+    "Screen.Notices": "Komunikaty",
+    "Screen.Notices.description": "Pokazuje na ekranie, gdy mikrofon lub słuchawki zostaną wyłączone lub włączone klawiszami."
+  },
+  "enum": {
+    "MicMode.PushToTalk": "Naciśnij, aby mówić",
+    "MicMode.OpenMic": "Otwarty mikrofon",
+    "VoiceSound.Spatial": "W przestrzeni",
+    "VoiceSound.Flat": "Płasko",
+    "SpeakersCorner.TopLeft": "U góry po lewej",
+    "SpeakersCorner.TopRight": "U góry po prawej",
+    "SpeakersCorner.BottomLeft": "Na dole po lewej",
+    "SpeakersCorner.BottomRight": "Na dole po prawej"
+  },
+  "speakers": {
+    "title": "Mówią",
+    "you": "Ty"
+  },
+  "notice": {
+    "MicrophoneOff": "Mikrofon wyłączony",
+    "MicrophoneOn": "Mikrofon włączony",
+    "HeadphonesOff": "Słuchawki wyłączone: nikogo nie słyszysz",
+    "HeadphonesOn": "Słuchawki włączone"
+  }
+}

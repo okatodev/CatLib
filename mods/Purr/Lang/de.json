@@ -1,0 +1,65 @@
+{
+  "mod": {
+    "name": "Purr!",
+    "description": "Sprich über Steam-Voice mit den anderen Spielern: Eine Stimme kommt von der Katze des Spielers und wird mit der Entfernung leiser, per Push-to-Talk oder offenem Mikrofon."
+  },
+  "section": {
+    "Voice": "Stimme",
+    "Microphone": "Mikrofon",
+    "Headphones": "Kopfhörer",
+    "Sound": "Klang",
+    "Screen": "Bildschirm"
+  },
+  "setting": {
+    "Voice.Enabled": "Sprachchat",
+    "Voice.Enabled.description": "Sprachchat mit den Spielern, die diesen Mod auch haben. Aus: Du sprichst nicht und hörst niemanden.",
+    "Voice.Volume": "Lautstärke der anderen",
+    "Voice.Volume.description": "Wie laut die anderen Spieler sind: 1 ist so, wie Steam sie liefert, 2 ist doppelt so laut.",
+    "Microphone.Mode": "Modus",
+    "Microphone.Mode.description": "Push-to-Talk sendet deine Stimme nur, solange du die Taste unten hältst. Offenes Mikrofon sendet sie immer, wenn Steam dich hört. Das Mikrofon selbst wählst du in Steam: Einstellungen, Sprache.",
+    "Microphone.PushToTalkKey": "Sprechtaste",
+    "Microphone.PushToTalkKey.description": "Halte sie gedrückt, um im Push-to-Talk-Modus zu sprechen.",
+    "Microphone.Muted": "Mikrofon aus",
+    "Microphone.Muted.description": "Schaltet dein Mikrofon aus: Niemand hört dich, du hörst aber alle.",
+    "Microphone.MuteKey": "Mikrofontaste",
+    "Microphone.MuteKey.description": "Schaltet das Mikrofon aus oder ein.",
+    "Headphones.Deafened": "Kopfhörer aus",
+    "Headphones.Deafened.description": "Schaltet die anderen Spieler aus: Du hörst niemanden, und dein Mikrofon ist auch aus, bis du sie wieder einschaltest.",
+    "Headphones.DeafenKey": "Kopfhörertaste",
+    "Headphones.DeafenKey.description": "Schaltet die anderen Spieler aus oder ein.",
+    "Sound.Sound": "Stimmen",
+    "Sound.Sound.description": "Räumlich kommt eine Stimme von der Katze des Spielers und wird mit der Entfernung leiser. Flach klingen alle gleich, wo sie auch sind. In der Lobby sind Stimmen immer flach.",
+    "Sound.HearDistance": "Hörweite",
+    "Sound.HearDistance.description": "Räumlich: wie weit entfernt eine Stimme noch zu hören ist, in Metern.",
+    "Sound.FullVolumeDistance": "Volle Lautstärke bis",
+    "Sound.FullVolumeDistance.description": "Räumlich: bis zu dieser Entfernung ist eine Stimme voll laut, in Metern.",
+    "Screen.ShowSpeakers": "Wer spricht",
+    "Screen.ShowSpeakers.description": "Zeigt während eines Levels in einer Bildschirmecke, wer gerade spricht.",
+    "Screen.Corner": "Ecke",
+    "Screen.Corner.description": "Die Bildschirmecke für die Liste derer, die sprechen.",
+    "Screen.NameTags": "Farbige Namen",
+    "Screen.NameTags.description": "Färbt den Namen über einer Katze, solange dieser Spieler spricht.",
+    "Screen.Notices": "Hinweise",
+    "Screen.Notices.description": "Zeigt auf dem Bildschirm an, wenn Mikrofon oder Kopfhörer mit den Tasten aus- oder eingeschaltet werden."
+  },
+  "enum": {
+    "MicMode.PushToTalk": "Push-to-Talk",
+    "MicMode.OpenMic": "Offenes Mikrofon",
+    "VoiceSound.Spatial": "Räumlich",
+    "VoiceSound.Flat": "Flach",
+    "SpeakersCorner.TopLeft": "Oben links",
+    "SpeakersCorner.TopRight": "Oben rechts",
+    "SpeakersCorner.BottomLeft": "Unten links",
+    "SpeakersCorner.BottomRight": "Unten rechts"
+  },
+  "speakers": {
+    "title": "Spricht",
+    "you": "Du"
+  },
+  "notice": {
+    "MicrophoneOff": "Mikrofon aus",
+    "MicrophoneOn": "Mikrofon an",
+    "HeadphonesOff": "Kopfhörer aus: Du hörst niemanden",
+    "HeadphonesOn": "Kopfhörer an"
+  }
+}

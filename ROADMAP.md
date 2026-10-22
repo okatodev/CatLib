@@ -23,11 +23,10 @@ Assets come up in many mods, so the API is for every mod author, not only for th
 
 ### Chat between players
 
-The game has neither a voice chat nor a text chat.
+Purr! and the voice API of CatLib are the first step, see [Voice](docs/Voice.md).
 
-- A new mod that tries this direction, with voice chat as the goal.
-- Voice needs sound in CatLib: capturing the microphone, encoding, sending over the CatLib channel and playing back
-  at the player's position. Either an audio API in CatLib or a separate library that mods depend on; to decide when it starts.
+- Purr!: a volume and mute per player in the Mods tab, push to talk on a gamepad.
+- A text chat.
 
 ## Deferred
 

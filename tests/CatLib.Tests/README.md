@@ -36,8 +36,9 @@ About 160 tests run inside the real game: settings, the Mods tab, translations, 
 | `Events`, `Bridge`, `Scheduling`, `Platform` | game events, singletons, the frame loop, game info, the IL2CPP metadata and symbols of the game for crash reports |
 | `Patching`, `Interop`, `Native` | `CatPatches`, `CodePatch`, IL2CPP arrays and events |
 | `Crash` | crash texts, the session file, the watcher package, stack unwinding, method names and PDB symbols of the watcher, stacks in the report |
+| `Voice` | voice packets, the playback stream, the routes through the host, the sound over distance; in the game a tone through a voice source |
 | `Inspection`, `DevTools`, `Runner` | the entity dump, the developer menu model, the test runner |
-| `BoatTweaks`, `ShelfLabels`, `BetterRepair`, `ParcelBoard`, `StackIt`, `TooLate`, `CustomStamps` | the logic of every mod, and their scenes in a level |
+| `BoatTweaks`, `ShelfLabels`, `BetterRepair`, `ParcelBoard`, `StackIt`, `TooLate`, `CustomStamps`, `Purr` | the logic of every mod, and their scenes in a level |
 
 </details>
 
@@ -109,6 +110,10 @@ All dumps go to `BepInEx/CatLib.Tests/Dumps`.
 | Too Late | Record game messages | Toggle: every network message of the game in the log |
 | | Joining players in the log | Whether players can join now, the player limit and who is joining |
 | | Snapshot in the log | The warehouse as a joining player would get it, in `BepInEx/cache/TooLate` |
+| Voice | Voice state in the log | Who owns voice, whether Steam records, what was sent, received and passed on, every speaker's queue and distance |
+| | Hear yourself | Toggle: the microphone stays on and your own voice plays back to you through Steam, offline too. Turn it off after the check |
+| | Record a voice sample | Toggle: the microphone stays on and Steam's voice is kept; turned off, it is written to `CatLib-voice-sample.bin` in the game's data folder |
+| | Send the voice sample | Sends the recorded sample to the other players as your voice, for a game copy without a microphone |
 | Custom Stamps | Game stamps in the log | Prefab, materials and textures of the game's decorative and weight stamps; open a level first |
 | | Custom stamps in the log | Every custom stamp, its size and whether it is used in this session |
 

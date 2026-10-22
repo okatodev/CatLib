@@ -1,0 +1,65 @@
+{
+  "mod": {
+    "name": "Purr!",
+    "description": "通过 Steam 语音和其他玩家交谈：声音来自玩家的猫，距离越远越小，可按键说话，也可开放麦克风。"
+  },
+  "section": {
+    "Voice": "语音",
+    "Microphone": "麦克风",
+    "Headphones": "耳机",
+    "Sound": "声音",
+    "Screen": "屏幕"
+  },
+  "setting": {
+    "Voice.Enabled": "语音聊天",
+    "Voice.Enabled.description": "与同样装有本模组的玩家语音聊天。关闭后你既不能说话，也听不到任何人。",
+    "Voice.Volume": "他人音量",
+    "Voice.Volume.description": "其他玩家的声音大小：1 为 Steam 原样，2 为两倍。",
+    "Microphone.Mode": "模式",
+    "Microphone.Mode.description": "按键说话只在你按住下面的按键时发送声音。开放麦克风则在 Steam 听到你时一直发送。麦克风本身在 Steam 的“设置 → 语音”中选择。",
+    "Microphone.PushToTalkKey": "说话键",
+    "Microphone.PushToTalkKey.description": "在按键说话模式下按住即可说话。",
+    "Microphone.Muted": "关闭麦克风",
+    "Microphone.Muted.description": "关闭你的麦克风：没人听得到你，你仍能听到所有人。",
+    "Microphone.MuteKey": "麦克风键",
+    "Microphone.MuteKey.description": "关闭或打开麦克风。",
+    "Headphones.Deafened": "关闭耳机",
+    "Headphones.Deafened.description": "关闭其他玩家的声音：你听不到任何人，在你重新打开之前麦克风也会关闭。",
+    "Headphones.DeafenKey": "耳机键",
+    "Headphones.DeafenKey.description": "关闭或打开其他玩家的声音。",
+    "Sound.Sound": "声音方式",
+    "Sound.Sound.description": "立体：声音来自玩家的猫，距离越远越小。平面：无论在哪里，大家的声音都一样。在大厅里声音总是平面的。",
+    "Sound.HearDistance": "听见距离",
+    "Sound.HearDistance.description": "立体模式下，声音还能听见的最远距离（米）。",
+    "Sound.FullVolumeDistance": "全音量距离",
+    "Sound.FullVolumeDistance.description": "立体模式下，在此距离（米）以内声音为全音量。",
+    "Screen.ShowSpeakers": "谁在说话",
+    "Screen.ShowSpeakers.description": "在关卡中于屏幕角落显示正在说话的人。",
+    "Screen.Corner": "角落",
+    "Screen.Corner.description": "显示说话者列表的屏幕角落。",
+    "Screen.NameTags": "彩色名字",
+    "Screen.NameTags.description": "玩家说话时，为其猫头上的名字上色。",
+    "Screen.Notices": "提示",
+    "Screen.Notices.description": "用按键关闭或打开麦克风、耳机时在屏幕上提示。"
+  },
+  "enum": {
+    "MicMode.PushToTalk": "按键说话",
+    "MicMode.OpenMic": "开放麦克风",
+    "VoiceSound.Spatial": "立体",
+    "VoiceSound.Flat": "平面",
+    "SpeakersCorner.TopLeft": "左上",
+    "SpeakersCorner.TopRight": "右上",
+    "SpeakersCorner.BottomLeft": "左下",
+    "SpeakersCorner.BottomRight": "右下"
+  },
+  "speakers": {
+    "title": "正在说话",
+    "you": "你"
+  },
+  "notice": {
+    "MicrophoneOff": "麦克风已关闭",
+    "MicrophoneOn": "麦克风已打开",
+    "HeadphonesOff": "耳机已关闭：你听不到任何人",
+    "HeadphonesOn": "耳机已打开"
+  }
+}

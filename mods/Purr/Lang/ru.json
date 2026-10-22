@@ -1,0 +1,65 @@
+{
+  "mod": {
+    "name": "Purr!",
+    "description": "Разговор с другими игроками через голос Steam: голос звучит от кота игрока и стихает с расстоянием, по кнопке или с открытым микрофоном."
+  },
+  "section": {
+    "Voice": "Голос",
+    "Microphone": "Микрофон",
+    "Headphones": "Наушники",
+    "Sound": "Звук",
+    "Screen": "Экран"
+  },
+  "setting": {
+    "Voice.Enabled": "Голосовой чат",
+    "Voice.Enabled.description": "Голосовой чат с игроками, у которых тоже есть этот мод. Если выключен, вы не говорите и никого не слышите.",
+    "Voice.Volume": "Громкость других",
+    "Voice.Volume.description": "Насколько громко звучат другие игроки: 1 — как их отдаёт Steam, 2 — вдвое громче.",
+    "Microphone.Mode": "Режим",
+    "Microphone.Mode.description": "По кнопке голос уходит, только пока вы держите клавишу ниже. Открытый микрофон передаёт его всегда, когда Steam вас слышит. Сам микрофон выбирается в Steam: Настройки, Голос.",
+    "Microphone.PushToTalkKey": "Клавиша разговора",
+    "Microphone.PushToTalkKey.description": "Держите её, чтобы говорить в режиме по кнопке.",
+    "Microphone.Muted": "Микрофон выключен",
+    "Microphone.Muted.description": "Выключает ваш микрофон: вас никто не слышит, а вы слышите всех.",
+    "Microphone.MuteKey": "Клавиша микрофона",
+    "Microphone.MuteKey.description": "Выключает или включает микрофон.",
+    "Headphones.Deafened": "Наушники выключены",
+    "Headphones.Deafened.description": "Выключает других игроков: вы никого не слышите, и ваш микрофон тоже выключен, пока вы их не включите.",
+    "Headphones.DeafenKey": "Клавиша наушников",
+    "Headphones.DeafenKey.description": "Выключает или включает других игроков.",
+    "Sound.Sound": "Голоса",
+    "Sound.Sound.description": "В пространстве голос звучит от кота игрока и стихает с расстоянием. Плоско — все звучат одинаково, где бы ни были. В лобби голоса всегда плоские.",
+    "Sound.HearDistance": "Дальность слышимости",
+    "Sound.HearDistance.description": "В пространстве — на каком расстоянии голос ещё слышно, в метрах.",
+    "Sound.FullVolumeDistance": "Полная громкость до",
+    "Sound.FullVolumeDistance.description": "В пространстве — до этого расстояния голос звучит в полную громкость, в метрах.",
+    "Screen.ShowSpeakers": "Кто говорит",
+    "Screen.ShowSpeakers.description": "Показывает в углу экрана, кто сейчас говорит, во время уровня.",
+    "Screen.Corner": "Угол",
+    "Screen.Corner.description": "Угол экрана для списка говорящих.",
+    "Screen.NameTags": "Цветные имена",
+    "Screen.NameTags.description": "Подсвечивает имя над котом, пока этот игрок говорит.",
+    "Screen.Notices": "Сообщения",
+    "Screen.Notices.description": "Пишет на экране, когда микрофон или наушники выключены или включены клавишами."
+  },
+  "enum": {
+    "MicMode.PushToTalk": "По кнопке",
+    "MicMode.OpenMic": "Открытый микрофон",
+    "VoiceSound.Spatial": "В пространстве",
+    "VoiceSound.Flat": "Плоско",
+    "SpeakersCorner.TopLeft": "Сверху слева",
+    "SpeakersCorner.TopRight": "Сверху справа",
+    "SpeakersCorner.BottomLeft": "Снизу слева",
+    "SpeakersCorner.BottomRight": "Снизу справа"
+  },
+  "speakers": {
+    "title": "Говорят",
+    "you": "Вы"
+  },
+  "notice": {
+    "MicrophoneOff": "Микрофон выключен",
+    "MicrophoneOn": "Микрофон включён",
+    "HeadphonesOff": "Наушники выключены: вы никого не слышите",
+    "HeadphonesOn": "Наушники включены"
+  }
+}

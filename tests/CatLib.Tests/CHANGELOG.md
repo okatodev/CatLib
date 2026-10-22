@@ -5,6 +5,8 @@
 - Developer menu group Crash: Crash in .NET code, an access violation inside .NET code with a marked text on the stack for the report,
   and Let the game shut Steam down, the game's own shutdown of Steam when it quits as before CatLib 0.7.3. The crash commands are noted
   as unfinished operations, so their reports name the developer menu as the cause.
+- Suites Voice and Purr: voice packets, the playback stream, routes through the host, the sound over distance, a tone through a voice source in the game,
+  the microphone logic and the translations of Purr!
 - Tests of the log copy in memory, the texts on the stack, unfinished operations, known causes and the places for memory dumps.
 
 ## 0.7.3

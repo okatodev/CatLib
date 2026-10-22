@@ -14,6 +14,7 @@
     <ProjectReference Include="..\..\mods\ShelfLabels\ShelfLabels.csproj" Private="false" />
     <ProjectReference Include="..\..\mods\BetterRepair\BetterRepair.csproj" Private="false" />
     <ProjectReference Include="..\..\mods\ParcelBoard\ParcelBoard.csproj" Private="false" />
+    <ProjectReference Include="..\..\mods\Purr\Purr.csproj" Private="false" />
     <ProjectReference Include="..\..\mods\StackIt\StackIt.csproj" Private="false" />
     <ProjectReference Include="..\..\mods\TooLate\TooLate.csproj" Private="false" />
     <ProjectReference Include="..\..\mods\CustomStamps\CustomStamps.csproj" Private="false" />

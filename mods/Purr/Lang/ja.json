@@ -1,0 +1,65 @@
+{
+  "mod": {
+    "name": "Purr!",
+    "description": "Steam のボイスでほかのプレイヤーと話せます。声はそのプレイヤーの猫から聞こえ、離れるほど小さくなります。プッシュトゥトークでもオープンマイクでも使えます。"
+  },
+  "section": {
+    "Voice": "ボイス",
+    "Microphone": "マイク",
+    "Headphones": "ヘッドホン",
+    "Sound": "サウンド",
+    "Screen": "画面"
+  },
+  "setting": {
+    "Voice.Enabled": "ボイスチャット",
+    "Voice.Enabled.description": "このMODを持っているプレイヤーとのボイスチャットです。オフにすると話すことも聞くこともできません。",
+    "Voice.Volume": "ほかの人の音量",
+    "Voice.Volume.description": "ほかのプレイヤーの声の大きさです。1 は Steam のまま、2 は 2 倍の大きさです。",
+    "Microphone.Mode": "モード",
+    "Microphone.Mode.description": "プッシュトゥトークでは、下のキーを押している間だけ声を送ります。オープンマイクでは Steam が声を拾うたびに送ります。マイク自体は Steam の「設定」→「ボイス」で選びます。",
+    "Microphone.PushToTalkKey": "話すキー",
+    "Microphone.PushToTalkKey.description": "プッシュトゥトークのとき、押している間だけ話せます。",
+    "Microphone.Muted": "マイクをオフ",
+    "Microphone.Muted.description": "マイクをオフにします。だれにも聞こえませんが、ほかの人の声は聞こえます。",
+    "Microphone.MuteKey": "マイクのキー",
+    "Microphone.MuteKey.description": "マイクをオフ・オンにします。",
+    "Headphones.Deafened": "ヘッドホンをオフ",
+    "Headphones.Deafened.description": "ほかのプレイヤーの声をオフにします。だれの声も聞こえず、オンに戻すまでマイクもオフになります。",
+    "Headphones.DeafenKey": "ヘッドホンのキー",
+    "Headphones.DeafenKey.description": "ほかのプレイヤーの声をオフ・オンにします。",
+    "Sound.Sound": "声の聞こえ方",
+    "Sound.Sound.description": "立体では、声はプレイヤーの猫から聞こえ、離れるほど小さくなります。フラットでは、どこにいても同じ大きさです。ロビーではいつもフラットです。",
+    "Sound.HearDistance": "聞こえる距離",
+    "Sound.HearDistance.description": "立体のとき、声が聞こえる最大の距離（メートル）です。",
+    "Sound.FullVolumeDistance": "最大音量の距離",
+    "Sound.FullVolumeDistance.description": "立体のとき、この距離（メートル）までは声が最大の大きさで聞こえます。",
+    "Screen.ShowSpeakers": "話している人",
+    "Screen.ShowSpeakers.description": "レベル中、いま話している人を画面の隅に表示します。",
+    "Screen.Corner": "表示位置",
+    "Screen.Corner.description": "話している人のリストを表示する画面の隅です。",
+    "Screen.NameTags": "名前に色",
+    "Screen.NameTags.description": "そのプレイヤーが話している間、猫の上の名前に色を付けます。",
+    "Screen.Notices": "お知らせ",
+    "Screen.Notices.description": "キーでマイクやヘッドホンをオフ・オンにしたとき、画面に表示します。"
+  },
+  "enum": {
+    "MicMode.PushToTalk": "プッシュトゥトーク",
+    "MicMode.OpenMic": "オープンマイク",
+    "VoiceSound.Spatial": "立体",
+    "VoiceSound.Flat": "フラット",
+    "SpeakersCorner.TopLeft": "左上",
+    "SpeakersCorner.TopRight": "右上",
+    "SpeakersCorner.BottomLeft": "左下",
+    "SpeakersCorner.BottomRight": "右下"
+  },
+  "speakers": {
+    "title": "話している人",
+    "you": "あなた"
+  },
+  "notice": {
+    "MicrophoneOff": "マイク オフ",
+    "MicrophoneOn": "マイク オン",
+    "HeadphonesOff": "ヘッドホン オフ：だれの声も聞こえません",
+    "HeadphonesOn": "ヘッドホン オン"
+  }
+}
