@@ -7,7 +7,7 @@ and its demo mod takes part in the lobby check, so friends without it would show
 
 ## What's inside
 
-- **Tests.** About 170 checks that run inside the real game: settings, the Mods tab, translations, saves, multiplayer and every mod.
+- **Tests.** About 190 checks that run inside the real game: settings, the Mods tab, translations, saves, multiplayer and every mod.
   They run when the main menu first loads and again from the developer menu. Tests of a mod that is not installed are skipped.
   Results go to `BepInEx/CatLib.Tests/Reports`, a timeline of game events to `BepInEx/CatLib.Tests/Timelines`.
 - **Developer menu** on the `` ` `` key, the one left of 1:
@@ -20,6 +20,7 @@ and its demo mod takes part in the lobby check, so friends without it would show
   - Network: send a test message, list the players Steam sees, join the first open game, check the Steam channel.
   - UI: preview a notification, the version badge in the main menu, a Mods tab full of mods, hide the game's interface with or without its notifications.
   - Crash: crash or hang the game on purpose to check the crash window. Each needs a second press.
+  - Voice, from CatLib: hear yourself through Steam voice, record a voice sample and send it from a game copy without a microphone.
   - A group for each mod with its own tools, for example the falls of Stack it! or the joins of Too Late.
 - **Demo settings.** A Demo section on the Mods tab to try live settings, plus a demo network mod
   whose version you can change on one side to see a mismatch in the lobby.

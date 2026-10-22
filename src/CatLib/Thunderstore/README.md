@@ -49,8 +49,10 @@ Everything below is documented in the repository.
   `GameImages` copies pictures of the game. Content packs: folders of files that players make for your mod,
   each with a card on the Mods tab, previews, a toggle and a Thunderstore package from one button.
 - **Developer menu.** `DevMenu.Command` adds your tools to one in-game panel on the `` ` `` key.
+- **Voice.** `CatVoice` records with Steam voice, sends it to the players who have your mod and plays every player
+  from their cat, quieter with distance, or flat. Purr! is built on it.
 - **Crash reports.** Crashes in your mod come with a report, both logs, a memory dump and the stacks of all threads
-  with the names of the game's methods.
+  with the names of the game's methods. `CrashTrail` notes a risky call, so a crash in the middle of it names it.
 
 Depend on `CatLib-CatLib-<version>` in your manifest. Start with [Writing a mod](https://github.com/okatodev/CatLib/blob/main/docs/WritingMods.md).
 

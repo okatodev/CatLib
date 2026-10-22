@@ -2,7 +2,14 @@
 
 CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late, Custom Stamps and Purr!, and CatLib Crash Watcher have their own versions and changelogs.
 
-## Unreleased
+## 0.7.4
+
+Released together with Purr! 0.1.0, CatLib Crash Watcher 1.2.0, Too Late 0.2.1 and CatLib Tests 0.7.4.
+For players: a new mod, Purr!, to talk to each other through Steam voice, from the cat and quieter with distance;
+crash reports keep the last lines of the log, the texts the game was working with and what it was doing when it closed,
+and name causes found before. For mod authors: the voice API `CatVoice`, `CrashTrail` to note risky calls for crash reports,
+and `GamePlayers.TryGetGhost`. Checked with two game copies on one computer, the second one in a sandbox; quitting the player first
+and then the host, with Steam left to the Steam client, closed both at once and without a crash every time.
 
 ### Added
 

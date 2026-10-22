@@ -2,10 +2,9 @@
 
 What is planned, in rough order. Finished work is removed from here and described in [CHANGELOG.md](CHANGELOG.md) or in the mod's CHANGELOG.md.
 
-## After 0.7.3
+## After 0.7.4
 
-The next steps go in small steps like the way to 0.7.0, in other directions: assets,
-the mods that are out already and a first try at talking to each other in the game.
+The next steps go on in small steps: assets, the mods that are out already, and more ways for players to talk to each other.
 
 ### Asset API
 

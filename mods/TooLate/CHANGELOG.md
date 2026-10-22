@@ -1,8 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.2.1
 
-- Writing the snapshot for a joining player is noted for crash reports: a crash in the middle of it names it. Needs CatLib 0.7.4.
+Needs CatLib 0.7.4.
+
+- Writing the snapshot for a joining player is noted for crash reports: if the game crashes in the middle of it, the report names it.
 
 ## 0.2.0
 

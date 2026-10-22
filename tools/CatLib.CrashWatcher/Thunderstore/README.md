@@ -14,6 +14,8 @@ and keeps a report folder with everything a mod author needs to fix it. Send tha
 - Notices when the game hangs while quitting and says so in the report.
 - Names the method of the game the crash happened in and writes down what every thread of the game was doing at that moment,
   so a mod author sees where it broke without opening the memory dump.
+- Keeps the last lines of the log even when the game had no time to write them, the texts the game was working with,
+  and what CatLib or a mod was in the middle of. A crash it has seen before, like Steam crashing while the game quits, is named as such.
 
 ## What it doesn't do
 

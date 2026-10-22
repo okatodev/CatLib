@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.2.0
 
 Reads session files of format 2, which CatLib 0.7.4 writes.
 
