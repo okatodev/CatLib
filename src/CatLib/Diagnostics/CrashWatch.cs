@@ -31,6 +31,7 @@ internal static class CrashWatch
     private static readonly HashSet<string> SkippedEvents = new(StringComparer.Ordinal) { "Network.NetworkTick" };
     private static readonly List<string> Header = new();
     private static readonly Queue<string> RecentEvents = new();
+    private static readonly Dictionary<long, string> OpenOperations = new();
     private static CatLogger _log;
     private static int _eventsInFile;
     private static string _sessionFile;
@@ -38,6 +39,8 @@ internal static class CrashWatch
     private static bool _closed;
     private static bool _dumps;
     private static bool _symbols;
+    private static long _nextOperation;
+    private static CrashLogMemory _logMemory;
 
     public static string ReportsDirectory => Path.Combine(Paths.BepInExRootPath, "CatLib", "Crashes");
 
@@ -108,6 +111,7 @@ internal static class CrashWatch
             ReportsDirectory = ReportsDirectory,
             MainThreadId = CurrentThreadId()
         };
+        StartMemoryReading(session);
         Header.AddRange(session.HeaderLines());
         Header.AddRange(TextLines(session.Language));
         File.WriteAllLines(_sessionFile, Header, Encoding.UTF8);
@@ -135,6 +139,80 @@ internal static class CrashWatch
     }
 
     private static void OnLanguageChanged(string language) => WriteLanguage(language);
+
+    private static void StartMemoryReading(CrashSession session)
+    {
+        try
+        {
+            _logMemory = CrashLogMemory.Start();
+            session.LogMemoryAddress = unchecked((ulong)_logMemory.Address.ToInt64());
+            session.LogMemorySize = _logMemory.Capacity;
+        }
+        catch (Exception exception)
+        {
+            _log.Warning($"The log copy in memory for crash reports could not start: {exception.Message}");
+        }
+
+        try
+        {
+            session.DotnetStringType = unchecked((ulong)typeof(string).TypeHandle.Value.ToInt64());
+        }
+        catch (Exception exception)
+        {
+            _log.Warning($"The .NET string type for crash reports could not be read: {exception.Message}");
+        }
+
+        try
+        {
+            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(Il2CppSystem.String).TypeHandle);
+            session.Il2CppStringType = unchecked((ulong)Il2CppInterop.Runtime.Il2CppClassPointerStore<Il2CppSystem.String>.NativeClassPtr.ToInt64());
+            if (session.Il2CppStringType == 0)
+            {
+                session.Il2CppStringType = unchecked((ulong)Il2CppInterop.Runtime.Il2CppClassPointerStore<string>.NativeClassPtr.ToInt64());
+            }
+        }
+        catch (Exception exception)
+        {
+            _log.Warning($"The IL2CPP string type for crash reports could not be read: {exception.Message}");
+        }
+    }
+
+    internal static long BeginOperation(string operation)
+    {
+        if (_sessionFile == null || string.IsNullOrWhiteSpace(operation))
+        {
+            return 0;
+        }
+
+        lock (Gate)
+        {
+            var id = ++_nextOperation;
+            var line = CrashSession.Line(CrashSession.DoingKey, CrashSession.DoingValue(id, Now(), operation.Trim()));
+            OpenOperations[id] = line;
+            CountLine();
+            Append(true, line);
+            return id;
+        }
+    }
+
+    internal static void EndOperation(long id)
+    {
+        if (id == 0)
+        {
+            return;
+        }
+
+        lock (Gate)
+        {
+            if (OpenOperations.Remove(id))
+            {
+                if (!CountLine())
+                {
+                    Append(true, CrashSession.Line(CrashSession.DoneKey, id.ToString(CultureInfo.InvariantCulture)));
+                }
+            }
+        }
+    }
 
     private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
     {
@@ -276,6 +354,19 @@ internal static class CrashWatch
         }
     }
 
+    private static bool CountLine()
+    {
+        _eventsInFile++;
+        if (_eventsInFile <= EventsBeforeTrim || _closed)
+        {
+            return false;
+        }
+
+        _eventsInFile = RecentEvents.Count;
+        Rewrite();
+        return true;
+    }
+
     private static void AppendHeader(params string[] lines)
     {
         lock (Gate)
@@ -292,12 +383,14 @@ internal static class CrashWatch
             return;
         }
 
-        Write(() => File.WriteAllLines(_sessionFile, Header.Concat(RecentEvents), Encoding.UTF8));
+        Write(() => File.WriteAllLines(_sessionFile, Header.Concat(RecentEvents).Concat(OpenOperations.OrderBy(pair => pair.Key).Select(pair => pair.Value)), Encoding.UTF8));
     }
 
-    private static void Append(params string[] lines)
+    private static void Append(params string[] lines) => Append(false, lines);
+
+    private static void Append(bool afterQuit, params string[] lines)
     {
-        if (_sessionFile == null || _closed)
+        if (_sessionFile == null || (_closed && !afterQuit))
         {
             return;
         }

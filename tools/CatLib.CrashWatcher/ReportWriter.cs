@@ -39,10 +39,27 @@ internal static class ReportWriter
         CopyInto(session.PlayerLog, folder, log);
         CopyInto(sessionFile, folder, log, SessionFileName);
 
-        var logTail = CrashText.Tail(ReadLines(bepinexLog ?? session.BepInExLog), CrashText.LogTailLines);
+        var fileLines = ReadLines(bepinexLog ?? session.BepInExLog);
+        var fromMemory = CrashLogRing.Missing(fileLines, info.MemoryLog);
+        info.MemoryLogMissing = fromMemory.Count;
+        if (fromMemory.Count > 0)
+        {
+            AppendMemoryLines(bepinexLog, fromMemory, log);
+            fileLines.AddRange(fromMemory);
+            log.Write($"{fromMemory.Count} line(s) of the BepInEx log were only in the game's memory, they are added to the report");
+        }
+
+        var logTail = CrashText.Tail(fileLines, CrashText.LogTailLines);
+        var keepsDump = KeepsDump(exit.ExitCode);
+        if (!keepsDump)
+        {
+            DropDump(ownDump, log);
+            ownDump = null;
+        }
+
         var dump = MoveDump(ownDump, folder, log);
         var ownDumpSaved = dump != null;
-        dump = dump ?? FindDump(session.ProcessId);
+        dump = dump ?? (keepsDump ? FindDump(session.ProcessId) : null);
         var text = CrashText.Report(session, exit.ExitCode, info, exit.Exited, exit.Played, logTail, dump);
         File.WriteAllText(Path.Combine(folder, ReportFileName), text, Encoding.UTF8);
         if (info.Threads.Count > 0)
@@ -68,6 +85,27 @@ internal static class ReportWriter
             Summary = CrashText.Summary(session, exit.ExitCode, info, exit.Played, strings, ownDumpSaved),
             Details = CrashText.Details(session, exit.ExitCode, info, exit.Exited, strings)
         };
+    }
+
+    public const string MemoryLinesMark = "----- CatLib: the lines below were still in the game's memory, the log file did not have them yet -----";
+
+    private static void AppendMemoryLines(string copiedLog, List<string> lines, WatcherLog log)
+    {
+        if (string.IsNullOrEmpty(copiedLog))
+        {
+            return;
+        }
+
+        try
+        {
+            var text = new List<string> { string.Empty, MemoryLinesMark };
+            text.AddRange(lines);
+            File.AppendAllLines(copiedLog, text, Encoding.UTF8);
+        }
+        catch (Exception exception)
+        {
+            log.Write($"Could not add the lines from memory to {copiedLog}: {exception.Message}");
+        }
     }
 
     public static List<string> ReadLines(string path)
@@ -125,6 +163,26 @@ internal static class ReportWriter
         }
     }
 
+    public static bool KeepsDump(uint exitCode) => CrashText.KeepsDump(exitCode);
+
+    private static void DropDump(string path, WatcherLog log)
+    {
+        if (string.IsNullOrEmpty(path) || !File.Exists(path))
+        {
+            return;
+        }
+
+        try
+        {
+            File.Delete(path);
+            log.Write("The game was closed through its console window, its memory dump is not kept so it takes none of the places for dumps");
+        }
+        catch (Exception exception)
+        {
+            log.Write($"Could not remove the memory dump of a game closed through its console window: {exception.Message}");
+        }
+    }
+
     private static string MoveDump(string source, string folder, WatcherLog log)
     {
         if (string.IsNullOrEmpty(source) || !File.Exists(source))
@@ -169,15 +227,12 @@ internal static class ReportWriter
             .Where(path => File.Exists(Path.Combine(path, ReportFileName)))
             .OrderByDescending(path => Path.GetFileName(path), StringComparer.Ordinal)
             .ToList();
-        foreach (var folder in folders.Skip(KeptDumps).Take(Math.Max(0, KeptReports - KeptDumps)))
+        foreach (var folder in CrashText.DumpsToDrop(folders.Take(KeptReports).ToList(), path => File.Exists(Path.Combine(path, DumpFileName)), KeptDumps))
         {
             var dump = Path.Combine(folder, DumpFileName);
             try
             {
-                if (File.Exists(dump))
-                {
-                    File.Delete(dump);
-                }
+                File.Delete(dump);
             }
             catch (Exception exception)
             {

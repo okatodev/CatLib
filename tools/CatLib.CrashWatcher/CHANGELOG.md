@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+
+Reads session files of format 2, which CatLib 0.7.4 writes.
+
+- The end of the BepInEx log is complete: CatLib keeps a copy of the last 64 KB of the log in memory, and the watcher reads it
+  at the moment of a crash or a hang. The lines the log file did not have yet go into the report and at the end of the copied `LogOutput.log`.
+  Before, the last lines before a native crash were often missing, the message of a crash command of the developer menu too.
+- Text on the stack: the report lists the strings of .NET and IL2CPP code in the registers and on the stack of the crashing thread,
+  the window the first three. A crash in .NET code shows only "JIT-compiled .NET code" in the stacks, the texts usually say what it did.
+- An access violation inside .NET code, which closes the game, is noted when it is raised, so its report has the text on the stack and the log.
+- Unfinished operations: what CatLib or a mod had begun and not finished when the game closed, from the session file, in the report and the window.
+- Known causes: a line in the report and the window names a cause found before, such as Steam crashing while the game shut it down.
+- A report without a memory dump no longer takes one of the three places for dumps, and a game closed through its console window keeps its report without a dump.
+- The module list is read once per loaded DLL instead of at every exception that may become a crash.
+
 ## 1.1.0
 
 - Reports name the method of the game a crash happened in, for example `EntityInteractableStore.Start() + 0x60` instead of only

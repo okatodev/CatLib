@@ -36,6 +36,14 @@ internal sealed class CrashEventInfo
 
     public List<CrashThreadStack> Threads { get; } = new List<CrashThreadStack>();
 
+    public List<string> MemoryLog { get; } = new List<string>();
+
+    public List<string> StackStrings { get; } = new List<string>();
+
+    public int MemoryLogMissing { get; set; }
+
+    public string Cause { get; set; } = string.Empty;
+
     public bool Hung => HangSeconds > 0;
 
     public bool HasFault => Module.Length > 0;
@@ -71,6 +79,7 @@ internal static class CrashText
     public const int ReportFrames = 24;
     public const string ScannedMark = "? ";
     public const int ListedGroupThreads = 10;
+    public const int DetailStrings = 3;
 
     public static readonly string[] SystemModules =
     {
@@ -84,7 +93,26 @@ internal static class CrashText
     public const uint ClosedOutsideCode = 1;
     public static readonly TimeSpan RaisedBeforeExit = TimeSpan.FromSeconds(10);
 
+    public const uint ConsoleClosedCode = 0xC000013A;
+
     public static bool IsNormalExit(uint exitCode) => exitCode == 0;
+
+    public static bool KeepsDump(uint exitCode) => exitCode != ConsoleClosedCode;
+
+    public static List<string> DumpsToDrop(IList<string> newestFirst, Func<string, bool> hasDump, int kept)
+    {
+        var drop = new List<string>();
+        var count = 0;
+        foreach (var folder in newestFirst)
+        {
+            if (hasDump(folder) && ++count > kept)
+            {
+                drop.Add(folder);
+            }
+        }
+
+        return drop;
+    }
 
     public static bool ClosedByRaised(uint exitCode, uint raisedCode, TimeSpan raisedBeforeExit)
     {
@@ -364,6 +392,11 @@ internal static class CrashText
             builder.AppendLine("No crash record: the crash watcher saw no exception and the Windows event log has none for this process.");
         }
 
+        if (info.Cause.Length > 0)
+        {
+            builder.AppendLine("Known cause: " + CrashCauses.ReportText(info.Cause));
+        }
+
         if (info.Hung)
         {
             builder.AppendLine("Hang: the game began to quit at " + session.CleanExit + " and was still running " + info.HangSeconds.ToString(CultureInfo.InvariantCulture) +
@@ -397,6 +430,27 @@ internal static class CrashText
             }
         }
 
+        if (info.StackStrings.Count > 0)
+        {
+            builder.AppendLine();
+            builder.AppendLine("Text on the stack of the crashing thread, the newest first (strings of .NET and IL2CPP code the thread was working with):");
+            foreach (var text in info.StackStrings)
+            {
+                builder.AppendLine("  " + text);
+            }
+        }
+
+        var unfinished = session.Unfinished;
+        if (unfinished.Count > 0)
+        {
+            builder.AppendLine();
+            builder.AppendLine("Unfinished when the game closed (CatLib and mods note these before risky calls):");
+            foreach (var operation in unfinished)
+            {
+                builder.AppendLine("  " + operation.Text + ", since " + operation.Time);
+            }
+        }
+
         AppendReportStacks(builder, session, info);
 
         builder.AppendLine();
@@ -414,7 +468,9 @@ internal static class CrashText
         }
 
         builder.AppendLine();
-        builder.AppendLine("End of the BepInEx log:");
+        builder.AppendLine(info.MemoryLogMissing > 0
+            ? "End of the BepInEx log, the last " + info.MemoryLogMissing.ToString(CultureInfo.InvariantCulture) + " line(s) read from the game's memory because the log file did not have them yet:"
+            : "End of the BepInEx log:");
         foreach (var line in logTail ?? new List<string>())
         {
             builder.AppendLine("  " + line);
@@ -452,6 +508,22 @@ internal static class CrashText
             {
                 builder.AppendLine(strings.Get("detailThread") + ": " + thread);
             }
+        }
+
+        if (info.Cause.Length > 0)
+        {
+            builder.AppendLine(strings.Get("detailCause") + ": " + strings.Get(CrashCauses.KeyPrefix + info.Cause));
+        }
+
+        for (var index = 0; index < info.StackStrings.Count && index < DetailStrings; index++)
+        {
+            builder.AppendLine((index == 0 ? strings.Get("detailStrings") + ": " : "  ") + info.StackStrings[index]);
+        }
+
+        var unfinishedNow = session.Unfinished;
+        if (unfinishedNow.Count > 0)
+        {
+            builder.AppendLine(strings.Get("detailUnfinished") + ": " + unfinishedNow[unfinishedNow.Count - 1].Text);
         }
 
         var headline = RuntimeHeadline(info.RuntimeMessage);

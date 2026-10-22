@@ -6,7 +6,7 @@ namespace CatLib.Diagnostics;
 
 internal sealed class CrashSession
 {
-    public const int CurrentFormat = 1;
+    public const int CurrentFormat = 2;
     public const string FormatKey = "format";
     public const string CatLibKey = "catlib";
     public const string GameKey = "game";
@@ -23,6 +23,11 @@ internal sealed class CrashSession
     public const string MainThreadKey = "mainThread";
     public const string ExceptionKey = "exception";
     public const string TextPrefix = "text.";
+    public const string LogMemoryKey = "logMemory";
+    public const string DotnetStringKey = "dotnetString";
+    public const string Il2CppStringKey = "il2cppString";
+    public const string DoingKey = "doing";
+    public const string DoneKey = "done";
 
     public int Format { get; set; }
 
@@ -60,6 +65,49 @@ internal sealed class CrashSession
 
     public Dictionary<string, string> Texts { get; } = new Dictionary<string, string>(StringComparer.Ordinal);
 
+    public ulong LogMemoryAddress { get; set; }
+
+    public int LogMemorySize { get; set; }
+
+    public ulong DotnetStringType { get; set; }
+
+    public ulong Il2CppStringType { get; set; }
+
+    public List<CrashOperation> Operations { get; } = new List<CrashOperation>();
+
+    public List<CrashOperation> Unfinished
+    {
+        get
+        {
+            var open = new List<CrashOperation>();
+            foreach (var operation in Operations)
+            {
+                if (!operation.Done)
+                {
+                    open.Add(operation);
+                }
+            }
+
+            return open;
+        }
+    }
+
+    public static string Address(ulong value) => "0x" + value.ToString("x", CultureInfo.InvariantCulture);
+
+    public static bool TryParseAddress(string text, out ulong value)
+    {
+        value = 0;
+        var trimmed = (text ?? string.Empty).Trim();
+        if (trimmed.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+        {
+            trimmed = trimmed.Substring(2);
+        }
+
+        return trimmed.Length > 0 && ulong.TryParse(trimmed, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value);
+    }
+
+    public static string DoingValue(long id, string time, string operation) => id.ToString(CultureInfo.InvariantCulture) + " " + time + " " + operation;
+
     public CrashStrings Strings => new CrashStrings(Texts);
 
     public static string Line(string key, string value) => key + "=" + Flatten(value);
@@ -78,6 +126,21 @@ internal sealed class CrashSession
         if (MainThreadId != 0)
         {
             yield return Line(MainThreadKey, MainThreadId.ToString(CultureInfo.InvariantCulture));
+        }
+
+        if (LogMemoryAddress != 0 && LogMemorySize > 0)
+        {
+            yield return Line(LogMemoryKey, Address(LogMemoryAddress) + " " + LogMemorySize.ToString(CultureInfo.InvariantCulture));
+        }
+
+        if (DotnetStringType != 0)
+        {
+            yield return Line(DotnetStringKey, Address(DotnetStringType));
+        }
+
+        if (Il2CppStringType != 0)
+        {
+            yield return Line(Il2CppStringKey, Address(Il2CppStringType));
         }
         foreach (var mod in Mods)
         {
@@ -148,6 +211,44 @@ internal sealed class CrashSession
                 case ExceptionKey:
                     session.ExceptionLines.Add(value);
                     break;
+                case LogMemoryKey:
+                    var parts = value.Split(' ');
+                    if (parts.Length >= 2 && TryParseAddress(parts[0], out var ring) &&
+                        int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var size))
+                    {
+                        session.LogMemoryAddress = ring;
+                        session.LogMemorySize = size;
+                    }
+
+                    break;
+                case DotnetStringKey:
+                    session.DotnetStringType = TryParseAddress(value, out var dotnet) ? dotnet : 0;
+                    break;
+                case Il2CppStringKey:
+                    session.Il2CppStringType = TryParseAddress(value, out var il2cpp) ? il2cpp : 0;
+                    break;
+                case DoingKey:
+                    var operation = CrashOperation.Parse(value);
+                    if (operation != null)
+                    {
+                        session.Operations.RemoveAll(known => known.Id == operation.Id);
+                        session.Operations.Add(operation);
+                    }
+
+                    break;
+                case DoneKey:
+                    if (long.TryParse(value.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var done))
+                    {
+                        foreach (var known in session.Operations)
+                        {
+                            if (known.Id == done)
+                            {
+                                known.Done = true;
+                            }
+                        }
+                    }
+
+                    break;
                 case MainThreadKey:
                     session.MainThreadId = int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var thread) ? thread : 0;
                     break;
@@ -158,4 +259,26 @@ internal sealed class CrashSession
     }
 
     private static string Flatten(string value) => (value ?? string.Empty).Replace('\r', ' ').Replace('\n', ' ');
+}
+
+internal sealed class CrashOperation
+{
+    public long Id { get; set; }
+
+    public string Time { get; set; } = string.Empty;
+
+    public string Text { get; set; } = string.Empty;
+
+    public bool Done { get; set; }
+
+    public static CrashOperation Parse(string value)
+    {
+        var parts = (value ?? string.Empty).Split(new[] { ' ' }, 4);
+        if (parts.Length < 4 || !long.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var id))
+        {
+            return null;
+        }
+
+        return new CrashOperation { Id = id, Time = parts[1] + " " + parts[2], Text = parts[3] };
+    }
 }

@@ -116,7 +116,7 @@ internal static class Program
         var hangDumpPath = Path.ChangeExtension(dumpPath, ".hang.dmp");
         var hang = new HangWatcher(processId, sessionFile, dump ? hangDumpPath : null, names, log);
         hang.Start();
-        var outcome = dump ? GameDebugger.Watch(processId, dumpPath, names, log) : null;
+        var outcome = dump ? GameDebugger.Watch(processId, dumpPath, sessionFile, names, log) : null;
         var exit = outcome?.Exit ?? GameProcess.WaitForExit(processId);
         hang.Stop();
         var session = CrashSession.Parse(ReportWriter.ReadLines(sessionFile));
@@ -163,9 +163,20 @@ internal static class Program
             {
                 info.Threads.AddRange(hang.Stacks);
             }
+
+            if (info.MemoryLog.Count == 0)
+            {
+                info.MemoryLog.AddRange(hang.MemoryLog);
+            }
         }
 
         NameCrash(info, exit, names, log);
+        info.Cause = CrashCauses.Find(session, exit.ExitCode, info);
+        if (info.Cause.Length > 0)
+        {
+            log.Write($"Known cause: {CrashCauses.ReportText(info.Cause)}");
+        }
+
         info.GameMethod = CrashText.NearestGameMethod(info);
         info.CalledFrom = CrashText.CalledFrom(info);
         if (info.CalledFrom.Length > 0)

@@ -163,6 +163,15 @@
     "detailGame": "Game",
     "detailMods": "Mods",
     "detailEvents": "Last events",
+    "detailStrings": "Text on the stack",
+    "detailUnfinished": "Unfinished",
+    "detailCause": "Known cause",
+    "cause": {
+      "steamShutdown": "Steam crashed while the game shut it down.",
+      "steamBreakpoint": "Steam stopped at a breakpoint of its own.",
+      "steamStructOverflow": "A call into Steam overwrote the stack.",
+      "developerMenu": "A crash on purpose from the developer menu."
+    },
     "exit": {
       "normal": "normal exit",
       "closedOutside": "the game was closed from outside, for example from the Task Manager",

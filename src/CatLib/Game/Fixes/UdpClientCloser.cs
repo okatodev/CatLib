@@ -29,9 +29,12 @@ internal static class UdpClientCloser
 
     internal static void CloseAll(string reason)
     {
-        foreach (var client in new List<Client>(Clients.Values))
+        using (CatLib.Diagnostics.CrashTrail.During("CatLib closes the UDP sockets of the game's network clients: " + reason))
         {
-            Close(client, reason);
+            foreach (var client in new List<Client>(Clients.Values))
+            {
+                Close(client, reason);
+            }
         }
 
         Clients.Clear();

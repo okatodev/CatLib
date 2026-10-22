@@ -225,6 +225,24 @@ internal static class ThreadStacks
         return ids;
     }
 
+    public static RegisterSet ReadRegisters(int threadId)
+    {
+        var handle = NativeMethods.OpenThread(NativeMethods.ThreadGetContext | NativeMethods.ThreadQueryInformation, false, threadId);
+        if (handle == IntPtr.Zero)
+        {
+            return null;
+        }
+
+        try
+        {
+            return Registers(handle);
+        }
+        finally
+        {
+            NativeMethods.CloseHandle(handle);
+        }
+    }
+
     private static RegisterSet Registers(IntPtr thread)
     {
         var memory = Marshal.AllocHGlobal(NativeMethods.ContextSize + 16);

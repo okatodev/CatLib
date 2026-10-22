@@ -17,7 +17,8 @@ different from crash to crash. Below it:
 
 - what happened in one line: the reason from the exit code, the module and offset of the crash,
   how long the game ran, whether it happened while the game was quitting and whether a memory dump was saved;
-- **Details**: time, exit code, module, the method it happened in and the nearest method of the game, the thread (the game thread or another one), the .NET exception,
+- **Details**: time, exit code, module, the method it happened in and the nearest method of the game, the thread (the game thread or another one),
+  a known cause, the first texts on the stack of the crashing thread, what CatLib or a mod had begun and not finished, the .NET exception,
   game and CatLib versions, the mods, the last game events;
 - **Open the report folder** and **Copy the report**; the window stays open after both;
 - the path of the report folder at the bottom.
@@ -30,14 +31,15 @@ A normal exit shows nothing. Closing the game from the Task Manager shows the wi
 
 | File | Contents |
 |---|---|
-| `report.txt` | The full report in English for the mod authors: summary, exit code, module, offset, method and thread of the crash, .NET message, the stacks of the crashing thread and the game thread, versions, the game build check (whether the game is the build CatLib is made for), game language, mods, the last 15 game events, the last 40 lines of the BepInEx log |
+| `report.txt` | The full report in English for the mod authors: summary, exit code, module, offset, method and thread of the crash, the known cause, .NET message, the texts on the stack of the crashing thread, unfinished operations, the stacks of the crashing thread and the game thread, versions, the game build check (whether the game is the build CatLib is made for), game language, mods, the last 15 game events, the last 40 lines of the BepInEx log, with the lines the log file did not have yet |
 | `stacks.txt` | The stack of every thread of the game at the moment of the crash or the hang, threads with the same stack grouped, see [Method names and stacks](#method-names-and-stacks) |
 | `crash.dmp` | The memory dump of the moment of the crash (5 to 50 MB): the stacks of every thread with the memory they point to, the modules, the handles |
-| `LogOutput.log` | The BepInEx log of the crashed session |
+| `LogOutput.log` | The BepInEx log of the crashed session; lines that were still in the game's memory follow a line that says so |
 | `Player.log` | The Unity log of the crashed session, which the game replaces on the next start |
 | `session.txt` | What CatLib recorded while the game ran |
 
-The last 10 reports are kept, memory dumps only in the last 3 of them. `BepInEx/CatLib/Crashes/watcher.log` has the watcher's own messages if something went wrong with it.
+The last 10 reports are kept, memory dumps only in the last 3 that have one: a report without a dump takes no place,
+and a game closed through its console window keeps its report but no dump. `BepInEx/CatLib/Crashes/watcher.log` has the watcher's own messages if something went wrong with it.
 
 ## How it works
 
@@ -58,6 +60,8 @@ The last 10 reports are kept, memory dumps only in the last 3 of them. `BepInEx/
    Anything else: it adds the .NET message from the Windows event log (.NET Runtime 1026), and without its own record
    the crash record too (Application Error 1000), writes the report folder and shows the window.
 5. An unhandled .NET exception is written into the session file by CatLib, so the report shows it even when Windows logs nothing.
+   An access violation inside .NET code closes the game too; the watcher notes the moment it is raised (at most once every 5 seconds, without a dump)
+   and uses it when the game closes with that code.
 6. A hang while quitting: once CatLib has marked the quit, the watcher waits 8 seconds. If the game still runs then,
    it notes a hang, pauses the game for a moment to read the stack of every thread and, with memory dumps on, writes a dump of every thread. When the player then closes the game
    from the Task Manager, the report and the window say the game stopped responding while quitting and for how long, and the dump goes with the report.
@@ -66,6 +70,38 @@ The last 10 reports are kept, memory dumps only in the last 3 of them. `BepInEx/
 The watcher changes nothing in the game: it only pauses it for the moment of writing a dump. It is a .NET Framework 4.8 program, so it runs on every Windows 10 and 11 without installing anything.
 The window texts come from CatLib's translations (`crash.*` keys of `catlib.core`), so they are in every game language
 and can be fixed by a translation file like every other text; without them the window is in English.
+
+## What the game was doing
+
+Three things in the report come from the game's memory and the session file rather than from the stacks.
+The first two are read while the game is stopped at the crash, so they need memory dumps on, like the stacks:
+
+- **The end of the log.** BepInEx writes `LogOutput.log` in blocks, so the last lines before a crash were often missing from it.
+  CatLib keeps a copy of the last 64 KB of the log in memory and writes its address into the session file. At the moment of the crash
+  the watcher reads it, and the lines the file does not have yet go into the report and at the end of the copied `LogOutput.log`.
+- **Text on the stack.** CatLib writes where the string types of .NET and IL2CPP are into the session file. The watcher looks through
+  the registers and the top 128 KB of the stack of the crashing thread for strings of either and shows the first 8 in the report,
+  the first 3 in the window: a crash in .NET code has no method names, but the texts it worked with usually say what it did.
+  ```
+  Text on the stack of the crashing thread, the newest first (strings of .NET and IL2CPP code the thread was working with):
+    .NET: "Before Steam shuts down: "
+    IL2CPP: "p_EntityCustomer"
+  ```
+- **Unfinished operations.** Before a rare call that can crash natively, CatLib writes it into the session file and marks it done after:
+  closing a Steam channel session, the game shutting Steam down, changing the game's code, closing the game's UDP sockets.
+  What was begun and not finished when the game closed is listed in the report and named in the window.
+  Mods do the same with `CrashTrail`, see [For mod authors](#for-mod-authors).
+
+### Known causes
+
+When a crash matches a cause found before, the report has a line `Known cause:` and the window says it in the game language:
+
+| Cause | How it is recognized |
+|---|---|
+| Steam crashed while the game shut it down | The crash is in `steamclient64.dll` on another thread while the game thread is in `SteamAPI_Shutdown` |
+| Steam stopped at a breakpoint of its own | A breakpoint (`0x80000003`) in `steamclient64.dll`, from crash watchers older than 1.1.0 |
+| A call into Steam overwrote the stack | A stack overrun (`0xC0000409`) with `GetSessionConnectionInfo` on the crashing thread, fixed in CatLib 0.7.1 |
+| A crash on purpose from the developer menu | An unfinished operation of the developer menu of `CatLib.Tests` |
 
 ## Method names and stacks
 
@@ -163,10 +199,29 @@ The developer menu of `CatLib.Tests` has the group **Crash**; the crash commands
 | Native crash, game thread | Unity's own forced crash, an access violation on the game thread |
 | Native crash, worker thread | An access violation on a new native thread, like the Steam networking crash found in 0.5.0 |
 | Managed crash | An unhandled .NET exception on a new thread |
+| Crash in .NET code | An access violation inside .NET code with a marked text on the stack, which the report shows under the texts on the stack |
+| Let the game shut Steam down | The game shuts Steam down itself when it quits, as before CatLib 0.7.3, to see whether Steam still crashes then; the report names the known cause |
 | Hang on quit | Turns on or off a 90 s hang of the game thread while Unity shuts down after a quit, like the real hangs; close the game from the Task Manager after 10 s to get the hang report |
 
 To look at the window without crashing, run
 `CatLib.CrashWatcher.exe --preview --session <any file>` from its folder in `BepInEx/plugins`.
+
+## For mod authors
+
+Before a call that may crash the game natively, a mod can note what it does, so a report of a crash in the middle of it names the operation:
+
+```csharp
+using CatLib.Diagnostics;
+
+using (CrashTrail.During("My Mod writes the boat layout"))
+{
+    WriteLayout();
+}
+
+var count = CrashTrail.Run("My Mod counts the parcels through interop", CountParcels);
+```
+
+Each call writes two lines into the session file, so it is for rare calls, not for every frame. When the crash watcher is off it does nothing.
 
 ## Memory dumps
 

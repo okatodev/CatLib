@@ -163,6 +163,15 @@
     "detailGame": "Juego",
     "detailMods": "Mods",
     "detailEvents": "Últimos eventos",
+    "detailStrings": "Texto en la pila",
+    "detailUnfinished": "Sin terminar",
+    "detailCause": "Causa conocida",
+    "cause": {
+      "steamShutdown": "Steam falló mientras el juego lo cerraba.",
+      "steamBreakpoint": "Steam se detuvo en un punto de interrupción propio.",
+      "steamStructOverflow": "Una llamada a Steam sobrescribió la pila.",
+      "developerMenu": "Un fallo a propósito desde el menú de desarrollador."
+    },
     "exit": {
       "normal": "salida normal",
       "closedOutside": "el juego se cerró desde fuera, por ejemplo desde el Administrador de tareas",

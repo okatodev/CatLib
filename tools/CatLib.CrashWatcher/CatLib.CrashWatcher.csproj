@@ -19,6 +19,8 @@
     <Compile Include="..\..\src\CatLib\Diagnostics\CrashText.cs" Link="Shared\CrashText.cs" />
     <Compile Include="..\..\src\CatLib\Diagnostics\CrashStrings.cs" Link="Shared\CrashStrings.cs" />
     <Compile Include="..\..\src\CatLib\Diagnostics\CrashThreadStack.cs" Link="Shared\CrashThreadStack.cs" />
+    <Compile Include="..\..\src\CatLib\Diagnostics\CrashLogRing.cs" Link="Shared\CrashLogRing.cs" />
+    <Compile Include="..\..\src\CatLib\Diagnostics\CrashCauses.cs" Link="Shared\CrashCauses.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(CatLibWatcherCheck)' != 'true'">

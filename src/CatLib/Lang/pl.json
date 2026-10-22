@@ -167,6 +167,15 @@
     "detailGame": "Gra",
     "detailMods": "Mody",
     "detailEvents": "Ostatnie zdarzenia",
+    "detailStrings": "Tekst na stosie",
+    "detailUnfinished": "Niezakończone",
+    "detailCause": "Znana przyczyna",
+    "cause": {
+      "steamShutdown": "Steam uległ awarii, gdy gra go zamykała.",
+      "steamBreakpoint": "Steam zatrzymał się na własnym punkcie przerwania.",
+      "steamStructOverflow": "Wywołanie Steam nadpisało stos.",
+      "developerMenu": "Celowa awaria z menu deweloperskiego."
+    },
     "exit": {
       "normal": "normalne zakończenie",
       "closedOutside": "grę zamknięto z zewnątrz, na przykład w Menedżerze zadań",

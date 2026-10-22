@@ -27,8 +27,9 @@ public sealed class SessionAcceptTest : TestCase
         Assert.Equal(TimeSpan.Zero, SessionNetwork.ShutdownDelay(TimeSpan.FromSeconds(6)), "No wait when the player left long ago");
         Assert.Equal(TimeSpan.Zero, SessionNetwork.ShutdownDelay(TimeSpan.MaxValue), "No wait when nobody left");
         Assert.Equal(TimeSpan.Zero, SessionNetwork.ShutdownDelay(TimeSpan.FromSeconds(-1)), "No wait for a clock that went back");
-        Assert.False(SessionNetwork.RunsSteamShutdown(true), "A game that quits leaves Steam to the Steam client");
-        Assert.True(SessionNetwork.RunsSteamShutdown(false), "Any other shutdown of Steam runs as in the game");
+        Assert.False(SessionNetwork.RunsSteamShutdown(true, false), "A game that quits leaves Steam to the Steam client");
+        Assert.True(SessionNetwork.RunsSteamShutdown(false, false), "Any other shutdown of Steam runs as in the game");
+        Assert.True(SessionNetwork.RunsSteamShutdown(true, true), "The developer menu can let the game shut Steam down while it quits");
         Assert.True(SteamMessagesTransport.IsGone(0), "A session in state none is gone");
         Assert.True(SteamMessagesTransport.IsGone(-3), "A dead session is gone");
         Assert.False(SteamMessagesTransport.IsGone(-1), "A session that is still finishing is not gone");

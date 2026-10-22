@@ -167,6 +167,15 @@
     "detailGame": "Игра",
     "detailMods": "Моды",
     "detailEvents": "Последние события",
+    "detailStrings": "Текст на стеке",
+    "detailUnfinished": "Не завершилось",
+    "detailCause": "Известная причина",
+    "cause": {
+      "steamShutdown": "Steam упал, пока игра его выключала.",
+      "steamBreakpoint": "Steam остановился на собственной точке останова.",
+      "steamStructOverflow": "Вызов Steam перезаписал стек.",
+      "developerMenu": "Краш нарочно, из меню разработчика."
+    },
     "exit": {
       "normal": "обычный выход",
       "closedOutside": "игру закрыли извне, например через диспетчер задач",

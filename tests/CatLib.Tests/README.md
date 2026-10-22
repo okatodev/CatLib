@@ -83,6 +83,8 @@ Groups come from `CatLib.Tests`, from CatLib itself and from the mods; a group a
 | Crash | Native crash, game thread | Access violation on the game thread. Press twice within 3 s |
 | | Native crash, worker thread | Access violation on a new native thread. Press twice |
 | | Managed crash | Unhandled .NET exception on a new thread. Press twice |
+| | Crash in .NET code | Access violation inside .NET code with a marked text on the stack, which the report shows under "Text on the stack". Press twice |
+| | Let the game shut Steam down | Toggle: the game shuts Steam down itself when it quits, as before CatLib 0.7.3, to see whether Steam still crashes then. Not kept after a restart |
 | | Hang on quit | Toggle: a 90 s hang while the game quits, to check the hang report |
 
 All dumps go to `BepInEx/CatLib.Tests/Dumps`.

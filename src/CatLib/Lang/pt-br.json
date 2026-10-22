@@ -163,6 +163,15 @@
     "detailGame": "Jogo",
     "detailMods": "Mods",
     "detailEvents": "Últimos eventos",
+    "detailStrings": "Texto na pilha",
+    "detailUnfinished": "Não concluído",
+    "detailCause": "Causa conhecida",
+    "cause": {
+      "steamShutdown": "O Steam travou enquanto o jogo o encerrava.",
+      "steamBreakpoint": "O Steam parou em um ponto de interrupção próprio.",
+      "steamStructOverflow": "Uma chamada ao Steam sobrescreveu a pilha.",
+      "developerMenu": "Um travamento proposital pelo menu de desenvolvedor."
+    },
     "exit": {
       "normal": "saída normal",
       "closedOutside": "o jogo foi fechado de fora, por exemplo pelo Gerenciador de Tarefas",

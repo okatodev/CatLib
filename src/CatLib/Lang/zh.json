@@ -159,6 +159,15 @@
     "detailGame": "游戏",
     "detailMods": "模组",
     "detailEvents": "最近事件",
+    "detailStrings": "栈上的文本",
+    "detailUnfinished": "未完成",
+    "detailCause": "已知原因",
+    "cause": {
+      "steamShutdown": "游戏关闭 Steam 时 Steam 崩溃了。",
+      "steamBreakpoint": "Steam 在自己的断点处停下了。",
+      "steamStructOverflow": "一次 Steam 调用覆盖了栈。",
+      "developerMenu": "来自开发者菜单的故意崩溃。"
+    },
     "exit": {
       "normal": "正常退出",
       "closedOutside": "游戏被外部关闭，例如通过任务管理器",

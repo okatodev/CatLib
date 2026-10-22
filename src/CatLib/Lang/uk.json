@@ -167,6 +167,15 @@
     "detailGame": "Гра",
     "detailMods": "Моди",
     "detailEvents": "Останні події",
+    "detailStrings": "Текст на стеку",
+    "detailUnfinished": "Не завершилося",
+    "detailCause": "Відома причина",
+    "cause": {
+      "steamShutdown": "Steam упав, поки гра його вимикала.",
+      "steamBreakpoint": "Steam зупинився на власній точці зупинки.",
+      "steamStructOverflow": "Виклик Steam перезаписав стек.",
+      "developerMenu": "Навмисний збій із меню розробника."
+    },
     "exit": {
       "normal": "звичайний вихід",
       "closedOutside": "гру закрили ззовні, наприклад через диспетчер завдань",

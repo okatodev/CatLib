@@ -2,6 +2,19 @@
 
 CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late and Custom Stamps, and CatLib Crash Watcher have their own versions and changelogs.
 
+## Unreleased
+
+### Added
+
+- `CrashTrail.During` and `CrashTrail.Run` in `CatLib.Diagnostics`: a mod notes a rare call that may crash the game natively,
+  and a crash report names it when the game closes in the middle of it. CatLib notes closing its Steam channel sessions,
+  the game shutting Steam down, changing the game's code and closing the game's UDP sockets. See [Crash reports](docs/CrashReports.md#for-mod-authors).
+- For crash watcher 1.2.0: CatLib keeps a copy of the last 64 KB of the BepInEx log in memory and writes where it is, and where
+  the string types of .NET and IL2CPP are, into the session file, now of format 2. Window texts for the known causes, the texts on the stack
+  and unfinished operations in all 13 languages.
+- Developer menu of `CatLib.Tests`: Crash → Crash in .NET code, and Let the game shut Steam down, which brings back the game's own
+  shutdown of Steam when it quits, to see whether Steam still crashes then.
+
 ## 0.7.3
 
 Released together with Too Late 0.2.0, Stack it! 0.1.1, Parcel Board 0.1.1 and CatLib Tests 0.7.3.

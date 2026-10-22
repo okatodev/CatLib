@@ -224,6 +224,10 @@ public sealed class CatLibTestsPlugin : BasePlugin
             "Crashes the game from a new native thread, like the Steam networking crash. Press twice.");
         DevMenu.Command("Crash", "Managed crash", _crashes.Managed,
             "Crashes the game with an unhandled .NET exception on a new thread. Press twice.");
+        DevMenu.Command("Crash", "Crash in .NET code", _crashes.InDotnetCode,
+            "Crashes the game with an access violation inside .NET code, with a marked text on the stack the crash report should show. Press twice.");
+        DevMenu.Toggle("Crash", "Let the game shut Steam down", () => CrashTrigger.SteamShutdownByGame, value => _crashes.SetSteamShutdown(value),
+            "On: the game shuts Steam down itself when it quits, as without the fix of CatLib 0.7.3, to see whether Steam still crashes then. Not kept after a restart.");
         DevMenu.Command("Crash", "Hang on quit", _crashes.ToggleHangOnQuit,
             "Turns on or off a 90 s hang of the game thread while Unity shuts down after a quit, to check that the crash watcher reports a hang and keeps a dump.");
     }

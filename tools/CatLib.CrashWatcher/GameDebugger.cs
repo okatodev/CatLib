@@ -35,7 +35,7 @@ internal static class GameDebugger
     public static readonly TimeSpan EarlyDumpPause = TimeSpan.FromSeconds(5);
     public static readonly uint[] FatalCodes = { 0xC0000005, 0xC000001D, 0xC0000096, 0xC00000FD, 0xC0000374, 0xC0000409, 0xC0000420 };
 
-    public static DebugOutcome Watch(int processId, string dumpPath, CodeNames names, WatcherLog log)
+    public static DebugOutcome Watch(int processId, string dumpPath, string sessionFile, CodeNames names, WatcherLog log)
     {
         var access = NativeMethods.Synchronize | NativeMethods.ProcessQueryLimitedInformation | NativeMethods.ProcessQueryInformation |
                      NativeMethods.ProcessVmRead | NativeMethods.ProcessDuplicateHandle;
@@ -60,6 +60,9 @@ internal static class GameDebugger
         var finished = false;
         var earlyPath = string.IsNullOrEmpty(dumpPath) ? null : Path.ChangeExtension(dumpPath, ".early.dmp");
         CrashEventInfo early = null;
+        CrashEventInfo managed = null;
+        var managedAt = DateTime.MinValue;
+        List<CrashModule> modules = null;
         var earlyAt = DateTime.MinValue;
         var exitAt = DateTime.MinValue;
         try
@@ -103,14 +106,28 @@ internal static class GameDebugger
                             if (earlyPath != null && outcome.Crash == null && Array.IndexOf(FatalCodes, exceptionCode) >= 0 &&
                                 outcome.EarlyDumps < MaxEarlyDumps && DateTime.UtcNow - earlyAt >= EarlyDumpPause)
                             {
-                                var candidate = Describe(process, thread, exceptionCode, debugEvent, log);
-                                if (!CrashText.IsManaged(candidate))
+                                modules = modules ?? SafeModules(process, log);
+                                var candidate = Describe(process, thread, exceptionCode, debugEvent, log, modules);
+                                if (CrashText.IsManaged(candidate))
+                                {
+                                    if (DateTime.UtcNow - managedAt < EarlyDumpPause)
+                                    {
+                                        break;
+                                    }
+
+                                    managedAt = DateTime.UtcNow;
+                                    managed = candidate;
+                                    managed.Early = true;
+                                    ReadMemory(process, thread, managed, sessionFile, log);
+                                }
+                                else
                                 {
                                     earlyAt = DateTime.UtcNow;
                                     outcome.EarlyDumps++;
                                     early = candidate;
                                     early.Early = true;
                                     log.Write($"The game raised {CrashText.Hex(exceptionCode)} in {early.Module} + {early.Offset} on thread {thread}, keeping a dump in case it does not recover");
+                                    ReadMemory(process, thread, early, sessionFile, log);
                                     early.Threads.AddRange(ThreadStacks.Capture(process, processId, names, false, thread, log));
                                     if (!TryWriteDump(process, processId, thread, debugEvent, earlyPath, log))
                                     {
@@ -126,6 +143,7 @@ internal static class GameDebugger
                             {
                                 outcome.Crash = Describe(process, thread, exceptionCode, debugEvent, log);
                                 log.Write($"The game crashed with {CrashText.Hex(exceptionCode)} in {outcome.Crash.Module} + {outcome.Crash.Offset} on thread {thread}");
+                                ReadMemory(process, thread, outcome.Crash, sessionFile, log);
                                 outcome.Crash.Threads.AddRange(ThreadStacks.Capture(process, processId, names, false, thread, log));
                                 if (!string.IsNullOrEmpty(dumpPath) && TryWriteDump(process, processId, thread, debugEvent, dumpPath, log))
                                 {
@@ -137,6 +155,7 @@ internal static class GameDebugger
                         break;
                     case NativeMethods.CreateProcessDebugEvent:
                     case NativeMethods.LoadDllDebugEvent:
+                        modules = null;
                         var file = Marshal.ReadIntPtr(debugEvent, 16);
                         if (file != IntPtr.Zero)
                         {
@@ -168,6 +187,12 @@ internal static class GameDebugger
             if (exitAt == DateTime.MinValue)
             {
                 exitAt = DateTime.UtcNow;
+            }
+
+            if (outcome.Crash == null && early == null && managed != null && CrashText.ClosedByRaised(outcome.Exit.ExitCode, ParseCode(managed.ExceptionCode), exitAt - managedAt))
+            {
+                outcome.Crash = managed;
+                log.Write($"The game closed with the exception it raised in .NET code at {managed.Module} + {managed.Offset}, the text on its stack and the log in memory of that moment go into the report");
             }
 
             if (outcome.Crash == null && early != null && !CrashText.ClosedByRaised(outcome.Exit.ExitCode, ParseCode(early.ExceptionCode), exitAt - earlyAt))
@@ -202,6 +227,35 @@ internal static class GameDebugger
                 {
                 }
             }
+        }
+    }
+
+    private static void ReadMemory(IntPtr process, int thread, CrashEventInfo info, string sessionFile, WatcherLog log)
+    {
+        if (string.IsNullOrEmpty(sessionFile))
+        {
+            return;
+        }
+
+        try
+        {
+            var session = CrashSession.Parse(ReportWriter.ReadLines(sessionFile));
+            var memory = new LiveProcessMemory(process);
+            info.MemoryLog.Clear();
+            info.MemoryLog.AddRange(CrashMemory.LogLines(memory, session.LogMemoryAddress, session.LogMemorySize));
+            info.StackStrings.Clear();
+            var registers = ThreadStacks.ReadRegisters(thread);
+            if (registers != null)
+            {
+                var values = new List<ulong>(registers.Integer) { registers.Rip };
+                info.StackStrings.AddRange(CrashMemory.StackStrings(memory, values, registers.Rsp, session.DotnetStringType, session.Il2CppStringType));
+            }
+
+            log.Write($"Read {info.MemoryLog.Count} log line(s) and {info.StackStrings.Count} text(s) of the crashing thread from the game's memory");
+        }
+        catch (Exception exception)
+        {
+            log.Write($"Reading the log and the text of the crashing thread from the game's memory failed: {exception.Message}");
         }
     }
 
@@ -261,19 +315,23 @@ internal static class GameDebugger
         return modules;
     }
 
-    private static CrashEventInfo Describe(IntPtr process, int thread, uint exceptionCode, IntPtr debugEvent, WatcherLog log)
+    private static List<CrashModule> SafeModules(IntPtr process, WatcherLog log)
     {
-        var address = unchecked((ulong)Marshal.ReadInt64(debugEvent, 16 + 16));
-        CrashEventInfo info;
         try
         {
-            info = CrashText.Locate(Modules(process), address, exceptionCode, thread);
+            return Modules(process);
         }
         catch (Exception exception)
         {
-            info = CrashText.Locate(null, address, exceptionCode, thread);
             log.Write($"Could not list the game modules: {exception.Message}");
+            return new List<CrashModule>();
         }
+    }
+
+    private static CrashEventInfo Describe(IntPtr process, int thread, uint exceptionCode, IntPtr debugEvent, WatcherLog log, List<CrashModule> modules = null)
+    {
+        var address = unchecked((ulong)Marshal.ReadInt64(debugEvent, 16 + 16));
+        var info = CrashText.Locate(modules ?? SafeModules(process, log), address, exceptionCode, thread);
 
         var parameters = Marshal.ReadInt32(debugEvent, 16 + 24);
         if (exceptionCode == 0xC0000005 && parameters >= 2)

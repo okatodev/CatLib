@@ -143,7 +143,12 @@ internal sealed class SteamMessagesTransport : ISessionTransport
         Breadcrumb("close", peer);
         try
         {
-            var closed = _api.Close(peer);
+            bool closed;
+            using (CatLib.Diagnostics.CrashTrail.During($"CatLib closes its Steam channel session with {peer}"))
+            {
+                closed = _api.Close(peer);
+            }
+
             _log.Info($"Closed the CatLib channel session with {peer}: {(closed ? "closed" : "there was none")}");
             return closed;
         }

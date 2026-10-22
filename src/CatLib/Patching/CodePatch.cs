@@ -134,7 +134,11 @@ public sealed class CodePatch
                 return false;
             }
 
-            NativeCode.Write(_site, bytes);
+            using (CatLib.Diagnostics.CrashTrail.During($"{OwnerId} changes the game's code: {Name}"))
+            {
+                NativeCode.Write(_site, bytes);
+            }
+
             _written = written;
             _log.Info($"[CodePatch] {OwnerId}: {Name} is now {Hex(bytes)}{(written == null ? " (as in the game)" : string.Empty)}");
             return true;

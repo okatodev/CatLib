@@ -163,6 +163,15 @@
     "detailGame": "Jeu",
     "detailMods": "Mods",
     "detailEvents": "Derniers événements",
+    "detailStrings": "Texte sur la pile",
+    "detailUnfinished": "Inachevé",
+    "detailCause": "Cause connue",
+    "cause": {
+      "steamShutdown": "Steam a planté pendant que le jeu le fermait.",
+      "steamBreakpoint": "Steam s'est arrêté sur l'un de ses propres points d'arrêt.",
+      "steamStructOverflow": "Un appel à Steam a écrasé la pile.",
+      "developerMenu": "Un plantage volontaire depuis le menu développeur."
+    },
     "exit": {
       "normal": "sortie normale",
       "closedOutside": "le jeu a été fermé de l'extérieur, par exemple depuis le Gestionnaire des tâches",

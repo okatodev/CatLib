@@ -35,6 +35,14 @@ public static class SaveSnapshot
 
     public static SnapshotResult Write()
     {
+        using (CatLib.Diagnostics.CrashTrail.During("Too Late writes the snapshot of the warehouse for a joining player"))
+        {
+            return WriteNow();
+        }
+    }
+
+    private static SnapshotResult WriteNow()
+    {
         var watch = Stopwatch.StartNew();
         var save = Singleton<SaveManager>.HasInstance() ? Singleton<SaveManager>.Instance : null;
         if (save == null)

@@ -130,7 +130,8 @@ internal static class SessionNetwork
             MainThread.Post(Stop);
         };
         _steamShutdown = new CatLib.Patching.CatPatches(SteamShutdownPatchOwner, log)
-            .Prefix(typeof(SteamAPI), nameof(SteamAPI.Shutdown), Type.EmptyTypes, typeof(SessionNetwork), nameof(BeforeSteamShutdown));
+            .Prefix(typeof(SteamAPI), nameof(SteamAPI.Shutdown), Type.EmptyTypes, typeof(SessionNetwork), nameof(BeforeSteamShutdown))
+            .Postfix(typeof(SteamAPI), nameof(SteamAPI.Shutdown), Type.EmptyTypes, typeof(SessionNetwork), nameof(AfterSteamShutdown));
         _steamShutdown.Apply();
         BootstrapEvents.MainMenuLoaded += EndRestart;
         BootstrapEvents.LevelLoadStarted += EndRestart;
@@ -276,7 +277,18 @@ internal static class SessionNetwork
         CloseChannelSessions();
     }
 
-    internal static bool RunsSteamShutdown(bool quitting) => !quitting;
+    internal static bool LetGameShutSteamDown { get; set; }
+
+    internal static bool RunsSteamShutdown(bool quitting, bool letGame) => !quitting || letGame;
+
+    private static IDisposable _steamShutdownStep;
+
+    private static void AfterSteamShutdown()
+    {
+        var step = _steamShutdownStep;
+        _steamShutdownStep = null;
+        step?.Dispose();
+    }
 
     private static bool BeforeSteamShutdown()
     {
@@ -288,7 +300,7 @@ internal static class SessionNetwork
         try
         {
             CloseChannelSessions();
-            if (!RunsSteamShutdown(_quitting))
+            if (!RunsSteamShutdown(_quitting, LetGameShutSteamDown))
             {
                 _log.Info("The game quits: Steam is not shut down by the game, the Steam client cleans up when the game's process ends. " +
                           "Steam crashed in its own threads while the game shut it down");
@@ -296,6 +308,12 @@ internal static class SessionNetwork
             }
 
             SettleClosedSessions();
+            if (_quitting)
+            {
+                _log.Info("The game quits and shuts Steam down itself, the developer menu allows it");
+            }
+
+            _steamShutdownStep = CatLib.Diagnostics.CrashTrail.During("Steam shuts down (SteamAPI.Shutdown)");
         }
         catch (Exception exception)
         {

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Writing the snapshot for a joining player is noted for crash reports: a crash in the middle of it names it. Needs CatLib 0.7.4.
+
 ## 0.2.0
 
 - Players 5 to 8 start at spots of their own, between the game's four and half a step past the last one.

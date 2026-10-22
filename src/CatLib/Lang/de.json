@@ -163,6 +163,15 @@
     "detailGame": "Spiel",
     "detailMods": "Mods",
     "detailEvents": "Letzte Ereignisse",
+    "detailStrings": "Text auf dem Stack",
+    "detailUnfinished": "Nicht beendet",
+    "detailCause": "Bekannte Ursache",
+    "cause": {
+      "steamShutdown": "Steam ist abgestürzt, während das Spiel es beendet hat.",
+      "steamBreakpoint": "Steam hat an einem eigenen Haltepunkt angehalten.",
+      "steamStructOverflow": "Ein Aufruf von Steam hat den Stack überschrieben.",
+      "developerMenu": "Ein absichtlicher Absturz aus dem Entwicklermenü."
+    },
     "exit": {
       "normal": "normales Beenden",
       "closedOutside": "das Spiel wurde von außen beendet, zum Beispiel über den Task-Manager",

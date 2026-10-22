@@ -40,6 +40,8 @@ internal sealed class HangWatcher
 
     public List<CrashThreadStack> Stacks { get; private set; } = new List<CrashThreadStack>();
 
+    public List<string> MemoryLog { get; private set; } = new List<string>();
+
     public void Start()
     {
         _thread = new Thread(Run) { IsBackground = true, Name = "CatLib hang watch" };
@@ -106,6 +108,8 @@ internal sealed class HangWatcher
         try
         {
             Stacks = ThreadStacks.Capture(process, _processId, _names, true, 0, _log);
+            var session = CrashSession.Parse(ReportWriter.ReadLines(_sessionFile));
+            MemoryLog = CrashMemory.LogLines(new LiveProcessMemory(process), session.LogMemoryAddress, session.LogMemorySize);
         }
         finally
         {

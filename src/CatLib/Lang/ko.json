@@ -159,6 +159,15 @@
     "detailGame": "게임",
     "detailMods": "모드",
     "detailEvents": "최근 이벤트",
+    "detailStrings": "스택의 텍스트",
+    "detailUnfinished": "끝나지 않음",
+    "detailCause": "알려진 원인",
+    "cause": {
+      "steamShutdown": "게임이 Steam을 종료하는 동안 Steam이 충돌했습니다.",
+      "steamBreakpoint": "Steam이 자체 중단점에서 멈췄습니다.",
+      "steamStructOverflow": "Steam 호출이 스택을 덮어썼습니다.",
+      "developerMenu": "개발자 메뉴에서 일부러 일으킨 충돌입니다."
+    },
     "exit": {
       "normal": "정상 종료",
       "closedOutside": "작업 관리자 등 외부에서 게임을 닫음",

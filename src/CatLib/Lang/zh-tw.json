@@ -159,6 +159,15 @@
     "detailGame": "遊戲",
     "detailMods": "模組",
     "detailEvents": "最近事件",
+    "detailStrings": "堆疊上的文字",
+    "detailUnfinished": "未完成",
+    "detailCause": "已知原因",
+    "cause": {
+      "steamShutdown": "遊戲關閉 Steam 時 Steam 當掉了。",
+      "steamBreakpoint": "Steam 在自己的中斷點停了下來。",
+      "steamStructOverflow": "一次 Steam 呼叫覆寫了堆疊。",
+      "developerMenu": "來自開發者選單的刻意當機。"
+    },
     "exit": {
       "normal": "正常結束",
       "closedOutside": "遊戲被外部關閉，例如透過工作管理員",

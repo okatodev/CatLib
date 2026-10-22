@@ -159,6 +159,15 @@
     "detailGame": "ゲーム",
     "detailMods": "MOD",
     "detailEvents": "最近のイベント",
+    "detailStrings": "スタック上のテキスト",
+    "detailUnfinished": "未完了",
+    "detailCause": "既知の原因",
+    "cause": {
+      "steamShutdown": "ゲームが Steam を終了させている間に Steam がクラッシュしました。",
+      "steamBreakpoint": "Steam が自身のブレークポイントで停止しました。",
+      "steamStructOverflow": "Steam の呼び出しがスタックを上書きしました。",
+      "developerMenu": "開発者メニューからの意図的なクラッシュです。"
+    },
     "exit": {
       "normal": "通常の終了",
       "closedOutside": "タスクマネージャーなど、外部からゲームが閉じられた",

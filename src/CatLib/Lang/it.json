@@ -163,6 +163,15 @@
     "detailGame": "Gioco",
     "detailMods": "Mod",
     "detailEvents": "Ultimi eventi",
+    "detailStrings": "Testo sullo stack",
+    "detailUnfinished": "Non concluso",
+    "detailCause": "Causa nota",
+    "cause": {
+      "steamShutdown": "Steam si è bloccato mentre il gioco lo chiudeva.",
+      "steamBreakpoint": "Steam si è fermato su un proprio punto di interruzione.",
+      "steamStructOverflow": "Una chiamata a Steam ha sovrascritto lo stack.",
+      "developerMenu": "Un crash voluto dal menu sviluppatore."
+    },
     "exit": {
       "normal": "uscita normale",
       "closedOutside": "il gioco è stato chiuso dall'esterno, per esempio da Gestione attività",
