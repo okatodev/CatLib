@@ -88,7 +88,7 @@ The first two are read while the game is stopped at the crash, so they need memo
     IL2CPP: "p_EntityCustomer"
   ```
 - **Unfinished operations.** Before a rare call that can crash natively, CatLib writes it into the session file and marks it done after:
-  closing a Steam channel session, the game shutting Steam down, changing the game's code, closing the game's UDP sockets.
+  closing a Steam channel session, the game shutting Steam down, changing the game's code.
   What was begun and not finished when the game closed is listed in the report and named in the window.
   Mods do the same with `CrashTrail`, see [For mod authors](#for-mod-authors).
 

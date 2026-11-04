@@ -43,7 +43,6 @@ public static class CatLibRuntime
         SessionNetwork.Initialize(Log.Scope("Net"), Settings);
         CatSaves.Initialize(Log.Scope("Saves"));
         CatLib.Assets.ContentPacks.Log = Log.Scope("Assets");
-        CatLib.Game.Fixes.UdpClientCloser.Initialize(Log.Scope("Fixes"));
         DevMenu.Initialize(Log.Scope("DevTools"), Settings);
         CatLib.Voice.CatVoice.Initialize(Log.Scope("Voice"));
         plugin.AddComponent<CatLibBehaviour>();
@@ -56,7 +55,6 @@ public static class CatLibRuntime
         CrashWatch.MarkCleanExit();
         CatLib.Voice.CatVoice.Quit();
         SessionNetwork.OnQuitting();
-        CatLib.Game.Fixes.UdpClientCloser.CloseAll("the game is quitting");
     }
 
     internal static void ShutDown()

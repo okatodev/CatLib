@@ -2,6 +2,13 @@
 
 CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late, Custom Stamps and Purr!, and CatLib Crash Watcher have their own versions and changelogs.
 
+## Unreleased
+
+### Removed
+
+- The fix for the game hanging while quitting after a single-player game. The game's patch of November 2026 closes
+  its own UDP client, so CatLib no longer closes the sockets of the game's network clients.
+
 ## 0.7.4
 
 Released together with Purr! 0.1.0, CatLib Crash Watcher 1.2.0, Too Late 0.2.1 and CatLib Tests 0.7.4.
