@@ -98,7 +98,7 @@ and `Invoke` returns how many failed. All events of CatLib are raised this way.
 
 | Property | Gives |
 |---|---|
-| `GameVersion` | the game's version string, for example `CMC 1.01.00.1737.9770.21112` |
+| `GameVersion` | the game's version string, for example `CMC 1.01.03.1858.9802.29687` |
 | `IsServer` | whether this game runs the server: single player and the host |
 | `IsSingleplayer`, `IsDemo` | the game mode and the demo build |
 | `LoadedLevelKey` | the level that is loaded |

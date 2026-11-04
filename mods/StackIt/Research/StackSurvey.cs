@@ -131,9 +131,13 @@ public sealed class StackSurvey
         }
 
         var children = store.GetChildren();
-        for (var index = 0; children != null && index < children.Count; index++)
+        if (children == null)
         {
-            var child = children[index];
+            return;
+        }
+
+        foreach (var child in children)
+        {
             if (child == null)
             {
                 continue;
@@ -162,9 +166,14 @@ public sealed class StackSurvey
     private static void Collect(EntityInteractableStore store, List<EntityInteractableStore> result, int depth)
     {
         var children = depth > 16 ? null : store.GetChildren();
-        for (var index = 0; children != null && index < children.Count; index++)
+        if (children == null)
         {
-            var childStore = children[index] == null || children[index].Interactable == null ? null : children[index].Interactable.Store;
+            return;
+        }
+
+        foreach (var child in children)
+        {
+            var childStore = child == null || child.Interactable == null ? null : child.Interactable.Store;
             if (childStore == null)
             {
                 continue;

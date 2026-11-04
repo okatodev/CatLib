@@ -91,7 +91,8 @@ Until then, and when the host rejected the client, `plan.IsOverridden` is false 
 ### Without the Steam network
 
 When Steam cannot reach its relay network, for example with a bad connection, the game still starts a level:
-it runs its server and its own client over a UDP socket on the computer, and that client gets the id `1` instead of a Steam id.
+it runs its server and its own client on the computer, which pass their messages to each other directly
+(over a UDP socket before the patch of November 2026), and that client gets the id `1` instead of a Steam id.
 Nobody else can join such a session. The role is still `Host`, every mod stays active, and the log says
 "The game hosts this session without the Steam network".
 

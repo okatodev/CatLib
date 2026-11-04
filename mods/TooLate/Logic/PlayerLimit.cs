@@ -8,7 +8,7 @@ public static class PlayerLimit
     public const int MostPlayers = 8;
     public const string CountPattern = "E8 ?? ?? ?? ?? 83 F8 05 0F 8D";
     public const int CountOffset = 7;
-    public const string LoadingPattern = "44 38 A1 90 00 00 00 0F 85 ?? ?? ?? ??";
+    public const string LoadingPattern = "44 38 A1 ?? 00 00 00 0F 85 ?? ?? ?? ??";
     public const int LoadingOffset = 7;
     public const int LoadingLength = 6;
 

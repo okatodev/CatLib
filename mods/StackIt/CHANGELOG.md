@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- The developer menu commands that write the storages and the parcels on them to the log work with the game patch of November 2026,
+  which keeps the parcels on a storage as a set instead of a list. Falling parcels were not affected.
+
 ## 0.1.1
 
 - A parcel across a joint that falls no longer jumps back a little on the other players' games before it falls.

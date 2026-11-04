@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.5
+
+- Tests of the game build check and of Too Late's code patch know the game patch of November 2026;
+  the version label preview of a newer game uses a build after it.
+
 ## 0.7.4
 
 - Developer menu group Crash: Crash in .NET code, an access violation inside .NET code with a marked text on the stack for the report,

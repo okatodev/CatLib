@@ -30,6 +30,11 @@ public sealed class PlayerLimitTest : TestCase
         Assert.SequenceEqual(new byte[] { 0x0F, 0x85, 0x08, 0x04, 0x00, 0x00 }, connect.Skip(loading).Take(PlayerLimit.LoadingLength),
             "The jump that turns the player away is what gets replaced");
         Assert.Equal(PlayerLimit.LoadingLength, PlayerLimit.SkipJump.Length, "It is replaced by an instruction of the same length");
+        var november = (byte[])connect.Clone();
+        november[28] = 0x88;
+        Assert.True(CodePatch.TryFindSite(november, BytePattern.Parse(PlayerLimit.LoadingPattern), PlayerLimit.LoadingOffset, PlayerLimit.LoadingLength,
+            out var moved, out _), "The check is found in the November 2026 build too, where the game's field moved from 0x90 to 0x88");
+        Assert.Equal(loading, moved, "at the same place");
 
         var scene = new[] { new EntityPlace(3, 1, 0, 0), new EntityPlace(5, 2, 0, 0), new EntityPlace(0, 9, 9, 9), new EntityPlace(3, 7, 0, 0) };
         var saved = new[] { new EntityPlace(5, 4, 1, 0), new EntityPlace(8, 6, 1, 0), new EntityPlace(8, 6, 1, 0) };

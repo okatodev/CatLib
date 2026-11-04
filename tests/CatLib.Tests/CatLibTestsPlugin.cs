@@ -205,7 +205,7 @@ public sealed class CatLibTestsPlugin : BasePlugin
             var current = CatLib.UI.MenuVersionBadge.PreviewCheck?.Status;
             var next = current switch
             {
-                null => "CMC 1.02.00.1800.9800.100",
+                null => "CMC 1.02.00.1900.9900.100",
                 CatLib.Game.GameBuildStatus.GameNewer => "CMC 1.01.00.1700.9722.30000",
                 _ => null
             };

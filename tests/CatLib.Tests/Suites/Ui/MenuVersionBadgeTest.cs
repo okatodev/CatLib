@@ -84,7 +84,7 @@ public sealed class MenuVersionBadgeTest : TestCase
             Assert.Equal(calmText, MenuVersionBadge.Label.text, "Moving the pointer away hides the detail line");
             Assert.False(MenuVersionBadge.ModsLabel.gameObject.activeSelf, "Moving the pointer away hides the mods");
 
-            foreach (var preview in new[] { "CMC 1.02.00.1800.9800.100", "CMC 1.01.00.1700.9722.30000" })
+            foreach (var preview in new[] { "CMC 1.02.00.1900.9900.100", "CMC 1.01.00.1700.9722.30000" })
             {
                 MenuVersionBadge.PreviewCheck = GameCompatibility.Compare(GameBuild.Parse(preview), GameCompatibility.Supported);
                 yield return Wait.Frames(3);

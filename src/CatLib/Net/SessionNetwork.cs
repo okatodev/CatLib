@@ -836,11 +836,11 @@ internal static class SessionNetwork
             var server = network.IsServer ? network._server : null;
             if (server != null)
             {
-                return server._udpClient != null;
+                return server._isSinglePlayer;
             }
 
             var client = network._client;
-            return client != null && client._udpClient != null;
+            return client != null && client._isSinglePlayer;
         }
         catch (Exception)
         {

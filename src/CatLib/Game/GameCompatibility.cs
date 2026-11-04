@@ -22,7 +22,7 @@ public static class GameCompatibility
 {
     public static readonly IReadOnlyList<GameBuild> Supported = new[]
     {
-        GameBuild.Parse("CMC 1.01.00.1737.9770.21112", 25651540)
+        GameBuild.Parse("CMC 1.01.03.1858.9802.29687", 26383073)
     };
 
     private static CatLogger _log;

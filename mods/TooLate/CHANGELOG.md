@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2
+
+Needs CatLib 0.7.5.
+
+- Joining a level in progress works again after the game patch of November 2026. The check in the game's code that turns
+  a joining player away from a started level moved a little, so the mod no longer found it and left joining closed, like in the game.
+
 ## 0.2.1
 
 Needs CatLib 0.7.4.

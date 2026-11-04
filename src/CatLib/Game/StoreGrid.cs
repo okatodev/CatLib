@@ -198,9 +198,14 @@ public static class StoreGrid
         }
 
         var children = store.GetChildren();
-        for (var index = 0; children != null && index < children.Count; index++)
+        if (children == null)
         {
-            var child = StoreOf(children[index]);
+            return;
+        }
+
+        foreach (var entity in children)
+        {
+            var child = StoreOf(entity);
             if (child == null)
             {
                 continue;

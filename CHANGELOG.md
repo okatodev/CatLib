@@ -2,7 +2,17 @@
 
 CatLib follows semantic versioning. The mods built on it, Boat Tweaks, Shelf Labels, Better Repair, Parcel Board, Stack it!, Too Late, Custom Stamps and Purr!, and CatLib Crash Watcher have their own versions and changelogs.
 
-## Unreleased
+## 0.7.5
+
+Released together with Too Late 0.2.2, Stack it! 0.1.2 and CatLib Tests 0.7.5.
+Made for the game patch of November 2026: `CMC 1.01.03.1858.9802.29687`, built 2026-11-02, Steam build 26383073.
+The version label in the main menu no longer says the game was updated. The other mods work with the patch as they are.
+
+### Changed
+
+- `CatNetwork.IsWithoutSteamNetwork` reads the game's own single-player flag: since the November patch the game plays
+  without the Steam network by passing messages to its own client directly instead of through a UDP socket.
+- `StoreGrid` reads the parcels standing on a storage as the set the game keeps them in since the November patch, instead of a list.
 
 ### Removed
 
