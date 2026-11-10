@@ -5,6 +5,7 @@
   },
   "section": {
     "Cardboard": "Pappe",
+    "Repair": "Reparatur",
     "Messages": "Meldungen"
   },
   "setting": {
@@ -16,6 +17,10 @@
     "Cardboard.Refill.description": "Was ein neuer Tag bringt: den vollen Vorrat wie im Spiel oder eine feste Anzahl Bögen. Der Host entscheidet für alle.",
     "Cardboard.RefillAmount": "Bögen pro Tag",
     "Cardboard.RefillAmount.description": "So viele Bögen kommen an jedem neuen Tag dazu, wenn oben eine feste Anzahl gewählt ist. Der Vorrat wächst nie über seine Größe hinaus. Der Host entscheidet für alle.",
+    "Repair.Several": "Mehrere Pakete auf einmal",
+    "Repair.Several.description": "Ein Druck auf den Reparaturknopf repariert alle beschädigten Pakete auf dem Tisch auf einmal, höchstens so viele wie unten eingestellt, und verbraucht für jedes einen Bogen Karton. Aus repariert der Tisch ein Paket nach dem anderen, wie im Spiel. Der Host entscheidet für alle.",
+    "Repair.AtOnce": "Pakete auf einmal",
+    "Repair.AtOnce.description": "Wie viele Pakete auf dem Tisch ein Druck reparieren kann. Liegen mehr Pakete auf dem Tisch, bleibt der Knopf aus, wie im Spiel. Der Host entscheidet für alle.",
     "Messages.Enabled": "Meldungen zur Pappe",
     "Messages.Enabled.description": "Zeigt nach einer Reparatur, wie viel Pappe übrig ist, und wie viel ein neuer Tag gebracht hat. Nur für dich."
   },

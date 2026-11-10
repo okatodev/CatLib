@@ -34,6 +34,7 @@ public sealed class BetterRepairPlugin : BasePlugin
         _controller.Settings = new RepairSettings(settings, _controller.OnSettingsChanged);
         _controller.Sync = new StockSync(CatNetwork.Channel(this), () => _controller.CurrentStock, log);
         _controller.Initialize();
+        var patches = Patches.RepairPatches.Install(PluginMeta.Guid, _controller, log);
         _store = new StockStore(CatSaves.For(this, DataVersion), () => _controller.CurrentStock, log);
         _store.Loaded += _controller.OnStoreLoaded;
 
@@ -45,6 +46,7 @@ public sealed class BetterRepairPlugin : BasePlugin
             "Writes the cardboard stock, the time period and the state of every repair table to the log.");
         DevMenu.Command("Better Repair", "Refill now", _controller.RefillNow,
             "Refills the cardboard as a new day would. Host only.");
-        log.Info($"Better Repair {PluginMeta.Version} loaded with {translations} translated text(s) in {string.Join(", ", settings.Texts.Languages)}");
+        log.Info($"Better Repair {PluginMeta.Version} loaded with {translations} translated text(s) in {string.Join(", ", settings.Texts.Languages)}, " +
+                 (patches.IsActive ? "repairing several parcels at once is ready" : "repairing several parcels at once is unavailable"));
     }
 }

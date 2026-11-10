@@ -18,8 +18,6 @@ Assets come up in many mods, so the API is for every mod author, not only for th
 ### The mods that are out
 
 - Too Late: players 5 to 8 who do not have the mod start at the spawn points of players 1 to 4, their own game picks the spot.
-- Better Repair 0.2.0: repairing several damaged parcels on the table at once, with settings for it,
-  such as how many parcels fit and whether each one still takes a sheet of cardboard. Maybe more around the repair table.
 - Every README with the Discord server, screenshots and short GIFs of what the mod does, on GitHub and on Thunderstore.
 
 ### Chat between players

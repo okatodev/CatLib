@@ -5,6 +5,7 @@
   },
   "section": {
     "Cardboard": "紙板",
+    "Repair": "修理",
     "Messages": "提示"
   },
   "setting": {
@@ -16,6 +17,10 @@
     "Cardboard.Refill.description": "新的一天會補充什麼：像遊戲中一樣補滿庫存，或是固定張數。由主機替所有人決定。",
     "Cardboard.RefillAmount": "每天張數",
     "Cardboard.RefillAmount.description": "上方選擇「固定張數」時，每個新的一天補充的紙板張數。庫存不會超過上限。由主機替所有人決定。",
+    "Repair.Several": "一次修理多個包裹",
+    "Repair.Several.description": "按一次修理按鈕，就會一次修好桌上所有損壞的包裹，最多到下面的數量，每個包裹用一張紙板。關閉時，桌子像遊戲裡一樣一次只修一個包裹。由房主為所有人決定。",
+    "Repair.AtOnce": "一次修理數量",
+    "Repair.AtOnce.description": "按一次能修好桌上多少個包裹。桌上的包裹更多時，按鈕會像遊戲裡一樣無法使用。由房主為所有人決定。",
     "Messages.Enabled": "紙板提示",
     "Messages.Enabled.description": "修理後顯示還剩多少紙板，以及新的一天補充了多少。只對你生效。"
   },

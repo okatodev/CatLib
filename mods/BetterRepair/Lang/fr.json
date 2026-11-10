@@ -5,6 +5,7 @@
   },
   "section": {
     "Cardboard": "Carton",
+    "Repair": "Réparation",
     "Messages": "Messages"
   },
   "setting": {
@@ -16,6 +17,10 @@
     "Cardboard.Refill.description": "Ce qu'apporte un nouveau jour : toute la réserve, comme dans le jeu, ou un nombre fixe de feuilles. L'hôte décide pour tout le monde.",
     "Cardboard.RefillAmount": "Feuilles par jour",
     "Cardboard.RefillAmount.description": "Feuilles ajoutées chaque nouveau jour quand un nombre fixe est choisi ci-dessus. La réserve ne dépasse jamais sa taille. L'hôte décide pour tout le monde.",
+    "Repair.Several": "Plusieurs colis à la fois",
+    "Repair.Several.description": "Un appui sur le bouton de réparation répare d'un coup tous les colis abîmés sur la table, jusqu'au nombre ci-dessous, et utilise une feuille de carton pour chacun. Désactivé, la table répare un colis à la fois, comme dans le jeu. L'hôte décide pour tout le monde.",
+    "Repair.AtOnce": "Colis à la fois",
+    "Repair.AtOnce.description": "Combien de colis sur la table un appui peut réparer. S'il y a plus de colis sur la table, le bouton reste éteint, comme dans le jeu. L'hôte décide pour tout le monde.",
     "Messages.Enabled": "Messages sur le carton",
     "Messages.Enabled.description": "Indique combien de carton il reste après une réparation et combien un nouveau jour en a apporté. Pour vous seulement."
   },

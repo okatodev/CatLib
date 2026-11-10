@@ -5,6 +5,7 @@
   },
   "section": {
     "Cardboard": "段ボール",
+    "Repair": "修理",
     "Messages": "通知"
   },
   "setting": {
@@ -16,6 +17,10 @@
     "Cardboard.Refill.description": "新しい日に補充される量です。ゲームと同じく在庫いっぱいか、指定した枚数を選べます。ホストが全員分を決めます。",
     "Cardboard.RefillAmount": "1日の補充枚数",
     "Cardboard.RefillAmount.description": "上で「指定枚数」を選んだとき、新しい日ごとに補充される枚数です。在庫は上限を超えません。ホストが全員分を決めます。",
+    "Repair.Several": "複数の荷物をまとめて",
+    "Repair.Several.description": "修理ボタンを1回押すと、テーブル上の壊れた荷物を下の数までまとめて直し、1つにつき段ボールを1枚使います。オフのときは、ゲームと同じく1つずつ直します。ホストが全員分を決めます。",
+    "Repair.AtOnce": "一度に直す数",
+    "Repair.AtOnce.description": "1回の押下で直せるテーブル上の荷物の数です。テーブルにそれより多くの荷物があると、ゲームと同じくボタンは押せません。ホストが全員分を決めます。",
     "Messages.Enabled": "段ボール通知",
     "Messages.Enabled.description": "修理後に残りの段ボールの枚数と、新しい日に補充された枚数を表示します。自分にだけ適用されます。"
   },

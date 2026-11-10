@@ -19,6 +19,11 @@ public sealed class RepairSettings
             "What a new day brings: the full stock, like in the game, or a set number of sheets. The host decides for everyone.");
         RefillAmount = settings.Session("Cardboard", "RefillAmount", CardboardStock.SheetsOnTable,
             "Sheets added every new day when a set number is chosen above. The stock never grows above its size. The host decides for everyone.", stock);
+        Several = settings.Session("Repair", "Several", false,
+            "One press of the repair button fixes every damaged parcel on the table at once, up to the number below, and uses a sheet of cardboard for each. Off, the table repairs one parcel at a time, like in the game. The host decides for everyone.");
+        AtOnce = settings.Session("Repair", "AtOnce", RepairBatch.DefaultAtOnce,
+            "How many parcels on the table one press can repair. With more parcels on the table the button stays off, like in the game. The host decides for everyone.",
+            new AcceptableValueRange<int>(RepairBatch.MinimumAtOnce, RepairBatch.MaximumAtOnce));
         Messages = settings.Local("Messages", "Enabled", true,
             "Shows how much cardboard is left after a repair and how much a new day brought. Only for you.");
 
@@ -35,6 +40,10 @@ public sealed class RepairSettings
     public Setting<RefillMode> Refill { get; }
 
     public Setting<int> RefillAmount { get; }
+
+    public Setting<bool> Several { get; }
+
+    public Setting<int> AtOnce { get; }
 
     public Setting<bool> Messages { get; }
 }

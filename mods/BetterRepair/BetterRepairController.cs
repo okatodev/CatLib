@@ -162,6 +162,72 @@ public sealed class BetterRepairController
         return Stock.Describe();
     }
 
+    public RepairPlan PlanBatch(EntityRepairWorkstation table)
+    {
+        if (Settings == null || !Settings.Several.Value || !CatNetwork.IsActive(PluginMeta.Guid) || (!CatNetwork.IsAuthority && !_hostStockKnown))
+        {
+            return null;
+        }
+
+        var store = table.LinkedStore;
+        var children = store == null ? null : store.GetChildParcelProperties();
+        if (children == null || children.Count < 2)
+        {
+            return null;
+        }
+
+        var damaged = new List<Entity>();
+        for (var index = 0; index < children.Count; index++)
+        {
+            var properties = children[index];
+            if (properties != null && properties.IsDamaged && properties.LinkedEntity != null)
+            {
+                damaged.Add(properties.LinkedEntity);
+            }
+        }
+
+        var sheets = Stock.Unlimited ? RepairBatch.MaximumAtOnce : Stock.Current;
+        var size = RepairBatch.Size(true, Settings.AtOnce.Value, children.Count, damaged.Count, sheets);
+        return size == 0 ? null : new RepairPlan(damaged.GetRange(0, size), children.Count);
+    }
+
+    public void OnBatchRepaired(EntityRepairWorkstation table, IReadOnlyList<Entity> damaged, int parcels)
+    {
+        for (var index = 1; index < damaged.Count; index++)
+        {
+            RepairAlso(damaged[index]);
+        }
+
+        var name = table.gameObject.name;
+        if (!CatNetwork.IsAuthority)
+        {
+            _log.Info($"A repair on {name} fixed {damaged.Count} of {parcels} parcel(s) at once, waiting for the host's stock");
+            return;
+        }
+
+        var used = Stock.Consume(damaged.Count);
+        _log.Info($"A repair on {name} fixed {damaged.Count} of {parcels} parcel(s) at once and used {used} sheet(s), cardboard {Stock.Describe()}");
+        Sync.Broadcast(Stock.Current);
+        ApplyAll();
+        ShowLeft();
+    }
+
+    private void RepairAlso(Entity entity)
+    {
+        var properties = entity == null ? null : entity.Properties;
+        if (properties == null || !properties.IsDamaged)
+        {
+            return;
+        }
+
+        properties.SetDamaged(false);
+        if (Singleton<VFXManager>.HasInstance())
+        {
+            var transform = entity.transform;
+            Singleton<VFXManager>.Instance.PlayRepairParcelVFX(transform.position, transform.position, transform.rotation);
+        }
+    }
+
     private void ReadSettings()
     {
         if (Settings == null)

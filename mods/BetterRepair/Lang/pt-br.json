@@ -5,6 +5,7 @@
   },
   "section": {
     "Cardboard": "Papelão",
+    "Repair": "Conserto",
     "Messages": "Mensagens"
   },
   "setting": {
@@ -16,6 +17,10 @@
     "Cardboard.Refill.description": "O que um novo dia traz: o estoque completo, como no jogo, ou um número fixo de folhas. O host decide por todos.",
     "Cardboard.RefillAmount": "Folhas por dia",
     "Cardboard.RefillAmount.description": "Folhas adicionadas a cada novo dia quando um número fixo é escolhido acima. O estoque nunca passa do seu tamanho. O host decide por todos.",
+    "Repair.Several": "Vários pacotes de uma vez",
+    "Repair.Several.description": "Um toque no botão de conserto arruma de uma vez todos os pacotes danificados da mesa, até o número abaixo, e usa uma folha de papelão para cada um. Desligado, a mesa conserta um pacote por vez, como no jogo. O anfitrião decide por todos.",
+    "Repair.AtOnce": "Pacotes de uma vez",
+    "Repair.AtOnce.description": "Quantos pacotes da mesa um toque pode consertar. Com mais pacotes na mesa, o botão continua desligado, como no jogo. O anfitrião decide por todos.",
     "Messages.Enabled": "Mensagens do papelão",
     "Messages.Enabled.description": "Mostra quanto papelão sobrou depois de um reparo e quanto um novo dia trouxe. Só para você."
   },

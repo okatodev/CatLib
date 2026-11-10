@@ -52,12 +52,16 @@ public sealed class BetterRepairTranslationsTest : TestCase
         }
 
         Assert.Equal(0, missing.Count, "Missing translations: " + string.Join("; ", missing));
-        Assert.Equal(5, sandbox.Settings.Settings.Count, "Five settings");
+        Assert.Equal(7, sandbox.Settings.Settings.Count, "Seven settings");
         Assert.Equal(SettingScope.Session, repair.Unlimited.Scope, "The host decides about unlimited cardboard");
         Assert.Equal(SettingScope.Session, repair.Stock.Scope, "The host decides the stock size");
         Assert.Equal(SettingScope.Session, repair.Refill.Scope, "The host decides the refill");
         Assert.Equal(SettingScope.Session, repair.RefillAmount.Scope, "The host decides the sheets per day");
+        Assert.Equal(SettingScope.Session, repair.Several.Scope, "The host decides about repairing several parcels at once");
+        Assert.Equal(SettingScope.Session, repair.AtOnce.Scope, "The host decides how many parcels at once");
         Assert.Equal(SettingScope.Local, repair.Messages.Scope, "Messages are personal");
+        Assert.False(repair.Several.Value, "One parcel at a time by default, like in the game");
+        Assert.Equal(2, repair.AtOnce.Value, "Two parcels at once when it is turned on");
         Assert.False(repair.Unlimited.Value, "Cardboard runs out by default, like in the game");
         Assert.Equal(3, repair.Stock.Value, "Three sheets by default, like in the game");
         Assert.Equal(RefillMode.Full, repair.Refill.Value, "A new day brings the full stock by default, like in the game");

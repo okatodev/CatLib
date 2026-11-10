@@ -5,6 +5,7 @@
   },
   "section": {
     "Cardboard": "Cartón",
+    "Repair": "Reparación",
     "Messages": "Mensajes"
   },
   "setting": {
@@ -16,6 +17,10 @@
     "Cardboard.Refill.description": "Qué trae un nuevo día: la reserva llena, como en el juego, o un número fijo de hojas. El anfitrión decide por todos.",
     "Cardboard.RefillAmount": "Hojas por día",
     "Cardboard.RefillAmount.description": "Hojas que se añaden cada nuevo día cuando arriba se elige un número fijo. La reserva nunca supera su tamaño. El anfitrión decide por todos.",
+    "Repair.Several": "Varios paquetes a la vez",
+    "Repair.Several.description": "Una pulsación del botón de reparar arregla de una vez todos los paquetes dañados de la mesa, hasta el número de abajo, y gasta una hoja de cartón por cada uno. Desactivado, la mesa repara un paquete cada vez, como en el juego. El anfitrión decide por todos.",
+    "Repair.AtOnce": "Paquetes a la vez",
+    "Repair.AtOnce.description": "Cuántos paquetes de la mesa puede reparar una pulsación. Si hay más paquetes en la mesa, el botón sigue apagado, como en el juego. El anfitrión decide por todos.",
     "Messages.Enabled": "Mensajes de cartón",
     "Messages.Enabled.description": "Muestra cuánto cartón queda tras una reparación y cuánto trajo un nuevo día. Solo para ti."
   },

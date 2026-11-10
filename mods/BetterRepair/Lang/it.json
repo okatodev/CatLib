@@ -5,6 +5,7 @@
   },
   "section": {
     "Cardboard": "Cartone",
+    "Repair": "Riparazione",
     "Messages": "Messaggi"
   },
   "setting": {
@@ -16,6 +17,10 @@
     "Cardboard.Refill.description": "Cosa porta un nuovo giorno: la scorta piena, come nel gioco, o un numero fisso di fogli. L'host decide per tutti.",
     "Cardboard.RefillAmount": "Fogli al giorno",
     "Cardboard.RefillAmount.description": "Fogli aggiunti a ogni nuovo giorno quando sopra è scelto un numero fisso. La scorta non supera mai la sua capienza. L'host decide per tutti.",
+    "Repair.Several": "Più pacchi alla volta",
+    "Repair.Several.description": "Una pressione del pulsante di riparazione ripara insieme tutti i pacchi danneggiati sul tavolo, fino al numero qui sotto, e usa un foglio di cartone per ciascuno. Disattivato, il tavolo ripara un pacco alla volta, come nel gioco. Decide l'host per tutti.",
+    "Repair.AtOnce": "Pacchi alla volta",
+    "Repair.AtOnce.description": "Quanti pacchi sul tavolo può riparare una pressione. Con più pacchi sul tavolo il pulsante resta spento, come nel gioco. Decide l'host per tutti.",
     "Messages.Enabled": "Messaggi sul cartone",
     "Messages.Enabled.description": "Mostra quanto cartone resta dopo una riparazione e quanto ne ha portato un nuovo giorno. Solo per te."
   },
