@@ -1,7 +1,7 @@
 {
   "mod": {
     "name": "Riparazione facile",
-    "description": "Scegli quanto cartone tiene il banco di riparazione e quanto ne torna a ogni nuovo giorno, oppure rendilo illimitato."
+    "description": "Scegli quanto cartone tiene il banco di riparazione e quanto ne torna a ogni nuovo giorno, oppure rendilo illimitato. Una pressione può anche riparare più pacchi sul tavolo alla volta."
   },
   "section": {
     "Cardboard": "Cartone",

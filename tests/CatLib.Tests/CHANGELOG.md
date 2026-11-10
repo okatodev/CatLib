@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Better Repair: the rules of repairing several parcels at once and its two new settings.
+
 ## 0.7.5
 
 - Tests of the game build check and of Too Late's code patch know the game patch of November 2026;

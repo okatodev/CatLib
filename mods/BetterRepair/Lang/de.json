@@ -1,7 +1,7 @@
 {
   "mod": {
     "name": "Bequeme Reparatur",
-    "description": "Lege fest, wie viel Pappe der Reparaturtisch fasst und wie viel ein neuer Tag zurückbringt, oder mach sie unbegrenzt."
+    "description": "Lege fest, wie viel Pappe der Reparaturtisch fasst und wie viel ein neuer Tag zurückbringt, oder mach sie unbegrenzt. Ein Druck kann auch mehrere Pakete auf dem Tisch auf einmal reparieren."
   },
   "section": {
     "Cardboard": "Pappe",
@@ -18,7 +18,7 @@
     "Cardboard.RefillAmount": "Bögen pro Tag",
     "Cardboard.RefillAmount.description": "So viele Bögen kommen an jedem neuen Tag dazu, wenn oben eine feste Anzahl gewählt ist. Der Vorrat wächst nie über seine Größe hinaus. Der Host entscheidet für alle.",
     "Repair.Several": "Mehrere Pakete auf einmal",
-    "Repair.Several.description": "Ein Druck auf den Reparaturknopf repariert alle beschädigten Pakete auf dem Tisch auf einmal, höchstens so viele wie unten eingestellt, und verbraucht für jedes einen Bogen Karton. Aus repariert der Tisch ein Paket nach dem anderen, wie im Spiel. Der Host entscheidet für alle.",
+    "Repair.Several.description": "Ein Druck auf den Reparaturknopf repariert alle beschädigten Pakete auf dem Tisch auf einmal, höchstens so viele wie unten eingestellt, und verbraucht für jedes einen Bogen Pappe. Aus repariert der Tisch ein Paket nach dem anderen, wie im Spiel. Der Host entscheidet für alle.",
     "Repair.AtOnce": "Pakete auf einmal",
     "Repair.AtOnce.description": "Wie viele Pakete auf dem Tisch ein Druck reparieren kann. Liegen mehr Pakete auf dem Tisch, bleibt der Knopf aus, wie im Spiel. Der Host entscheidet für alle.",
     "Messages.Enabled": "Meldungen zur Pappe",

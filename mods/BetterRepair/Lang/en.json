@@ -1,7 +1,7 @@
 {
   "mod": {
     "name": "Better Repair",
-    "description": "Set how much cardboard the repair table holds and how much a new day brings back, or make it unlimited."
+    "description": "Set how much cardboard the repair table holds and how much a new day brings back, or make it unlimited. One press can also repair several parcels on the table at once."
   },
   "section": {
     "Cardboard": "Cardboard",

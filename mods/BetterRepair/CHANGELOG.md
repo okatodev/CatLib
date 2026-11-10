@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0
+
+- Repairing several parcels at once: turned on, one press of the repair button fixes every damaged parcel on the table,
+  up to a set number from 2 to 8, and uses a sheet of cardboard for each repaired parcel. The game itself repairs only
+  when exactly one parcel lies on the table. Off by default, the host decides for everyone.
+- Better Repair now changes the game's code of the repair table, only while repairing several parcels at once is on.
+
 ## 0.1.1
 
 - The Mods tab shows what Better Repair does under its name, in all 13 languages. Needs CatLib 0.7.0.

@@ -1,7 +1,7 @@
 {
   "mod": {
     "name": "Wygodna naprawa",
-    "description": "Ustal, ile tektury mieści stół naprawczy i ile wraca z nowym dniem, albo ustaw ją bez limitu."
+    "description": "Ustal, ile tektury mieści stół naprawczy i ile wraca z nowym dniem, albo ustaw ją bez limitu. Jedno naciśnięcie może też naprawić kilka paczek na stole naraz."
   },
   "section": {
     "Cardboard": "Karton",
@@ -18,9 +18,9 @@
     "Cardboard.RefillAmount": "Arkuszy na dzień",
     "Cardboard.RefillAmount.description": "Tyle arkuszy dochodzi każdego nowego dnia, gdy wyżej wybrano ustaloną liczbę. Zapas nigdy nie przekracza swojego rozmiaru. Host decyduje za wszystkich.",
     "Repair.Several": "Kilka paczek naraz",
-    "Repair.Several.description": "Jedno naciśnięcie przycisku naprawy naprawia naraz wszystkie uszkodzone paczki na stole, najwyżej tyle, ile ustawiono niżej, i zużywa arkusz kartonu na każdą. Wyłączone: stół naprawia jedną paczkę naraz, jak w grze. Decyduje host dla wszystkich.",
+    "Repair.Several.description": "Jedno naciśnięcie przycisku naprawy naprawia naraz wszystkie uszkodzone paczki na stole, najwyżej tyle, ile ustawiono niżej, i zużywa arkusz kartonu na każdą. Wyłączone: stół naprawia jedną paczkę naraz, jak w grze. Host decyduje za wszystkich.",
     "Repair.AtOnce": "Paczek naraz",
-    "Repair.AtOnce.description": "Ile paczek na stole może naprawić jedno naciśnięcie. Gdy na stole jest więcej paczek, przycisk pozostaje wyłączony, jak w grze. Decyduje host dla wszystkich.",
+    "Repair.AtOnce.description": "Ile paczek na stole może naprawić jedno naciśnięcie. Gdy na stole jest więcej paczek, przycisk pozostaje wyłączony, jak w grze. Host decyduje za wszystkich.",
     "Messages.Enabled": "Komunikaty o kartonie",
     "Messages.Enabled.description": "Pokazuje, ile kartonu zostało po naprawie i ile przyniósł nowy dzień. Tylko dla ciebie."
   },

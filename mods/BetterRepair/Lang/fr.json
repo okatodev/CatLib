@@ -1,7 +1,7 @@
 {
   "mod": {
     "name": "Réparation facile",
-    "description": "Choisissez combien de carton tient l'établi de réparation et combien chaque nouvelle journée en rapporte, ou rendez-le illimité."
+    "description": "Choisissez combien de carton tient l'établi de réparation et combien chaque nouvelle journée en rapporte, ou rendez-le illimité. Un appui peut aussi réparer plusieurs colis sur la table à la fois."
   },
   "section": {
     "Cardboard": "Carton",
